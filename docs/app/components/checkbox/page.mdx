@@ -1,0 +1,78 @@
+# Checkbox
+
+A Base UI Checkbox in its own label row for independent yes/no choices, and the Checkbox Group that lays out a visible set.
+
+```tsx
+import { Checkbox } from '@fairgarden-private/design/components/Checkbox'
+import { CheckboxGroup } from '@fairgarden-private/design/components/CheckboxGroup'
+```
+
+The whole row is the hit target, at least 44 px tall. Checked is a `--role-select` fill, a ✓ in `--role-select-mark` and a 3 px `--role-select-edge`, so the fill is never the only signal; indeterminate swaps the ✓ for a bar. Phrase labels positively and author short ones in title case. A setting that applies at once is a Switch.
+
+## States
+
+import { DemoCheckboxStates } from './demos/states'
+
+<DemoCheckboxStates.Title />
+
+Hover gives an unchecked box a soft `--primary3` fill where soft fills apply, lightens a checked box to `--role-select-hover` and underlines the label in the accent; the edge never changes, so hover never reads as checked. Disabled draws a dotted edge and drops the fill, never dimming; read-only keeps its rest look and ignores hover. A "select all" parent is a `Checkbox` with `parent` inside a controlled group with `allValues`, and turns indeterminate while only some are ticked. An error never turns a box red: the group message sits under the legend.
+
+<DemoCheckboxStates />
+
+[See Demo](./demos/states/)
+
+## Option cards and ledger rows
+
+import { DemoCheckboxKinds } from './demos/kinds'
+
+<DemoCheckboxKinds.Title />
+
+`kind="card"` is the option card: a bordered row with an optional `thumb`, a caps title and a right-aligned `valueLabel`; its edge goes from `--role-rule` to `--primary12` on hover and to a 2 px `--role-select-edge` when checked. `kind="ledger"` puts the box at the end of a dotted leader. A group's `kind` is its checkboxes' default. The group is an inline-size container: short labels run in two columns from 480 px, more than four cards go 2-up from 768 px, and below 360 px a card's value drops under its title.
+
+<DemoCheckboxKinds />
+
+[See Demo](./demos/kinds/)
+
+## Primary and secondary
+
+import { DemoCheckboxColor } from './demos/color'
+
+<DemoCheckboxColor.Title />
+
+`secondary` drives the checked fill, mark and edge; `primary` drives the box edge, label and focus ring. Neither is defaulted, so an omitted prop inherits the scope. The secondary never switches to the danger scale in an error.
+
+<DemoCheckboxColor />
+
+[See Demo](./demos/color/)
+
+## On grounds
+
+import { DemoCheckboxGrounds } from './demos/grounds'
+
+<DemoCheckboxGrounds.Title />
+
+On paper the checked box is green with a green-11 edge and a loam ✓. On forest, and on every saturated ground, it takes the inverse pair: a `--primary12` fill with a `--role-inverse` ✓.
+
+<DemoCheckboxGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesCheckbox, TypesCheckboxAdditional } from './types'
+
+### Checkbox
+
+<TypesCheckbox.Checkbox />
+
+### CheckboxGroup
+
+<TypesCheckbox.CheckboxGroup />
+
+### Additional types
+
+<TypesCheckboxAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §10.7 (checkbox and checkbox group) and §10.1 (the selected fill).

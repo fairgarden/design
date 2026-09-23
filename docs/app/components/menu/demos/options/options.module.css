@@ -1,0 +1,14 @@
+.face {
+  display: grid;
+  justify-items: start;
+  gap: var(--size-px-3);
+  padding: var(--size-px-5);
+  border-radius: var(--ds-radius-8);
+}
+
+.caption {
+  margin: 0;
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-caption);
+  color: var(--role-muted);
+}

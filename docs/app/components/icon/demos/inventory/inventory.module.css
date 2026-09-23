@@ -1,0 +1,22 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(144px, 1fr));
+  gap: var(--size-px-2);
+  inline-size: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cell {
+  display: flex;
+  gap: var(--size-px-2);
+  align-items: center;
+  min-block-size: var(--ds-size-hit);
+}
+
+.name {
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-font-size-caption);
+  color: var(--role-muted);
+}

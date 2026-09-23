@@ -1,0 +1,10 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-7);
+  inline-size: 100%;
+}
+
+.panel {
+  padding: var(--size-px-3);
+  border: var(--border-size-1) solid var(--role-rule);
+}

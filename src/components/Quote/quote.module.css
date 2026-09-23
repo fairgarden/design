@@ -1,0 +1,184 @@
+/*
+ * Testimonial & Quote (§12.8). Parts: base (the figure, or the aside of a
+ * duplicate pull quote; the framed kind's `frame` is its border), mark (the
+ * framed open-quote glyph), text (`textBody` for the blockquote kind, which
+ * also carries its left rule), rule (the pull quote's short rule),
+ * attribution, name, role, portrait (an Avatar, styled by §10.12), source.
+ * Static, no container. Every ink is --primary12 on every ground: colors are
+ * role variables only, and local custom properties carry dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.text {
+  composes: typeQuote from '../../utils/type.module.css';
+}
+
+.textBody {
+  composes: typeBody from '../../utils/type.module.css';
+}
+
+.name {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.role {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.source {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .text,
+  .textBody {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .text > p,
+  .textBody > p {
+    margin: 0;
+  }
+
+  .text > p + p,
+  .textBody > p + p {
+    margin-block-start: var(--size-px-3);
+  }
+
+  /* The open-quote glyph: the display face's “ at 3 × the quote size, heavy, decorative. */
+  .mark {
+    display: block;
+    color: var(--primary12);
+    font-family: var(--ds-font-display);
+    font-variation-settings: var(--ds-font-display-settings);
+    font-size: calc(3 * var(--ds-font-size-quote));
+    font-weight: var(--font-weight-9);
+    line-height: var(--ds-leading-display);
+    block-size: 0.75em;
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  /* The pull quote's rule: --size-px-8 long, --border-size-1, --primary12. */
+  .rule {
+    display: block;
+    inline-size: var(--size-px-8);
+    margin-block-start: var(--size-px-3);
+    border-block-start: var(--border-size-1) solid var(--primary12);
+  }
+
+  /* Attribution: name over role (a line break, never a pipe), portrait beside them. */
+  .attribution {
+    display: grid;
+    justify-items: start;
+    margin-block-start: var(--size-px-5);
+    color: var(--primary12);
+  }
+
+  .attribution:has(> .portrait) {
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: var(--ds-space-12);
+    align-items: center;
+  }
+
+  .attribution > :not(.portrait) {
+    grid-column: -2 / -1;
+  }
+
+  .portrait {
+    grid-row: 1 / span 3;
+    align-self: start;
+  }
+
+  .name,
+  .role,
+  .source {
+    display: block;
+    color: var(--primary12);
+  }
+
+  .source {
+    font-style: normal;
+  }
+}
+
+@layer variants {
+  /* Band: centered and alone on its ground; quote within a comfortable measure. */
+  .band {
+    text-align: center;
+  }
+
+  .band .text {
+    max-inline-size: var(--size-content-2);
+    margin-inline: auto;
+  }
+
+  .band .attribution {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--size-px-2);
+  }
+
+  /* Framed: a --border-size-2 --primary12 outline, square corners, --size-px-7
+     padding; the glyph at the top start, the words indented one glyph width. */
+  .framed {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: var(--size-px-2);
+    padding: var(--size-px-7);
+    border: var(--border-size-2) solid var(--primary12);
+    border-radius: var(--ds-radius-none);
+  }
+
+  .framed > .mark {
+    grid-row: 1 / span 2;
+  }
+
+  .framed > :not(.mark) {
+    grid-column: 2;
+  }
+
+  /* Pull: hanging punctuation [D32]; no attribution. */
+  .pull .text {
+    hanging-punctuation: first last;
+  }
+
+  /* Blockquote: type-body indented --size-px-5 behind a --ds-stroke-3 left rule. */
+  .block .textBody {
+    padding-inline-start: var(--size-px-5);
+    border-inline-start: var(--ds-stroke-3) solid var(--primary12);
+  }
+
+  /* Epigraph: display bold italic, no marks. */
+  .epigraph .text {
+    --type-weight: var(--font-weight-7);
+  }
+}
+
+@layer print {
+  @media print {
+    /* The frame prints 1.5 pt through --border-size-2's print value; prose caps at the print measure. */
+    .base {
+      break-inside: avoid;
+    }
+
+    .text,
+    .textBody {
+      max-inline-size: var(--ds-measure-print);
+    }
+
+    /* A pull quote that repeats body text is hidden in print [D174]. */
+    .duplicate {
+      display: none;
+    }
+  }
+}

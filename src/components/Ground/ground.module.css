@@ -1,0 +1,84 @@
+/*
+ * Ground: the preset scope (§1.11.5) [D178]. Paints the scope's ground, sets
+ * its one text ink, publishes the container edge as --role-edge, draws the
+ * seam on full-bleed bands and the edge on fields. Colors come from
+ * roles.css through the scope attributes the component writes; the module
+ * itself names role variables only and selects no scope or mode hook.
+ *
+ * The kind classes sit in the base layer, so a composing component's
+ * variant class (the Dialog's solid cover) can reset a field's geometry.
+ */
+@layer base {
+  .base {
+    display: block;
+    color: var(--primary12);
+    background-color: var(--role-ground);
+  }
+
+  /*
+   * Full-bleed band (a page ground, or the night band): a --border-size-1
+   * seam at top and bottom in --role-seam, invisible (the ground's own
+   * color) except on the night band in dark mode, where it is --primary12
+   * [D179]. A band has no container edge, so --role-edge is --role-rule.
+   * The hairline between two different page grounds is the §11.2 divider's.
+   */
+  .band {
+    --role-edge: var(--role-rule);
+
+    border-block: var(--border-size-1) solid var(--role-seam);
+  }
+
+  /*
+   * Field [D177]: inset inside the content container, never full-bleed, with
+   * a radius and its own --primary12 edge at --border-size-1 in both modes;
+   * no seam, because the edge does that job.
+   */
+  .field {
+    --role-edge: var(--primary12);
+    --ground-edge: var(--border-size-1);
+
+    padding: var(--ds-space-margin);
+    border: var(--ground-edge) solid var(--role-edge);
+    border-radius: var(--ds-radius-8);
+  }
+
+  /*
+   * Nested face (card face, plate, panel): no seam and no geometry of its
+   * own; the composing component sets size and radius and draws its edge in
+   * --role-edge: --primary10 on a page ground [D179].
+   */
+  .face {
+    --role-edge: var(--primary10);
+
+    border-block: none;
+  }
+}
+
+@layer variants {
+  /* A page ground inside a field or the night band: a light island with a --primary12 edge [D149, D179]. */
+  .island {
+    --role-edge: var(--primary12);
+  }
+
+  /* The one framed feature field per page: --ds-radius-feature and a --border-size-2 edge [D95, D177]. */
+  .framed {
+    --ground-edge: var(--border-size-2);
+
+    border-radius: var(--ds-radius-feature);
+  }
+}
+
+@layer print {
+  @media print {
+    /* The seam is the printed ground-change rule (§1.4.5); the ground prints white. */
+    .band {
+      border-block-width: var(--border-size-1);
+      break-inside: auto;
+    }
+
+    /* A field keeps its edge on paper; the framed feature field keeps --border-size-2 [D95]. */
+    .field {
+      break-inside: avoid;
+    }
+  }
+}

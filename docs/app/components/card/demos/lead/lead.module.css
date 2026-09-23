@@ -1,0 +1,17 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-7);
+  inline-size: 100%;
+}
+
+/* Each wrapper names the `card-grid` container the cards read. */
+.lead {
+  container: card-grid / inline-size;
+}
+
+.row {
+  container: card-grid / inline-size;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(224px, 1fr));
+  gap: var(--size-px-5);
+}

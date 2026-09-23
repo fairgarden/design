@@ -1,0 +1,394 @@
+/*
+ * Input (§10.3; the field box of §10.1). CVA function `input`; the textarea
+ * uses the same module and function. Parts: `base` (the box), `icon`,
+ * `affix` (prefix or suffix), `control` (the input or textarea), `label`
+ * (label-inside only), `count` (with `countGlyph`), `actionSlot` (holds the
+ * §9.2 Button; `actionIcon` / `actionText` pick its build by width), and
+ * `edge` / `edgeLine`, the SVG that draws the disabled `line-dotted-fine`
+ * edge as true dots [D36, D68]; `ruled` prints an empty textarea as ruled
+ * lines. Colors are role variables only; local custom properties carry
+ * dimensions only.
+ *
+ * States read Base UI's attributes on the control from the box
+ * (`.base:has(.control[data-focused])`), because the box is the part that
+ * draws the edge and the ring (§1.11.4).
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.control {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.affix {
+  composes: typeBodyUi typeMuted from '../../utils/type.module.css';
+}
+
+.label {
+  composes: typeFieldLabel from '../../utils/type.module.css';
+}
+
+.count {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.edgeLine {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+@layer base {
+  .base {
+    /* Local dimensions. Variants and states publish these; `base` consumes them. */
+    --input-height: var(--size-px-8);
+    --input-edge: var(--border-size-1);
+    --input-radius: var(--radius-1);
+    --input-padding: var(--ds-space-12);
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-2);
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
+    block-size: var(--input-height);
+    margin: 0;
+    /* A heavier state edge moves into the padding, so the content never shifts. */
+    padding-inline: calc(var(--input-padding) + var(--border-size-1) - var(--input-edge));
+    border: var(--input-edge) solid var(--role-rule);
+    border-radius: var(--input-radius);
+    background: none;
+    color: var(--primary12);
+    cursor: text;
+  }
+
+  /* The value: type-body-ui (never below 1rem, so iOS does not zoom) in the box's ink. */
+  .control {
+    flex: 1 1 auto;
+    align-self: stretch;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    color: inherit;
+    text-overflow: ellipsis;
+    appearance: none;
+  }
+
+  /*
+   * The placeholder: --role-muted at full strength, ending in "…"; one
+   * weight lighter in dark scopes through --ds-muted-weight-step, floored
+   * by the type role [D154, D170].
+   */
+  .control::placeholder {
+    color: var(--role-muted);
+    font-weight: max(
+      var(--type-weight-floor, 400),
+      calc(var(--type-weight, 400) - var(--ds-muted-weight-step))
+    );
+  }
+
+  /* Leading icon: Material Symbols Rounded, inline tier, --size-px-2 to the value [D166]. */
+  .icon {
+    flex: none;
+    color: inherit;
+  }
+
+  /* Prefix or suffix unit, in --role-muted inside the box ("$ … USD"). */
+  .affix {
+    flex: none;
+    white-space: nowrap;
+  }
+
+  /* Label-inside: type-field-label, --size-px-2 from the top-left of the box. */
+  .label {
+    position: absolute;
+    inset-block-start: calc(var(--size-px-2) - var(--input-edge));
+    inset-inline-start: calc(var(--input-padding) + var(--border-size-1) - var(--input-edge));
+    color: inherit;
+    cursor: text;
+  }
+
+  /* Textarea count: type-data in --role-muted, at the box's end. */
+  .count {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-end;
+    gap: var(--size-px-1);
+    color: var(--role-muted);
+  }
+
+  .countGlyph {
+    display: none;
+    inline-size: var(--size-px-3);
+    block-size: var(--size-px-3);
+    overflow: visible;
+    color: var(--role-status);
+    fill: var(--role-status-fill);
+    stroke: var(--role-status-fill);
+    stroke-width: var(--ds-stroke-1-5);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /*
+   * The butted action cell sits over the box's block and end edges, so its
+   * own edge is the seam and the box keeps its height (§10.3).
+   */
+  .actionSlot {
+    display: flex;
+    flex: none;
+    align-self: stretch;
+    margin-block: calc(-1 * var(--input-edge));
+    margin-inline-end: calc(-1 * var(--input-edge));
+  }
+
+  /* Disabled edge host: covers the box once the solid edge is removed. */
+  .edge {
+    display: none;
+    position: absolute;
+    inset-block-start: calc(var(--ds-dot-fine) / 2);
+    inset-inline-start: calc(var(--ds-dot-fine) / 2);
+    inline-size: calc(100% - var(--ds-dot-fine));
+    block-size: calc(100% - var(--ds-dot-fine));
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .edgeLine {
+    fill: none;
+    stroke: var(--role-disabled-edge);
+    rx: calc(var(--input-radius) - var(--ds-dot-fine) / 2);
+  }
+
+  /* Print-only ruled lines for an empty textarea. */
+  .ruled {
+    display: none;
+  }
+
+  @media (--forcedColors) {
+    .edgeLine {
+      stroke: currentColor;
+    }
+
+    .countGlyph {
+      forced-color-adjust: none;
+      color: CanvasText;
+      fill: Canvas;
+      stroke: Canvas;
+    }
+  }
+
+  @media (--motionOK) {
+    .base {
+      transition-property: border-color, outline-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer variants {
+  /* Boxed (default): the §10.1 field box. */
+  .outline {
+    border-style: solid;
+  }
+
+  /* Underline: no box, a lone --border-size-1 --role-rule bottom rule (settings rows, printable blanks). */
+  .underline {
+    --input-radius: var(--ds-radius-none);
+
+    padding-inline: 0;
+    border-width: 0 0 var(--input-edge);
+  }
+
+  /* Label-inside: the --ds-size-control-xl box; the value sits --size-px-2 from the bottom, larger than the label. */
+  .labelInside {
+    --input-height: var(--ds-size-control-xl);
+  }
+
+  .labelInside .control {
+    align-self: flex-end;
+    block-size: auto;
+    padding-block-end: calc(var(--size-px-2) - var(--input-edge));
+  }
+
+  /* Textarea: at least 3 lines at --ds-leading-compact; vertical resize only. */
+  .multiline {
+    --input-height: auto;
+
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--size-px-1);
+    padding-block: calc(var(--input-padding) + var(--border-size-1) - var(--input-edge));
+  }
+
+  .multiline .control {
+    min-block-size: 3lh;
+    line-height: var(--ds-leading-compact);
+    resize: vertical;
+  }
+
+  /*
+   * Plate: the box face is the nested white scope's --primary1 (patterned
+   * grounds only, §10.1). The box is also a Ground face, whose own classes
+   * share the base layer, so its display and edge are restated here.
+   */
+  .plate {
+    display: flex;
+    border: var(--input-edge) solid var(--role-rule);
+    background-color: var(--primary1);
+    color: var(--primary12);
+  }
+
+  /* Butted end: --ds-radius-none at the seam, --radius-1 outside; the cell fills the end. */
+  .buttedEnd {
+    padding-inline-end: 0;
+    border-start-end-radius: var(--ds-radius-none);
+    border-end-end-radius: var(--ds-radius-none);
+  }
+
+  /*
+   * The action's build by width (§10.3, §5.10.2): the icon-only 64 × 48 px
+   * cell at base; an authored label from --md-n-above; icon-only again below
+   * 360 px of Form width or below --xs-n-below [D73, D163]. Written here,
+   * above the Button's own `base`, because it only switches visibility.
+   */
+  .actionText {
+    display: none;
+  }
+
+  @media (--md-n-above) {
+    .actionSlot:has(.actionText) .actionIcon {
+      display: none;
+    }
+
+    .actionText {
+      display: inline-flex;
+    }
+  }
+
+  @media (--xs-n-below) {
+    .actionSlot .actionIcon {
+      display: inline-flex;
+    }
+
+    .actionText {
+      display: none;
+    }
+  }
+
+  @container form (width < 360px) {
+    .actionSlot .actionIcon {
+      display: inline-flex;
+    }
+
+    .actionText {
+      display: none;
+    }
+  }
+}
+
+@layer states {
+  /*
+   * Hover (not disabled, invalid or read-only): the 1 px edge steps to
+   * --primary12 at the same weight, the underline variant's rule included,
+   * so layout never shifts [D140, D181].
+   */
+  .base:hover:has(.control:not([data-disabled], [data-invalid], [readonly])) {
+    border-color: var(--primary12);
+  }
+
+  /* Focus: the ring on any focus, pointer included, outside the box [D45, D90]. */
+  .base:has(.control[data-focused]),
+  .base:has(.control:focus) {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  .control:focus-visible {
+    outline: none;
+  }
+
+  /* Error: a --border-size-2 edge in --role-status (the danger scale's step 11) [D141, D155]. */
+  .base:has(.control[data-invalid]) {
+    --input-edge: var(--border-size-2);
+
+    border-color: var(--role-status);
+  }
+
+  /*
+   * Disabled: the solid edge becomes the dotted edge (the SVG), the face
+   * drops, and every ink takes --role-muted; never dimmed [D16, D85].
+   */
+  .base:has(.control[data-disabled]) {
+    --input-edge: 0px;
+
+    border-style: none;
+    background: none;
+    color: var(--role-muted);
+    cursor: default;
+  }
+
+  .base:has(.control[data-disabled]) .edge {
+    display: block;
+  }
+
+  /* Read-only: the box is removed; a --border-size-1 --role-rule bottom rule remains. */
+  .base:has(.control[readonly]) {
+    --input-padding: 0px;
+    --input-radius: var(--ds-radius-none);
+
+    border-width: 0 0 var(--border-size-1);
+    border-color: var(--role-rule);
+    background: none;
+  }
+
+  /* Count over its limit: --primary12 with the danger ◆ (the part carries the danger scale). */
+  .countOver {
+    color: var(--primary12);
+  }
+
+  .countOver .countGlyph {
+    display: block;
+  }
+
+  /* Autofill: override the browser's tint so the field keeps its normal face (§10.3). */
+  .control:autofill {
+    -webkit-text-fill-color: var(--primary12);
+    caret-color: var(--primary12);
+    transition: background-color 0s 86400s;
+  }
+}
+
+@layer print {
+  @media print {
+    /* The value prints in a 0.75 pt frame; the action cell, count and reveal toggle are interaction only. */
+    .actionSlot,
+    .count {
+      display: none;
+    }
+
+    /* Placeholders do not print (§10.2); shrinking is structural, not a color. */
+    .control::placeholder {
+      font-size: 0;
+    }
+
+    /* An empty textarea prints as at least 4 ruled lines (§10.3). */
+    .multiline:has(.control:not([data-filled])) .control {
+      display: none;
+    }
+
+    .multiline:has(.control:not([data-filled])) .ruled {
+      display: grid;
+    }
+
+    .ruled > span {
+      block-size: var(--ds-ruled-pitch);
+      border-block-end: var(--border-size-1) solid var(--role-rule);
+    }
+  }
+}

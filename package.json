@@ -1,0 +1,113 @@
+{
+  "sideEffects": [
+    "*.css",
+    "./utils/fonts.js",
+    "./src/utils/fonts.ts"
+  ],
+  "name": "@fairgarden-private/design",
+  "version": "0.1.0-alpha.0",
+  "description": "FairGarden Design System",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fairgarden/design.git"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "files": [
+    "components",
+    "utils",
+    "icons"
+  ],
+  "type": "module",
+  "scripts": {
+    "build": "pnpm run generate && pnpm run css-types && tsc && pnpm run postcss",
+    "dev": "concurrently --names css-types,typescript,postcss \"pnpm run css-types-watch\" \"tsc --pretty --watch --preserveWatchOutput\" \"pnpm run postcss-watch\"",
+    "postcss": "postcss './src/**/(*.css|*.module.css)' --base ./src -d . --config ./postcss.config.js",
+    "postcss-watch": "postcss './src/**/(*.css|*.module.css)' --base ./src -d . --config ./postcss.config.js --watch",
+    "css-types": "tcm -p '**/*.module.css' ./src",
+    "css-types-watch": "tcm -p '**/*.module.css' ./src --watch",
+    "lint": "eslint",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "canary": "fg-dist canary",
+    "release": "fg-dist release",
+    "release:check": "fg-dist release --check",
+    "generate": "node scripts/build-colors.js && node scripts/build-icons.js"
+  },
+  "keywords": [
+    "design",
+    "system",
+    "ui",
+    "components",
+    "react",
+    "typescript",
+    "fairgarden",
+    "base-ui"
+  ],
+  "author": "FairGarden",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@base-ui/react": "^1.8.0",
+    "@csstools/postcss-global-data": "^4.0.0",
+    "@fairgarden/distribution": "^0.1.0-alpha.0",
+    "@material-symbols/svg-400": "^0.47.5",
+    "@material-symbols/svg-500": "^0.47.5",
+    "@material-symbols/svg-600": "^0.47.5",
+    "@material-symbols/svg-700": "^0.47.5",
+    "@protomaps/basemaps": "^5.7.2",
+    "@radix-ui/colors": "^3.0.0",
+    "@types/geojson": "^7946.0.16",
+    "@types/node": "^26.6.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.70.0",
+    "@typescript-eslint/parser": "^8.70.0",
+    "classnames": "^2.5.1",
+    "concurrently": "^10.0.5",
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-react": "^7.37.5",
+    "maplibre-gl": "^6.11.1",
+    "open-props": "^1.7.23",
+    "pmtiles": "^4.5.0",
+    "postcss": "^8.5.28",
+    "postcss-cli": "^12.0.0",
+    "postcss-custom-media": "^12.0.1",
+    "postcss-import": "^17.0.0",
+    "prettier": "^3.9.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tslib": "^2.8.1",
+    "typed-css-modules": "^0.9.1",
+    "typescript": "^6.0.3"
+  },
+  "peerDependencies": {
+    "@base-ui/react": "^1.8.0",
+    "@protomaps/basemaps": "^5.7.2",
+    "maplibre-gl": "^6.11.1",
+    "pmtiles": "^4.5.0",
+    "react": "^19",
+    "react-dom": "^19"
+  },
+  "peerDependenciesMeta": {
+    "@protomaps/basemaps": {
+      "optional": true
+    },
+    "maplibre-gl": {
+      "optional": true
+    },
+    "pmtiles": {
+      "optional": true
+    }
+  },
+  "packageManager": "pnpm@10.28.0+sha512.05df71d1421f21399e053fde567cea34d446fa02c76571441bfc1c7956e98e363088982d940465fd34480d4d90a0668bc12362f8aa88000a64e83d0b0e47be48",
+  "dependencies": {
+    "@fontsource-variable/figtree": "^5.3.0",
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource-variable/source-serif-4": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "class-variance-authority": "^0.7.1",
+    "recharts": "^3.10.1"
+  }
+}

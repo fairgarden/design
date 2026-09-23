@@ -1,0 +1,413 @@
+/*
+ * Breadcrumb (§9.8). CVA functions `breadcrumb` and `breadcrumbStairRow` in
+ * Breadcrumb.tsx. Parts: base (the nav), list (the one-line `ol`), item,
+ * link (an ancestor: Link kind="nav" muted), plain (a level without a page),
+ * separator (› chevron), current, domainGlyph, the "…" overflow crumb,
+ * parentRow / parentLink / parentText (‹ Parent), stair (the Collapsible
+ * root), stairBar, stairToggle, stairGlyph (the glyph's box),
+ * stairTitle, staircase (the Collapsible panel), stairList, stairRow,
+ * stairChevron, printLine. Colors follow the §9.8 Color roles table through
+ * role variables only; local custom properties carry dimensions only:
+ *   --stair-indent  a staircase row's start inset, published by level1…6
+ *
+ * Tier classes: `inMd` marks what the 4-level line shows, `inLg` what the
+ * 6-level line shows; the media and container rules below pick one.
+ *
+ * The staircase kind is the section-bar breadcrumb (§11.7) [D184]: the
+ * staircase below --md-n-above, then one line whose crumbs truncate on a
+ * --ds-size-hit target, rest in --primary12 (the §11.7 crumb ink; the hover
+ * stays Link's muted --role-link-hover only) and whose current crumb, at
+ * --font-weight-7, acts as the bar's title.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. Crumbs are caps wayfinding,
+ * the §3.7 breadcrumb forms of `type-label` [D165]. */
+.link {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.plain {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.current {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.parentLink {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.stairTitle {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.printLine {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base {
+    min-inline-size: 0;
+    color: var(--primary12);
+  }
+
+  /* The one-line form. Crumbs never wrap; the middle collapses instead. */
+  .list {
+    display: none;
+    flex-wrap: nowrap;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    white-space: nowrap;
+  }
+
+  .item {
+    display: none;
+    flex: none;
+    align-items: center;
+  }
+
+  /* › at the inline tier, --size-px-2 each side, --role-muted (§9.8 Tokens). */
+  .separator {
+    flex: none;
+    margin-inline: var(--size-px-2);
+    color: var(--role-muted);
+  }
+
+  /* Optional solid glyph, --size-px-3, --size-px-2 before the root [D47]. */
+  .domainGlyph {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--size-px-3);
+    block-size: var(--size-px-3);
+    margin-inline-end: var(--size-px-2);
+    color: var(--primary12);
+  }
+
+  .current {
+    color: var(--primary12);
+  }
+
+  .plain {
+    color: var(--role-muted);
+  }
+
+  /* ‹ Parent: one line; a long label truncates with an ellipsis, never wraps. */
+  .parentRow {
+    display: flex;
+    min-inline-size: 0;
+  }
+
+  .parentLink {
+    max-inline-size: 100%;
+  }
+
+  /* The cap is the container width less the glyph and the Button's gap; the
+     vw line is the fallback without container units. */
+  .parentText {
+    display: block;
+    max-inline-size: calc(100vw - 2 * var(--ds-space-margin) - 2 * var(--size-px-3));
+    max-inline-size: calc(100cqi - 2 * var(--size-px-3));
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* The staircase (LTA): toggle and truncated title on a --ds-size-hit bar. */
+  .stair {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  .stairBar {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--ds-size-hit);
+    min-inline-size: 0;
+  }
+
+  .stairToggle {
+    position: relative;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--ds-size-hit);
+    block-size: var(--ds-size-hit);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-round);
+    background: none;
+    color: var(--primary12);
+    cursor: pointer;
+    appearance: none;
+  }
+
+  /* The 16 px glyph's box, centred in the toggle's hit area. */
+  .stairGlyph {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--size-px-7);
+    block-size: var(--size-px-7);
+  }
+
+  .stairTitle {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow: hidden;
+    color: var(--primary12);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* The clip reveal (§1.5.15) [D91]: the panel's edge wipes open, never fades. */
+  .staircase {
+    block-size: var(--collapsible-panel-height);
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  /* Level 1 sits under the title, past the toggle's hit area (LTA ≈41 px). */
+  .stairList {
+    margin: 0;
+    padding: 0;
+    padding-inline-start: var(--ds-size-hit);
+    list-style: none;
+  }
+
+  .stairRow {
+    --stair-indent: 0px;
+
+    display: flex;
+    align-items: center;
+    min-block-size: var(--ds-size-hit);
+    padding-inline-start: var(--stair-indent);
+    white-space: nowrap;
+  }
+
+  /* The --size-px-5 chevron slot before levels 2 and deeper; › in --role-muted. */
+  .stairChevron {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    inline-size: var(--size-px-5);
+    color: var(--role-muted);
+  }
+
+  .printLine {
+    display: none;
+    margin: 0;
+  }
+
+  @media (--motionOK) {
+    .staircase {
+      transition-property: block-size;
+      transition-duration: var(--ds-duration-disclosure);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer variants {
+  /* Ancestor and pageless level: --font-weight-4, --font-letterspacing-2 (§3.7);
+     the ancestor link's rest ink is Link's `muted` --role-muted, never an accent [D80]. */
+  .link,
+  .plain {
+    font-weight: var(--font-weight-4);
+    letter-spacing: var(--font-letterspacing-2);
+  }
+
+  .link {
+    white-space: nowrap;
+  }
+
+  /* Staircase indents: level 2 adds the chevron slot; each deeper level --size-px-2. */
+  .level1,
+  .level2 {
+    --stair-indent: 0px;
+  }
+
+  .level3 {
+    --stair-indent: var(--size-px-2);
+  }
+
+  .level4 {
+    --stair-indent: calc(2 * var(--size-px-2));
+  }
+
+  .level5 {
+    --stair-indent: calc(3 * var(--size-px-2));
+  }
+
+  .level6 {
+    --stair-indent: calc(4 * var(--size-px-2));
+  }
+
+  /* In-page breadcrumb: a module, container-first [D163]. Baseline: the
+     parent link only. */
+  .kindInline {
+    container: breadcrumb / inline-size;
+  }
+
+  /* Parent: the single ‹ Parent link at every width. */
+  .kindParent .parentRow {
+    display: flex;
+  }
+
+  /* The staircase kind's line (the section bar's crumbs): crumbs shrink and
+     truncate rather than wrap, each at most --size-px-14, on a --ds-size-hit
+     target (§11.7) [D184]. */
+  .kindStaircase .list {
+    min-inline-size: 0;
+  }
+
+  .kindStaircase .item {
+    flex: 0 1 auto;
+    min-inline-size: 0;
+  }
+
+  .kindStaircase .list .link,
+  .kindStaircase .list .plain,
+  .kindStaircase .list .current {
+    display: block;
+    min-inline-size: 0;
+    max-inline-size: var(--size-px-14);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .kindStaircase .list .link {
+    padding-block: calc((var(--ds-size-hit) - 1lh) / 2);
+  }
+
+  /* The bar's crumbs rest in --primary12 (§11.7); weight and position tell
+     the current crumb apart. Link's states layer keeps the muted hover. */
+  .kindStaircase .list .link,
+  .kindStaircase .list .plain {
+    color: var(--primary12);
+  }
+
+  /* Viewport fallback: inline from --md-n-above (4 levels), 6 levels from
+     --lg-n-above. The staircase is page frame: the staircase below
+     --md-n-above, one line from it [D184]. */
+  @media (--md-n-above) {
+    .kindInline .list,
+    .kindStaircase .list {
+      display: flex;
+    }
+
+    .kindInline .parentRow,
+    .kindStaircase .stair {
+      display: none;
+    }
+
+    .inMd {
+      display: flex;
+    }
+  }
+
+  @media (--lg-n-above) {
+    .item {
+      display: none;
+    }
+
+    .inLg {
+      display: flex;
+    }
+  }
+
+  /* Container thresholds (§5.10.2): from 768 px inline, the middle collapsed
+     past 4 levels (root and last two ancestors kept); from 1024 px up to 6. */
+  @container breadcrumb (width < 768px) {
+    .kindInline .list {
+      display: none;
+    }
+
+    .kindInline .parentRow {
+      display: flex;
+    }
+  }
+
+  @container breadcrumb (width >= 768px) {
+    .kindInline .list {
+      display: flex;
+    }
+
+    .kindInline .parentRow {
+      display: none;
+    }
+
+    .item {
+      display: none;
+    }
+
+    .inMd {
+      display: flex;
+    }
+  }
+
+  @container breadcrumb (width >= 1024px) {
+    .item {
+      display: none;
+    }
+
+    .inLg {
+      display: flex;
+    }
+  }
+}
+
+@layer states {
+  /* Ancestor hover is Link's `muted` nav hover: --role-link-hover only,
+     underlined where that ink is --primary12 (§9.8) [D80, D181]. */
+
+  /* Current: --font-weight-6 against ancestors at --font-weight-4, last, unlinked;
+     on the staircase kind's line --font-weight-7, acting as the title [D184]. */
+  .current[aria-current='page'] {
+    font-weight: var(--font-weight-6);
+  }
+
+  .kindStaircase .list .current[aria-current='page'] {
+    font-weight: var(--font-weight-7);
+  }
+
+  /* Stair toggle hover: the glyph at the next tier's weight, from the
+     Collapsible's glyph host; no added circle (§11.7) [D181]. */
+
+  /* Focus: 2 px --primary12 ring at a 2 px offset, keyboard only [D45]. */
+  .stairToggle:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  .staircase[data-starting-style],
+  .staircase[data-ending-style] {
+    block-size: 0;
+  }
+}
+
+@layer print {
+  @media print {
+    /* The interactive breadcrumb is hidden; the path prints once as one plain
+       line of caps, the staircase flattened and collapsed crumbs restored,
+       with no URLs or link letters (§7.8) [D80, D105]. */
+    .list,
+    .parentRow,
+    .stair {
+      display: none;
+    }
+
+    .printLine {
+      display: block;
+    }
+  }
+}

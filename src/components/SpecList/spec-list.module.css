@@ -1,0 +1,95 @@
+/*
+ * Leader list (§8.3; §12.7). CVA function `specList`. Color roles (§12.7):
+ * label --role-muted, leader line-dotted-fine in --role-rule, value
+ * --primary12. The leader is the item's `::before`, a flex item between
+ * label and value: an SVG mask cuts a 1 px solid border into true round
+ * dots at a 3 px pitch [D36, D68], never a dotted border style or a
+ * gradient. Being a border it prints as foreground, at 0.75 pt dots on a
+ * 2.25 pt pitch, and takes the system ink in forced colors.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.label {
+  composes: typeLabel typeMuted from '../../utils/type.module.css';
+}
+
+.value {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base {
+    container-type: inline-size;
+    /* Size containment leaves no intrinsic width: fill the box, never collapse as a flex or shrink-to-fit item. */
+    inline-size: 100%;
+    display: grid;
+    row-gap: var(--size-px-2);
+    margin: 0;
+    min-inline-size: 0;
+  }
+
+  /* Label, leader, value on the label's last baseline; the leader stops --size-px-2 short of each. */
+  .item {
+    display: flex;
+    align-items: last baseline;
+    column-gap: var(--size-px-2);
+    min-inline-size: 0;
+  }
+
+  .label {
+    flex: 0 1 auto;
+    min-inline-size: 0;
+    margin: 0;
+  }
+
+  .item::before {
+    content: '';
+    order: 1;
+    flex: 1 0 var(--size-px-5);
+    align-self: last baseline;
+    block-size: 0;
+    border-block-end: var(--ds-dot-fine) solid var(--role-rule);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 1'%3E%3Ccircle cx='1.5' cy='0.5' r='0.5'/%3E%3C/svg%3E");
+    mask-size: var(--ds-dot-fine-pitch) var(--ds-dot-fine);
+    mask-repeat: round no-repeat;
+    mask-origin: border-box;
+  }
+
+  /* The value: right-aligned lining tabular figures; a wrapped value stays right-aligned. */
+  .value {
+    order: 2;
+    flex: 0 1 auto;
+    min-inline-size: 0;
+    margin: 0;
+    color: var(--primary12);
+    font-variant-numeric: var(--ds-numerals-data);
+    text-align: end;
+  }
+
+  /* Below 320 px of the list: the leader drops and the label stacks over the value (§8.3). */
+  @container (width < 320px) {
+    .item {
+      flex-direction: column;
+      align-items: flex-start;
+      row-gap: var(--size-px-1);
+    }
+
+    .item::before {
+      display: none;
+    }
+
+    .value {
+      text-align: start;
+    }
+  }
+}
+
+@layer print {
+  @media print {
+    .item {
+      break-inside: avoid;
+    }
+  }
+}

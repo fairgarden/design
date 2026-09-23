@@ -1,0 +1,174 @@
+/*
+ * Separator (§9.12; geometry and meaning §4). CVA function `separator` in
+ * Separator.tsx. Parts: base (the line), dots (the SVG dot run of `dotted`),
+ * segment and dot (the rule–dot–rule ornament), glyph / glyphInk (typographic
+ * separators, composed by host modules). Every separator is --border-size-1;
+ * solid = boundary, dotted = relation, double = total; never dashed [D35, D66].
+ *
+ * Variant classes compose one line style and publish local dimensions; the
+ * data-orientation rules (states layer) consume them for the edge and axis.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.segment {
+  composes: lineSolid from '../../utils/line.module.css';
+}
+
+@layer base {
+  .base {
+    --separator-thickness: 0;
+    --separator-edge-start: var(--border-size-1);
+    --separator-edge-end: 0;
+    position: relative;
+    flex: none;
+    margin: 0;
+    border-color: currentColor;
+    color: var(--role-rule);
+  }
+
+  /*
+   * True round dots in inline SVG (foreground, so they print) [D36, D68]:
+   * zero-length dashes with round caps, geometry inherited from lineDottedFine.
+   * The offset puts the first dot's centre half a dot in, and the run is sized
+   * below to a whole number of pitches, so it starts and ends on a dot (§4.8.3).
+   */
+  .dots {
+    position: absolute;
+    inset: 0;
+    display: block;
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-dashoffset: calc(var(--ds-dot-fine) / -2);
+  }
+
+  /* Rule–dot–rule (ornament-rule-dot, §4.8.2): two hairlines and a solid dot. */
+  .segment {
+    flex: 1 1 0;
+    border-color: currentColor;
+    border-width: 0;
+    border-block-start-width: var(--border-size-1);
+  }
+
+  .dot {
+    flex: none;
+    inline-size: var(--ds-ornament-dot);
+    block-size: var(--ds-ornament-dot);
+    margin-inline: var(--ds-ornament-dot-gap);
+    fill: currentColor;
+  }
+
+  /* Typographic separators (· › and • |), composed by host modules. */
+  .glyph {
+    color: var(--role-muted);
+  }
+
+  .glyphInk {
+    color: var(--primary12);
+  }
+}
+
+.rule {
+  composes: lineSolid from '../../utils/line.module.css';
+}
+
+.hairline {
+  composes: lineSolid from '../../utils/line.module.css';
+}
+
+.dotted {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+.doubleHair {
+  composes: lineDoubleHair from '../../utils/line.module.css';
+}
+
+@layer variants {
+  /* Solid, where the division must be found (default). */
+  .rule {
+    color: var(--role-rule);
+  }
+
+  /* Solid, with whitespace support only [D17]. */
+  .hairline {
+    color: var(--role-hairline);
+  }
+
+  /* Relation only: subdivisions inside solid-bounded groups, never the only
+     boundary [D66]. The SVG draws it; the box carries no border. */
+  .dotted {
+    --separator-thickness: var(--ds-dot-fine);
+    --separator-edge-start: 0;
+    color: var(--role-rule);
+  }
+
+  /* Totals and running-header bands: 1 + 1 px, --ds-double-hair-gap apart. */
+  .doubleHair {
+    --separator-thickness: var(--ds-double-hair-gap);
+    --separator-edge-end: var(--border-size-1);
+    color: var(--role-rule);
+  }
+
+  /* Thematic break: 35% of the text column, max --size-px-13, centred.
+     Ornaments in reading bands take --primary12 (§4.8.2). Horizontal only. */
+  .ruleDot {
+    --separator-thickness: var(--ds-ornament-dot);
+    --separator-edge-start: 0;
+    display: flex;
+    align-items: center;
+    inline-size: min(35%, var(--size-px-13));
+    margin-inline: auto;
+    color: var(--primary12);
+  }
+}
+
+@layer states {
+  /* data-orientation picks the axis and the edge that draws the line. */
+  .base[data-orientation='horizontal'] {
+    box-sizing: content-box;
+    block-size: var(--separator-thickness);
+    border-width: 0;
+    border-block-width: var(--separator-edge-start) var(--separator-edge-end);
+  }
+
+  .base[data-orientation='vertical'] {
+    box-sizing: content-box;
+    align-self: stretch;
+    inline-size: var(--separator-thickness);
+    border-width: 0;
+    border-inline-width: var(--separator-edge-start) var(--separator-edge-end);
+  }
+
+  /* Whole pitches plus one dot, centred; 100% where round() is unsupported. */
+  .base[data-orientation='horizontal'] .dots {
+    inline-size: 100%;
+    inline-size: calc(
+      round(down, 100% - var(--ds-dot-fine), var(--ds-dot-fine-pitch)) + var(--ds-dot-fine)
+    );
+    block-size: 100%;
+    margin-inline: auto;
+  }
+
+  .base[data-orientation='vertical'] .dots {
+    inline-size: 100%;
+    block-size: 100%;
+    block-size: calc(
+      round(down, 100% - var(--ds-dot-fine), var(--ds-dot-fine-pitch)) + var(--ds-dot-fine)
+    );
+    margin-block: auto;
+  }
+}
+
+@layer print {
+  @media print {
+    /* A rule is never stranded at the top or foot of a page; lines print
+       black at 0.75 pt through the global remap (§9.12, §4.12). */
+    .base[data-orientation='horizontal'] {
+      break-before: avoid;
+      break-after: avoid;
+    }
+  }
+}

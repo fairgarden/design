@@ -1,0 +1,99 @@
+/*
+ * Alert: the inline status block (§10.20) [D110]. On the page ground, never a
+ * tinted panel: a --ds-stroke-3 start bar and the glyph in --role-status, a
+ * type-runin word lead, the message in type-body-ui --primary12, padding
+ * --size-px-3 from the bar. The secondary is the status scale, so
+ * --role-status resolves to --secondary11 (--primary12 on saturated grounds,
+ * --secondary12 on brick) without the module reading the scope [D141, D155].
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.base {
+  composes: typeBodyUi from '../../utils/type.module.css';
+  composes: lineSolid from '../../utils/line.module.css';
+}
+
+.lead {
+  composes: typeRunin from '../../utils/type.module.css';
+}
+
+@layer base {
+  /* The start bar (part `bar`) is the root's inline-start border, so it spans the block and prints as a rule. */
+  .base {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    column-gap: var(--size-px-2);
+    row-gap: var(--ds-space-12);
+    border-width: 0;
+    border-inline-start-width: var(--ds-stroke-3);
+    border-inline-start-color: var(--role-status);
+    padding-inline-start: var(--size-px-3);
+    color: var(--primary12);
+  }
+
+  /*
+   * Custom §1.5.4 glyph at the tag tier: the shape and inner mark in
+   * --role-status (currentColor), knockouts and the outline disc in
+   * --role-status-fill. One line box tall so it sits on the first line.
+   */
+  .glyph {
+    grid-column: 1;
+    grid-row: 1;
+    display: block;
+    inline-size: var(--size-px-4);
+    block-size: var(--size-px-4);
+    block-size: 1lh;
+    overflow: visible;
+    color: var(--role-status);
+    fill: var(--role-status-fill);
+    stroke: var(--role-status-fill);
+    stroke-width: var(--ds-stroke-1-5);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .message {
+    grid-column: 2;
+    min-inline-size: 0;
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  /* The status word: --primary12, or the status scale's step 12 on brick [D173]. */
+  .lead {
+    color: var(--role-status-text);
+  }
+
+  .action {
+    grid-column: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--size-px-2);
+  }
+
+  /* Forced colors: keep the shape and its knockout mark legible. */
+  @media (--forcedColors) {
+    .glyph {
+      forced-color-adjust: none;
+      color: CanvasText;
+      fill: Canvas;
+      stroke: Canvas;
+    }
+  }
+}
+
+@layer print {
+  @media print {
+    /* A failed module prints its status line; the glyph and bar print black through the remap. */
+    .base {
+      break-inside: avoid;
+    }
+
+    .action {
+      display: none;
+    }
+  }
+}

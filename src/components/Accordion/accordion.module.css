@@ -1,0 +1,248 @@
+/*
+ * Accordion (§10.13). Parts: `base` (the Base UI Root), `item` (its top rule;
+ * the last item also closes with one), `header` (the heading), `trigger`
+ * (the row), `icon` (optional leading subject symbol), `title`, `glyph`
+ * (the LTA disclosure glyph, whose direction and color the Collapsible
+ * module draws, or the plus/minus `circle`), `panel` and its padded inner
+ * `content`. Pure type and line: no fill in any state. Colors are role
+ * variables only; local custom properties carry dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. The trigger carries the title's
+ * type role so the glyph can align to the first line (1lh). */
+.trigger {
+  composes: typeSubhead from '../../utils/type.module.css';
+}
+
+.content {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.item {
+  composes: lineSolid from '../../utils/line.module.css';
+}
+
+@layer base {
+  .base {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  /* Row rules: --border-size-1 --role-rule above each item and after the last. */
+  .item {
+    border-width: 0;
+    border-block-start-width: var(--border-size-1);
+    border-color: var(--role-rule);
+  }
+
+  .item:last-child {
+    border-block-end-width: var(--border-size-1);
+  }
+
+  .header {
+    margin: 0;
+  }
+
+  /* The row: ≥ --ds-size-control-xl tall, --size-px-3 vertical padding, text aligned to the column. */
+  .trigger {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--size-px-3);
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: var(--ds-size-control-xl);
+    margin: 0;
+    padding-block: var(--size-px-3);
+    padding-inline: 0;
+    border: 0;
+    background: none;
+    color: var(--primary12);
+    text-align: start;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  /* Leading icon and glyph centre on the title's first line (1lh), so they stay top-aligned when it wraps. */
+  .icon {
+    margin-block: calc((1lh - var(--size-px-4)) / 2);
+    color: var(--primary12);
+  }
+
+  /* The bare-text hover underline's color, weight and offset (§10.1) [D181]. */
+  .title {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  /* Both glyph forms sit at the row's end. */
+  .glyph {
+    flex: none;
+  }
+
+  /* The clip reveal (§1.5.15) [D91]: the panel's edge wipes open; never a fade. */
+  .panel {
+    block-size: var(--accordion-panel-height);
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  .content {
+    padding-block-end: var(--size-px-5);
+    color: var(--primary12);
+  }
+
+  /* A leading icon indents the panel to the title column (Sofar Sounds). */
+  .item:has(.icon) .content {
+    padding-inline-start: calc(var(--size-px-4) + var(--size-px-3));
+  }
+
+  @media (--motionOK) {
+    .panel {
+      transition-property: block-size;
+      transition-duration: var(--ds-duration-disclosure);
+      transition-timing-function: var(--ease-out-3);
+    }
+
+    /* Hover transitions [D181]: --ds-duration-quick, --ease-out-3. */
+    .title,
+    .circle {
+      transition-property: text-decoration-color, border-width;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+
+  /* Stack guard: leading icons drop so the title keeps its width [D73]. */
+  @media (--xs-n-below) {
+    .icon {
+      display: none;
+    }
+
+    .item:has(.icon) .content {
+      padding-inline-start: 0;
+    }
+  }
+}
+
+@layer variants {
+  /* Disclosure (default): the 20 px LTA glyph, centred on the title's first line [D109]. */
+  .disclosure .glyph {
+    margin-block: calc((1lh - var(--size-px-4)) / 2);
+  }
+
+  /* Strong top: a --border-size-2 --primary12 rule above the first item (turbopuffer). */
+  .headed .item:first-child {
+    border-block-start-width: var(--border-size-2);
+    border-block-start-color: var(--primary12);
+  }
+
+  /* Plus / minus: a --size-px-5 outline circle at --ds-stroke-1-5, outline in both states. */
+  .plusminus .circle {
+    --accordion-circle-edge: var(--ds-stroke-1-5);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    inline-size: var(--size-px-5);
+    block-size: var(--size-px-5);
+    margin-block: calc((1lh - var(--size-px-5)) / 2);
+    border: var(--accordion-circle-edge) solid var(--primary12);
+    border-radius: var(--radius-round);
+    color: var(--primary12);
+  }
+
+  .plusminus .minus {
+    display: none;
+  }
+}
+
+@layer states {
+  /* Expanded: + becomes −; the disclosure glyph's own module flips its arrows. */
+  .trigger[data-panel-open] .plus {
+    display: none;
+  }
+
+  .trigger[data-panel-open] .minus {
+    display: inline-block;
+  }
+
+  /*
+   * Hover (not disabled): the title takes the bare-text underline,
+   * --role-accent at --border-size-2, offset --size-px-1; the disclosure
+   * glyph does not change [D109, D181].
+   */
+  .trigger:not([data-disabled]):hover .title {
+    text-decoration-line: underline;
+  }
+
+  /*
+   * Plus / minus hover and press: the glyph takes the next tier's weight
+   * (§10.1 icon states) [D181]. The sign swaps to its emphasis instance
+   * (Icon weight="interactive", hosted by the trigger); the circle, drawn
+   * at the sign's tier, steps with it to the next tier's stroke.
+   */
+  .trigger:not([data-disabled]):is(:hover, :active) .circle {
+    --accordion-circle-edge: var(--border-size-2);
+  }
+
+  /* Focus: the ring surrounds the row, drawn inside the column so it never clips. */
+  .trigger:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: calc(-1 * var(--border-size-2));
+  }
+
+  /* Disabled: title, icon and glyph --role-muted; the row rule is unchanged [D16, D85]. */
+  .trigger[data-disabled] {
+    color: var(--role-muted);
+    cursor: default;
+  }
+
+  .trigger[data-disabled] .icon {
+    color: var(--role-muted);
+  }
+
+  .trigger[data-disabled] .circle {
+    border-color: var(--role-muted);
+    color: var(--role-muted);
+  }
+
+  .panel[data-starting-style],
+  .panel[data-ending-style] {
+    block-size: 0;
+  }
+}
+
+@layer print {
+  @media print {
+    /* Every panel prints expanded; the trigger prints as its heading and glyphs hide (§7.7). */
+    .glyph {
+      display: none;
+    }
+
+    .trigger {
+      min-block-size: 0;
+    }
+
+    .header {
+      break-after: avoid;
+    }
+
+    .panel,
+    .panel[data-starting-style],
+    .panel[data-ending-style] {
+      block-size: auto;
+      overflow: visible;
+    }
+
+    .panel[hidden] {
+      display: block;
+      content-visibility: visible;
+    }
+  }
+}

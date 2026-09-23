@@ -1,0 +1,53 @@
+# Separator
+
+A line that divides content and is announced to assistive technology, built on Base UI's Separator.
+
+```tsx
+import { Separator } from '@fairgarden-private/design/components/Separator'
+```
+
+Use it where the grouping would otherwise be unclear. Typographic separators (· • | ›) are text, not this component.
+
+## Variants and orientation
+
+import { DemoSeparatorVariants } from './demos/variants'
+
+<DemoSeparatorVariants.Title />
+
+`rule` (the default) is a boundary a reader must find, in `--role-rule`. `hairline` is for places where whitespace and type also carry the structure. `dotted` marks a relation inside a solid-bounded group, `doubleHair` a total or running header, and `ruleDot` a thematic break. There is no dashed variant: dashes never divide. `orientation` is Base UI's own prop.
+
+<DemoSeparatorVariants />
+
+[See Demo](./demos/variants/)
+
+## Primary scale
+
+import { DemoSeparatorColor } from './demos/color'
+
+<DemoSeparatorColor.Title />
+
+Rules and hairlines are primary roles, so `primary` recolors them. `secondary` is accepted for consistency, but no separator part draws in an accent.
+
+<DemoSeparatorColor />
+
+[See Demo](./demos/color/)
+
+## On grounds
+
+import { DemoSeparatorGrounds } from './demos/grounds'
+
+<DemoSeparatorGrounds.Title />
+
+<DemoSeparatorGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesSeparator } from './types'
+
+<TypesSeparator />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §9.12 (separator) and §4.2 (line semantics).

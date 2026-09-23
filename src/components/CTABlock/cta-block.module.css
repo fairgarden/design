@@ -1,0 +1,358 @@
+/*
+ * CTA Block (§11.10, the CTA banner). CVA function `ctaBlock`.
+ * Color roles (§11.10): CTA field ground = the preset's, edge --role-edge
+ * (the field's --primary12, drawn by Ground); kicker --role-heading; trail
+ * --role-accent; headline --primary12 over a pattern, else --role-heading;
+ * support --primary12; action and outline twin: the §9.2 Button's roles;
+ * decor --role-tint (the sunburst's tile ink); blob mount discs
+ * --secondary9 / --secondary7 and its mark --secondary-contrast (the
+ * ornament module's); crop marks --primary12.
+ * Colors are role variables only; local custom properties carry
+ * dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.kicker {
+  composes: typeKicker from '../../utils/type.module.css';
+}
+
+.headline {
+  composes: typeH2 from '../../utils/type.module.css';
+}
+
+.support {
+  composes: typeBody from '../../utils/type.module.css';
+}
+
+.frameLine {
+  composes: lineDashedFine from '../../utils/line.module.css';
+}
+
+.decorSunburst {
+  composes: patternSunburst from '../../utils/pattern.module.css';
+}
+
+@layer base {
+  .base {
+    position: relative;
+    display: block;
+    color: var(--primary12);
+  }
+
+  /*
+   * The content: the inline-size container `cta`. Baseline: a centered
+   * stack; kicker → headline --ds-space-56, headline → action --size-px-7.
+   */
+  .content {
+    container: cta / inline-size;
+    position: relative;
+    z-index: 1;
+    min-inline-size: 0;
+  }
+
+  .layout {
+    display: grid;
+    justify-items: center;
+    row-gap: var(--size-px-7);
+    min-inline-size: 0;
+    text-align: center;
+  }
+
+  .text {
+    display: grid;
+    justify-items: center;
+    min-inline-size: 0;
+    inline-size: 100%;
+  }
+
+  /* The kicker starts ≈ 15% of the column in while the headline centers (LTA). */
+  .kicker {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-12);
+    justify-self: start;
+    margin: 0;
+    margin-block-end: var(--ds-space-56);
+    margin-inline-start: 15%;
+    color: var(--role-heading);
+    text-align: start;
+  }
+
+  .trail {
+    display: inline-flex;
+    flex: none;
+    max-inline-size: var(--size-px-12);
+    color: var(--role-accent);
+  }
+
+  .trail > :where(svg, img) {
+    display: block;
+    max-inline-size: 100%;
+    block-size: auto;
+  }
+
+  /* The headline: type-h2, centered, ≤ 45ch (--size-content-2). */
+  .headline {
+    max-inline-size: var(--size-content-2);
+    margin: 0;
+    color: var(--role-heading);
+    text-wrap: balance;
+  }
+
+  .support {
+    max-inline-size: var(--size-content-2);
+    margin: 0;
+    margin-block-start: var(--size-px-5);
+    color: var(--primary12);
+  }
+
+  /* Actions flex-wrap: the outline twin sits inline once both fit, below otherwise. */
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--ds-space-12);
+  }
+
+  /*
+   * Decoration behind the content, in --role-tint, clipped by its box (the
+   * block; the sunburst kind's reaches --ds-space-40 below it, below). A
+   * custom node sits centred on the bottom edge. `.base .decor` outranks
+   * the pattern class's own `position: relative` in this layer.
+   */
+  .base .decor {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    color: var(--role-tint);
+    pointer-events: none;
+  }
+
+  .decor > :where(svg, img) {
+    display: block;
+    max-inline-size: none;
+  }
+
+  /* The blob mount (an OrnamentBlob, which colors its discs and mark), above the headline. */
+  .mount {
+    display: grid;
+    place-items: center;
+    margin-block-end: var(--size-px-5);
+  }
+
+  /* The crop-mark box (§4.5.5): a line-dashed-fine rectangle in --primary12, foreground so it prints. */
+  .frame {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .frameLine {
+    fill: none;
+    stroke: var(--primary12);
+  }
+
+  /* A "+" of --ds-mark-arm --border-size-1 arms at each corner, overhanging --ds-mark-overhang. */
+  .cornerMark {
+    position: absolute;
+    inline-size: var(--ds-mark-arm);
+    block-size: var(--ds-mark-arm);
+    overflow: visible;
+    fill: none;
+    stroke: var(--primary12);
+    stroke-width: var(--border-size-1);
+    pointer-events: none;
+  }
+
+  .startStart {
+    inset-block-start: calc(-1 * var(--ds-mark-overhang));
+    inset-inline-start: calc(-1 * var(--ds-mark-overhang));
+  }
+
+  .startEnd {
+    inset-block-start: calc(-1 * var(--ds-mark-overhang));
+    inset-inline-end: calc(-1 * var(--ds-mark-overhang));
+  }
+
+  .endStart {
+    inset-block-end: calc(-1 * var(--ds-mark-overhang));
+    inset-inline-start: calc(-1 * var(--ds-mark-overhang));
+  }
+
+  .endEnd {
+    inset-block-end: calc(-1 * var(--ds-mark-overhang));
+    inset-inline-end: calc(-1 * var(--ds-mark-overhang));
+  }
+}
+
+@layer variants {
+  /* Only --primary12 text sits on a pattern (§4.10.1) [D120]. */
+  .patterned .headline {
+    color: var(--primary12);
+  }
+
+  /*
+   * Sunburst: the decoration reaches --ds-space-40 below the block's bottom
+   * edge, into its band's bottom padding, and pattern-sunburst centres its
+   * origin there, so that edge clips the lower half (§4.10.1, §11.10).
+   */
+  .sunburst .decor {
+    inset-block-end: calc(-1 * var(--ds-space-40));
+  }
+
+  /* Mission: the mount replaces the kicker's trail; the headline follows it directly. */
+  .mission .kicker {
+    justify-self: center;
+    margin-inline-start: 0;
+  }
+
+  /*
+   * The CTA field [D177]: inset in the content container, never full-bleed;
+   * --ds-radius-20; padding --size-px-7, --size-px-10 from --lg-n-above
+   * (≥ the radius); Ground draws the --primary12 edge.
+   */
+  .field {
+    position: relative;
+    padding: var(--size-px-7);
+    border-radius: var(--ds-radius-20);
+  }
+
+  @media (--lg-n-above) {
+    .field {
+      padding: var(--size-px-10);
+    }
+  }
+
+  /* Saturated campaign field: one ink; the kicker centers with the headline. */
+  .saturated .kicker {
+    justify-self: center;
+    margin-inline-start: 0;
+  }
+
+  /* Framed: the crop-mark box around --size-px-7 of padding, square. */
+  .framed {
+    padding: var(--size-px-7);
+    border-radius: var(--ds-radius-none);
+  }
+
+  /*
+   * Deep and framed: headline 7, actions 5 from 768 px of the content's
+   * container (Crab Fit's donate strip); viewport fallback --lg-n-above.
+   */
+  @media (--lg-n-above) {
+    .deep .layout,
+    .framed .layout {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      align-items: center;
+      column-gap: var(--ds-space-margin);
+      justify-items: stretch;
+      text-align: start;
+    }
+
+    .deep .text,
+    .framed .text {
+      grid-column: 1 / span 7;
+      justify-items: start;
+    }
+
+    .deep .actions,
+    .framed .actions {
+      grid-column: 8 / -1;
+      justify-content: flex-end;
+    }
+
+    .deep .kicker,
+    .framed .kicker {
+      margin-inline-start: 0;
+    }
+  }
+
+  @container cta (width < 768px) {
+    .deep .layout,
+    .framed .layout {
+      grid-template-columns: minmax(0, 1fr);
+      justify-items: center;
+      text-align: center;
+    }
+
+    .deep .text,
+    .framed .text,
+    .deep .actions,
+    .framed .actions {
+      grid-column: 1 / -1;
+    }
+
+    .deep .text,
+    .framed .text {
+      justify-items: center;
+    }
+
+    .deep .actions,
+    .framed .actions {
+      justify-content: center;
+    }
+  }
+
+  @container cta (width >= 768px) {
+    .deep .layout,
+    .framed .layout {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      align-items: center;
+      column-gap: var(--ds-space-margin);
+      justify-items: stretch;
+      text-align: start;
+    }
+
+    .deep .text,
+    .framed .text {
+      grid-column: 1 / span 7;
+      justify-items: start;
+    }
+
+    .deep .actions,
+    .framed .actions {
+      grid-column: 8 / -1;
+      justify-content: flex-end;
+    }
+
+    .deep .kicker,
+    .framed .kicker {
+      margin-inline-start: 0;
+    }
+  }
+}
+
+@layer print {
+  @media print {
+    /*
+     * The ornament drops; the block reads completely without it (LTA). The
+     * trail prints black at 0.75 pt and the blob mount drops its discs (the
+     * ornament module's print rules), its mark printing black (§6.6, §11.10).
+     */
+    .decor {
+      display: none;
+    }
+
+    /* Page-ground kinds print between rules; a CTA field prints its edge as a black frame (Ground). */
+    .sunburst,
+    .mission {
+      padding-block: var(--size-px-5);
+      border-block: var(--border-size-1) solid var(--primary12);
+    }
+
+    .base {
+      break-inside: avoid;
+    }
+
+    /* The framed kind's dashed frame (0.75 pt, 3 / 2.25 pt) and corner marks print as they are. */
+  }
+}

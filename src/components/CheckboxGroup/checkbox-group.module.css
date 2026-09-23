@@ -1,0 +1,52 @@
+/*
+ * Checkbox Group (§10.7), group layout only. CVA function `checkboxGroup`.
+ * The root `base` is the inline-size container `checkbox-group` [D163]. A
+ * container cannot query itself, so the columns come from the rows' flex
+ * basis, which the container rules set; the group styles only that layout
+ * and never a checkbox's own parts. Baseline without container support:
+ * one column.
+ */
+
+@layer base {
+  .base {
+    container: checkbox-group / inline-size;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ds-space-12);
+    min-inline-size: 0;
+  }
+
+  .base > * {
+    flex: 1 1 100%;
+    min-inline-size: 0;
+  }
+}
+
+@layer variants {
+  .standard {
+    gap: var(--ds-space-12);
+  }
+
+  /* Option cards sit --size-px-5 apart. */
+  .card {
+    gap: var(--size-px-5);
+  }
+
+  .ledger {
+    gap: var(--ds-space-12);
+  }
+
+  /* From 480 px of group width, short labels run in 2 columns (§5.10.2). */
+  @container checkbox-group (width >= 480px) {
+    .standard > * {
+      flex: 0 1 calc((100% - var(--ds-space-12)) / 2);
+    }
+  }
+
+  /* From 768 px, option cards go 2-up when there are more than 4. */
+  @container checkbox-group (width >= 768px) {
+    .card:has(> :nth-child(5)) > * {
+      flex: 0 1 calc((100% - var(--size-px-5)) / 2);
+    }
+  }
+}

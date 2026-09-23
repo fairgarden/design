@@ -1,0 +1,273 @@
+/*
+ * Toolbar (§9.11). CVA functions `toolbar` and `toolbarBottomRule` in
+ * Toolbar.tsx. Parts: base (the row, the `toolbar` container), group,
+ * separator, count, more (the "…" trigger), bottomRule (with its `rule` /
+ * `hairline` classes), item (a ToolbarButton's root), collapsing and label
+ * (the icon-only-below-768 label), lowPriority, caption (print only). The
+ * module styles only these layout parts; items keep their own modules
+ * (§9.2, §9.4, §9.7). Colors follow the §9.11 Color roles table through
+ * role variables only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.count {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.caption {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.bottomRule {
+  composes: lineSolid from '../../utils/line.module.css';
+}
+
+@layer base {
+  /* The row: --size-px-8 tall (--ds-size-control-md items plus --size-px-1
+     padding), the band's ground, no face of its own. Never wraps. */
+  .base {
+    container: toolbar / inline-size;
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: var(--size-px-1);
+    box-sizing: border-box;
+    min-block-size: var(--size-px-8);
+    padding-block: var(--size-px-1);
+    color: var(--primary12);
+  }
+
+  .group {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--size-px-1);
+  }
+
+  /* Vertical --border-size-1 in --role-rule; the axis rules are in `states`. */
+  .separator {
+    flex: none;
+    align-self: center;
+    margin: 0;
+    border: 0 solid var(--role-rule);
+  }
+
+  /* "Items (54)": mono, --primary12. */
+  .count {
+    flex: none;
+    color: var(--primary12);
+    white-space: nowrap;
+  }
+
+  /* Baseline: the label stays the accessible name, visually hidden. */
+  .label {
+    position: absolute;
+    inline-size: var(--border-size-1);
+    block-size: var(--border-size-1);
+    margin: calc(var(--border-size-1) * -1);
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* The bottom rule: --border-size-1 along the row's bottom edge. */
+  .bottomRule {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    border-width: 0;
+    border-block-end-width: var(--border-size-1);
+    pointer-events: none;
+  }
+
+  .caption {
+    display: none;
+    margin: 0;
+  }
+}
+
+@layer variants {
+  /* List: the count at the start, its actions at the end (UN-MS Research). */
+  .list .count {
+    margin-inline-end: auto;
+  }
+
+  /* Format: groups of icon toggles and buttons, start-aligned, divided by
+     vertical rules (Notetaking App, rebuilt). */
+  .format {
+    justify-content: flex-start;
+  }
+
+  /* Context: tools at the start, the breadcrumb centered, a toggle at the end (Audubon). */
+  .context {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+
+  .context > :nth-child(1) {
+    justify-self: start;
+  }
+
+  .context > :nth-child(2) {
+    justify-self: center;
+  }
+
+  .context > :nth-child(3) {
+    justify-self: end;
+  }
+
+  /* Figure: the controls spread under the figure, a step pager at the end. */
+  .figure {
+    justify-content: space-between;
+  }
+
+  /* Docked: opaque on the band's ground, a --border-size-1 --role-rule on the
+     content side, --ds-space-margin at the ends, --layer-2 [D23, D89]. */
+  .docked {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: var(--layer-2);
+    padding-inline: var(--ds-space-margin);
+    border-block-end: var(--border-size-1) solid var(--role-rule);
+    background-color: var(--role-ground);
+  }
+
+  .docked .bottomRule {
+    display: none;
+  }
+
+  .rule {
+    border-color: var(--role-rule);
+  }
+
+  .hairline {
+    border-color: var(--role-hairline);
+  }
+
+  /* Baseline, container-first [D163]: icon-only `text` Buttons (the Button's
+     gap closes with its label) and the low-priority items inside "More". */
+  .collapsing {
+    column-gap: 0;
+  }
+
+  .lowPriority {
+    display: none;
+  }
+
+  /* Viewport fallback: labels return from --md-n-above. */
+  @media (--md-n-above) {
+    .collapsing {
+      column-gap: revert-layer;
+    }
+
+    .collapsing .label {
+      position: static;
+      inline-size: auto;
+      block-size: auto;
+      margin: 0;
+      overflow: visible;
+      clip-path: none;
+    }
+
+    .lowPriority {
+      display: revert-layer;
+    }
+
+    .more {
+      display: none;
+    }
+  }
+
+  /* Container thresholds (§5.10.2): from 768 px of the toolbar, labels return. */
+  @container toolbar (width < 768px) {
+    .collapsing {
+      column-gap: 0;
+    }
+
+    .collapsing .label {
+      position: absolute;
+      inline-size: var(--border-size-1);
+      block-size: var(--border-size-1);
+      margin: calc(var(--border-size-1) * -1);
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+
+    .lowPriority {
+      display: none;
+    }
+
+    .more {
+      display: revert-layer;
+    }
+  }
+
+  @container toolbar (width >= 768px) {
+    .collapsing {
+      column-gap: revert-layer;
+    }
+
+    .collapsing .label {
+      position: static;
+      inline-size: auto;
+      block-size: auto;
+      margin: 0;
+      overflow: visible;
+      clip-path: none;
+    }
+
+    .lowPriority {
+      display: revert-layer;
+    }
+
+    .more {
+      display: none;
+    }
+  }
+}
+
+@layer states {
+  /* data-orientation: the row's direction and the separator's axis. */
+  .base[data-orientation='vertical'] {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .group[data-orientation='vertical'] {
+    flex-direction: column;
+  }
+
+  .separator[data-orientation='vertical'] {
+    block-size: var(--size-px-4);
+    margin-inline: calc(var(--size-px-2) - var(--size-px-1));
+    border-inline-start-width: var(--border-size-1);
+  }
+
+  .separator[data-orientation='horizontal'] {
+    inline-size: var(--size-px-4);
+    margin-block: calc(var(--size-px-2) - var(--size-px-1));
+    border-block-start-width: var(--border-size-1);
+  }
+
+  /* Hidden beside a pressed segment (§9.4); its space is kept. */
+  [data-pressed] + .separator,
+  .separator:has(+ [data-pressed]) {
+    visibility: hidden;
+  }
+}
+
+@layer print {
+  @media print {
+    /* The toolbar is hidden; the state it carries prints as a caption (§9.11). */
+    .base {
+      display: none;
+    }
+
+    .caption {
+      display: block;
+    }
+  }
+}

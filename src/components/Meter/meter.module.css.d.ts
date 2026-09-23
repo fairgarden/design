@@ -1,0 +1,33 @@
+declare const styles: {
+  readonly "arrow": string;
+  readonly "bar": string;
+  readonly "base": string;
+  readonly "cell": string;
+  readonly "cellFilled": string;
+  readonly "danger": string;
+  readonly "indicator": string;
+  readonly "kindRing": string;
+  readonly "label": string;
+  readonly "ordinal": string;
+  readonly "panel": string;
+  readonly "readout": string;
+  readonly "ring": string;
+  readonly "ringArc": string;
+  readonly "ringTrack": string;
+  readonly "status": string;
+  readonly "statusGlyph": string;
+  readonly "statusText": string;
+  readonly "steps": string;
+  readonly "stop": string;
+  readonly "stopActive": string;
+  readonly "stopLabel": string;
+  readonly "stopLabelActive": string;
+  readonly "stops": string;
+  readonly "success": string;
+  readonly "threshold": string;
+  readonly "track": string;
+  readonly "value": string;
+  readonly "warning": string;
+};
+export = styles;
+

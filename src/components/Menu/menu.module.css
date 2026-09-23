@@ -1,0 +1,244 @@
+/*
+ * Menu (§9.7), shared by Context Menu and the Menubar's menus. CVA
+ * functions `menu` (the popup) and `menuItem` (an item) in Menu.tsx.
+ * Parts: positioner (the layer), base (the popup), item, itemIcon (the
+ * --size-px-5 leading slot), itemLabel, checkGlyph (✓ or ●), dangerGlyph
+ * (◆ with ×), shortcut, submenuChevron, groupLabel, separator.
+ *
+ * The §9.1 overlay panel: the `white` scope's --primary1 face, a
+ * --border-size-2 --primary12 edge in both modes, never --role-rule
+ * [D92, D156], --ds-radius-8, --size-px-1 padding, no shadow or backdrop.
+ * The list highlight is --primary4 plus a --ds-stroke-3 start-edge bar in
+ * --primary12; a checked option is a leading ✓ or ● and --font-weight-6,
+ * with no fill and no bar [D145]. Motion is instant or a clip reveal from
+ * the trigger side, never a fade [D91]. Colors are role variables only;
+ * local custom properties carry dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.base {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.shortcut {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.groupLabel {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+@layer base {
+  .positioner {
+    z-index: var(--layer-3);
+  }
+
+  /* 200 px to --size-px-14, at least the trigger's width, at most the viewport less its margins. */
+  .base {
+    --menu-clip-from: inset(0);
+    --menu-item-radius: calc(var(--ds-radius-8) - var(--size-px-1));
+
+    box-sizing: border-box;
+    min-inline-size: min(
+      max(var(--ds-size-menu-min), var(--anchor-width, 0px)),
+      calc(100vw - 2 * var(--ds-space-margin))
+    );
+    max-inline-size: min(var(--size-px-14), calc(100vw - 2 * var(--ds-space-margin)));
+    max-block-size: var(--available-height);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--size-px-1);
+    border: var(--border-size-2) solid var(--primary12);
+    border-radius: var(--ds-radius-8);
+    background-color: var(--primary1);
+    color: var(--primary12);
+    clip-path: inset(0);
+  }
+
+  /* A row: --ds-size-hit tall at every breakpoint, --ds-space-12 padding. */
+  .item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-2);
+    min-block-size: var(--ds-size-hit);
+    padding-inline: var(--ds-space-12);
+    border-radius: var(--menu-item-radius);
+    color: var(--primary12);
+    cursor: default;
+    user-select: none;
+    /* The highlight is the indicator inside the popup, not a ring (§9.7). */
+    outline: none;
+  }
+
+  /* The start-edge bar: a border, so it survives forced colors. Shown by the highlight. */
+  .item::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    display: none;
+    border-inline-start: var(--ds-stroke-3) solid var(--primary12);
+    border-start-start-radius: var(--menu-item-radius);
+    border-end-start-radius: var(--menu-item-radius);
+  }
+
+  /* The leading slot: glyph, ✓, ● or the danger glyph, at the inline tier. */
+  .itemIcon {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--size-px-5);
+    block-size: var(--size-px-5);
+  }
+
+  .itemLabel {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+
+  .checkGlyph {
+    display: inline-flex;
+    color: var(--primary12);
+  }
+
+  /* ◆ with its inner × at the inline tier; the knockout takes the face [D58]. */
+  .dangerGlyph {
+    display: block;
+    inline-size: var(--size-px-3);
+    block-size: var(--size-px-3);
+    overflow: visible;
+    fill: var(--primary1);
+    stroke: var(--primary1);
+    stroke-width: var(--ds-stroke-1-5);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Shortcut: mono, end-aligned (P4). */
+  .shortcut {
+    flex: none;
+    margin-inline-start: auto;
+    padding-inline-start: var(--size-px-3);
+    color: var(--role-muted);
+  }
+
+  .submenuChevron {
+    flex: none;
+    margin-inline-start: auto;
+  }
+
+  .groupLabel {
+    display: flex;
+    align-items: center;
+    padding-block: var(--size-px-2) var(--size-px-1);
+    padding-inline: var(--ds-space-12);
+    color: var(--role-muted);
+  }
+
+  /* Full width across the popup's padding, --size-px-1 above and below. */
+  .separator {
+    margin-block: var(--size-px-1);
+    margin-inline: calc(-1 * var(--size-px-1));
+    border: 0;
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  @media (--motionOK) {
+    .base {
+      transition-property: clip-path;
+      transition-duration: var(--ds-duration-disclosure);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+
+  @media (--forcedColors) {
+    .dangerGlyph {
+      forced-color-adjust: none;
+      color: CanvasText;
+      fill: Canvas;
+      stroke: Canvas;
+    }
+  }
+}
+
+@layer variants {
+  /* Destructive: the danger glyph in --secondary11 of the item's danger scale [D129]; the label stays --primary12. */
+  .destructive .itemIcon {
+    color: var(--secondary11);
+  }
+}
+
+@layer states {
+  /* The reveal starts at the trigger edge (data-side names where the popup sits). */
+  .base[data-side='bottom'] {
+    --menu-clip-from: inset(0 0 100% 0);
+  }
+
+  .base[data-side='top'] {
+    --menu-clip-from: inset(100% 0 0 0);
+  }
+
+  .base[data-side='left'],
+  .base[data-side='inline-start'] {
+    --menu-clip-from: inset(0 0 0 100%);
+  }
+
+  .base[data-side='right'],
+  .base[data-side='inline-end'] {
+    --menu-clip-from: inset(0 100% 0 0);
+  }
+
+  .base[data-starting-style],
+  .base[data-ending-style] {
+    clip-path: var(--menu-clip-from);
+  }
+
+  .base[data-instant] {
+    transition: none;
+  }
+
+  /* Highlight (pointer or keyboard) and an open submenu's trigger: the soft fill plus the bar [D145]. */
+  .item[data-highlighted],
+  .item[data-popup-open] {
+    background-color: var(--primary4);
+  }
+
+  .item[data-highlighted]::before,
+  .item[data-popup-open]::before {
+    display: block;
+  }
+
+  /* Checked: the leading glyph and --font-weight-6; no fill, no bar. */
+  .item[data-checked] .itemLabel {
+    font-weight: var(--font-weight-6);
+  }
+
+  /* Disabled: --role-muted throughout and no highlight; still announced. Declared last to win. */
+  .item[data-disabled] {
+    background: none;
+    color: var(--role-muted);
+  }
+
+  .item[data-disabled]::before {
+    display: none;
+  }
+
+  .item[data-disabled] .itemIcon,
+  .item[data-disabled] .checkGlyph {
+    color: var(--role-muted);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Hidden; the state a menu sets prints as a caption (§9.1). */
+    .positioner,
+    .base {
+      display: none;
+    }
+  }
+}

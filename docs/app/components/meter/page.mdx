@@ -1,0 +1,47 @@
+# Meter
+
+A Base UI Meter for a measured value in a known range: storage used, strength, a level on an ordinal scale. Never use a meter for an unbounded value.
+
+```tsx
+import { Meter, MeterPanel } from '@fairgarden-private/design/components/Meter'
+```
+
+Meters are ink only: track edges, indicators, cells, ticks and labels all use the scope's step-12 ink, and the track interior shows the ground. No part uses the secondary scale, so a meter never reads as a chart series. The value is always in text.
+
+## Kinds in a meter panel
+
+import { DemoMeterKinds } from './demos/kinds'
+
+<DemoMeterKinds.Title />
+
+`bar` is the default: an outlined 8 px track with a solid indicator. `threshold` draws a 12 px tick across the track at a limit, and nearing or passing it is a status glyph plus words (▲ "Near limit", ◆ "Over limit"), never an indicator color swap. `steps` draws one outlined cell per unit. `ordinal` is a 1 px scale with a tick and caps label per stop (`stops`); the active stop is bold, one step larger and pointed to by an outlined triangle. `ring` is a 2 px arc beside its value.
+
+`MeterPanel` stacks meters and is their container: label, track and value share one row once the panel is at least 768 px wide, and stack below that. Ordinal labels wrap in narrow panels, and all of them are kept.
+
+<DemoMeterKinds />
+
+[See Demo](./demos/kinds/)
+
+## In print
+
+Linear and segmented values print as a 45° hatch inside their outline, closed by an edge at the value, with the numeral, threshold tick and status words kept. Rings and ordinal scales print as line, with the active label in bold.
+
+## API Reference
+
+import { TypesMeter, TypesMeterAdditional } from './types'
+
+### Meter
+
+<TypesMeter.Meter />
+
+### MeterPanel
+
+<TypesMeter.MeterPanel />
+
+### Additional types
+
+<TypesMeterAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §10.18 (progress and meter) and §8.9 (meters, scales and data progress).

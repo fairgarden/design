@@ -1,0 +1,30 @@
+declare const styles: {
+  readonly "base": string;
+  readonly "body": string;
+  readonly "commonName": string;
+  readonly "figure": string;
+  readonly "figured": string;
+  readonly "formBox": string;
+  readonly "frame": string;
+  readonly "frameContent": string;
+  readonly "glance": string;
+  readonly "grid": string;
+  readonly "heading": string;
+  readonly "identity": string;
+  readonly "intro": string;
+  readonly "kindLeader": string;
+  readonly "lead": string;
+  readonly "manual": string;
+  readonly "moduleHeading": string;
+  readonly "more": string;
+  readonly "morePanel": string;
+  readonly "moreTrigger": string;
+  readonly "names": string;
+  readonly "portrait": string;
+  readonly "provenance": string;
+  readonly "secondaryName": string;
+  readonly "sheet": string;
+  readonly "split": string;
+};
+export = styles;
+

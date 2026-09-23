@@ -1,0 +1,9 @@
+/* Cards are inline-size containers; the grid gives each a width and names
+   the `card-grid` container their face padding reads. */
+.grid {
+  container: card-grid / inline-size;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(224px, 1fr));
+  gap: var(--size-px-5);
+  inline-size: 100%;
+}

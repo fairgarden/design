@@ -1,0 +1,19 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--size-px-7);
+  inline-size: 100%;
+}
+
+.item {
+  display: grid;
+  justify-items: start;
+  gap: var(--size-px-2);
+  margin: 0;
+}
+
+.name {
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-caption);
+}

@@ -1,0 +1,187 @@
+/*
+ * Card Grid (§12.3). The root `base` is the inline-size container
+ * `card-grid`: `list` queries it here, and each card's face padding queries
+ * it in card.module.css (608 / 944 px, §5.10.2). Parts: base, header,
+ * toolbar, count, list, item, footer, footerLink (a standalone Link, which
+ * draws the chevron). Colors are role variables only; local custom
+ * properties carry dimensions only:
+ *   --card-grid-gap   the gutter (= --ds-space-margin) [D42]
+ *   --card-grid-min   the card's content minimum (288 px; compact 152 px)
+ *   --card-grid-cap   the most columns the auto-fit baseline allows (3; compact 4)
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.count {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base {
+    --card-grid-gap: var(--ds-space-margin);
+    --card-grid-min: 288px; /* card content minimum (§5.10.2) */
+    --card-grid-cap: 3;
+
+    container: card-grid / inline-size;
+    /* Size containment leaves no intrinsic width: fill the box, never collapse as a flex or shrink-to-fit item. */
+    inline-size: 100%;
+    min-inline-size: 0;
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .header {
+    margin-block-end: var(--size-px-5);
+  }
+
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--size-px-2);
+    margin-block-end: var(--size-px-3);
+  }
+
+  .count {
+    margin: 0 0 var(--size-px-3);
+    color: var(--primary12);
+  }
+
+  /*
+   * Baseline (§1.11.11): auto-fit tracks at the card minimum, capped at
+   * --card-grid-cap columns; min(100%, …) keeps a lone column inside a rail
+   * narrower than the minimum. Complete without container queries.
+   */
+  .list {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(
+        min(
+          100%,
+          max(
+            var(--card-grid-min),
+            calc((100% - (var(--card-grid-cap) - 1) * var(--card-grid-gap)) / var(--card-grid-cap))
+          )
+        ),
+        1fr
+      )
+    );
+    gap: var(--card-grid-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Each cell stretches its card to the row's height. */
+  .item {
+    display: grid;
+    min-inline-size: 0;
+  }
+
+  .footer {
+    margin-block-start: var(--size-px-7);
+  }
+}
+
+@layer variants {
+  /* Editorial and block: 1 below 608 px, 2 from 608, 3 from 944 (§5.10.2). */
+  @container card-grid (width < 608px) {
+    .editorial .list,
+    .block .list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @container card-grid (608px <= width < 944px) {
+    .editorial .list,
+    .block .list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @container card-grid (width >= 944px) {
+    .editorial .list,
+    .block .list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  /* Block edge: --size-px-2 more on the heavy right and bottom sides, so the
+     --ds-stroke-8 edge never touches a neighbor. */
+  .block .item {
+    padding-inline-end: var(--size-px-2);
+    padding-block-end: var(--size-px-2);
+  }
+
+  /* Compact: 152 px minimum, capped at 4. */
+  .compact {
+    --card-grid-min: 152px; /* compact card content minimum (§5.10.2) */
+    --card-grid-cap: 4;
+  }
+
+  /* Viewport fallback for the stack guard [D73]. */
+  @media (--xs-n-below) {
+    .compact .list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* Compact: 1 below 360 px, 2 below 704, 4 from 704 (§5.10.2). */
+  @container card-grid (width < 360px) {
+    .compact .list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @container card-grid (360px <= width < 704px) {
+    .compact .list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @container card-grid (width >= 704px) {
+    .compact .list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  /* Lead + list: the one lead card spans the grid; §12.11 rows follow it. */
+  .lead .list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Grids print 2-up in the live area, rows whole; filters are screen-only (§12.1).
+       The page margin prints as 0, so the gutter takes its own print step. */
+    .base {
+      --card-grid-gap: var(--size-px-5);
+    }
+
+    .header {
+      break-after: avoid;
+    }
+
+    .toolbar {
+      display: none;
+    }
+
+    .list,
+    .editorial .list,
+    .block .list,
+    .compact .list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .lead .list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .item {
+      break-inside: avoid;
+    }
+  }
+}

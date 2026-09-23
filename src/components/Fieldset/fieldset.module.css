@@ -1,0 +1,167 @@
+/*
+ * Fieldset (§10.2). CVA function `fieldset`. Parts: `base` (the native
+ * fieldset), `legend`, `rule` (the open variant's hairline), `leader` (the
+ * ledger's dotted leader) with `leaderLine`, and `frame` / `frameLine`, the
+ * SVG that draws the ledger's `line-dotted` frame as true dots [D36, D68].
+ * Structure takes --primary12 and --role-* only; the legend is authored in
+ * title case up to about four words [D160].
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.legend {
+  composes: typeFieldLabel from '../../utils/type.module.css';
+}
+
+.frameLine {
+  composes: lineDotted from '../../utils/line.module.css';
+}
+
+.leaderLine {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+@layer base {
+  /* The native fieldset, reset: no UA border, padding or min-content floor [D154]. */
+  .base {
+    /* Local dimension: framed padding by tier. */
+    --fieldset-padding: var(--size-px-3);
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-px-5);
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    color: var(--primary12);
+  }
+
+  /* Fieldsets stand --ds-space-40 apart; the Form's --size-px-5 gap supplies the rest. */
+  .base + .base {
+    margin-block-start: calc(var(--ds-space-40) - var(--size-px-5));
+  }
+
+  .legend {
+    padding: 0;
+    color: var(--primary12);
+  }
+
+  .rule {
+    display: none;
+  }
+
+  /* The ledger frame host covers the border box, inset by half a dot. */
+  .frame {
+    position: absolute;
+    inset-block-start: calc(var(--ds-dot) / 2);
+    inset-inline-start: calc(var(--ds-dot) / 2);
+    inline-size: calc(100% - var(--ds-dot));
+    block-size: calc(100% - var(--ds-dot));
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .frameLine {
+    fill: none;
+    stroke: var(--role-rule);
+  }
+
+  /* A leader runs from the label to the control; it grows to fill the row. */
+  .leader {
+    flex: 1 1 var(--size-px-5);
+    align-self: center;
+    min-inline-size: var(--size-px-5);
+    block-size: var(--ds-dot-fine);
+    overflow: visible;
+  }
+
+  .leaderLine {
+    fill: none;
+    stroke: var(--role-rule);
+  }
+
+  @media (--forcedColors) {
+    .frameLine,
+    .leaderLine {
+      stroke: CanvasText;
+    }
+  }
+}
+
+@layer variants {
+  /*
+   * Open (default): the legend is an ordinary block (a floated legend is
+   * laid out as a flex item), then a --border-size-1 --role-hairline rule
+   * --ds-space-12 below it; content follows --size-px-5 below the rule.
+   */
+  .text .legend,
+  .ledger .legend {
+    float: inline-start;
+    inline-size: 100%;
+  }
+
+  .text .rule {
+    display: block;
+    margin-block-start: var(--ds-space-12);
+    border-block-start: var(--border-size-1) solid var(--role-hairline);
+  }
+
+  /* Framed: a --ds-stroke-3 --primary12 frame, square; the legend sits in its top edge. */
+  .outline {
+    padding: var(--fieldset-padding);
+    border: var(--ds-stroke-3) solid var(--primary12);
+    border-radius: var(--ds-radius-none);
+  }
+
+  /* The legend's --size-px-2 break on each side of the frame line. */
+  .outline .legend {
+    padding-inline: var(--size-px-2);
+  }
+
+  /* Ledger: the dotted frame (the SVG) with padding inside it. */
+  .ledger {
+    padding: var(--fieldset-padding);
+  }
+
+  /* Framed padding: --size-px-3 at base, --size-px-7 from --lg-n-above (§10.2 tokens). */
+  @media (--lg-n-above) {
+    .outline,
+    .ledger {
+      --fieldset-padding: var(--size-px-7);
+    }
+  }
+
+  /* Stack guard: viewport fallback first, then the Form container (§5.10.2) [D163]. */
+  @media (--xs-n-below) {
+    .outline,
+    .ledger {
+      --fieldset-padding: var(--ds-space-12);
+    }
+  }
+
+  @container form (width < 360px) {
+    .outline,
+    .ledger {
+      --fieldset-padding: var(--ds-space-12);
+    }
+  }
+}
+
+@layer states {
+  /* Disabled: the legend takes --role-muted with its controls; never dimmed [D16]. */
+  .legend[data-disabled] {
+    color: var(--role-muted);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Frames print through the remap (2.25 pt framed, dotted ledger); keep a group whole. */
+    .base {
+      break-inside: avoid;
+    }
+  }
+}

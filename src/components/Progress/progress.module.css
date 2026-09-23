@@ -1,0 +1,280 @@
+/*
+ * Progress (§10.18; constructions §8.9). CVA functions `progress` and
+ * `progressStatus`. Ink only: track edge, indicator, cells, label and value
+ * are --primary12 on the ground; no part uses the secondary, so progress
+ * never reads as a chart series. Status glyphs take --role-status of their
+ * own status scale. Colors are role variables only; no opacity, no shimmer.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.label {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.value {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.statusText {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.dashLine {
+  composes: lineDashed from '../../utils/line.module.css';
+}
+
+@keyframes dashAdvance {
+  to {
+    stroke-dashoffset: calc(-1 * (var(--ds-dash) + var(--ds-dash-gap)));
+  }
+}
+
+@layer base {
+  /* Label and value above a full-width track (§8.9 responsive baseline). */
+  .base {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'label readout'
+      'track track';
+    align-items: baseline;
+    gap: var(--size-px-1) var(--size-px-3);
+    min-inline-size: 0;
+    color: var(--primary12);
+  }
+
+  .label {
+    grid-area: label;
+    color: var(--primary12);
+  }
+
+  .readout {
+    grid-area: readout;
+    justify-self: end;
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--size-px-1) var(--size-px-2);
+  }
+
+  .value {
+    color: var(--primary12);
+    white-space: nowrap;
+  }
+
+  /* Linear: a --border-size-1 outlined --primary12 track, 8 px tall, square in data modules. */
+  .track {
+    grid-area: track;
+    align-self: center;
+    position: relative;
+    box-sizing: content-box;
+    block-size: calc(var(--size-px-2) - 2 * var(--border-size-1));
+    border: var(--border-size-1) solid var(--primary12);
+    border-radius: var(--ds-radius-none);
+  }
+
+  /* The indicator's height is Base UI's inline `inherit`: the track's content height. */
+  .indicator {
+    display: block;
+    background-color: var(--primary12);
+  }
+
+  .dashes {
+    display: none;
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    overflow: visible;
+    stroke: var(--primary12);
+  }
+
+  /* Segmented: outlined --ds-space-12 cells, --border-size-1, 2 px apart; filled cells solid. */
+  .cell {
+    flex: none;
+    box-sizing: border-box;
+    inline-size: var(--ds-space-12);
+    block-size: var(--ds-space-12);
+    border: var(--border-size-1) solid var(--primary12);
+  }
+
+  .cellFilled {
+    background-color: var(--primary12);
+  }
+
+  /* Ring: a --border-size-2 --primary12 arc over a --role-hairline track, always with its value. */
+  .ring {
+    grid-area: track;
+    display: block;
+    inline-size: var(--size-px-4);
+    block-size: var(--size-px-4);
+    overflow: visible;
+  }
+
+  .ringTrack,
+  .ringArc {
+    fill: none;
+    stroke-width: var(--border-size-2);
+  }
+
+  .ringTrack {
+    stroke: var(--role-hairline);
+  }
+
+  .ringArc {
+    stroke: var(--primary12);
+  }
+
+  /* Status: the §1.5.4 glyph in --role-status (its status scale) plus the word in --primary12. */
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-px-1);
+  }
+
+  .success,
+  .warning,
+  .danger {
+    color: var(--primary12);
+  }
+
+  .statusGlyph {
+    flex: none;
+    display: block;
+    inline-size: var(--size-px-3);
+    block-size: var(--size-px-3);
+    overflow: visible;
+    color: var(--role-status);
+    fill: var(--role-status-fill);
+    stroke: var(--role-status-fill);
+    stroke-width: var(--ds-stroke-1-5);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .statusText {
+    color: var(--primary12);
+  }
+
+  @media (--forcedColors) {
+    .indicator,
+    .cellFilled {
+      forced-color-adjust: none;
+      background-color: CanvasText;
+    }
+
+    .ringArc {
+      forced-color-adjust: none;
+      stroke: CanvasText;
+    }
+
+    .statusGlyph {
+      forced-color-adjust: none;
+      color: CanvasText;
+      fill: Canvas;
+      stroke: Canvas;
+    }
+  }
+}
+
+@layer variants {
+  .steps .track {
+    justify-self: start;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--border-size-2);
+    block-size: auto;
+    border-width: 0;
+  }
+
+  /* Ring: inline, the ring beside its value; its tracks pack at the start even when stretched in a panel. */
+  .kindRing {
+    display: inline-grid;
+    grid-template-columns: auto auto auto;
+    grid-template-areas: 'label track readout';
+    justify-content: start;
+    align-items: center;
+    column-gap: var(--size-px-2);
+  }
+
+  /* Rail (§10.19): a --border-size-2 --role-hairline line, the position in --primary12. */
+  .rail .track {
+    block-size: var(--border-size-2);
+    border-width: 0;
+    background-color: var(--role-hairline);
+  }
+
+  /* Viewport fallback: label | track | value in one row from --md-n-above… */
+  @media (--md-n-above) {
+    .bar,
+    .steps,
+    .rail {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+      grid-template-areas: 'label track readout';
+    }
+  }
+
+  /* …refined by the meter-panel container: stacked below 768 px, rows from 768 (§5.10.2). */
+  @container meter-panel (width < 768px) {
+    .bar,
+    .steps,
+    .rail {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        'label readout'
+        'track track';
+    }
+  }
+
+  @container meter-panel (width >= 768px) {
+    .bar,
+    .steps,
+    .rail {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+      grid-template-areas: 'label track readout';
+    }
+  }
+}
+
+@layer states {
+  /* Indeterminate: the track in line-dashed (provisional [D66]), no indicator; "Loading…" beside it. */
+  .base[data-indeterminate] .track {
+    padding-block: var(--border-size-1);
+    border-width: 0;
+  }
+
+  .base[data-indeterminate] .indicator {
+    display: none;
+  }
+
+  .base[data-indeterminate] .dashes {
+    display: block;
+  }
+
+  /* The dashes advance slowly, and only under --motionOK; never shimmer, pulse or opacity (§10.20). */
+  @media (--motionOK) {
+    .base[data-indeterminate] .dashLine {
+      animation: dashAdvance calc(var(--ds-duration-disclosure) * 6) linear infinite;
+    }
+  }
+}
+
+@layer print {
+  @media print {
+    /* Progress is hidden in print, except steps, which print their "2 of 4" text (§10.18). */
+    .base {
+      display: none;
+    }
+
+    .steps {
+      display: grid;
+    }
+
+    .steps .track {
+      display: none;
+    }
+  }
+}

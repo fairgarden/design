@@ -1,0 +1,61 @@
+# Navigation Bar
+
+The site header on every page, as a `header` landmark. It holds a skip link first, the green brand strip, an optional utility row, then the bar: the logo as a home link, the Navigation Menu, icon Buttons, the one action and, below the inline threshold, the drawer's menu Button.
+
+```tsx
+import {
+  NavigationBar,
+  NavigationBarUtility,
+  NavigationBarUtilityLink,
+} from '@fairgarden-private/design/components/NavigationBar'
+```
+
+The bar is an opaque `kind="band"` Ground: the page ground it sits in (`paper`, `white` or the page's one pastel), or `preset="night"` only directly over the night media hero. It is 56 px tall (64 px from `--lg-n-above`), with a full-bleed `--role-rule` bottom rule, and its content is capped at `--ds-container-content`. Panels attach under that rule. `currentPath` flows to the menu, the drawer and the utility links, which mark the current page and the parent of the current page by URL path.
+
+## The site header
+
+import { DemoNavigationBarHeader } from './demos/header'
+
+<DemoNavigationBarHeader.Title />
+
+From `--ds-nav-inline-n-above` (1024 px by default, a build-time custom media) the inline menu and the 36 px utility row show. Below it they are replaced by the drawer's menu Button, and the utility links move to the drawer footer. Items never wrap. At the threshold the logo, items, search, action and gaps must fit the content container (944 px at 1024 px). Overflow goes to the utility row, then to a final "More" item with a `dropdown` panel, never a hamburger. A site over budget sets the custom media to 1440 px. Below 360 px the action moves into the drawer.
+
+<DemoNavigationBarHeader />
+
+[See Demo](./demos/header/)
+
+## Ruled, masthead and compact
+
+import { DemoNavigationBarVariants } from './demos/variants'
+
+<DemoNavigationBarVariants.Title />
+
+`ruled` splits the items with vertical rules. `masthead` stacks a wordmark row over the caps nav row, ruled above and below. `compact` is the docked header at the same height: the utility row and brand drawing drop, and the triggers, search and action stay.
+
+The header is static by default (`dock="none"`). `dock="pinned"` docks it after 50vh of scroll, and it stays until its own place scrolls back into view. `dock="swap"` works with the sticky section bar: pass a zero-height `sentinelRef` at the bar's in-flow position. Once it passes the viewport top, upward scroll brings the header back in place of the bar, and downward scroll restores the bar. Hide the bar while `onDockChange` reports `true`, so the two never stack. While docked, the header turns compact and takes the top edge on `--layer-2`, swapped in by a `--ds-duration-quick` clip cut that is instant under reduced motion.
+
+<DemoNavigationBarVariants />
+
+[See Demo](./demos/variants/)
+
+## API Reference
+
+import { TypesNavigationBar, TypesNavigationBarAdditional } from './types'
+
+### NavigationBar
+
+<TypesNavigationBar.NavigationBar />
+
+### NavigationBarUtility and NavigationBarUtilityLink
+
+<TypesNavigationBar.NavigationBarUtility />
+
+<TypesNavigationBar.NavigationBarUtilityLink />
+
+### Additional types
+
+<TypesNavigationBarAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §11.5 (navigation bar) [D182, D183] and §11.3 (brand strip and utility bar); print per §7.8 (the masthead).

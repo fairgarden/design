@@ -1,0 +1,278 @@
+/*
+ * Spec Sheet (§12.7). CVA function `specSheet`. The densest module, with no
+ * ornament: only line semantics (§12.1 ornament budget). The grid and the
+ * leader list keep their own modules (spec-grid, spec-list), which own the
+ * cells, rules, labels, values and leaders (§1.11.1); this module lays out
+ * the sheet around them.
+ * Color roles (§12.7): identity names --primary12; heading --role-heading
+ * (a module head --primary12); lead and provenance --primary12 (a linked
+ * title is a Link, the body link's --role-accent underline); manual frame
+ * `line-double` in --primary12; form-box rules --role-rule. Colors are role
+ * variables only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.commonName {
+  composes: typeItemhead from '../../utils/type.module.css';
+}
+
+.secondaryName {
+  composes: typeSecondaryName from '../../utils/type.module.css';
+}
+
+.heading {
+  composes: typeH2 from '../../utils/type.module.css';
+}
+
+.moduleHeading {
+  composes: typeItemhead from '../../utils/type.module.css';
+}
+
+.lead {
+  composes: typeLead from '../../utils/type.module.css';
+}
+
+.provenance {
+  composes: typeSmall from '../../utils/type.module.css';
+}
+
+.frame {
+  composes: lineDouble from '../../utils/line.module.css';
+}
+
+@layer base {
+  /*
+   * The sheet: the inline-size container `spec-grid` (named: it may sit in
+   * a card or a split). Identity → heading → body, --size-px-5 apart.
+   */
+  .base {
+    container: spec-grid / inline-size;
+    display: grid;
+    gap: var(--size-px-5);
+    /* Size containment gives the sheet no intrinsic width, so it fills its box
+       rather than collapsing as a shrink-to-fit or flex item. */
+    inline-size: 100%;
+    min-inline-size: 0;
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  /* Identity block [D188]: the portrait beside the names (§12.15 author block); heads the reading column. */
+  .identity {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--size-px-3);
+  }
+
+  .portrait {
+    flex: none;
+  }
+
+  .names {
+    display: grid;
+    gap: var(--size-px-1);
+    min-inline-size: 0;
+  }
+
+  .commonName,
+  .secondaryName {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  /* Chapter-stack H2 in --role-heading; a module head in --primary12. */
+  .heading {
+    margin: 0;
+    color: var(--role-heading);
+  }
+
+  .moduleHeading {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  /*
+   * Body: a 12-track grid. Baseline: intro, sheet and figure stacked in
+   * source order (the split and the figure layout refine it).
+   */
+  .body {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--size-px-5) var(--ds-space-margin);
+    min-inline-size: 0;
+  }
+
+  .intro,
+  .sheet,
+  .figure {
+    grid-column: 1 / -1;
+    min-inline-size: 0;
+  }
+
+  /* Lead → provenance --ds-space-12 (§3.5 Recipe C). */
+  .intro {
+    display: grid;
+    align-content: start;
+    gap: var(--ds-space-12);
+  }
+
+  .lead,
+  .provenance {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .lead > :where(p) {
+    margin: 0;
+  }
+
+  .sheet {
+    display: grid;
+    align-content: start;
+    gap: var(--size-px-3);
+  }
+
+  .grid {
+    min-inline-size: 0;
+  }
+
+  .figure > :where(*) {
+    margin: 0;
+  }
+
+  /* "More Details": the Collapsible (§10.13) below the grid; its rows start --ds-space-12 under the trigger. */
+  .more {
+    min-inline-size: 0;
+  }
+
+  .moreTrigger {
+    justify-self: start;
+  }
+
+  .morePanel .grid {
+    margin-block-start: var(--ds-space-12);
+  }
+}
+
+@layer variants {
+  /* At a Glance: the lead is prose, held to the reading measure beside or above the grid. */
+  .glance .intro {
+    max-inline-size: var(--ds-measure-reading);
+  }
+
+  /* Leader list: one column, the value column aligned right, held to the reading measure. */
+  .kindLeader .sheet {
+    max-inline-size: var(--ds-measure-reading);
+  }
+
+  /* Manual page: the frame's parts stand --size-px-5 apart. */
+  .manual .sheet {
+    gap: var(--size-px-5);
+  }
+
+  /* Manual page: a `line-double` frame in --primary12, square, --size-px-5 padding. */
+  .frame {
+    padding: var(--size-px-5);
+    border-color: var(--primary12);
+    border-radius: var(--ds-radius-none);
+    outline-color: var(--primary12);
+  }
+
+  .frameContent {
+    display: grid;
+    gap: var(--size-px-5);
+    min-inline-size: 0;
+  }
+
+  /* Form box: a ruled box in --role-rule around the grid; the cells keep their small caps labels at the top left. */
+  .formBox .grid {
+    padding: var(--size-px-3);
+    border: var(--border-size-1) solid var(--role-rule);
+    border-radius: var(--ds-radius-none);
+  }
+
+  /*
+   * The sheet beside its figure (spec 5, figure 7): viewport fallback from
+   * --lg-n-above, then the sheet's own container from 1024 px [D163].
+   */
+  @media (--lg-n-above) {
+    .figured .sheet {
+      grid-column: 1 / span 5;
+    }
+
+    .figured .figure {
+      grid-column: 6 / -1;
+    }
+  }
+
+  @container spec-grid (width < 1024px) {
+    .figured .sheet,
+    .figured .figure {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @container spec-grid (width >= 1024px) {
+    .figured .sheet {
+      grid-column: 1 / span 5;
+    }
+
+    .figured .figure {
+      grid-column: 6 / -1;
+    }
+  }
+
+  /*
+   * At a Glance split [D188], a page-grid placement on the viewport: from
+   * --lg-n-above the lead and provenance take the first half of the reading
+   * span and the grid the second, a margin gutter between; the grid's own
+   * spec-grid container (≈ 350–450 px) keeps it 2-up. A figure then runs
+   * below, full width. Written after the figure layout, so it wins.
+   */
+  @media (--lg-n-above) {
+    .split .intro {
+      grid-column: 1 / span 6;
+    }
+
+    .split .sheet {
+      grid-column: 7 / -1;
+    }
+
+    .split .figure {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+@layer print {
+  @media print {
+    /* Prints as on screen, stacked: the split and the figure layout drop (§7.12.4) [D188]. */
+    .intro,
+    .sheet,
+    .figure,
+    .figured .sheet,
+    .figured .figure,
+    .split .intro,
+    .split .sheet {
+      grid-column: 1 / -1;
+    }
+
+    .identity,
+    .intro {
+      break-inside: avoid;
+    }
+
+    /* The heading stays with the first rows. */
+    .heading,
+    .moduleHeading {
+      break-after: avoid;
+    }
+
+    .frame {
+      break-inside: auto;
+    }
+  }
+}

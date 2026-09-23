@@ -1,0 +1,36 @@
+declare const styles: {
+  readonly "base": string;
+  readonly "current": string;
+  readonly "domainGlyph": string;
+  readonly "inLg": string;
+  readonly "inMd": string;
+  readonly "item": string;
+  readonly "kindInline": string;
+  readonly "kindParent": string;
+  readonly "kindStaircase": string;
+  readonly "level1": string;
+  readonly "level2": string;
+  readonly "level3": string;
+  readonly "level4": string;
+  readonly "level5": string;
+  readonly "level6": string;
+  readonly "link": string;
+  readonly "list": string;
+  readonly "parentLink": string;
+  readonly "parentRow": string;
+  readonly "parentText": string;
+  readonly "plain": string;
+  readonly "printLine": string;
+  readonly "separator": string;
+  readonly "stair": string;
+  readonly "stairBar": string;
+  readonly "stairChevron": string;
+  readonly "stairGlyph": string;
+  readonly "stairList": string;
+  readonly "stairRow": string;
+  readonly "stairTitle": string;
+  readonly "stairToggle": string;
+  readonly "staircase": string;
+};
+export = styles;
+

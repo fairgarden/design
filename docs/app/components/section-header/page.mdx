@@ -1,0 +1,43 @@
+# Section Header
+
+Opens every band or module in a fixed order: what kind of thing this is (the eyebrow), what it says (the heading), why it matters (the lede) and where to go next ("See all").
+
+```tsx
+import { SectionHeader } from '@fairgarden-private/design/components/SectionHeader'
+```
+
+A band header is an `h2` in the section-head color; `level="module"` makes it an `h3` item head in the text color. Pass `headingId` to name the band with `aria-labelledby`. The eyebrow is never the only heading and never takes the accent color. Pick the eyebrow rule or the trail, never both.
+
+## Kinds
+
+import { DemoSectionHeaderKinds } from './demos/kinds'
+
+<DemoSectionHeaderKinds.Title />
+
+`editorial` (default) sets the eyebrow over its hairline: 14 px from the eyebrow to the rule, 19 px from the rule to the heading. A band that opens this way needs no page-seam hairline above it. `trailed` threads a display-serif kicker with the dashed trail and centres the heading below it. `scene` centres heading, lede and pill. `anchored` sits a sticker drawing on the heading. `technical` sets a mono section number and a caps label over a rule. `topic` puts a topic tag above the heading. Children form the action row.
+
+<DemoSectionHeaderKinds />
+
+[See Demo](./demos/kinds/)
+
+## On grounds
+
+import { DemoSectionHeaderGrounds } from './demos/grounds'
+
+<DemoSectionHeaderGrounds.Title />
+
+On a page ground the section head takes the ground's own hue at step 12 and the trail its accent. On the night band every text resolves to the light ink. "See all" is underlined at rest; on hover its label takes the link hover ink and its arrow the next weight. It sits below the lede at base and at the end of the heading row from 1024 px.
+
+<DemoSectionHeaderGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesSectionHeader } from './types'
+
+<TypesSectionHeader />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §11.8 (section header and eyebrow), §3.5 (the chapter stack) and §4.7.1 (the trail ornament).

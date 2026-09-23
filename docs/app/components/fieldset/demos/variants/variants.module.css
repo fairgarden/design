@@ -1,0 +1,16 @@
+.stack {
+  display: grid;
+  gap: var(--ds-space-40);
+  inline-size: 100%;
+  max-inline-size: var(--size-sm);
+}
+
+.ledgerRow {
+  display: flex;
+  align-items: center;
+  gap: var(--size-px-2);
+}
+
+.ledgerRow > :first-child {
+  margin-block-end: 0;
+}

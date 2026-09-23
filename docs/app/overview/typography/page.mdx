@@ -1,0 +1,54 @@
+# Typography
+
+Serif leads the system. Each of the four families has one job, and a change of family marks a hierarchy step before size does.
+
+## Families
+
+| Token | Role | Family |
+| --- | --- | --- |
+| `--ds-font-display` | Headings, item heads, kicker, stats, quotes | Fraunces |
+| `--ds-font-text` | Long-form body | Source Serif 4 |
+| `--ds-font-ui` | Controls, ledes, subheads, labels, captions | Figtree |
+| `--ds-font-mono` | Data, codes, figure numbers | IBM Plex Mono |
+
+`--ds-font-fine` sets footnotes and secondary names: Source Serif 4 in light scopes and print, Figtree in dark scopes, since serif below 17 px does not hold on a reversed ground. The mode blocks set it, so components never choose.
+
+All four are open-license (SIL OFL) and self-hosted from Fontsource by `@fairgarden-private/design/utils/fonts`, with no font CDN: variable Fraunces, Source Serif 4 and Figtree, and IBM Plex Mono at 400, 500 and 700. Never add a fifth family.
+
+## Type roles
+
+A component part takes a role by composing it from the shared module, never by setting sizes itself:
+
+```css filename=button.module.css
+.label {
+  composes: typeButton from '../../utils/type.module.css';
+}
+```
+
+| Role | Family and weight | Size (mobile to desktop) |
+| --- | --- | --- |
+| `typeDisplay` (H1) | display 700 | 34 → 49 px |
+| `typeH2` | display 700 | 28 → 34 px |
+| `typeItemhead` | display 700 | 22 → 24 px |
+| `typeSubhead` | UI 600 | 18 → 19 px |
+| `typeLead` | UI 400 | 20 → 22 px |
+| `typeBody` | text 400 | 17 → 18 px |
+| `typeBodyUi` | UI 400 | 16 → 17 px |
+| `typeButton` | UI 700, title case | 14 → 15 px |
+| `typeLabel` | UI 600, caps | 13 px |
+| `typeEyebrow` | UI 600, caps | 13 → 14 px |
+| `typeCaption` | UI 400 | 14 px |
+| `typeData` | mono 400, tabular | 14 px |
+
+The module holds more roles for single jobs, among them `typeDisplayXl`, `typeKicker`, `typeQuote`, `typeStat`, `typeFootnote`, `typeSmall`, `typeFieldLabel` and `typeUrl`.
+
+Sizes are `rem` clamps, fluid from 360 px to 1024 px; print remaps them to `pt`. `typeMuted` colors text `--role-muted` and, on dark scopes, steps its weight down by `--ds-muted-weight-step`, so components stay mode-blind.
+
+## Rules
+
+- Headings are sentence case. Button labels and short field labels are title case, authored in the source.
+- Caps are for wayfinding (eyebrows, navigation, tabs, labels), never for actions.
+- Emphasis is italic, weight or family, never color alone.
+- Body text runs at `--ds-measure-reading` (66ch), ragged right.
+
+Full specification: `DESIGN-SYSTEM.md` §3 (typography) and §1.5.5–§1.5.6 (families and type scale); companion guide §H.

@@ -1,0 +1,86 @@
+# Dialog
+
+A modal panel for a focused sub-task: a titled top bar, a scrolling body and an action bar, framed and never dimmed.
+
+```tsx
+import {
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogClose,
+  DialogDescription,
+  DialogEyebrow,
+  DialogPopup,
+  DialogTitle,
+  DialogTopBar,
+  DialogTrigger,
+} from '@fairgarden-private/design/components/Dialog'
+```
+
+The panel renders in a portal as a `white` scope that follows the page mode, whatever the trigger's ground. Its `--ds-stroke-3` frame carries the boundary in both modes; there is no tinted backdrop, so the page stays visible, inert and scroll-locked. Below 768 px the panel is a full-screen sheet with the actions docked at its foot; from 768 px it is centered. It opens instantly, or with a clip reveal where motion is allowed. Focus moves to the first field in the body. An open dialog prints alone.
+
+Use a dialog for a short form or a detail view, never for marketing or exit-intent prompts. Put the `solid` action first, then its outline twin.
+
+## A focused task
+
+import { DemoDialogBasic } from './demos/basic'
+
+<DemoDialogBasic.Title />
+
+The top bar holds an optional eyebrow, the title (the dialog's accessible name) and the close X. `DialogClose` also closes from an action: pass the action Button as `render`.
+
+<DemoDialogBasic />
+
+[See Demo](./demos/basic/)
+
+## Wide, with a solid cover
+
+import { DemoDialogCover } from './demos/cover'
+
+<DemoDialogCover.Title />
+
+`wide` sets the detail-view width. `cover` names the page ground's partner preset (paper → forest, white → night); from 768 px it renders as a fully opaque Ground that hides the page, never a tint. When the body overflows, a rule marks each edge with hidden content.
+
+<DemoDialogCover />
+
+[See Demo](./demos/cover/)
+
+## API Reference
+
+import { TypesDialog, TypesDialogAdditional } from './types'
+
+### Dialog and DialogTrigger
+
+<TypesDialog.Dialog />
+
+<TypesDialog.DialogTrigger />
+
+### DialogPopup
+
+<TypesDialog.DialogPopup />
+
+### DialogTopBar, DialogEyebrow, DialogTitle and DialogClose
+
+<TypesDialog.DialogTopBar />
+
+<TypesDialog.DialogEyebrow />
+
+<TypesDialog.DialogTitle />
+
+<TypesDialog.DialogClose />
+
+### DialogBody, DialogDescription and DialogActions
+
+<TypesDialog.DialogBody />
+
+<TypesDialog.DialogDescription />
+
+<TypesDialog.DialogActions />
+
+### Additional types
+
+<TypesDialogAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §10.14 (dialog), §10.1 (the overlay surface and backdrop) and §1.3.2 (no scrims).

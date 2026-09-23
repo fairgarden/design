@@ -1,0 +1,71 @@
+# Fieldset
+
+Groups controls that answer one question, such as an address or a contact preference, and every checkbox or radio group. A native `fieldset` on Base UI's Fieldset, with its legend first.
+
+```tsx
+import {
+  Fieldset,
+  FieldsetLeader,
+  FieldsetLegend,
+} from '@fairgarden-private/design/components/Fieldset'
+```
+
+The legend is authored in title case up to about four words. `disabled` disables the legend and every control inside it; hiding the group is usually better. Don't nest framed fieldsets, and don't frame ordinary forms: the frame is for technical or printable panels.
+
+## Variants and states
+
+import { DemoFieldsetVariants } from './demos/variants'
+
+<DemoFieldsetVariants.Title />
+
+`text` (default) is open: the legend over a hairline rule. `outline` is the framed panel, the legend set into its `--ds-stroke-3` top edge. `ledger` is the dotted frame for self-contained order and checklist forms: lay each row out inline and put a `FieldsetLeader` between the label and the control.
+
+<DemoFieldsetVariants />
+
+[See Demo](./demos/variants/)
+
+## Primary scale
+
+import { DemoFieldsetColor } from './demos/color'
+
+<DemoFieldsetColor.Title />
+
+Structure takes `primary` only; `secondary` is accepted and unused.
+
+<DemoFieldsetColor />
+
+[See Demo](./demos/color/)
+
+## On grounds
+
+import { DemoFieldsetGrounds } from './demos/grounds'
+
+<DemoFieldsetGrounds.Title />
+
+The hairline, frame and field roles resolve per ground.
+
+<DemoFieldsetGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesFieldset, TypesFieldsetAdditional } from './types'
+
+### Fieldset
+
+<TypesFieldset.Fieldset />
+
+### FieldsetLegend and FieldsetLeader
+
+<TypesFieldset.FieldsetLegend />
+
+<TypesFieldset.FieldsetLeader />
+
+### Additional types
+
+<TypesFieldsetAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §10.2 (field, fieldset and form).

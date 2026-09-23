@@ -1,0 +1,101 @@
+/*
+ * Line styles (§1.5.8, §4.2, §4.6). Compose into a module part, in a
+ * top-level rule outside any @layer (Lightning CSS rejects nested composes):
+ *   .label { composes: lineDotted from '../../utils/line.module.css'; }
+ * The part colors the line from a role variable (`stroke`, `border-color`,
+ * `outline-color`); the line style never carries a color.
+ *
+ * SVG first. Dots and dashes are drawn in SVG from the --ds- geometry
+ * tokens [D36, D68]: every class sets the SVG stroke properties, which
+ * inherit, so an inline <svg><line/></svg> or <rect/> inside the part draws
+ * true round dots and exact dash arrays (round caps extend each dash by the
+ * stroke width, so the drawn array is compensated). Inline SVG is foreground
+ * and prints.
+ *
+ * HTML boxes. `lineSolid`, `lineDouble` and `lineDoubleHair` are complete as
+ * borders. The dotted and dashed classes also set a `border-style` fallback
+ * for a box that cannot host an SVG (a pill's disabled edge); its geometry
+ * is the browser's, so prefer the SVG where the line carries meaning.
+ */
+@layer base {
+  .lineSolid {
+    border-style: solid;
+    stroke-width: var(--border-size-1);
+    stroke-dasharray: none;
+    stroke-linecap: butt;
+  }
+
+  /* Relation: leaders, tethers, estimates, disabled edges. 1 px at 3 px. */
+  .lineDottedFine {
+    border-style: dotted;
+    border-width: var(--ds-dot-fine);
+    stroke-width: var(--ds-dot-fine);
+    stroke-dasharray: 0 var(--ds-dot-fine-pitch);
+    stroke-linecap: round;
+  }
+
+  /* Relation, grouping frames, ornamental rules. 2 px at 5 px. */
+  .lineDotted {
+    border-style: dotted;
+    border-width: var(--ds-dot);
+    stroke-width: var(--ds-dot);
+    stroke-dasharray: 0 var(--ds-dot-pitch);
+    stroke-linecap: round;
+  }
+
+  /* Ornamental dot underline; dot-and-star rule. 4 px at 9 px. */
+  .lineDottedBold {
+    border-style: dotted;
+    border-width: var(--ds-dot-bold);
+    stroke-width: var(--ds-dot-bold);
+    stroke-dasharray: 0 var(--ds-dot-bold-pitch);
+    stroke-linecap: round;
+  }
+
+  /* Annotation. 1 px, 4 on / 3 off, butt caps. */
+  .lineDashedFine {
+    border-style: dashed;
+    border-width: var(--border-size-1);
+    stroke-width: var(--border-size-1);
+    stroke-dasharray: var(--ds-dash-fine) var(--ds-dash-fine-gap);
+    stroke-linecap: butt;
+  }
+
+  /* Path; provisional. 2 px, renders 5 on / 4 off with round caps. */
+  .lineDashed {
+    border-style: dashed;
+    border-width: var(--border-size-2);
+    stroke-width: var(--border-size-2);
+    stroke-dasharray: calc(var(--ds-dash) - var(--border-size-2))
+      calc(var(--ds-dash-gap) + var(--border-size-2));
+    stroke-linecap: round;
+  }
+
+  /*
+   * Frame / terminal: outer --border-size-2, --ds-double-gap, inner
+   * --border-size-1. The inner line is an outline inset inside the border;
+   * set `outline-color` with `border-color`.
+   */
+  .lineDouble {
+    border-style: solid;
+    border-width: var(--border-size-2);
+    outline-style: solid;
+    outline-width: var(--border-size-1);
+    outline-offset: calc(
+      -1 * (var(--border-size-2) + var(--ds-double-gap) + var(--border-size-1))
+    );
+  }
+
+  /*
+   * Table totals, running header: two --border-size-1 hairlines
+   * --ds-double-hair-gap apart. The element sits between its block-start
+   * and block-end borders: empty, it is the gap; as a band, content grows it.
+   */
+  .lineDoubleHair {
+    box-sizing: content-box;
+    border-style: solid;
+    border-width: 0;
+    border-block-width: var(--border-size-1);
+    min-block-size: var(--ds-double-hair-gap);
+  }
+}

@@ -1,0 +1,151 @@
+/*
+ * Marquee (§11.12, the marquee band). CVA function `marquee`. Static only
+ * [D169]: no animation, transition or motion rule exists here.
+ * Color roles (§11.12): field ground = the preset's, edge --role-edge (the
+ * field's --primary12) at --border-size-1 (Ground draws it); phrases and
+ * dots --primary12; ticker rules --role-rule; drawing lines --primary12
+ * with --role-halo fills (the drawing's own SVG). Colors are role
+ * variables only; local custom properties carry dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.marqueeText {
+  composes: typeMarquee from '../../utils/type.module.css';
+}
+
+.tickerText {
+  composes: typeBody from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base {
+    --marquee-art: var(--ds-size-art-s);
+
+    display: block;
+    color: var(--primary12);
+  }
+
+  /* The page-frame container: --ds-container-content inside the page margins. */
+  .container {
+    box-sizing: content-box;
+    max-inline-size: var(--ds-container-content);
+    margin-inline: auto;
+    padding-inline: var(--ds-space-margin);
+  }
+
+  /* The run: --size-px-8 minimum, never clipped. */
+  .run {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    min-block-size: var(--size-px-8);
+    margin: 0;
+    padding-block: var(--size-px-2);
+    color: var(--primary12);
+  }
+
+  .phrase {
+    overflow-wrap: break-word;
+  }
+
+  /* The separator: a solid --ds-ornament-dot disc on the cap-height center, a word space each side. */
+  .dot {
+    display: inline-block;
+    inline-size: var(--ds-ornament-dot);
+    block-size: var(--ds-ornament-dot);
+    fill: currentColor;
+    vertical-align: calc(0.35em - var(--ds-ornament-dot) / 2);
+  }
+
+  /* The drawing size steps between fixed art sizes, never fluid [D78]. */
+  @media (--md-n-above) {
+    .base {
+      --marquee-art: var(--ds-size-art-l);
+    }
+  }
+}
+
+@layer variants {
+  /*
+   * The full-container field: Ground draws the ground, the --ds-radius-8 and
+   * the --primary12 edge; the run sets the height, so the field adds only
+   * inline padding. It stays above a hanging drawing.
+   */
+  .fielded .field {
+    position: relative;
+    z-index: 1;
+    padding-block: 0;
+    padding-inline: var(--size-px-3);
+  }
+
+  /* Static: the phrases set once, optically centered. */
+  .static .run {
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* The quote ticker: serif italic sentences between two full-bleed --border-size-1 --role-rule rules. */
+  .ticker {
+    border-block: var(--border-size-1) solid var(--role-rule);
+  }
+
+  .tickerText {
+    font-style: italic;
+  }
+
+  /*
+   * The hanging drawing (band-hang): tucked under the field's bottom edge by
+   * a quarter of its height (20–35%), hanging into the page ground below
+   * at the container's end.
+   */
+  .hanging .container {
+    isolation: isolate;
+  }
+
+  .drawing {
+    position: relative;
+    z-index: 0;
+    display: flex;
+    justify-content: flex-end;
+    margin-block-start: calc(var(--marquee-art) * -0.25);
+    padding-inline-end: var(--size-px-7);
+    color: var(--primary12);
+    pointer-events: none;
+  }
+
+  .drawing > :where(svg, img) {
+    display: block;
+    inline-size: auto;
+    block-size: var(--marquee-art);
+  }
+}
+
+@layer print {
+  @media print {
+    /* The phrases once, centered, between two 1.5 pt rules; the field's fill and frame drop (§7.7). */
+    .ticker {
+      border-block: 0;
+    }
+
+    .fielded .field {
+      padding: 0;
+      border: 0;
+      border-radius: var(--ds-radius-none);
+    }
+
+    .run {
+      justify-content: center;
+      border-block: var(--border-size-2) solid var(--primary12);
+      text-align: center;
+      break-inside: avoid;
+    }
+
+    /* The hanging drawing prints whole, in the flow before the next heading. */
+    .drawing {
+      margin-block-start: var(--size-px-3);
+      break-inside: avoid;
+    }
+  }
+}

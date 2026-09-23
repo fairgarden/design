@@ -1,0 +1,11 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-2);
+}
+
+.text {
+  margin: 0;
+  font-family: var(--ds-font-text);
+  font-size: var(--ds-font-size-body);
+  line-height: var(--ds-leading-reading);
+}

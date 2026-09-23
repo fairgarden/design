@@ -1,0 +1,15 @@
+.stack {
+  display: grid;
+  /* One track the width of the preview; an auto track grows to the footers' min-content. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ds-space-40);
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.logo {
+  color: var(--primary12);
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-font-size-itemhead);
+  font-weight: var(--font-weight-7);
+}

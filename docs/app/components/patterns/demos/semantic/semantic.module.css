@@ -1,0 +1,36 @@
+.legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--size-px-3) var(--size-px-5);
+  inline-size: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  gap: var(--ds-space-12);
+  align-items: center;
+}
+
+.swatch {
+  flex: none;
+  inline-size: var(--size-px-9);
+  block-size: var(--ds-space-40);
+}
+
+.text {
+  display: grid;
+}
+
+.name {
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-font-size-caption);
+}
+
+.note {
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-caption);
+  color: var(--role-muted);
+}

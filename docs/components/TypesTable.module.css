@@ -1,0 +1,87 @@
+.root {
+  display: grid;
+  gap: var(--size-px-3);
+  margin-block: var(--size-px-5);
+}
+
+.description {
+  composes: typeBodyUi from '../../src/utils/type.module.css';
+  max-inline-size: var(--ds-measure-reading);
+}
+
+.scroll {
+  overflow-x: auto;
+}
+
+/* Table frame per [D83]: rule for the frame, hairline for body rows. */
+.table {
+  composes: typeBodyUi from '../../src/utils/type.module.css';
+  inline-size: 100%;
+  border-collapse: collapse;
+  border-block: var(--border-size-1) solid var(--role-rule);
+
+  /* type-label (composes is not allowed in a nested rule). */
+  & th {
+    font-family: var(--ds-font-ui);
+    font-weight: var(--font-weight-6);
+    font-size: var(--ds-font-size-label);
+    line-height: var(--font-lineheight-1);
+    letter-spacing: var(--font-letterspacing-3);
+    text-transform: uppercase;
+    padding: var(--size-px-2) var(--ds-space-12);
+    border-block-end: var(--border-size-1) solid var(--role-rule);
+    color: var(--role-muted);
+    text-align: start;
+  }
+
+  & td {
+    padding: var(--ds-space-12);
+    border-block-end: var(--border-size-1) solid var(--role-hairline);
+    vertical-align: top;
+  }
+
+  & tr:last-child td {
+    border-block-end: none;
+  }
+}
+
+.name {
+  white-space: nowrap;
+
+  & code {
+    font-family: var(--ds-font-mono);
+    font-size: var(--ds-font-size-caption);
+    font-weight: var(--font-weight-5);
+  }
+}
+
+.default,
+.returns {
+  composes: typeCaption from '../../src/utils/type.module.css';
+  margin-block-start: var(--size-px-1);
+  color: var(--role-muted);
+}
+
+.label {
+  composes: typeLabel from '../../src/utils/type.module.css';
+  margin-inline-end: var(--size-px-2);
+}
+
+.additional {
+  border-block-start: var(--border-size-1) solid var(--role-hairline);
+  padding-block-start: var(--size-px-2);
+}
+
+.summary {
+  composes: typeFieldLabel from '../../src/utils/type.module.css';
+  min-block-size: var(--ds-size-hit);
+  display: flex;
+  align-items: center;
+  font-family: var(--ds-font-mono);
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: var(--ds-focus-width) solid var(--primary12);
+    outline-offset: var(--ds-focus-offset);
+  }
+}

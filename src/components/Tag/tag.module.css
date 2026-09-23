@@ -1,0 +1,99 @@
+/*
+ * Tag (§10.11): the topic tag. Parts: `base` (no container), `icon` (the
+ * subject symbol at the tag tier, the tag's only color, --role-accent) and
+ * `label` (caps, --primary12). Colors are role variables only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. Topic tags keep caps [D160]. */
+.label {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+@layer base {
+  /* No container: icon, --ds-space-12, label (LTA 11–12 px). */
+  .base {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-12);
+    max-inline-size: 100%;
+    color: var(--primary12);
+    text-decoration-line: none;
+    vertical-align: middle;
+  }
+
+  /* The subject symbol: tag tier (--size-px-4), filled in --role-accent. */
+  .icon {
+    display: inline-flex;
+    flex: none;
+    inline-size: var(--size-px-4);
+    block-size: var(--size-px-4);
+    color: var(--role-accent);
+    fill: currentColor;
+  }
+
+  .icon > svg {
+    inline-size: 100%;
+    block-size: 100%;
+    fill: currentColor;
+  }
+
+  /* The bare-text hover underline's color, weight and offset (§10.1) [D181]. */
+  .label {
+    font-weight: var(--font-weight-7);
+    color: var(--primary12);
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  /* A linked tag's target reaches --ds-size-hit, extended invisibly (§9.1) [D43]. */
+  .base[href] {
+    position: relative;
+  }
+
+  .base[href]::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    inline-size: 100%;
+    block-size: var(--ds-size-hit);
+    min-inline-size: var(--ds-size-hit);
+    translate: -50% -50%;
+  }
+
+  @media (--forcedColors) {
+    .icon {
+      color: CanvasText;
+    }
+  }
+
+  /* Hover transition [D181]: --ds-duration-quick, --ease-out-3. */
+  @media (--motionOK) {
+    .label {
+      transition-property: text-decoration-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer states {
+  /*
+   * Linked tag hover: tag lists are bare text, so the label takes the
+   * bare-text underline, --role-accent at --border-size-2, offset
+   * --size-px-1 (§10.11) [D181].
+   */
+  .base[href]:hover .label {
+    text-decoration-line: underline;
+  }
+
+  /* Focus: the ring around icon and label, keyboard only [D45]. */
+  .base:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+    border-radius: var(--radius-1);
+  }
+}

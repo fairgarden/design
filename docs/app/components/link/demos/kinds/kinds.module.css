@@ -1,0 +1,26 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-3);
+  justify-items: start;
+}
+
+.text {
+  margin: 0;
+  font-family: var(--ds-font-text);
+  font-size: var(--ds-font-size-body);
+  line-height: var(--ds-leading-reading);
+}
+
+.nav {
+  display: flex;
+  gap: var(--size-px-5);
+}
+
+.list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-body-ui);
+}

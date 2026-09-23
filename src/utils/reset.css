@@ -1,0 +1,129 @@
+/*
+ * The element reset (§1.11.9) [D154]. Structural rules only, replacing Open
+ * Props Normalize: no palette color, shadow, opacity, table or field radius,
+ * or unguarded dark-mode rule. Every color is a role variable.
+ */
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  :where(:not(dialog)) {
+    margin: 0;
+  }
+
+  :where(html) {
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+    block-size: 100%;
+    color: var(--primary12);
+    background-color: var(--role-ground);
+    font-family: var(--ds-font-ui);
+    font-size: 100%;
+    line-height: var(--font-lineheight-3);
+    tab-size: 2;
+    hanging-punctuation: first allow-end last;
+  }
+
+  @media (--motionOK) {
+    :where(html) {
+      scroll-behavior: smooth;
+    }
+  }
+
+  :where(body) {
+    min-block-size: 100%;
+  }
+
+  :where(h1, h2, h3, h4, h5, h6) {
+    font-size: inherit;
+    font-weight: inherit;
+    text-wrap: balance;
+  }
+
+  :where(p, li, dd, figcaption, blockquote) {
+    text-wrap: pretty;
+  }
+
+  :where(h1, h2, h3, h4, h5, h6, p, li, dt, dd, figcaption, blockquote) {
+    overflow-wrap: break-word;
+  }
+
+  :where(ul, ol)[role='list'] {
+    list-style: none;
+    padding: 0;
+  }
+
+  :where(img, svg, video, canvas, picture, iframe) {
+    display: block;
+    max-inline-size: 100%;
+  }
+
+  :where(img, video) {
+    block-size: auto;
+  }
+
+  :where(svg:not([fill])) {
+    fill: currentColor;
+  }
+
+  :where(input, button, textarea, select) {
+    font: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+  }
+
+  :where(button, [role='button'], summary, label[for]) {
+    cursor: pointer;
+  }
+
+  :where(textarea) {
+    resize: vertical;
+  }
+
+  :where(table) {
+    border-collapse: collapse;
+    inline-size: 100%;
+  }
+
+  :where(hr) {
+    block-size: 0;
+    border: none;
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  /* Links: --primary12 text, --role-accent underline (§1.5.3). */
+  :where(a) {
+    color: inherit;
+    text-decoration-line: underline;
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--ds-stroke-1-5);
+    text-underline-offset: 0.15em;
+  }
+
+  /* Firefox dims placeholders with opacity; cancel it so no text is translucent. */
+  :where(::placeholder) {
+    color: var(--role-muted);
+    opacity: 1;
+  }
+
+  /* The ring: 2 px --primary12 at a 2 px offset; never removed (§1.5.14). */
+  :where(:focus-visible) {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  :where([hidden]:not([hidden='until-found'])) {
+    display: none !important;
+  }
+
+  @media (--motionNotOK) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+    }
+  }
+}

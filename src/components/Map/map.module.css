@@ -1,0 +1,501 @@
+/*
+ * Map (§8.10) [D169, D191]. CVA function `map`. Parts: `base` (the module
+ * wrapper, the container `map`), `layout` (map, then index), `media` (the
+ * FigureMedia; the Figure owns the caption), `title`,
+ * `toolbar` (+ `zoomLevel`), `frame` (the pannable, focusable map window),
+ * `canvas` (MapLibre's container) / `snapshot` (the print image),
+ * `drawing` / `drawingContent`, `overlay`, `marker` (+
+ * `markerSquare`, `markerDiamond`, `markerNumber`), `label`, `attribution`,
+ * `address`, `index` (+
+ * `indexGroup`, `indexHead`, `indexTitle`, `indexNumber`), `instructions`,
+ * `fallback`, `printNote` (+ `printUrl`, `printQr`), and the drawing kit's
+ * line classes (`boundary`, `subdivision`, `road`, `street`, `path`,
+ * `building`, `area`, `route`, `altRoute`).
+ *
+ * Colors are role variables only; the MapLibre canvas reads them at runtime
+ * [D158]. Local custom property: --map-ratio, the frame's aspect ratio (a
+ * dimension). MapLibre's stylesheet is not needed: `canvas` carries the two
+ * rules its canvas relies on, and no MapLibre control, marker or popup is
+ * used.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.title {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.zoomLevel {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.address {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.attribution {
+  composes: typeSmall typeMuted from '../../utils/type.module.css';
+}
+
+.markerNumber {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.label {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.indexHead {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.indexNumber {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.printUrl {
+  composes: typeUrl from '../../utils/type.module.css';
+}
+
+.boundary {
+  composes: lineSolid from '../../utils/line.module.css';
+}
+
+.subdivision {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+.route {
+  composes: lineDashed from '../../utils/line.module.css';
+}
+
+.altRoute {
+  composes: lineDashed from '../../utils/line.module.css';
+}
+
+@layer base {
+  /*
+   * The module wrapper: its own inline-size container [D163], named because
+   * the Figure inside is a container too and the layout answers to this one.
+   */
+  .base {
+    container: map / inline-size;
+    /* Size containment leaves no intrinsic width: fill the box, never collapse as a flex or shrink-to-fit item. */
+    inline-size: 100%;
+    min-inline-size: 0;
+    color: var(--primary12);
+  }
+
+  /* Baseline: the map, then the index. */
+  .layout {
+    display: grid;
+    gap: var(--size-px-5);
+    min-inline-size: 0;
+  }
+
+  /* The figure's media: title, toolbar, map window, attribution, address. */
+  .media {
+    display: grid;
+    gap: var(--size-px-2);
+    min-inline-size: 0;
+  }
+
+  .title {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  /* The in-flow Toolbar above the map, never floating over it [D23]. */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-1);
+    min-block-size: var(--size-px-8);
+  }
+
+  .zoomLevel {
+    margin-inline-start: var(--size-px-2);
+    color: var(--primary12);
+  }
+
+  /* The map window: land is the ground; its frame comes from `kind`. */
+  .frame {
+    position: relative;
+    box-sizing: border-box;
+    inline-size: 100%;
+    aspect-ratio: var(--map-ratio);
+    overflow: clip;
+    border-style: solid;
+    background-color: var(--role-ground);
+    cursor: grab;
+    touch-action: pan-x pan-y;
+    user-select: none;
+  }
+
+  /* MapLibre's container fills the window; the map below it is the ground until it draws. */
+  .canvas {
+    position: absolute;
+    inset: 0;
+    overflow: clip;
+  }
+
+  .canvas :global(.maplibregl-canvas) {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    display: block;
+  }
+
+  /* The print snapshot waits hidden; print shows it (see the print layer). */
+  .snapshot {
+    display: none;
+  }
+
+  .drawing {
+    position: absolute;
+    inset: 0;
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* Strokes keep their screen weight at every zoom step [I7]. */
+  .drawingContent * {
+    vector-effect: non-scaling-stroke;
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  /*
+   * marker-index: a --size-px-5 circle, --primary1 face (named directly, a
+   * face is not a knockout [D144]), --ds-stroke-1-5 --primary12 edge, a
+   * zero-padded numeral in `type-label` at --font-weight-6. Screen size at
+   * every zoom; the face layer carries the shape.
+   */
+  .marker {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+    inline-size: var(--size-px-5);
+    block-size: var(--size-px-5);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--primary12);
+    translate: -50% -50%;
+    pointer-events: auto;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .marker::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-sizing: border-box;
+    border: var(--ds-stroke-1-5) solid var(--primary12);
+    border-radius: var(--radius-round);
+    background-color: var(--primary1);
+  }
+
+  .markerSquare::before {
+    border-radius: var(--ds-radius-none);
+  }
+
+  /* A diamond: the square turned 45°, inset so its points stay inside the 24 px cell. */
+  .markerDiamond::before {
+    inset: calc(var(--size-px-5) * 0.1464);
+    border-radius: var(--ds-radius-none);
+    rotate: 45deg;
+  }
+
+  .markerNumber {
+    position: relative;
+    font-weight: var(--font-weight-6);
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  /* Labels: live text on a nested opaque plate with a --border-size-1 edge (§8.10). */
+  .label {
+    position: absolute;
+    padding-inline: var(--size-px-1);
+    border: var(--border-size-1) solid var(--primary12);
+    background-color: var(--role-halo);
+    color: var(--primary12);
+    white-space: nowrap;
+    translate: -50% -50%;
+  }
+
+  .attribution {
+    margin: 0;
+  }
+
+  /* The mixed-case text address a location map always carries. */
+  .address {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  /* The index: numbered entries grouped under `type-label` heads; the Accordion draws the rules. */
+  .index {
+    display: grid;
+    gap: var(--size-px-5);
+    align-content: start;
+    min-inline-size: 0;
+  }
+
+  .indexGroup {
+    display: grid;
+    gap: var(--size-px-2);
+  }
+
+  .indexHead {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .indexTitle {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--size-px-2);
+  }
+
+  .indexNumber {
+    color: var(--primary12);
+  }
+
+  .instructions {
+    position: absolute;
+    overflow: hidden;
+    clip-path: inset(50%);
+    inline-size: 1px;
+    block-size: 1px;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .fallback,
+  .printNote {
+    display: none;
+  }
+
+  /* The drawing kit (§8.10 encodings). Strokes in role variables; widths from tokens. */
+  .boundary {
+    fill: none;
+    stroke: var(--primary12);
+  }
+
+  .subdivision {
+    fill: none;
+    stroke: var(--primary12);
+  }
+
+  .road {
+    fill: none;
+    stroke: var(--primary12);
+    stroke-width: var(--border-size-2);
+  }
+
+  .street {
+    fill: none;
+    stroke: var(--primary12);
+    stroke-width: var(--ds-stroke-1-5);
+  }
+
+  .path {
+    fill: none;
+    stroke: var(--primary12);
+    stroke-width: var(--border-size-1);
+  }
+
+  .building {
+    fill: var(--role-ground);
+    stroke: var(--primary12);
+    stroke-width: var(--border-size-1);
+  }
+
+  .area {
+    stroke: var(--primary12);
+    stroke-width: var(--border-size-1);
+  }
+
+  .route {
+    fill: none;
+    stroke: var(--role-accent);
+  }
+
+  .altRoute {
+    fill: none;
+    stroke: var(--primary12);
+  }
+
+  /* Forced colors: marks and lines take system colors; the land stays Canvas. */
+  @media (--forcedColors) {
+    .marker::before,
+    .label {
+      border-color: CanvasText;
+    }
+
+    .patternMark {
+      fill: CanvasText;
+    }
+
+    .patternGround {
+      fill: Canvas;
+    }
+
+    .boundary,
+    .subdivision,
+    .road,
+    .street,
+    .path,
+    .building,
+    .area,
+    .route,
+    .altRoute {
+      stroke: CanvasText;
+    }
+  }
+}
+
+@layer variants {
+  /* Technical maps: square corners, a --border-size-1 --role-rule frame. */
+  .technical .frame {
+    border-width: var(--border-size-1);
+    border-color: var(--role-rule);
+    border-radius: var(--ds-radius-none);
+  }
+
+  /* Location maps: --ds-radius-20, a --border-size-2 --primary12 frame. */
+  .location .frame {
+    border-width: var(--border-size-2);
+    border-color: var(--primary12);
+    border-radius: var(--ds-radius-20);
+  }
+
+  /* Container rule [D163] (§5.10.2): side by side 2:1 from 1024 px. */
+  @container map (min-width: 1024px) {
+    .withIndex {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+}
+
+@layer states {
+  /* The focused map shows the standard ring on its frame. */
+  .frame:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  .frame[data-dragging] {
+    cursor: grabbing;
+  }
+
+  /* Marker hover: the edge up one stroke tier. */
+  .marker:hover::before {
+    border-width: var(--border-size-2);
+  }
+
+  /* Selected: the inverse pair; its index entry is open, the second cue. */
+  .marker[aria-pressed='true'] {
+    color: var(--role-inverse);
+  }
+
+  .marker[aria-pressed='true']::before {
+    background-color: var(--primary12);
+  }
+
+  .marker:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+}
+
+@layer print {
+  @media print {
+    /* The toolbar is interactive only. */
+    .toolbar {
+      display: none;
+    }
+
+    /* The map, then its full index. */
+    .layout {
+      display: block;
+    }
+
+    /* The static map within --ds-print-figure-max and the 174 mm block. */
+    .frame {
+      inline-size: min(100%, calc(var(--ds-print-figure-max) * var(--map-ratio)));
+      cursor: auto;
+    }
+
+    /* Marker faces and label plates are knockouts over patterns: keep them. */
+    .marker,
+    .label {
+      print-color-adjust: exact;
+    }
+
+    .hasFallback .frame {
+      display: none;
+    }
+
+    /*
+     * A vector map prints its snapshot, never the WebGL canvas: the reset
+     * extent at 2×, centered at its own size so the print frame crops it
+     * like the screen frame (markers sit at px offsets from the center).
+     * Physical offsets center it in either direction.
+     */
+    .canvas {
+      display: none;
+    }
+
+    .snapshot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: block;
+      max-inline-size: none;
+      translate: -50% -50%;
+    }
+
+    /* No snapshot yet and no fallback: the index, address and credit print alone. */
+    .frame[data-print-empty] {
+      display: none;
+    }
+
+    .fallback {
+      display: block;
+    }
+
+    /* The URL in `type-url`, the QR code beside it [D168]. */
+    .printNote {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--size-px-3);
+      margin: var(--size-px-3) 0 0;
+    }
+
+    .printQr {
+      display: block;
+      flex: none;
+      inline-size: var(--ds-print-qr);
+      block-size: var(--ds-print-qr);
+    }
+
+    /* Standard dot screens print 1 pt dots (§1.5.9). */
+    .patternDot {
+      r: 0.6667px;
+    }
+  }
+}

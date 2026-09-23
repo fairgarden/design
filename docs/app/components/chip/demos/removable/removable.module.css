@@ -1,0 +1,44 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-3);
+}
+
+.face {
+  display: grid;
+  gap: var(--ds-space-12);
+  padding: var(--size-px-5);
+  border: var(--border-size-1) solid var(--role-edge);
+  border-radius: var(--ds-radius-8);
+}
+
+.name {
+  font-family: var(--ds-font-ui);
+  font-weight: var(--font-weight-6);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--size-px-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.status {
+  margin: 0;
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-caption);
+  color: var(--role-muted);
+}
+
+.reset {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--primary12);
+  font: inherit;
+  text-decoration-line: underline;
+  text-decoration-color: var(--role-accent);
+  cursor: pointer;
+}

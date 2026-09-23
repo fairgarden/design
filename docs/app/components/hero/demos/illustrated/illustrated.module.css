@@ -1,0 +1,30 @@
+.page {
+  display: grid;
+  inline-size: 100%;
+}
+
+.band {
+  padding-block: var(--ds-space-section);
+}
+
+.container {
+  inline-size: min(100% - 2 * var(--ds-space-margin), var(--ds-container-content));
+  margin-inline: auto;
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-eyebrow);
+  font-weight: var(--font-weight-6);
+  letter-spacing: var(--font-letterspacing-4);
+  text-transform: uppercase;
+  color: var(--primary12);
+}
+
+.text {
+  margin: 0;
+  font-family: var(--ds-font-text);
+  font-size: var(--ds-font-size-body);
+  color: var(--primary12);
+}

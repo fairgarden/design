@@ -1,0 +1,66 @@
+# Preview Card
+
+A hover preview of a linked page: a thumbnail, the page's title, one line of description and its domain.
+
+```tsx
+import {
+  PreviewCard,
+  PreviewCardArrow,
+  PreviewCardDescription,
+  PreviewCardDomain,
+  PreviewCardPopup,
+  PreviewCardThumb,
+  PreviewCardTitle,
+  PreviewCardTrigger,
+} from '@fairgarden-private/design/components/PreviewCard'
+```
+
+The trigger is a Link, so it navigates and prints like any link. The card opens after 600 ms of hover and closes 300 ms after the pointer leaves. It appears only with hover and a fine pointer; on touch the link simply navigates. The card is the same anchored `white` panel as a Popover, with a `--border-size-2` `--primary12` frame, and it is hidden in print.
+
+A preview card holds at most one link and is never the only route to its information.
+
+## A link preview
+
+import { DemoPreviewCardBasic } from './demos/basic'
+
+<DemoPreviewCardBasic.Title />
+
+`PreviewCardThumb` is a 16:9 image with the nested radius; give it `alt`, or an empty `alt` when the title already names it. The title is set in `type-itemhead` and the domain in mono.
+
+<DemoPreviewCardBasic />
+
+[See Demo](./demos/basic/)
+
+## API Reference
+
+import { TypesPreviewCard, TypesPreviewCardAdditional } from './types'
+
+### PreviewCard and PreviewCardTrigger
+
+<TypesPreviewCard.PreviewCard />
+
+<TypesPreviewCard.PreviewCardTrigger />
+
+### PreviewCardPopup and PreviewCardArrow
+
+<TypesPreviewCard.PreviewCardPopup />
+
+<TypesPreviewCard.PreviewCardArrow />
+
+### PreviewCardThumb, PreviewCardTitle, PreviewCardDescription and PreviewCardDomain
+
+<TypesPreviewCard.PreviewCardThumb />
+
+<TypesPreviewCard.PreviewCardTitle />
+
+<TypesPreviewCard.PreviewCardDescription />
+
+<TypesPreviewCard.PreviewCardDomain />
+
+### Additional types
+
+<TypesPreviewCardAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §10.15 (preview card), §9.3 (link) and §7.6 (link notes in print).

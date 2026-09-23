@@ -1,0 +1,7 @@
+.stack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--size-px-8);
+  /* A flex item of the preview: fill it, since the charts have no intrinsic width. */
+  inline-size: 100%;
+}

@@ -1,0 +1,689 @@
+/*
+ * Role maps (§1.5.3, §1.11.9, §1.5.16), follow-OS strategy.
+ *
+ * Keyed on data-ground / data-tone / data-scheme, which Ground and every
+ * component root write from React context [D148]. Each alias is declared on
+ * the element carrying the attribute, so var(--primaryN) / var(--secondaryN)
+ * resolve with that element's OWN scales (its primary<Scale> class, or the
+ * values it inherits from its scope). Roles name role scale steps, never a
+ * Radix variable, except --role-ground, the preset's fixed ground step.
+ *
+ * `page` schemes (the eight page grounds [D176]) take the light map, and the
+ * dark map under the root's dark selectors. `light` / `dark` schemes (the
+ * night band, the fields and light islands) keep their preset map in both
+ * modes. --role-seam is visible only on the night band in dark mode [D179].
+ *
+ * --role-edge (the container edge) is not keyed here: Ground's kind class
+ * publishes it on each scope [D178], and component roots inherit it.
+ *
+ * Hover [D181]: --role-link-hover, --role-action-hover (the label stays
+ * --role-action-label, the edge is unchanged), --role-select-hover, and
+ * --role-soft-hover, the outline Button's --primary3 fill (the ground where
+ * soft fills drop). --role-soft-hover-face is the same hover for a part
+ * whose rest face is --role-halo (the slider thumb): --primary3 where soft
+ * fills apply, --role-halo (no change) where they drop, so the face never
+ * turns the ground color [D181]. --secondary-hover is the per-scale lighter
+ * neighbour (step 10 in a dark scope) that the scales module publishes.
+ *
+ * Text-bearing selection: --role-select-text / -label / -edge / -hover, for
+ * a selected state that carries words (option pill, filter chip with a
+ * label). It is the selection pair wherever the mark is text-safe, and the
+ * inverse pair on light rose, where --mauve12 on --red9 is 4.16:1 (glyph
+ * only); glyph-only marks (✓, ●, thumbs) keep --role-select there
+ * [decided by orchestrator; flagged for user review, §1.8].
+ *
+ * Charts [D125]: --role-series-odd is the odd series slots' ink,
+ * --secondary11 on light base grounds (and a `white` plate) and --primary12
+ * elsewhere (§8.7); the --ds-series-fill / --ds-series-pattern switches
+ * (tokens.css) pick the sequential cells' screen fill or one-ink pattern.
+ */
+@layer roles {
+  /* System defaults: the page root is a paper band, olive × green, action amber (§1.4.3). */
+  :root {
+    --primary1: var(--olive1);
+    --primary2: var(--olive2);
+    --primary3: var(--olive3);
+    --primary4: var(--olive4);
+    --primary5: var(--olive5);
+    --primary6: var(--olive6);
+    --primary7: var(--olive7);
+    --primary8: var(--olive8);
+    --primary9: var(--olive9);
+    --primary10: var(--olive10);
+    --primary11: var(--olive11);
+    --primary12: var(--olive12);
+    --primary-contrast: var(--olive-contrast);
+    --primary-hover: var(--olive-hover);
+    --secondary1: var(--green1);
+    --secondary2: var(--green2);
+    --secondary3: var(--green3);
+    --secondary4: var(--green4);
+    --secondary5: var(--green5);
+    --secondary6: var(--green6);
+    --secondary7: var(--green7);
+    --secondary8: var(--green8);
+    --secondary9: var(--green9);
+    --secondary10: var(--green10);
+    --secondary11: var(--green11);
+    --secondary12: var(--green12);
+    --secondary-contrast: var(--green-contrast);
+    --secondary-hover: var(--green-hover);
+    --action1: var(--amber1);
+    --action2: var(--amber2);
+    --action3: var(--amber3);
+    --action4: var(--amber4);
+    --action5: var(--amber5);
+    --action6: var(--amber6);
+    --action7: var(--amber7);
+    --action8: var(--amber8);
+    --action9: var(--amber9);
+    --action10: var(--amber10);
+    --action11: var(--amber11);
+    --action12: var(--amber12);
+    --action-contrast: var(--amber-contrast);
+    --action-hover: var(--amber-hover);
+
+    /* The page root is a band: no container edge, so --role-edge is the rule [D178]. */
+    --role-edge: var(--role-rule);
+  }
+
+  /* Every scope: invariant and fallback aliases. */
+  :root,
+  [data-ground] {
+    --role-inverse: var(--primary1);
+    --role-halo: var(--primary1); /* P1 in every scope and mode [D150] */
+    --role-seam: var(--role-ground); /* invisible; --primary12 on the night band in dark mode [D179] */
+    --role-glyph: var(--primary12);
+    --role-status: var(--secondary11);
+    --role-status-text: var(--primary12);
+    --role-status-fill: var(--role-ground);
+    --role-grain-light: var(--role-ground);
+    --role-grain-dark: var(--role-ground);
+    /* Pressed primary action: the inverse pair (§1.11.4) [D96]. */
+    --role-action-pressed: var(--primary12);
+    --role-action-pressed-label: var(--role-inverse);
+    /* Disabled edge (line-dotted-fine) [D16]; --primary12 on one-ink grounds [D85]. */
+    --role-disabled-edge: var(--role-rule);
+    /* Hover [D181]: S12 link ink, the lighter-neighbour fills, the soft outline fill. */
+    --role-link-hover: var(--secondary12);
+    --role-action-hover: var(--secondary-hover);
+    --role-select-hover: var(--secondary-hover);
+    --role-soft-hover: var(--primary3);
+    --role-soft-hover-face: var(--primary3);
+    /*
+     * The pill: a solid badge's fill, label and edge (S9, its contrast ink,
+     * S11 where S9 is below 3:1 on light grounds); the ink pill on saturated
+     * fields [D14].
+     */
+    --role-pill: var(--secondary9);
+    --role-pill-label: var(--secondary-contrast);
+    --role-pill-edge: var(--secondary11);
+    /* Text-bearing selection: the selection pair; light rose swaps in the inverse pair (below). */
+    --role-select-text: var(--role-select);
+    --role-select-text-label: var(--role-select-mark);
+    --role-select-text-edge: var(--role-select-edge);
+    --role-select-text-hover: var(--role-select-hover);
+    /* Charts: one ink off the light base grounds (§8.7) [D125]. */
+    --role-series-odd: var(--primary12);
+    /* Switches (tokens.css): shaped edges only on the night band in light mode [D179]. */
+    --ds-edge-shaped: none;
+    --ds-link-hover-line: none;
+    --ds-soft-hover-line: none;
+    --ds-series-fill: none;
+    --ds-series-pattern: inline;
+  }
+
+  /* Tone-resolved aliases [D155, D141]. */
+  :root,
+  [data-tone='light-base'] {
+    --role-glyph: var(--role-accent);
+    --role-status-fill: var(--secondary4);
+    /* Two-ink charts: odd slots --secondary11 and the sequential screen fills, in both modes (§8.7). */
+    --role-series-odd: var(--secondary11);
+    --ds-series-fill: inline;
+    --ds-series-pattern: none;
+  }
+
+  [data-tone='tinted'] {
+    --role-glyph: var(--role-accent);
+  }
+
+  /*
+   * Soft fills drop on tinted grounds (the pastels, forest) and the solid
+   * fields: the outline Button's hover takes the bare-text underline instead
+   * of its --primary3 fill, and a --role-halo face keeps its rest face
+   * [D181].
+   */
+  [data-tone='tinted'],
+  [data-tone='dark-tinted'],
+  [data-tone='solid-light'],
+  [data-tone='solid-dark'] {
+    --role-soft-hover: var(--role-ground);
+    --role-soft-hover-face: var(--role-halo);
+    --ds-soft-hover-line: underline;
+  }
+
+  /* Dark fixed scopes: a pill fill that reaches 3:1 is its own edge. */
+  [data-scheme='dark'] {
+    --role-pill-edge: var(--secondary9);
+  }
+
+  [data-tone='solid-light'],
+  [data-tone='solid-dark'] {
+    --role-status: var(--primary12);
+    --role-disabled-edge: var(--primary12);
+    /* One ink [D14]: link hover is that ink plus the underline; selection hovers the inverse pair [D181]. */
+    --role-link-hover: var(--primary12);
+    --role-select-hover: var(--primary11);
+    --ds-link-hover-line: underline;
+    /* The ink pill. */
+    --role-pill: var(--primary12);
+    --role-pill-label: var(--role-inverse);
+    --role-pill-edge: var(--primary12);
+  }
+
+  /* Ink pill pressed: a --primary1 face with a --primary12 label (§1.11.10, §9.2) [D144]. */
+  [data-tone='solid-light'] {
+    --role-action-pressed: var(--primary1);
+    --role-action-pressed-label: var(--primary12);
+    --role-action-hover: var(--primary11); /* the ink pill's hover [D181] */
+  }
+
+  /* Page grounds paint the same step in both modes (§1.4.2) [D176]; their role maps follow below. */
+  :root,
+  [data-ground='paper'] {
+    --role-ground: var(--orange2);
+  }
+
+  [data-ground='white'] {
+    --role-ground: var(--olive1);
+  }
+
+  [data-ground='tide'] {
+    --role-ground: var(--blue3);
+  }
+
+  [data-ground='meadow'] {
+    --role-ground: var(--green3);
+  }
+
+  [data-ground='pollen'] {
+    --role-ground: var(--yellow3);
+  }
+
+  [data-ground='apricot'] {
+    --role-ground: var(--orange3);
+  }
+
+  [data-ground='rose'] {
+    --role-ground: var(--red3);
+  }
+
+  [data-ground='heather'] {
+    --role-ground: var(--purple3);
+  }
+
+  /*
+   * The night band and the fields (§1.5.3): fixed mode, one map in both
+   * modes; dark presets resolve through their data-theme. Fields keep their
+   * maps unchanged [D177].
+   */
+  [data-ground='night'] {
+    --role-ground: var(--blue2);
+    --role-heading: var(--primary12);
+    --role-muted: var(--primary11);
+    --role-rule: var(--primary9);
+    --role-hairline: var(--primary6);
+    --role-tint: var(--primary4);
+    --role-accent: var(--secondary9);
+    --role-select: var(--secondary9);
+    --role-select-mark: var(--secondary-contrast);
+    --role-select-edge: var(--secondary9);
+    --role-action: var(--secondary9);
+    --role-action-label: var(--secondary-contrast);
+    --role-action-edge: var(--secondary9);
+    --role-link-hover: var(--secondary9); /* --green9 5.6 */
+    --role-grain-light: var(--primary4);
+    --role-grain-dark: var(--primary1);
+    /* The one seam tone separates (from a light page ground): the shaped edge may sit here [D179]. */
+    --ds-edge-shaped: block;
+  }
+
+  [data-ground='forest'] {
+    --role-ground: var(--green6);
+    --role-heading: var(--primary12);
+    --role-muted: var(--primary12);
+    --role-rule: var(--primary11);
+    --role-hairline: var(--primary9);
+    --role-tint: var(--primary8);
+    --role-accent: var(--secondary9);
+    --role-select: var(--primary12);
+    --role-select-mark: var(--primary1);
+    --role-select-edge: var(--primary12);
+    --role-action: var(--secondary9);
+    --role-action-label: var(--secondary-contrast);
+    --role-action-edge: var(--secondary9);
+    --role-link-hover: var(--secondary9); /* --amber9 5.3 */
+    --role-select-hover: var(--primary11); /* the inverse pair: --sage11 */
+    --role-grain-light: var(--primary8);
+    --role-grain-dark: var(--primary6);
+    --role-disabled-edge: var(--primary12); /* one text ink [D85, D115] */
+    --ds-muted-weight-step: 0; /* no muted tier [D175] */
+  }
+
+  [data-ground='leaf'] {
+    --role-ground: var(--green9);
+    --role-heading: var(--primary12);
+    --role-muted: var(--primary12);
+    --role-rule: var(--primary12);
+    --role-hairline: var(--secondary11);
+    --role-tint: var(--secondary8);
+    --role-accent: var(--primary12);
+    --role-select: var(--primary12);
+    --role-select-mark: var(--primary1);
+    --role-select-edge: var(--primary12);
+    --role-action: var(--primary12);
+    --role-action-label: var(--primary1);
+    --role-action-edge: var(--primary12);
+    --role-grain-light: var(--secondary8);
+    --role-grain-dark: var(--secondary10);
+    --ds-muted-weight-step: 0; /* no muted tier [D175] */
+  }
+
+  [data-ground='amber'] {
+    --role-ground: var(--amber10);
+    --role-heading: var(--primary12);
+    --role-muted: var(--primary12);
+    --role-rule: var(--primary12);
+    --role-hairline: var(--secondary11);
+    --role-tint: var(--secondary8);
+    --role-accent: var(--primary12);
+    --role-select: var(--primary12);
+    --role-select-mark: var(--primary1);
+    --role-select-edge: var(--primary12);
+    --role-action: var(--primary12);
+    --role-action-label: var(--primary1);
+    --role-action-edge: var(--primary12);
+    --role-grain-light: var(--secondary6);
+    --role-grain-dark: var(--secondary8);
+    --ds-muted-weight-step: 0; /* no muted tier [D175] */
+  }
+
+  [data-ground='clay'] {
+    --role-ground: var(--orange9);
+    --role-heading: var(--primary12);
+    --role-muted: var(--primary12);
+    --role-rule: var(--primary12);
+    --role-hairline: var(--secondary11);
+    --role-tint: var(--secondary8);
+    --role-accent: var(--primary12);
+    --role-select: var(--primary12);
+    --role-select-mark: var(--primary1);
+    --role-select-edge: var(--primary12);
+    --role-action: var(--primary12);
+    --role-action-label: var(--primary1);
+    --role-action-edge: var(--primary12);
+    --role-grain-light: var(--secondary8);
+    --role-grain-dark: var(--secondary10);
+    --ds-muted-weight-step: 0; /* no muted tier [D175] */
+  }
+
+  [data-ground='pink'] {
+    --role-ground: var(--pink8);
+    --role-heading: var(--primary12);
+    --role-muted: var(--primary12);
+    --role-rule: var(--primary12);
+    --role-hairline: var(--secondary9);
+    --role-tint: var(--secondary7);
+    --role-accent: var(--primary12);
+    --role-select: var(--primary12);
+    --role-select-mark: var(--primary1);
+    --role-select-edge: var(--primary12);
+    --role-action: var(--primary12);
+    --role-action-label: var(--primary1);
+    --role-action-edge: var(--primary12);
+    --role-grain-light: var(--secondary7);
+    --ds-muted-weight-step: 0; /* no muted tier [D175] */
+  }
+
+  [data-ground='royal'] {
+    --role-ground: var(--indigo8);
+    --role-heading: var(--primary12);
+    --role-muted: var(--primary12);
+    --role-rule: var(--primary12);
+    --role-hairline: var(--secondary6);
+    --role-tint: var(--secondary7);
+    --role-accent: var(--primary12);
+    --role-select: var(--primary12);
+    --role-select-mark: var(--primary1);
+    --role-select-edge: var(--primary12);
+    --role-action: var(--secondary9);
+    --role-action-label: var(--secondary-contrast);
+    --role-action-edge: var(--secondary9);
+    --role-grain-dark: var(--secondary7);
+    --ds-muted-weight-step: 0; /* no muted tier [D175] */
+  }
+
+  [data-ground='brick'] {
+    --role-ground: var(--red7);
+    --role-heading: var(--primary12);
+    --role-muted: var(--primary12);
+    --role-rule: var(--primary12);
+    --role-hairline: var(--secondary5);
+    --role-tint: var(--secondary6);
+    --role-accent: var(--primary12);
+    --role-select: var(--primary12);
+    --role-select-mark: var(--primary1);
+    --role-select-edge: var(--primary12);
+    --role-action: var(--secondary9);
+    --role-action-label: var(--secondary-contrast);
+    --role-action-edge: var(--secondary9);
+    --role-status: var(--secondary12);
+    --role-status-text: var(--secondary12);
+    --role-grain-light: var(--secondary8);
+    --role-grain-dark: var(--secondary6);
+    --ds-muted-weight-step: 0; /* no muted tier [D175] */
+  }
+
+  /*
+   * The night band in dark mode [D179]: its seam turns visible as its
+   * --primary12 (12.7–16.2:1 against the eight dark page grounds), and its
+   * shaped edge drops for that straight rule.
+   *
+   * The dark ancestor is the page's mode: data-theme on html or on a preview
+   * wrapper, neither of which carries data-ground. Ground writes
+   * data-theme="dark" on the night band itself, and that must not count, or
+   * every root nested in the band would match in light mode and drop its
+   * fringe. Nested roots match only when the page is dark, and then they
+   * restate the band's values.
+   */
+  [data-theme='dark']:not([data-ground]) [data-ground='night'] {
+    --role-seam: var(--primary12);
+    --ds-edge-shaped: none;
+  }
+
+  /*
+   * Page grounds, dark mode (§1.11.9 and the §1.5.3 dark table) [D138, D176].
+   * `data-theme="dark"` on html, or on a preview wrapper: a `page` scheme
+   * never sits inside a fixed scope, so in a product this is always the
+   * root's mode. Each pastel paints the same step in its dark value.
+   */
+
+  :root[data-theme='dark'],
+  [data-theme='dark'] [data-ground='paper'][data-scheme='page'],
+  [data-theme='dark'] [data-ground='white'][data-scheme='page'] {
+    --role-heading: var(--secondary12);
+    --role-muted: var(--primary11);
+    --role-rule: var(--primary9);
+    --role-hairline: var(--primary6);
+    --role-tint: var(--primary4);
+    --role-accent: var(--secondary9);
+    --role-select: var(--secondary9);
+    --role-select-mark: var(--secondary-contrast);
+    --role-select-edge: var(--secondary9);
+    --role-action: var(--secondary9);
+    --role-action-label: var(--secondary-contrast);
+    --role-action-edge: var(--secondary9);
+    --role-status-fill: var(--role-ground);
+    --role-link-hover: var(--secondary9);
+    --role-select-hover: var(--secondary-hover);
+    --role-pill: var(--secondary9);
+    --role-pill-label: var(--secondary-contrast);
+    --role-pill-edge: var(--secondary9);
+    --ds-link-hover-line: none;
+  }
+
+  [data-theme='dark'] [data-ground='white'][data-scheme='page'] {
+    --role-tint: var(--primary3);
+  }
+
+  [data-theme='dark'] [data-ground='tide'][data-scheme='page'],
+  [data-theme='dark'] [data-ground='meadow'][data-scheme='page'],
+  [data-theme='dark'] [data-ground='pollen'][data-scheme='page'],
+  [data-theme='dark'] [data-ground='apricot'][data-scheme='page'],
+  [data-theme='dark'] [data-ground='rose'][data-scheme='page'],
+  [data-theme='dark'] [data-ground='heather'][data-scheme='page'] {
+    --role-heading: var(--secondary12);
+    --role-muted: var(--primary11);
+    --role-rule: var(--primary10);
+    --role-hairline: var(--primary7);
+    --role-tint: var(--primary5);
+    --role-accent: var(--secondary9);
+    --role-select: var(--secondary9);
+    --role-select-mark: var(--secondary-contrast);
+    --role-select-edge: var(--secondary9);
+    --role-action: var(--secondary9);
+    --role-action-label: var(--secondary-contrast);
+    --role-action-edge: var(--secondary9);
+    --role-status-fill: var(--role-ground);
+    --role-link-hover: var(--secondary9);
+    --role-select-hover: var(--secondary-hover);
+    --role-pill: var(--secondary9);
+    --role-pill-label: var(--secondary-contrast);
+    --role-pill-edge: var(--secondary9);
+    /* Text-bearing selection: the selection pair again (--red1 on dark --red9 is 4.75:1). */
+    --role-select-text: var(--role-select);
+    --role-select-text-label: var(--role-select-mark);
+    --role-select-text-edge: var(--role-select-edge);
+    --role-select-text-hover: var(--role-select-hover);
+    --ds-link-hover-line: none;
+  }
+
+  [data-theme='dark'] [data-ground='rose'][data-scheme='page'],
+  [data-theme='dark'] [data-ground='heather'][data-scheme='page'] {
+    /* No text-safe accent (--red9 4.17, --purple10 3.55): links stay ink, and hover adds the underline [D176, D181]. */
+    --role-link-hover: var(--primary12);
+    --ds-link-hover-line: underline;
+  }
+
+  [data-theme='dark'] [data-ground='heather'][data-scheme='page'] {
+    /* --purple9 is 2.99: accent --purple10 (3.55, non-text); selection is the inverse pair. */
+    --role-accent: var(--secondary10);
+    --role-select: var(--primary12);
+    --role-select-mark: var(--primary1);
+    --role-select-edge: var(--primary12);
+    --role-select-hover: var(--primary11);
+    --role-pill: var(--primary12);
+    --role-pill-label: var(--role-inverse);
+    --role-pill-edge: var(--primary12);
+  }
+
+  @media only screen and (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']),
+    :root:not([data-theme='light']) [data-ground='paper'][data-scheme='page'],
+    :root:not([data-theme='light']) [data-ground='white'][data-scheme='page'] {
+      --role-heading: var(--secondary12);
+      --role-muted: var(--primary11);
+      --role-rule: var(--primary9);
+      --role-hairline: var(--primary6);
+      --role-tint: var(--primary4);
+      --role-accent: var(--secondary9);
+      --role-select: var(--secondary9);
+      --role-select-mark: var(--secondary-contrast);
+      --role-select-edge: var(--secondary9);
+      --role-action: var(--secondary9);
+      --role-action-label: var(--secondary-contrast);
+      --role-action-edge: var(--secondary9);
+      --role-status-fill: var(--role-ground);
+      --role-link-hover: var(--secondary9);
+      --role-select-hover: var(--secondary-hover);
+      --role-pill: var(--secondary9);
+      --role-pill-label: var(--secondary-contrast);
+      --role-pill-edge: var(--secondary9);
+      --ds-link-hover-line: none;
+    }
+
+    :root:not([data-theme='light']) [data-ground='white'][data-scheme='page'] {
+      --role-tint: var(--primary3);
+    }
+
+    :root:not([data-theme='light']) [data-ground='tide'][data-scheme='page'],
+    :root:not([data-theme='light']) [data-ground='meadow'][data-scheme='page'],
+    :root:not([data-theme='light']) [data-ground='pollen'][data-scheme='page'],
+    :root:not([data-theme='light']) [data-ground='apricot'][data-scheme='page'],
+    :root:not([data-theme='light']) [data-ground='rose'][data-scheme='page'],
+    :root:not([data-theme='light']) [data-ground='heather'][data-scheme='page'] {
+      --role-heading: var(--secondary12);
+      --role-muted: var(--primary11);
+      --role-rule: var(--primary10);
+      --role-hairline: var(--primary7);
+      --role-tint: var(--primary5);
+      --role-accent: var(--secondary9);
+      --role-select: var(--secondary9);
+      --role-select-mark: var(--secondary-contrast);
+      --role-select-edge: var(--secondary9);
+      --role-action: var(--secondary9);
+      --role-action-label: var(--secondary-contrast);
+      --role-action-edge: var(--secondary9);
+      --role-status-fill: var(--role-ground);
+      --role-link-hover: var(--secondary9);
+      --role-select-hover: var(--secondary-hover);
+      --role-pill: var(--secondary9);
+      --role-pill-label: var(--secondary-contrast);
+      --role-pill-edge: var(--secondary9);
+      --role-select-text: var(--role-select);
+      --role-select-text-label: var(--role-select-mark);
+      --role-select-text-edge: var(--role-select-edge);
+      --role-select-text-hover: var(--role-select-hover);
+      --ds-link-hover-line: none;
+    }
+
+    :root:not([data-theme='light']) [data-ground='rose'][data-scheme='page'],
+    :root:not([data-theme='light']) [data-ground='heather'][data-scheme='page'] {
+      /* No text-safe accent (--red9 4.17, --purple10 3.55): links stay ink, and hover adds the underline [D176, D181]. */
+      --role-link-hover: var(--primary12);
+      --ds-link-hover-line: underline;
+    }
+
+    :root:not([data-theme='light']) [data-ground='heather'][data-scheme='page'] {
+      /* --purple9 is 2.99: accent --purple10 (3.55, non-text); selection is the inverse pair. */
+      --role-accent: var(--secondary10);
+      --role-select: var(--primary12);
+      --role-select-mark: var(--primary1);
+      --role-select-edge: var(--primary12);
+      --role-select-hover: var(--primary11);
+      --role-pill: var(--primary12);
+      --role-pill-label: var(--role-inverse);
+      --role-pill-edge: var(--primary12);
+    }
+
+    :root:not([data-theme='light']) [data-ground='night'] {
+      --role-seam: var(--primary12);
+      --ds-edge-shaped: none;
+    }
+  }
+
+  /*
+   * Page grounds, light mode (§1.5.3) [D176]. After the dark maps: each rule's
+   * second selector re-applies the light map under a `data-theme="light"`
+   * ancestor below html (a preview wrapper), which must beat the OS query.
+   * Every mode-dependent role is restated, so that reset is complete.
+   */
+
+  :root,
+  [data-ground='paper'],
+  :root [data-theme='light'] [data-ground='paper'][data-scheme='page'],
+  [data-ground='white'],
+  :root [data-theme='light'] [data-ground='white'][data-scheme='page'] {
+    --role-heading: var(--secondary12);
+    --role-muted: var(--primary11);
+    --role-rule: var(--primary9);
+    --role-hairline: var(--primary7);
+    --role-tint: var(--primary5);
+    --role-accent: var(--secondary11);
+    --role-select: var(--secondary9);
+    --role-select-mark: var(--primary12);
+    --role-select-edge: var(--secondary11);
+    --role-action: var(--secondary9);
+    --role-action-label: var(--secondary-contrast);
+    --role-action-edge: var(--secondary11);
+    --role-status-fill: var(--secondary4);
+    --role-link-hover: var(--secondary12);
+    --role-select-hover: var(--secondary-hover);
+    --role-pill: var(--secondary9);
+    --role-pill-label: var(--secondary-contrast);
+    --role-pill-edge: var(--secondary11);
+    --ds-link-hover-line: none;
+  }
+
+  [data-ground='white'],
+  :root [data-theme='light'] [data-ground='white'][data-scheme='page'] {
+    --role-tint: var(--primary4);
+  }
+
+  [data-ground='tide'],
+  :root [data-theme='light'] [data-ground='tide'][data-scheme='page'],
+  [data-ground='meadow'],
+  :root [data-theme='light'] [data-ground='meadow'][data-scheme='page'],
+  [data-ground='pollen'],
+  :root [data-theme='light'] [data-ground='pollen'][data-scheme='page'],
+  [data-ground='apricot'],
+  :root [data-theme='light'] [data-ground='apricot'][data-scheme='page'],
+  [data-ground='rose'],
+  :root [data-theme='light'] [data-ground='rose'][data-scheme='page'],
+  [data-ground='heather'],
+  :root [data-theme='light'] [data-ground='heather'][data-scheme='page'] {
+    /* The pastel ladder [D176]: rule P10, hairline P8 (P7 in dark mode), tint P5; soft fills drop. */
+    --role-heading: var(--secondary12);
+    --role-muted: var(--primary11);
+    --role-rule: var(--primary10);
+    --role-hairline: var(--primary8);
+    --role-tint: var(--primary5);
+    --role-accent: var(--secondary11);
+    --role-select: var(--secondary9);
+    --role-select-mark: var(--primary12);
+    --role-select-edge: var(--secondary11);
+    --role-action: var(--secondary9);
+    --role-action-label: var(--secondary-contrast);
+    --role-action-edge: var(--secondary11);
+    --role-status-fill: var(--role-ground);
+    --role-link-hover: var(--secondary12);
+    --role-select-hover: var(--secondary-hover);
+    --role-pill: var(--secondary9);
+    --role-pill-label: var(--secondary-contrast);
+    --role-pill-edge: var(--secondary11);
+    --ds-link-hover-line: none;
+  }
+
+  [data-ground='pollen'],
+  :root [data-theme='light'] [data-ground='pollen'][data-scheme='page'],
+  [data-ground='heather'],
+  :root [data-theme='light'] [data-ground='heather'][data-scheme='page'] {
+    /* Selection mark: the scale's own contrast ink (--yellow12 8.68, --purple1 5.07). */
+    --role-select-mark: var(--secondary-contrast);
+  }
+
+  [data-ground='rose'],
+  :root [data-theme='light'] [data-ground='rose'][data-scheme='page'],
+  [data-ground='heather'],
+  :root [data-theme='light'] [data-ground='heather'][data-scheme='page'] {
+    /* The fill reaches 3:1 (--red9 3.41, --purple9 4.56), so the edge is the fill; rose's --mauve12 mark is glyph-only (4.16). */
+    --role-select-edge: var(--secondary9);
+    --role-pill-edge: var(--secondary9);
+  }
+
+  /*
+   * Light rose, text-bearing selection: --mauve12 on --red9 is 4.16:1, below
+   * text contrast, so a selected state that carries words takes the inverse
+   * pair (fill --primary12, label --role-inverse, hover --primary11), as dark
+   * heather does; glyph-only marks keep --red9 / --mauve12 (≥ 3:1)
+   * [decided by orchestrator; flagged for user review, §1.8].
+   */
+  [data-ground='rose'],
+  :root [data-theme='light'] [data-ground='rose'][data-scheme='page'] {
+    --role-select-text: var(--primary12);
+    --role-select-text-label: var(--role-inverse);
+    --role-select-text-edge: var(--primary12);
+    --role-select-text-hover: var(--primary11);
+  }
+
+  /*
+   * The night band under a light preview wrapper keeps its light-mode seam
+   * and shaped edge. Like the dark rule, only the page's mode counts, never
+   * a data-theme that Ground writes.
+   */
+  :root [data-theme='light']:not([data-ground]) [data-ground='night'] {
+    --role-seam: var(--role-ground);
+    --ds-edge-shaped: block;
+  }
+}

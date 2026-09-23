@@ -1,0 +1,598 @@
+/*
+ * Sticky Section Bar (§11.7) [D183, D184]. CVA function `sectionBar` in
+ * SectionBar.tsx. Parts: base (the scoped nav; its end border is the
+ * bottomRule), sentinel, topRule, stack (the Collapsible root), toolbar,
+ * lead, glyph, title, search, breadcrumb (the §9.8 Breadcrumb's root:
+ * its one line, crumbs and states are the Breadcrumb's), jumpTrigger (jumpLabel,
+ * jumpStatic, jumpLive, chevron, jumpIndicator), end, listen, listenCount,
+ * tools, share, tabList (tabItem, tab, tabLabel, toTopItem, toTop: the
+ * arrow_upward icon link), breadcrumbPanel (stairList, stairChevron, stairLink,
+ * stairPlain, stairCurrent, panelTools), jumpPositioner, jumpPanel,
+ * jumpList, jumpItem, visuallyHidden. Colors follow the §11.7 Color roles
+ * table through role variables only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. Wayfinding is caps [D165]. */
+.title {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.stairLink {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.stairPlain {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.stairCurrent {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.tab {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.jumpTrigger {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.jumpItem {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+/* The dock swap: a --ds-duration-quick clip from the top edge, never tied to scroll. */
+@keyframes dock {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  to {
+    clip-path: inset(0);
+  }
+}
+
+@layer base {
+  /* Opaque, on the covered band's ground; one line, at least --ds-size-hit. */
+  .base {
+    position: relative;
+    display: block;
+    min-block-size: var(--ds-size-hit);
+  }
+
+  .sentinel {
+    display: block;
+    block-size: 0;
+  }
+
+  /* The optional top rule: --border-size-2 in the brand green, like the strip. */
+  .topRule {
+    display: block;
+    block-size: var(--border-size-2);
+    background-color: var(--secondary9);
+  }
+
+  .stack {
+    display: block;
+  }
+
+  /* The row: --ds-space-12 sides (LTA's tight gutters), capped at the content container from --lg-n-above. */
+  .toolbar {
+    box-sizing: border-box;
+    display: flex;
+    align-items: stretch;
+    gap: var(--size-px-3);
+    inline-size: 100%;
+    min-block-size: var(--ds-size-hit);
+    margin-inline: auto;
+    padding-inline: var(--ds-space-12);
+  }
+
+  /* Base: the disclosure glyph and the caps title. */
+  .lead {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    min-inline-size: 0;
+  }
+
+  .glyph {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--ds-size-hit);
+    block-size: var(--ds-size-hit);
+    margin: 0;
+    margin-inline-start: calc(-1 * var(--ds-space-12));
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-round);
+    background: none;
+    color: var(--primary12);
+    cursor: pointer;
+    appearance: none;
+  }
+
+  /* type-label, one line, ellipsis; the full text stays in the accessible name. */
+  .title {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow: hidden;
+    color: var(--primary12);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .search {
+    display: none;
+  }
+
+  /* The inline breadcrumb (from --md-n-above): the §9.8 Breadcrumb's one
+     line, whose crumbs truncate on a --ds-size-hit target, never wrap. */
+  .breadcrumb {
+    display: none;
+    align-items: center;
+    min-inline-size: 0;
+  }
+
+  /* Jump to: ≤ 30% of the bar (LTA 240 px), type-body-ui plus expand_more. */
+  .jumpTrigger {
+    position: relative;
+    display: flex;
+    flex: 0 1 var(--size-px-13);
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--size-px-2);
+    min-inline-size: 0;
+    max-inline-size: 30%;
+    margin: 0;
+    margin-inline-start: auto;
+    padding: 0 var(--size-px-2);
+    border: 0;
+    background: none;
+    color: var(--primary12);
+    text-align: start;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .jumpLabel {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .jumpLive {
+    display: none;
+  }
+
+  .chevron {
+    color: var(--role-glyph);
+  }
+
+  /* The indicator: --border-size-2 in --role-accent, trigger-wide, flush with the bottom rule. */
+  .jumpIndicator {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: var(--border-size-2);
+    background-color: var(--role-accent);
+    pointer-events: none;
+  }
+
+  .end {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--size-px-3);
+    min-inline-size: 0;
+  }
+
+  /* The guide's listen jump: a standalone body link and its opaque count badge. */
+  .listen {
+    padding-block: var(--size-px-2);
+    white-space: nowrap;
+  }
+
+  .listenCount {
+    margin-inline-start: var(--size-px-2);
+  }
+
+  .tools,
+  .toolsMovable,
+  .share {
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-2);
+  }
+
+  .share {
+    display: none;
+  }
+
+  /* The tab strip (from --lg-n-above): equal cells, at least --size-px-12. */
+  .tabList {
+    display: none;
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-x: auto;
+  }
+
+  .tabItem {
+    display: flex;
+    flex: 1 1 0;
+    min-inline-size: var(--size-px-12);
+  }
+
+  .toTopItem {
+    display: flex;
+    flex: none;
+  }
+
+  .tab {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 0;
+    min-block-size: var(--ds-size-hit);
+    padding-inline: var(--size-px-3);
+    color: var(--primary12);
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .tabLabel {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* toTop: a --ds-size-hit square icon link at the strip's start. */
+  .toTop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--ds-size-hit);
+    block-size: var(--ds-size-hit);
+    color: var(--primary12);
+  }
+
+  /* The staircase (base only): capped at half the viewport, scrolling inside. */
+  .breadcrumbPanel {
+    block-size: var(--collapsible-panel-height);
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  .stairList {
+    max-block-size: 50vh;
+    margin: 0;
+    padding-block: 0 var(--size-px-2);
+    padding-inline: calc(var(--ds-space-12) + var(--ds-size-hit)) var(--ds-space-12);
+    overflow-y: auto;
+    list-style: none;
+  }
+
+  .stairChevron {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    inline-size: var(--size-px-5);
+    color: var(--role-muted);
+  }
+
+  .stairLink,
+  .stairPlain,
+  .stairCurrent {
+    color: var(--primary12);
+  }
+
+  .panelTools {
+    display: none;
+  }
+
+  /* The Jump panel: the anchored overlay surface, --size-px-14 wide [D184]. */
+  .jumpPositioner {
+    z-index: var(--layer-3);
+  }
+
+  .jumpPanel {
+    box-sizing: border-box;
+    inline-size: min(var(--size-px-14), 100vw - 2 * var(--ds-space-margin));
+    max-block-size: min(60vh, var(--available-height));
+    padding-block: var(--size-px-2);
+    overflow-y: auto;
+    border: var(--border-size-2) solid var(--primary12);
+    border-radius: var(--ds-radius-8);
+    background-color: var(--primary1);
+    color: var(--primary12);
+    clip-path: inset(0);
+  }
+
+  .jumpList {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Rows ≥ --ds-size-control-md in a --ds-size-hit area; no rest underline [D80]. */
+  .jumpItem {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-block-size: var(--ds-size-hit);
+    padding: var(--size-px-1) var(--size-px-3);
+    color: var(--primary12);
+    text-decoration: none;
+  }
+
+  .visuallyHidden {
+    position: absolute;
+    inline-size: var(--border-size-1);
+    block-size: var(--border-size-1);
+    margin: calc(-1 * var(--border-size-1));
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (--motionOK) {
+    .breadcrumbPanel {
+      transition: block-size var(--ds-duration-disclosure) var(--ease-out-3);
+    }
+
+    .jumpPanel {
+      transition: clip-path var(--ds-duration-disclosure) var(--ease-out-3);
+    }
+
+    .jumpItem,
+    .jumpLabel {
+      transition: color var(--ds-duration-quick) var(--ease-out-3);
+    }
+  }
+
+  /* Below 360 px the tools move into the staircase panel, keeping one line [D73]. */
+  @media (--xs-n-below) {
+    .toolsMovable {
+      display: none;
+    }
+
+    .panelTools {
+      display: flex;
+      align-items: center;
+      gap: var(--size-px-2);
+      padding: 0 var(--ds-space-12) var(--size-px-2);
+    }
+  }
+
+  /* From --md-n-above: the inline breadcrumb and the live Jump label [D184]. */
+  @media (--md-n-above) {
+    .lead,
+    .breadcrumbPanel {
+      display: none;
+    }
+
+    .breadcrumb {
+      display: flex;
+      flex: 1 1 auto;
+    }
+
+    .jumpStatic {
+      display: none;
+    }
+
+    .jumpLive {
+      display: inline;
+    }
+  }
+
+  @media (--lg-n-above) {
+    .toolbar {
+      max-inline-size: calc(var(--ds-container-content) + 2 * var(--ds-space-12));
+    }
+  }
+
+  /* Share tools may join from --xl-n-above [D184]. */
+  @media (--xl-n-above) {
+    .share {
+      display: flex;
+    }
+  }
+}
+
+@layer variants {
+  /* The bottom rule: the band's end border, --border-size-1 in --role-rule (no shadow [D19]). */
+  .base {
+    border-block-end-color: var(--role-rule);
+  }
+
+  /* Capped: the top rule stands at the edge in place of the band's hidden top seam. */
+  .capped {
+    border-block-start-width: 0;
+  }
+
+  /* Section: never the tab strip. */
+  .section .tabList {
+    display: none;
+  }
+
+  /* Guide (from --md-n-above): search at the start, the breadcrumb centred, the tools at the end. */
+  @media (--md-n-above) {
+    .guide .search {
+      display: flex;
+      flex: 1 1 0;
+      align-items: center;
+      min-inline-size: 0;
+    }
+
+    .guide .search > * {
+      flex: 0 1 var(--size-px-13);
+      min-inline-size: 0;
+    }
+
+    .guide .breadcrumb {
+      flex: 0 1 auto;
+      justify-content: center;
+    }
+
+    .guide .end {
+      flex: 1 1 0;
+      justify-content: flex-end;
+    }
+
+    .guide .jumpTrigger {
+      margin-inline-start: 0;
+    }
+  }
+
+  /* Tabs (from --lg-n-above, ≤ 6 sections): the strip replaces the breadcrumb row and Jump to. */
+  @media (--lg-n-above) {
+    .tabs .breadcrumb,
+    .tabs .jumpTrigger {
+      display: none;
+    }
+
+    .tabs .tabList {
+      display: flex;
+    }
+  }
+
+  /* Docked: the top edge's one sticky bar, opaque, on --layer-2 [D89, D183]. */
+  .docked {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: var(--layer-2);
+  }
+
+  @media (--motionOK) {
+    .docked {
+      animation: dock var(--ds-duration-quick) var(--ease-out-3);
+    }
+  }
+}
+
+@layer states {
+  /* Glyph hover: the next tier's weight (§10.1 icon states) [D181]. */
+  .glyph:hover svg {
+    stroke-width: var(--ds-stroke-1-5);
+  }
+
+  /* Jump trigger hover: the label takes the link hover ink; the indicator keeps its weight [D181]. */
+  .jumpTrigger:hover .jumpLabel {
+    color: var(--role-link-hover);
+    text-decoration-line: var(--ds-link-hover-line);
+  }
+
+  .jumpTrigger[data-popup-open] .chevron {
+    rotate: 180deg;
+  }
+
+  .jumpTrigger[data-popup-open] .jumpIndicator {
+    block-size: var(--ds-stroke-3);
+  }
+
+  /* Jump item hover: --role-link-hover only; underlined where it is --primary12 [D181]. */
+  .jumpItem:hover {
+    color: var(--role-link-hover);
+    text-decoration-line: var(--ds-link-hover-line);
+  }
+
+  .stairLink:hover {
+    color: var(--role-link-hover);
+  }
+
+  /* The staircase's current row: --font-weight-6 (the line's current crumb is the Breadcrumb's, at 7 [D184]). */
+  .stairCurrent[aria-current='page'] {
+    font-weight: var(--font-weight-6);
+  }
+
+  /* Current Jump item: the --ds-stroke-3 start bar in --primary12 [D15]. */
+  .jumpItem[aria-current='location']::before {
+    content: '';
+    position: absolute;
+    inset-block: var(--size-px-1);
+    inset-inline-start: 0;
+    inline-size: var(--ds-stroke-3);
+    background-color: var(--primary12);
+  }
+
+  /* Tab hover: the bare-text underline [D181]; current: the bar on the bottom rule plus weight. */
+  .tab:not([aria-current='location']):hover .tabLabel {
+    text-decoration-line: underline;
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  .tab[aria-current='location'] {
+    font-weight: var(--font-weight-7);
+  }
+
+  .tab[aria-current='location']::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: var(--ds-stroke-3);
+    background-color: var(--primary12);
+  }
+
+  .glyph:focus-visible,
+  .jumpTrigger:focus-visible,
+  .toTop:focus-visible {
+    outline: var(--ds-focus-width) solid var(--primary12);
+    outline-offset: var(--ds-focus-offset);
+  }
+
+  /* Rings inside a scrolling strip or panel sit inset, so nothing clips them. */
+  .tab:focus-visible,
+  .jumpItem:focus-visible {
+    outline: var(--ds-focus-width) solid var(--primary12);
+    outline-offset: calc(-1 * (var(--ds-focus-width) + var(--ds-focus-offset)));
+  }
+
+  .breadcrumbPanel[data-starting-style],
+  .breadcrumbPanel[data-ending-style] {
+    block-size: 0;
+  }
+
+  .jumpPanel[data-starting-style],
+  .jumpPanel[data-ending-style] {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  .jumpPanel[data-instant] {
+    transition: none;
+  }
+
+  /* Forced colors flatten inks, so a color-only hover adds an underline [D181]. */
+  @media (--forcedColors) {
+    .jumpTrigger:hover .jumpLabel,
+    .jumpItem:hover {
+      text-decoration-line: underline;
+    }
+  }
+}
+
+@layer print {
+  @media print {
+    /* Hidden with the Jump label, tabs, toTop, search and listen; the path prints in the masthead. */
+    .base,
+    .sentinel,
+    .jumpPositioner {
+      display: none;
+    }
+  }
+}

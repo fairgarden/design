@@ -1,0 +1,57 @@
+/*
+ * Radio Group (§10.8), group layout only. CVA function `radioGroup`. The
+ * root `base` is the inline-size container `radio-group` [D163]. A
+ * container cannot query itself, so the rows' flex basis carries the
+ * layout: 100% (a stack) at baseline, content width when 2–3 short
+ * options run inline. The group never styles a radio's own parts.
+ */
+
+@layer base {
+  .base {
+    container: radio-group / inline-size;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ds-space-12);
+    min-inline-size: 0;
+  }
+
+  .base > * {
+    flex: 1 1 100%;
+    min-inline-size: 0;
+  }
+}
+
+@layer variants {
+  .standard {
+    column-gap: var(--size-px-5);
+  }
+
+  /* Option pills always stack: they are answers to read. */
+  .pill {
+    gap: var(--ds-space-12);
+  }
+
+  /* Swatches wrap at --ds-size-hit targets, --ds-space-12 apart (5 per row at 320 px [D73]). */
+  .kindSwatch > * {
+    flex: 0 0 auto;
+  }
+
+  /* 2–3 short options run inline: viewport fallback, then the group container (§5.10.2). */
+  @media (--md-n-above) {
+    .standard:not(:has(> :nth-child(4))) > * {
+      flex: 0 1 auto;
+    }
+  }
+
+  @container radio-group (width < 768px) {
+    .standard:not(:has(> :nth-child(4))) > * {
+      flex: 1 1 100%;
+    }
+  }
+
+  @container radio-group (width >= 768px) {
+    .standard:not(:has(> :nth-child(4))) > * {
+      flex: 0 1 auto;
+    }
+  }
+}

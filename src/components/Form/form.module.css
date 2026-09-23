@@ -1,0 +1,123 @@
+/*
+ * Form (§10.2). CVA function `form`. Parts: `base` (the form and its
+ * inline-size container `form`), `summary` (the danger Alert at the top,
+ * with `summaryTitle` and `summaryList`), `row` (a short pair such as city
+ * and postcode) and `actions` (the action row). Structure takes role
+ * variables only; the summary's colors are the Alert's.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.summaryTitle {
+  composes: typeSubhead from '../../utils/type.module.css';
+}
+
+@layer base {
+  /*
+   * One column at --size-sm, fields --size-px-5 apart (§10.2). The root is
+   * the inline-size container `form` that fieldsets, pairs and butted
+   * submits query (§5.10.2) [D163].
+   */
+  .base {
+    container: form / inline-size;
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-px-5);
+    inline-size: 100%;
+    max-inline-size: var(--size-sm);
+    color: var(--primary12);
+  }
+
+  /* The summary takes focus when it appears; the Alert draws its own bar and glyph. */
+  .summary {
+    scroll-margin-block: var(--ds-space-margin);
+  }
+
+  .summaryTitle {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .summaryList {
+    display: grid;
+    gap: var(--size-px-2);
+    margin: 0;
+    margin-block-start: var(--size-px-2);
+    padding: 0;
+    list-style: none;
+  }
+
+  /*
+   * A short pair shares one row in a 2:1 split and stacks when both do not
+   * fit (flex-wrap at each field's minimum); from 480 px of form width it
+   * always shares the row (§5.10.2).
+   */
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--size-px-5);
+  }
+
+  .row > * {
+    flex: 2 1 var(--size-px-12);
+    min-inline-size: 0;
+  }
+
+  .row > :last-child:not(:first-child) {
+    flex: 1 1 var(--size-px-11);
+  }
+
+  @container form (width >= 480px) {
+    .row {
+      flex-wrap: nowrap;
+    }
+  }
+
+  /*
+   * The action row, --size-px-5 above the last field: stacked with the
+   * solid submit first at base; from --md-n-above one row with the submit
+   * last (rightmost) [D106]. Author the submit last.
+   */
+  .actions {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: var(--ds-space-12);
+  }
+
+  @media (--md-n-above) {
+    .actions {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  }
+}
+
+@layer states {
+  /* The summary is focused by script; the ring shows for keyboard users only [D45]. */
+  .summary:focus {
+    outline: none;
+  }
+
+  .summary:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  /* Busy: the form is inert until the response; the submit reads "Sending…" [D84]. */
+  .base[aria-busy='true'] {
+    cursor: progress;
+  }
+}
+
+@layer print {
+  @media print {
+    /* The summary prints if present; the action row is interaction only. */
+    .actions {
+      display: none;
+    }
+  }
+}

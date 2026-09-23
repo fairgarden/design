@@ -1,0 +1,69 @@
+# Footer
+
+The page's heaviest band and closing summary, required on every page: action blocks, the sitemap, contact, social links, the legal row and the colophon. It absorbs everything other systems float: back to top, accessibility settings, chat and feedback are footer links.
+
+```tsx
+import { Footer, FooterBlock } from '@fairgarden-private/design/components/Footer'
+```
+
+The footer is a band Ground, `night` by default (slate × green, amber action); never a field. Page ground always lies above it, so no field touches it except a straddle card crossing its seam (`straddle`). On a dark page Ground draws its top seam as a one-ink rule. `sitemap` takes the navigation data, one group per top-level section, so the footer and the navigation panels never drift apart; a section with an `href` gets a linked heading with a chevron.
+
+## Field guide footer
+
+import { DemoFooterGuide } from './demos/guide'
+
+<DemoFooterGuide.Title />
+
+`FooterBlock`s stack at base and run 3-up from 944 px of their row. Sitemap links have no rest underline, stand 44 px apart and take the link hover ink only; the current page carries a 3 px start bar and bold. Contact links are underlined at rest. The legal row sits above a rule, stacked at base with © last and on one line from 768 px (© left, links right). From 1024 px the brand, contact and social take columns 1–4 and the sitemap 5–12, its groups 4-up.
+
+<DemoFooterGuide />
+
+[See Demo](./demos/guide/)
+
+## Newsletter column, ruled and minimal
+
+import { DemoFooterColumn } from './demos/column'
+
+<DemoFooterColumn.Title />
+
+With `newsletterColumn`, from 1024 px the sitemap takes columns 1–7 (the brand above, groups 3-up) and the inline `newsletter` columns 8–12 behind a vertical rule, which turns horizontal when the column stacks. Above 24 links the groups collapse into an Accordion on phones; at 24 or fewer they stay open. `signoff` crops a large wordmark in the tint at the band's bottom edge. `kind="ruled"` sets a full-bleed grid of caps link cells and contact rows on a page ground; `kind="minimal"` a top rule, the logo, one link line, the legal row and the colophon.
+
+<DemoFooterColumn />
+
+[See Demo](./demos/column/)
+
+## One navigation object
+
+import { DemoFooterNavigation } from './demos/navigation'
+
+<DemoFooterNavigation.Title />
+
+The footer mirrors the mega panels because both read the same data: a `Sitemap` (`SitemapSection`s from `@fairgarden-private/design/utils/navigation`). The Navigation Menu builds its bar from it with `NavigationMenuSections`, the drawer with its `sections` prop, and the footer with `sitemap`. Each section is a bar item, a drawer group and a footer group headed by its label. A link with its own `links` is a third tier that only the panels show: a caps group in an `overview` panel, a category in an `index` panel. `description` and `promo` fill the overview panel and `featured` the index panel's featured bar. The menu and drawer mark current pages by path; the footer has no path, so it reads `current` from the data.
+
+<DemoFooterNavigation />
+
+[See Demo](./demos/navigation/)
+
+## In print
+
+Only the imprint prints, above a 0.75 pt rule: `organization`, the address, the contact line written out, "Printed on" the date, ©, the colophon and, with the newsletter column, "Newsletter (`newsletterUrl`)". The sitemap, social links, buttons, forms, sign-off and back-to-top drop.
+
+## API Reference
+
+import { TypesFooter, TypesFooterAdditional } from './types'
+
+### Footer
+
+<TypesFooter.Footer />
+
+### FooterBlock
+
+<TypesFooter.FooterBlock />
+
+### Additional types
+
+<TypesFooterAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §11.13 (footer; the sitemap and newsletter column per D187), §5.10.2 (module reflow) and §7.12.3 (print).

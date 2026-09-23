@@ -1,0 +1,271 @@
+/*
+ * Announcement Bar (§11.4). CVA function `announcementBar`.
+ * Color roles (§11.4): the bar's preset ground (Ground paints it); field
+ * edge --role-edge (the field's --primary12, drawn by Ground); message
+ * --primary12; link: the §9.3 body link (--primary12, --role-accent
+ * underline, --role-link-hover on hover); countdown cells --role-rule
+ * edge with --primary12 digits; dismiss glyph --primary12, pressed the
+ * inverse pair; bottom rule --role-rule. Colors are role variables only;
+ * local custom properties carry dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+/* The voice is the bar's type role, inherited by the message and link. */
+.standard,
+.dual {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.mono {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.cell {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.endDate {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base {
+    --announcement-min: var(--ds-size-bar-utility);
+
+    display: block;
+    color: var(--primary12);
+  }
+
+  /*
+   * One row inside the page margins: the message centered and growing, the
+   * countdown after it, the dismiss at the end; --size-px-2 vertical
+   * padding; 36 px tall for text alone, 44 px with a link or the dismiss.
+   */
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--size-px-2) var(--size-px-3);
+    box-sizing: content-box;
+    max-inline-size: var(--ds-container-content);
+    margin-inline: auto;
+    padding-inline: var(--ds-space-margin);
+  }
+
+  .message {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    margin: 0;
+    color: var(--primary12);
+    text-align: center;
+    overflow-wrap: break-word;
+  }
+
+  .link {
+    white-space: nowrap;
+  }
+
+  /* Countdown: boxed tabular digits, never flipping; each cell ≥ 2.5ch. */
+  .countdown {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    color: var(--primary12);
+  }
+
+  .cells {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-px-2);
+  }
+
+  .cellGroup {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--size-px-1);
+  }
+
+  .cell {
+    box-sizing: border-box;
+    min-inline-size: 2.5ch;
+    padding: 0 var(--size-px-1);
+    border: var(--border-size-1) solid var(--role-rule);
+    border-radius: var(--radius-1);
+    color: var(--primary12);
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+
+  .unit {
+    color: var(--primary12);
+  }
+
+  .endDate {
+    display: none;
+  }
+
+  .visuallyHidden {
+    position: absolute;
+    inline-size: var(--border-size-1);
+    block-size: var(--border-size-1);
+    margin: calc(var(--border-size-1) * -1);
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* The accent phrase stays in caps whatever its voice. */
+  .accent {
+    text-transform: uppercase;
+  }
+
+  /* Dismiss: the close glyph (inline tier) in a --ds-size-hit target; no circle [D181]. */
+  .dismiss {
+    position: relative;
+    flex: none;
+    display: grid;
+    place-items: center;
+    inline-size: var(--ds-size-hit);
+    block-size: var(--ds-size-hit);
+    margin: 0;
+    /* The glyph, not its target, meets the container edge (from --lg-n-above, the container's own edge). */
+    margin-inline-end: calc((var(--ds-size-hit) - var(--size-px-3)) / -2);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-round);
+    background: none;
+    color: var(--primary12);
+    cursor: pointer;
+    appearance: none;
+  }
+
+  @media (--motionOK) {
+    .dismiss {
+      transition-property: color, background-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+
+  /* ≤ 2 lines at base; one line from --md-n-above (authored short). */
+  @media (--md-n-above) {
+    .message {
+      text-wrap: balance;
+    }
+  }
+}
+
+@layer variants {
+  /* Page-ground bar: --size-px-2 vertical padding, 36 / 44 px minimum. */
+  .bar .container {
+    box-sizing: border-box;
+    min-block-size: var(--announcement-min);
+    padding-block: var(--size-px-2);
+  }
+
+  /* The required bottom rule: --border-size-1, full-bleed, the bar's --role-rule [D179]. */
+  .ruled {
+    border-block-end: var(--border-size-1) solid var(--role-rule);
+  }
+
+  /*
+   * Field bar [D180]: the strip keeps --size-px-2 of page ground above and
+   * below; the field spans the container with Ground's --ds-radius-8 and
+   * --primary12 edge, and the row inside it.
+   */
+  .field .container {
+    padding-block: var(--size-px-2);
+  }
+
+  .fieldBar {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    gap: var(--size-px-2) var(--size-px-3);
+    box-sizing: border-box;
+    min-block-size: var(--announcement-min);
+    padding-block: var(--size-px-2);
+    padding-inline: var(--size-px-3);
+  }
+
+  .interactive {
+    --announcement-min: var(--ds-size-hit);
+  }
+
+  /* Mono: type-data set in caps for dated or technical notices ("CLOSED 24–26 DEC"). */
+  .mono {
+    font-variant-numeric: tabular-nums;
+    text-transform: uppercase;
+  }
+
+  /*
+   * Dual: the caps run keeps its UI face; the one accent phrase switches to
+   * the text serif, untracked, at the run's size (cap heights within ≈ 5%).
+   */
+  .dual .accent {
+    font-family: var(--ds-font-text);
+    font-weight: var(--font-weight-6);
+    letter-spacing: 0;
+  }
+}
+
+@layer states {
+  .dismiss:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: calc(-1 * var(--border-size-2));
+  }
+
+  /* Hover: the glyph's next tier weight comes from iconHost (§9.2 icon-only); forced colors add an outline [D181]. */
+  @media (--forcedColors) {
+    .dismiss:hover {
+      outline: var(--border-size-2) solid currentColor;
+      outline-offset: calc(-1 * var(--border-size-2));
+    }
+  }
+
+  /* Pressed: the inverse pair. */
+  .dismiss:active {
+    background-color: var(--primary12);
+    color: var(--role-inverse);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Hidden by default (§11.4). */
+    .base {
+      display: none;
+    }
+
+    /*
+     * A notice of record prints once, black on white between two 0.75 pt
+     * rules; its link prints its short URL (the Link's own print rule).
+     */
+    .record {
+      display: block;
+      margin-block-end: var(--size-px-3);
+      border-block: var(--border-size-1) solid var(--primary12);
+      break-inside: avoid;
+    }
+
+    .fieldBar {
+      border: 0;
+      padding-inline: 0;
+    }
+
+    .dismiss,
+    .cells {
+      display: none;
+    }
+
+    /* A countdown prints its end date ("Ends 30 Sept 2026"). */
+    .endDate {
+      display: inline;
+    }
+  }
+}

@@ -1,0 +1,339 @@
+/*
+ * Tabs (§9.5). Parts: `base` (the Root, the `tabs` container), `bar` (the
+ * non-scrolling row: the Scroll Area and the overflow button), `scroller`
+ * (the wide Scroll Area root, §10.19), `list` (the tablist and its
+ * baseline, inside the scroller), `tab`, `icon`, `label` (with `labelText` and the hidden
+ * weight-700 `labelSizer`), `indicator` (the current bar), `edge` /
+ * `edgeLine` (the disabled `line-dotted-fine` underline, true SVG dots),
+ * `overflow` (the › button), `panel` and `printLabel`. Colors are role
+ * variables only; local custom properties carry dimensions only:
+ *   --tab-inset        the tab's side inset; the bar and pressed line match the label
+ *   --tab-ring-offset  where the focus ring sits inside the hit area
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. Labels are caps wayfinding
+ * (`type-label`) [D165]; inactive labels are muted text [D170, D175]. */
+.label {
+  composes: typeLabel typeMuted from '../../utils/type.module.css';
+}
+
+.printLabel {
+  composes: typeSubhead from '../../utils/type.module.css';
+}
+
+.edgeLine {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+@layer base {
+  .base {
+    --tab-inset: var(--size-px-1);
+    --tab-ring-offset: calc(-1 * var(--border-size-2));
+
+    container: tabs / inline-size;
+    min-inline-size: 0;
+    color: var(--primary12);
+  }
+
+  .bar {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--size-px-2);
+    min-inline-size: 0;
+  }
+
+  /*
+   * When 4–6 tabs overflow, the tablist scrolls sideways in a `wide` Scroll
+   * Area (§9.5, §10.19): the last tab clipped, a visible scrollbar under the
+   * row and the hard overflow edges, never a fade.
+   */
+  .scroller {
+    flex: 1 1 auto;
+  }
+
+  .list {
+    position: relative;
+    display: flex;
+    gap: calc(var(--size-px-5) - 2 * var(--tab-inset));
+  }
+
+  /* Each tab is at least --ds-size-hit tall; it grows when the label wraps. */
+  .tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--size-px-2);
+    box-sizing: border-box;
+    min-inline-size: 0;
+    min-block-size: var(--ds-size-hit);
+    margin: 0;
+    padding-block: var(--size-px-2);
+    padding-inline: var(--tab-inset);
+    border: 0;
+    background: none;
+    color: var(--role-muted);
+    text-align: center;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  /* The pressed line, where the bar sits. */
+  .tab::after {
+    content: '';
+    display: none;
+    position: absolute;
+    inset-inline: var(--tab-inset);
+    inset-block-end: 0;
+    border-block-end: var(--ds-stroke-1-5) solid var(--primary12);
+  }
+
+  .icon {
+    color: inherit;
+  }
+
+  /* Label text and its weight-700 twin share one cell, so the width holds across states. */
+  .label {
+    display: inline-grid;
+    min-inline-size: 0;
+    text-wrap: balance;
+  }
+
+  .labelText,
+  .labelSizer {
+    grid-area: 1 / 1;
+  }
+
+  /*
+   * The bare-text hover underline's color, weight and offset (§9.5) [D181]:
+   * under the label, so its color and position tell it from the bar.
+   */
+  .labelText {
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  .labelSizer {
+    visibility: hidden;
+    font-weight: var(--font-weight-7);
+  }
+
+  /* The current bar: --ds-stroke-3 in --primary12, placed from Base UI's active-tab variables. */
+  .indicator {
+    position: absolute;
+    inset-block-end: 0;
+    left: calc(var(--active-tab-left) + var(--tab-inset));
+    inline-size: calc(var(--active-tab-width) - 2 * var(--tab-inset));
+    border-block-end: var(--ds-stroke-3) solid var(--primary12);
+    pointer-events: none;
+  }
+
+  /* Disabled underline host: true 1 px dots at 3 px (§4.6) [D36, D68]. */
+  .edge {
+    display: none;
+    position: absolute;
+    inset-inline-start: var(--tab-inset);
+    inset-block-end: 0;
+    inline-size: calc(100% - 2 * var(--tab-inset));
+    block-size: var(--ds-dot-fine);
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .edgeLine {
+    fill: none;
+    stroke: var(--role-disabled-edge);
+  }
+
+  /* The › button, centred on a one-line tab row. */
+  .overflow {
+    flex: none;
+    margin-block-start: calc((var(--ds-size-hit) - var(--size-px-7)) / 2);
+  }
+
+  .panel {
+    margin-block-start: var(--size-px-5);
+  }
+
+  .printLabel {
+    display: none;
+  }
+
+  @media (--forcedColors) {
+    .edgeLine {
+      stroke: currentColor;
+    }
+  }
+
+  /* Hover transitions [D181]: --ds-duration-quick, --ease-out-3. */
+  @media (--motionOK) {
+    .tab {
+      transition-property: background-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+
+    .labelText {
+      transition-property: text-decoration-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer variants {
+  /*
+   * Underline: a --border-size-1 --role-rule baseline under the tablist, at
+   * least the container width; the bar and the pressed line cover it.
+   */
+  .underline .list {
+    border-block-end: var(--border-size-1) solid var(--role-rule);
+  }
+
+  .underline .indicator,
+  .underline .tab::after {
+    inset-block-end: calc(-1 * var(--border-size-1));
+  }
+
+  /* Baseline: up to 3 equal cells with wrapping labels (LTA)… */
+  .underline .tab {
+    flex: 1 1 0;
+  }
+
+  /* …4–6 tabs hug their labels on one scrolling line, the last one clipped (PostHog). */
+  .underline .list:has(> .tab:nth-child(4)) .tab {
+    flex: none;
+    white-space: nowrap;
+  }
+
+  /* From 768 px: one row, tabs hugging their labels. Viewport fallback, then the container (§5.10.2). */
+  @media (--md-n-above) {
+    .underline .tab {
+      flex: none;
+    }
+  }
+
+  @container tabs (width < 768px) {
+    .underline .tab {
+      flex: 1 1 0;
+    }
+  }
+
+  @container tabs (width >= 768px) {
+    .underline .tab {
+      flex: none;
+    }
+  }
+
+  /* Segmented: full-bleed equal cells with no dividers; the bar spans the cell bottom. */
+  .segmented {
+    --tab-inset: 0px;
+    --tab-ring-offset: calc(-2 * var(--border-size-2));
+  }
+
+  .segmented .list {
+    gap: 0;
+  }
+
+  .segmented .tab {
+    flex: 1 1 0;
+    padding: calc(var(--size-px-2) + var(--border-size-2));
+  }
+}
+
+@layer states {
+  /* Current (`data-active`): --primary12 label at --font-weight-7 beside the bar. */
+  .tab[data-active],
+  .tab[data-active] .label {
+    color: var(--primary12);
+  }
+
+  .tab[data-active] .label {
+    font-weight: var(--font-weight-7);
+  }
+
+  /*
+   * Hover (not disabled) [D181]: the label keeps its ink and takes the
+   * bare-text underline (--role-accent at --border-size-2, offset
+   * --size-px-1), told from the --ds-stroke-3 --primary12 current bar by
+   * color and position, so hover never reads as current.
+   */
+  .tab:not([data-disabled]):hover .labelText {
+    text-decoration-line: underline;
+  }
+
+  /* Pressed: the bar at --border-size-2. */
+  .tab:not([data-disabled]):active::after {
+    display: block;
+    border-block-end-width: var(--border-size-2);
+  }
+
+  /* Focus: the 2 px --primary12 ring on the hit area, inside it so the scrolling row never clips it. */
+  .tab:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--tab-ring-offset);
+  }
+
+  /* Disabled: --role-muted label and the dotted underline; never dimmed [D16, D85]. */
+  .tab[data-disabled] {
+    color: var(--role-muted);
+    cursor: default;
+  }
+
+  .tab[data-disabled] .edge {
+    display: block;
+  }
+
+  /*
+   * Filled segmented cell (light scopes only): its own ground, --role-select
+   * with a --role-select-edge edge and a --role-select-mark label; the bar
+   * stays --primary12. The edge's width comes out of the padding.
+   */
+  .filled .tab[data-active] {
+    padding: var(--size-px-2);
+    border: var(--border-size-2) solid var(--role-select-edge);
+    background-color: var(--role-select);
+    color: var(--role-select-mark);
+  }
+
+  .filled .tab[data-active] .label {
+    color: var(--role-select-mark);
+  }
+
+  /* Its hover moves the fill to --role-select-hover; label, bar and edge stay [D181]. */
+  .filled .tab[data-active]:not([data-disabled]):hover {
+    background-color: var(--role-select-hover);
+  }
+
+  .panel:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+}
+
+@layer print {
+  @media print {
+    /* The list hides; every panel prints in order under its label over a --border-size-1 rule (§7.7). */
+    .bar {
+      display: none;
+    }
+
+    .panel,
+    .panel[hidden] {
+      display: block;
+      margin-block-start: var(--size-px-5);
+    }
+
+    .printLabel {
+      display: block;
+      margin: 0 0 var(--size-px-3);
+      padding-block-end: var(--size-px-2);
+      border-block-end: var(--border-size-1) solid var(--role-hairline);
+      color: var(--primary12);
+      break-after: avoid;
+    }
+  }
+}

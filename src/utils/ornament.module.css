@@ -1,0 +1,224 @@
+/*
+ * Ornaments and markers (§1.5.16; geometry §4.7; usage §8.4, §8.10, §8.11,
+ * §12.11, §12.14, §12.16). Shared classes for inline, aria-hidden SVG: the
+ * `marker-*` shapes, the index and rank numerals, `ornament-trail`, the LTA
+ * dashed trail, and `ornament-blob`, the LTA blob mount (§6.6).
+ * utils/Ornament.tsx draws the SVG geometry and adds these
+ * classes; compose them into a module part in a top-level rule outside any
+ * @layer (Lightning CSS rejects nested composes):
+ *   .marker { composes: markerOrigin from '../../utils/ornament.module.css'; }
+ *
+ * Color. Markers draw in currentColor, the role color of the line they end
+ * or mark (--role-accent on a trail; --primary12 on a timeline, which its
+ * host sets); `ornamentTrail` sets --role-accent itself, which resolves to
+ * --primary12 on the saturated fields [D14, D117]. The index marker names
+ * its --primary1 face directly (a face under ink, not a knockout) [D144].
+ *
+ * Geometry. Fixed pixel sizes from the --ds-marker-* tokens, never scaled
+ * with a figure or the viewport (P9). Open shapes at --ds-stroke-1-5 with
+ * round caps and joins; `marker-current` is the one solid mark, a data mark
+ * a legend defines [D58]. A dash stops --size-px-1 short of a marker and
+ * restarts past it, so no partial dash touches one (§4.7.5).
+ *
+ * The blob mount is the exception to one ink: two flat secondary discs
+ * (brand marks [D117]) behind a mark in the front disc's contrast ink.
+ *
+ * Print: markers and the trail are SVG foreground and print black through
+ * the remap; the trail prints at 0.75 pt with 3 / 2.5 pt dashes [D142],
+ * markers kept (§4.7.1). The blob's discs are hidden (the remap would turn
+ * them black) and its mark prints black [D103, D126]. Forced colors:
+ * currentColor takes the system ink; the blob's discs drop.
+ */
+
+/* Composition sits in top-level rules, outside the layers. */
+.markerIndex {
+  composes: typeLabel from './type.module.css';
+}
+
+.markerRank {
+  composes: typeBodyUi typeMuted from './type.module.css';
+}
+
+/* The trail's path: line-dashed, --border-size-2, 5 on / 4 off, round caps [D66]. */
+.ornamentTrailPath {
+  composes: lineDashed from './line.module.css';
+}
+
+@layer base {
+  /*
+   * marker-origin (open circle), marker-waypoint (stroked X), marker-terminal
+   * (open triangle pointing along the path, never a chevron) and
+   * marker-current (solid dot), each at its token size.
+   */
+  .markerOrigin,
+  .markerWaypoint,
+  .markerTerminal,
+  .markerCurrent {
+    display: block;
+    flex: none;
+    inline-size: var(--marker-size);
+    block-size: var(--marker-size);
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: var(--ds-stroke-1-5);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .markerOrigin {
+    --marker-size: var(--ds-marker-trail);
+  }
+
+  .markerWaypoint {
+    --marker-size: var(--ds-marker-waypoint);
+  }
+
+  .markerTerminal {
+    --marker-size: var(--ds-arrow-head);
+  }
+
+  .markerCurrent {
+    --marker-size: var(--ds-marker-current);
+
+    fill: currentColor;
+    stroke: none;
+  }
+
+  /*
+   * marker-index (§4.7.5, §8.10): a --size-px-5 circle, a --primary1 face
+   * with a --ds-stroke-1-5 --primary12 edge, holding a zero-padded numeral
+   * in type-label (--font-weight-6). Numbered map and figure callouts keyed
+   * to a list; never an unstroked colored disc.
+   */
+  .markerIndex {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    box-sizing: border-box;
+    inline-size: var(--size-px-5);
+    block-size: var(--size-px-5);
+    border: var(--ds-stroke-1-5) solid var(--primary12);
+    border-radius: var(--radius-round);
+    background-color: var(--primary1);
+    color: var(--primary12);
+    font-variant-numeric: var(--ds-numerals-data);
+    line-height: 1;
+  }
+
+  /*
+   * The rank numeral (§8.4 ranked, §12.11): type-body-ui in data numerals,
+   * --role-muted (the one ink on forest and the saturated fields), no
+   * period, end-aligned in a 2.5ch column.
+   */
+  .markerRank {
+    display: inline-block;
+    flex: none;
+    min-inline-size: 2.5ch;
+    font-variant-numeric: var(--ds-numerals-data);
+    text-align: end;
+  }
+
+  /*
+   * ornament-trail (§4.7.1): a freehand line-dashed path with its markers,
+   * 110–220 × 45–90 px, decorative. At most one per band and two per page;
+   * never with an eyebrow rule or on a haloed lockup [D38]; it stops
+   * --ds-space-halo short of a label and hides rather than touch type.
+   */
+  .ornamentTrail {
+    display: block;
+    flex: none;
+    overflow: visible;
+    color: var(--role-accent);
+    fill: none;
+  }
+
+  .ornamentTrailPath {
+    fill: none;
+    stroke: currentColor;
+  }
+
+  /*
+   * ornament-blob, the blob mount (§6.6, §1.5.16): a hand-cut disc at a
+   * fixed 136 × 130 px, flat and opaque in --secondary9, over an under-disc
+   * 4% larger and turned 8° in --secondary7 (fill.mount.under), which shows
+   * only 2–6 px crescents. The mark sits centred on the front disc in its
+   * contrast ink, --secondary-contrast (§1.4.7), about 42% of the disc's
+   * width. The discs are brand marks, exempt from 3:1 [D117]; on a dark
+   * ground the under-disc reads darker than the front disc. Once per page:
+   * a logo, block icon or stat numeral. The only color layer allowed behind
+   * a drawing [D77].
+   */
+  .ornamentBlob {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    vertical-align: middle;
+  }
+
+  .blobDiscs {
+    display: block;
+    grid-area: 1 / 1;
+    overflow: visible;
+  }
+
+  .blobUnder {
+    fill: var(--secondary7);
+  }
+
+  .blobFront {
+    fill: var(--secondary9);
+  }
+
+  .blobMark {
+    display: grid;
+    grid-area: 1 / 1;
+    place-items: center;
+    color: var(--secondary-contrast);
+  }
+
+  /* Forced colors flatten fills: the discs drop and the mark takes the system ink (§4.11). */
+  @media (--forcedColors) {
+    .blobDiscs {
+      display: none;
+    }
+  }
+
+  /* The trail's own markers, drawn inside its SVG: solid strokes, never the path's dashes. */
+  .trailMarker {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: var(--ds-stroke-1-5);
+    stroke-dasharray: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+@layer variants {
+  /* On a timeline, origin and terminal take --ds-marker-timeline (8 px) (§4.7.2). */
+  .markerTimeline {
+    --marker-size: var(--ds-marker-timeline);
+  }
+
+  /* Where the mount is omitted (forest, the solid fields), the bare mark takes the scope's one ink. */
+  .blobOmitted .blobMark {
+    color: inherit;
+  }
+}
+
+@layer print {
+  @media print {
+    /* The trail prints black at 0.75 pt with 3 / 2.5 pt dashes, markers kept [D142]. */
+    .ornamentTrailPath {
+      stroke-width: var(--ds-print-trail-stroke);
+      stroke-dasharray: var(--ds-print-trail-dash) var(--ds-print-trail-gap);
+      stroke-linecap: butt;
+    }
+
+    /* The blob's discs drop; the mark stays, black through the remap [D103, D126]. */
+    .blobDiscs {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,751 @@
+/*
+ * Table (§8.2). CVA function `table`. This module is the single definition
+ * of table rules: the Color roles table's parts are its classes — `frame`
+ * (top and bottom rules), `headerRule`, `row`, `cadence`, `totalRule`,
+ * `grid` and `rowBar` [D127]. Borders sit on the cells (separate border
+ * model), so a pinned column keeps its rules while the rest scrolls. Dots
+ * are true circles: an SVG mask cuts a 1 px solid border into round dots
+ * (never a dotted border style or a gradient [D36, D68]); being a border,
+ * the run prints as foreground and takes the system ink in forced colors.
+ * Colors are role variables only; local custom properties carry dimensions.
+ *
+ * Local properties:
+ *   --table-pad-block, --table-pad-inline  cell padding by density
+ *   --table-row-min                         minimum row pitch (compact 32, interactive 44)
+ *   --table-row-rule                        width of the --role-rule row rule (compact)
+ * Each starts from its --ds-table-* density token (tokens.css), so a
+ * Ground's data-density reaches the table; the `density` prop overrides it.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.cue {
+  composes: typeCaption typeMuted from '../../utils/type.module.css';
+}
+
+.captionLabel {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.captionTitle {
+  composes: typeSubhead from '../../utils/type.module.css';
+}
+
+.captionNote {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.headCell {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.rowHeader {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.cell {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.cellLabel {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.notes {
+  composes: typeSmall from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base {
+    --table-pad-block: var(--ds-table-pad-block);
+    --table-pad-inline: var(--ds-table-pad-inline);
+    --table-row-min: var(--ds-table-row-min);
+    --table-row-rule: var(--ds-table-row-rule);
+
+    container-type: inline-size;
+    /* Size containment leaves no intrinsic width: fill the box, never collapse as a flex or shrink-to-fit item. */
+    inline-size: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--ds-space-12);
+    min-inline-size: 0;
+    color: var(--primary12);
+  }
+
+  .toggle {
+    display: flex;
+  }
+
+  .cue {
+    margin: 0;
+  }
+
+  /* Frame: --border-size-2 --primary12 top and bottom; no verticals, no box. */
+  .frame {
+    inline-size: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-block: var(--border-size-2) solid var(--primary12);
+    color: var(--primary12);
+    font-variant-numeric: var(--ds-numerals-data);
+  }
+
+  /* Caption block above the table; it stays in view while a wide table scrolls. */
+  .caption {
+    caption-side: top;
+    padding-block-end: var(--ds-space-12);
+    text-align: start;
+  }
+
+  .captionInner {
+    position: sticky;
+    inset-inline-start: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-px-1);
+    inline-size: fit-content;
+    max-inline-size: 100cqi;
+  }
+
+  .captionLabel,
+  .captionTitle,
+  .captionNote {
+    display: block;
+    color: var(--primary12);
+  }
+
+  .headCell,
+  .rowHeader,
+  .cell {
+    position: relative;
+    box-sizing: border-box;
+    block-size: var(--table-row-min);
+    padding: var(--table-pad-block) var(--table-pad-inline);
+    border: 0 solid var(--role-hairline);
+    color: var(--primary12);
+    text-align: start;
+    overflow-wrap: break-word;
+  }
+
+  /* Column headers: caps labels, bottom-aligned, aligned like their data. */
+  .headCell {
+    vertical-align: bottom;
+  }
+
+  .rowHeader,
+  .cell {
+    vertical-align: baseline;
+  }
+
+  .rowHeader {
+    --type-weight: var(--font-weight-6);
+
+    font-weight: var(--type-weight);
+  }
+
+  /* Numbers: right-aligned lining tabular figures that never wrap. */
+  .numeric {
+    text-align: end;
+    white-space: nowrap;
+  }
+
+  /* The column label repeats only in stacked records. */
+  .cellLabel {
+    display: none;
+  }
+
+  /* Header rule: --border-size-1 --primary12 under the head's last row. */
+  .headerRule > .row:last-child > * {
+    border-block-end: var(--border-size-1) solid var(--primary12);
+  }
+
+  /*
+   * Row rules: --border-size-1 --role-hairline under every body row; the
+   * frame closes the last [D83]. Compact padding needs --role-rule rows:
+   * --table-row-rule moves the rule's pixel to a --role-rule line above the
+   * next row, so the pitch holds.
+   */
+  .body > .row > * {
+    border-block-end-width: calc(var(--border-size-1) - var(--table-row-rule));
+  }
+
+  .body > .row + .row > * {
+    border-block-start: var(--table-row-rule) solid var(--role-rule);
+  }
+
+  .body > .row:last-child > * {
+    border-block-end-width: 0;
+  }
+
+  /*
+   * The five-row cadence (tables over 10 rows) [D174]: a line-dotted-fine
+   * rule in --role-rule between rows, the solid --role-rule rule after
+   * every fifth. Dotted rows keep the rule's pixel as padding, so every
+   * row has the same pitch. `mask-repeat: round` ends each cell on a whole
+   * dot, so the rhythm runs on across cell seams.
+   */
+  .cadence > .row > * {
+    border-block-end-width: 0;
+    padding-block-end: calc(var(--table-pad-block) + var(--border-size-1));
+  }
+
+  .cadence > .row > *::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: 0;
+    border-block-end: var(--ds-dot-fine) solid var(--role-rule);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 1'%3E%3Ccircle cx='1.5' cy='0.5' r='0.5'/%3E%3C/svg%3E");
+    mask-size: var(--ds-dot-fine-pitch) var(--ds-dot-fine);
+    mask-repeat: round no-repeat;
+    mask-origin: border-box;
+    pointer-events: none;
+  }
+
+  .cadence > .row:nth-child(5n) > * {
+    border-block-end-width: var(--border-size-1);
+    border-block-end-color: var(--role-rule);
+    padding-block-end: var(--table-pad-block);
+  }
+
+  .cadence > .row:nth-child(5n) > *::after,
+  .cadence > .row:last-child > *::after {
+    content: none;
+  }
+
+  .cadence > .row:last-child > * {
+    border-block-end-width: 0;
+    padding-block-end: var(--table-pad-block);
+  }
+
+  /* The cadence draws every row rule in --role-rule already. */
+  .cadence > .row + .row > * {
+    border-block-start-width: 0;
+  }
+
+  /*
+   * Total rule: line-double-hair in --primary12, two --border-size-1 lines
+   * --ds-double-hair-gap apart, drawn on the foot's first row (a cell
+   * border plus a second line) because cells cannot host the composed
+   * line class.
+   */
+  .totalRule > .row:first-child > * {
+    border-block-start: var(--border-size-1) solid var(--primary12);
+    padding-block-start: calc(
+      var(--table-pad-block) + var(--ds-double-hair-gap) + var(--border-size-1)
+    );
+  }
+
+  .totalRule > .row:first-child > *::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: var(--ds-double-hair-gap);
+    border-block-start: var(--border-size-1) solid var(--primary12);
+    pointer-events: none;
+  }
+
+  /* Selected or current row bar: --ds-stroke-3 --primary12 at the row's start edge [D15]. */
+  .rowBar {
+    display: none;
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    inline-size: var(--ds-stroke-3);
+    background-color: var(--primary12);
+  }
+
+  /* Sort header: a button that keeps the column header's caps [D165]; glyph after the label. */
+  .sortButton {
+    position: relative;
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--size-px-1);
+    margin: calc(-1 * var(--size-px-1));
+    padding: var(--size-px-1);
+    border: 0;
+    border-radius: var(--radius-1);
+    background: none;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-align: inherit;
+    text-transform: inherit;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  /* Every target reaches --ds-size-hit (§9.1) [D43]. */
+  .sortButton::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    inline-size: var(--ds-size-hit);
+    block-size: var(--ds-size-hit);
+    min-inline-size: 100%;
+    min-block-size: 100%;
+    translate: -50% -50%;
+  }
+
+  /* The bare-text hover underline's color, weight and offset (§10.1) [D181]. */
+  .sortLabel {
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  /* Hover and press transitions [D181]: --ds-duration-quick, --ease-out-3. */
+  @media (--motionOK) {
+    .sortButton {
+      transition-property: color, background-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+
+  .sortGlyph {
+    flex: none;
+    inline-size: var(--size-px-2);
+    block-size: var(--size-px-2);
+    fill: currentColor;
+  }
+
+  .sortState {
+    position: absolute;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .notes {
+    display: grid;
+    gap: var(--size-px-1);
+    color: var(--primary12);
+  }
+
+  .notes > * {
+    margin: 0;
+  }
+
+  @media (--forcedColors) {
+    .rowBar {
+      forced-color-adjust: none;
+      background-color: CanvasText;
+    }
+  }
+}
+
+@layer variants {
+  /* Density [D83]: compact padding --size-px-2 × --ds-space-12, rows ≥ 32 px, --role-rule row rules. */
+  .compact {
+    --table-pad-block: var(--size-px-2);
+    --table-pad-inline: var(--ds-space-12);
+    --table-row-min: var(--size-px-7);
+    --table-row-rule: var(--border-size-1);
+  }
+
+  .densityDefault {
+    --table-pad-block: var(--ds-space-12);
+    --table-pad-inline: var(--size-px-3);
+    --table-row-min: 0px;
+    --table-row-rule: 0px;
+  }
+
+  /* Interactive rows are click targets: ≥ --ds-size-hit tall with --role-rule rules [D83]. */
+  .interactive {
+    --table-row-min: var(--ds-size-hit);
+  }
+
+  .interactive .body > .row > * {
+    border-block-end-color: var(--role-rule);
+  }
+
+  /* Saturated grounds (≤ 5 rows): line-dotted-fine row rules in --role-rule (= --primary12 there). */
+  .onSolid .body > .row > * {
+    border-block-start-width: 0;
+    border-block-end-width: 0;
+    padding-block-end: calc(var(--table-pad-block) + var(--border-size-1));
+  }
+
+  .onSolid .body > .row > *::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: 0;
+    border-block-end: var(--ds-dot-fine) solid var(--role-rule);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 1'%3E%3Ccircle cx='1.5' cy='0.5' r='0.5'/%3E%3C/svg%3E");
+    mask-size: var(--ds-dot-fine-pitch) var(--ds-dot-fine);
+    mask-repeat: round no-repeat;
+    mask-origin: border-box;
+    pointer-events: none;
+  }
+
+  .onSolid .body > .row:last-child > *::after {
+    content: none;
+  }
+
+  /* Matrix grid: --border-size-1 --role-rule, never --role-hairline [D83]; centered headers, marks centered. */
+  .grid .headCell,
+  .grid .rowHeader,
+  .grid .cell {
+    border-inline-start-width: var(--border-size-1);
+    border-inline-start-color: var(--role-rule);
+  }
+
+  .grid .lead {
+    border-inline-start-width: 0;
+  }
+
+  .grid .body > .row > * {
+    border-block-end-color: var(--role-rule);
+  }
+
+  .grid .headCell,
+  .grid .cell {
+    text-align: center;
+  }
+
+  /* The row-header column's header aligns like its data: start, as the row headers. */
+  .grid .headCell.lead {
+    text-align: start;
+  }
+
+  /* Fit (≤ 4 short columns) stays a table at every width; scroll matrices keep one-line headers. */
+  .fit .headCell,
+  .scroll .headCell {
+    white-space: nowrap;
+  }
+
+  /* Scroll: the first column stays pinned; its end edge replaces the Scroll Area's start edge. */
+  .pinned {
+    --scroll-area-edge-start: none;
+  }
+
+  .pinned .lead {
+    position: sticky;
+    inset-inline-start: 0;
+    z-index: var(--layer-1);
+    border-inline-end: 0 solid var(--role-rule);
+    padding-inline-end: calc(var(--table-pad-inline) + var(--border-size-2));
+    background-color: var(--role-ground);
+  }
+
+  /* Prioritize: optional columns wait behind the toggle; they always print. */
+  .prioritize .optional {
+    display: none;
+  }
+
+  /*
+   * Stacked records (strategy `stack`), screen only: below 768 px of the
+   * table's width each row is a block — the row header as `type-itemhead`,
+   * then a leader list of header → value — separated by a --border-size-1
+   * --role-rule rule (§8.2, §8.3). Baseline: the viewport fallback below
+   * --md-n-above; the same rules follow under the container query. The row
+   * header restates type-itemhead's tokens: composition cannot depend on
+   * the container width.
+   */
+  @media screen and (--md-n-below) {
+    .stack .frame,
+    .stack .caption,
+    .stack .body,
+    .stack .totalRule {
+      display: block;
+    }
+
+    .stack .frame {
+      border-block-start-width: 0;
+    }
+
+    .stack .body {
+      border-block-start: var(--border-size-2) solid var(--primary12);
+    }
+
+    .stack .headerRule {
+      position: absolute;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .stack .row {
+      display: block;
+      padding-block: var(--table-pad-block);
+      border-block-end: var(--border-size-1) solid var(--role-rule);
+    }
+
+    .stack .body > .row:last-child {
+      border-block-end-width: 0;
+    }
+
+    .stack .totalRule > .row:first-child {
+      border-block-start: var(--border-size-1) solid var(--primary12);
+    }
+
+    .stack .rowHeader,
+    .stack .cell {
+      block-size: auto;
+      padding: 0;
+      border-width: 0;
+      text-align: start;
+    }
+
+    .stack .rowHeader {
+      display: block;
+      padding-block-end: var(--size-px-2);
+      font-family: var(--ds-font-display);
+      font-variation-settings: var(--ds-font-display-settings);
+      font-size: var(--ds-font-size-itemhead);
+      font-weight: var(--font-weight-7);
+      line-height: var(--font-lineheight-0);
+    }
+
+    .stack .cell {
+      display: flex;
+      align-items: last baseline;
+      column-gap: var(--size-px-2);
+    }
+
+    .stack .cell + .cell {
+      margin-block-start: var(--size-px-1);
+    }
+
+    .stack .rowHeader::after,
+    .stack .cell::after,
+    .stack .totalRule > .row:first-child > .rowHeader::before {
+      content: none;
+    }
+
+    .stack .cellLabel {
+      display: block;
+      flex: 0 1 auto;
+    }
+
+    /* The leader stops --size-px-2 short of each text (the LTA trail break). It
+       resets the total rule's line, so the total row's cells keep their leaders. */
+    .stack .cell::before {
+      content: '';
+      position: static;
+      border-block-start-width: 0;
+      order: 1;
+      flex: 1 0 var(--size-px-5);
+      align-self: last baseline;
+      block-size: 0;
+      border-block-end: var(--ds-dot-fine) solid var(--role-rule);
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 1'%3E%3Ccircle cx='1.5' cy='0.5' r='0.5'/%3E%3C/svg%3E");
+      mask-size: var(--ds-dot-fine-pitch) var(--ds-dot-fine);
+      mask-repeat: round no-repeat;
+      mask-origin: border-box;
+    }
+
+    .stack .cellValue {
+      order: 2;
+      flex: 0 1 auto;
+      margin-inline-start: auto;
+      text-align: end;
+    }
+  }
+
+  @media screen {
+    @container (width < 768px) {
+      .stack .frame,
+      .stack .caption,
+      .stack .body,
+      .stack .totalRule {
+        display: block;
+      }
+
+      .stack .frame {
+        border-block-start-width: 0;
+      }
+
+      .stack .body {
+        border-block-start: var(--border-size-2) solid var(--primary12);
+      }
+
+      .stack .headerRule {
+        position: absolute;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      .stack .row {
+        display: block;
+        padding-block: var(--table-pad-block);
+        border-block-end: var(--border-size-1) solid var(--role-rule);
+      }
+
+      .stack .body > .row:last-child {
+        border-block-end-width: 0;
+      }
+
+      .stack .totalRule > .row:first-child {
+        border-block-start: var(--border-size-1) solid var(--primary12);
+      }
+
+      .stack .rowHeader,
+      .stack .cell {
+        block-size: auto;
+        padding: 0;
+        border-width: 0;
+        text-align: start;
+      }
+
+      .stack .rowHeader {
+        display: block;
+        padding-block-end: var(--size-px-2);
+        font-family: var(--ds-font-display);
+        font-variation-settings: var(--ds-font-display-settings);
+        font-size: var(--ds-font-size-itemhead);
+        font-weight: var(--font-weight-7);
+        line-height: var(--font-lineheight-0);
+      }
+
+      .stack .cell {
+        display: flex;
+        align-items: last baseline;
+        column-gap: var(--size-px-2);
+      }
+
+      .stack .cell + .cell {
+        margin-block-start: var(--size-px-1);
+      }
+
+      .stack .rowHeader::after,
+      .stack .cell::after,
+      .stack .totalRule > .row:first-child > .rowHeader::before {
+        content: none;
+      }
+
+      .stack .cellLabel {
+        display: block;
+        flex: 0 1 auto;
+      }
+
+      .stack .cell::before {
+        content: '';
+        position: static;
+        border-block-start-width: 0;
+        order: 1;
+        flex: 1 0 var(--size-px-5);
+        align-self: last baseline;
+        block-size: 0;
+        border-block-end: var(--ds-dot-fine) solid var(--role-rule);
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 1'%3E%3Ccircle cx='1.5' cy='0.5' r='0.5'/%3E%3C/svg%3E");
+        mask-size: var(--ds-dot-fine-pitch) var(--ds-dot-fine);
+        mask-repeat: round no-repeat;
+        mask-origin: border-box;
+      }
+
+      .stack .cellValue {
+        order: 2;
+        flex: 0 1 auto;
+        margin-inline-start: auto;
+        text-align: end;
+      }
+    }
+  }
+}
+
+@layer states {
+  /* Prioritize, expanded: the optional columns return. */
+  .expanded .optional {
+    display: table-cell;
+  }
+
+  /* The scroll cue shows only while the table overflows. */
+  .base:not(:has(.region[data-has-overflow-x])) .cue {
+    display: none;
+  }
+
+  /* Pinned column: its --border-size-2 --role-rule edge appears once columns scroll under it. */
+  .pinned[data-overflow-x-start] .lead {
+    border-inline-end-width: var(--border-size-2);
+    padding-inline-end: var(--table-pad-inline);
+  }
+
+  /* Selected (a checked row Checkbox or `selected`) and current (`:target`): the row bar. */
+  .selected .rowBar,
+  .row:has([data-checked]) .rowBar,
+  .row:target .rowBar {
+    display: block;
+  }
+
+  .row:target .rowHeader {
+    --type-weight: var(--font-weight-7);
+
+    font-weight: var(--type-weight);
+  }
+
+  /* Inactive: --role-muted plus a word, never tone alone. */
+  .inactive > * {
+    color: var(--role-muted);
+  }
+
+  /*
+   * Sort header hover (not disabled): a column header is bare wayfinding
+   * text, so its label takes the bare-text underline, --role-accent at
+   * --border-size-2, offset --size-px-1; no fill (§8.2, §10.1) [D181].
+   */
+  .sortButton:not([data-disabled]):hover .sortLabel {
+    text-decoration-line: underline;
+  }
+
+  /* Pressed: the inverse pair [D96]. */
+  .sortButton:not([data-disabled]):active {
+    background-color: var(--primary12);
+    color: var(--role-inverse);
+  }
+
+  /* Focus: the 2 px --primary12 ring at a 2 px offset, keyboard only [D45]. */
+  .sortButton:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+}
+
+@layer print {
+  @media print {
+    /*
+     * The full table at every printed width: the header repeats on every
+     * page, the total prints once, rows never split. Every rule prints at
+     * 0.75 pt black through the remap; no zebra tint exists to drop.
+     */
+    .headerRule {
+      display: table-header-group;
+    }
+
+    .totalRule {
+      display: table-row-group;
+    }
+
+    .row {
+      break-inside: avoid;
+    }
+
+    .caption {
+      break-after: avoid;
+    }
+
+    .prioritize .optional {
+      display: table-cell;
+    }
+
+    /* Interactive-only chrome: sort glyphs, row checkboxes and row bars are hidden. */
+    .toggle,
+    .cue,
+    .sortGlyph,
+    .rowBar,
+    .frame [role='checkbox'] {
+      display: none;
+    }
+
+    .pinned .lead {
+      position: static;
+    }
+  }
+}

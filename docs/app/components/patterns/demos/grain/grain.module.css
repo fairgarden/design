@@ -1,0 +1,30 @@
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(176px, 1fr));
+  gap: var(--size-px-3);
+  inline-size: 100%;
+}
+
+.face {
+  display: grid;
+  gap: var(--size-px-2);
+  align-content: start;
+  min-block-size: var(--size-px-12);
+  padding: var(--size-px-5);
+  border-radius: var(--ds-radius-20);
+}
+
+.head {
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-font-size-itemhead);
+  font-weight: var(--font-weight-7);
+  line-height: var(--ds-leading-display);
+}
+
+.body {
+  margin: 0;
+  font-family: var(--ds-font-text);
+  font-size: var(--ds-font-size-body);
+  line-height: var(--ds-leading-compact);
+}

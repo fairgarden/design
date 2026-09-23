@@ -1,0 +1,428 @@
+/*
+ * Timeline & Agenda (§12.14). The root `base` is the inline-size container
+ * `timeline`; the entry layout queries it. Parts: base, list, entry, end
+ * (the ongoing terminal row), dateKey, rail, marker (the box holding the
+ * shared utils/Ornament markers, each tagged markerOrigin, markerWaypoint,
+ * markerTerminal or markerCurrent; markerFixed when set by a prop), spineBox
+ * and spine (the dashed SVG line), body, title, titleLink
+ * (a title Link), text, caption, dateStack (dateMonth, dateDay,
+ * dateWeekday); agenda: day, dateHead, scope, session, sessionMarker,
+ * sessionBody, sessionTitle, meta, description. Colors are role variables
+ * only; local custom properties carry dimensions only:
+ *   --timeline-rail   the spine column's width (the marker box)
+ *   --timeline-gap    the gap either side of the spine column
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.dateKey {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.title {
+  composes: typeItemhead from '../../utils/type.module.css';
+}
+
+.text {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.caption {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.dateMonth {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.dateDay {
+  composes: typeStatCompact from '../../utils/type.module.css';
+}
+
+.dateWeekday {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.dateHead {
+  composes: typeItemhead from '../../utils/type.module.css';
+}
+
+.scope {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.sessionTitle {
+  composes: typeItemhead from '../../utils/type.module.css';
+}
+
+.meta {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.description {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+/* Path: --border-size-2, 5 on / 4 off, round caps [D66]; set on the SVG line. */
+.spine {
+  composes: lineDashed from '../../utils/line.module.css';
+}
+
+@layer base {
+  .base {
+    --timeline-rail: var(--size-px-3);
+    --timeline-gap: var(--size-px-3);
+
+    container: timeline / inline-size;
+    /* Size containment leaves no intrinsic width: fill the box, never collapse as a flex or shrink-to-fit item. */
+    inline-size: 100%;
+    min-inline-size: 0;
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Baseline (§1.11.11): spine at the start margin, the date above the title. */
+  .entry,
+  .end {
+    position: relative; /* a stretched title link covers the entry */
+    display: grid;
+    grid-template-columns: var(--timeline-rail) minmax(0, 1fr);
+    grid-template-areas:
+      'rail key'
+      'rail body';
+    column-gap: var(--timeline-gap);
+  }
+
+  .dateKey {
+    grid-area: key;
+    min-inline-size: 0;
+    padding-block-end: var(--size-px-1);
+    color: var(--primary12);
+  }
+
+  .rail {
+    grid-area: rail;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-block-start: var(--size-px-1);
+  }
+
+  /* Markers (§4.7) in --primary12, centered in the rail's box; the shape is picked below.
+     Geometry, stroke and size come from the shared ornament utilities. */
+  .marker {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--timeline-rail);
+    block-size: var(--timeline-rail);
+    color: var(--primary12);
+  }
+
+  .marker .markerOrigin,
+  .marker .markerTerminal,
+  .marker .markerCurrent {
+    display: none;
+  }
+
+  /* The spine segment: it stops --size-px-1 before and after each marker, and its
+     dash phase restarts past it (§4.7.2). Straight; never scaled. */
+  .spineBox {
+    display: block;
+    flex: 1 1 auto;
+    inline-size: var(--border-size-2);
+    min-block-size: var(--size-px-3);
+    margin-block: var(--size-px-1);
+    overflow: visible;
+  }
+
+  .spine {
+    fill: none;
+    stroke: var(--role-accent);
+  }
+
+  .body {
+    grid-area: body;
+    min-inline-size: 0;
+    max-inline-size: var(--ds-measure-reading);
+    padding-block-end: var(--size-px-7);
+  }
+
+  .title {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .text {
+    margin: var(--size-px-2) 0 0;
+    color: var(--primary12);
+  }
+
+  .caption {
+    margin: var(--size-px-3) 0 0;
+    color: var(--primary12);
+  }
+
+  /* Viewport fallback: the key column from --md-n-above; 3 / gutter / 7 from --lg-n-above. */
+  @media (--md-n-above) {
+    .entry,
+    .end {
+      grid-template-columns: minmax(0, 2fr) var(--timeline-rail) minmax(0, 6fr);
+      grid-template-areas: 'key rail body';
+    }
+
+    .dateKey {
+      padding-block-end: 0;
+      text-align: end;
+    }
+  }
+
+  @media (--lg-n-above) {
+    .entry,
+    .end {
+      grid-template-columns: minmax(0, 3fr) var(--timeline-rail) minmax(0, 7fr) minmax(0, 2fr);
+      grid-template-areas: 'key rail body .';
+    }
+  }
+
+  /* Container (§5.10.2): dates above titles below 768 px; key 2/8 from 768; key 3, spine
+     in the gutter, entries 7 from 1024. */
+  @container timeline (width < 768px) {
+    .entry,
+    .end {
+      grid-template-columns: var(--timeline-rail) minmax(0, 1fr);
+      grid-template-areas:
+        'rail key'
+        'rail body';
+    }
+
+    .dateKey {
+      padding-block-end: var(--size-px-1);
+      text-align: start;
+    }
+  }
+
+  @container timeline (768px <= width < 1024px) {
+    .entry,
+    .end {
+      grid-template-columns: minmax(0, 2fr) var(--timeline-rail) minmax(0, 6fr);
+      grid-template-areas: 'key rail body';
+    }
+
+    .dateKey {
+      padding-block-end: 0;
+      text-align: end;
+    }
+  }
+
+  @container timeline (width >= 1024px) {
+    .entry,
+    .end {
+      grid-template-columns: minmax(0, 3fr) var(--timeline-rail) minmax(0, 7fr) minmax(0, 2fr);
+      grid-template-areas: 'key rail body .';
+    }
+
+    .dateKey {
+      padding-block-end: 0;
+      text-align: end;
+    }
+  }
+}
+
+@layer variants {
+  /* Trail: origin at the first entry, terminal at the last (past it when ongoing). */
+  .trail .entry:first-child .markerOrigin {
+    display: block;
+  }
+
+  .trail .entry:first-child .markerWaypoint {
+    display: none;
+  }
+
+  .trail .entry:last-child .markerTerminal {
+    display: block;
+  }
+
+  .trail .entry:last-child .markerWaypoint,
+  .trail .entry:last-child .markerOrigin {
+    display: none;
+  }
+
+  .trail .entry:last-child .spineBox {
+    display: none;
+  }
+
+  .ongoing .end .rail {
+    padding-block-start: 0;
+  }
+
+  /* Date block (Sofar Sounds): a fixed key column at every width, no spine. */
+  .dateBlock .rail {
+    display: none;
+  }
+
+  .dateBlock .entry {
+    grid-template-columns: var(--size-px-9) minmax(0, 1fr);
+    grid-template-areas: 'key body';
+  }
+
+  .dateBlock .dateKey {
+    padding-block-end: 0;
+    text-align: start;
+  }
+
+  .dateStack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: var(--primary12);
+  }
+
+  .dateMonth,
+  .dateDay,
+  .dateWeekday {
+    color: var(--primary12);
+  }
+
+  /*
+   * Agenda (LTA): date head → scope caption → sessions, each led by the »
+   * marker. Rhythm: marker → 24 → title → 40 → description → 56 → next.
+   */
+  .day + .day {
+    margin-block-start: var(--ds-space-56);
+  }
+
+  .dateHead {
+    margin: 0;
+    color: var(--role-heading);
+  }
+
+  .scope {
+    margin: var(--size-px-2) 0 var(--size-px-5);
+    color: var(--primary12);
+  }
+
+  .agenda .list {
+    display: grid;
+    gap: var(--ds-space-56);
+  }
+
+  .session {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--ds-size-icon-block) minmax(0, 1fr);
+    column-gap: var(--size-px-5);
+    align-items: start;
+  }
+
+  .sessionMarker {
+    display: block;
+    inline-size: var(--ds-size-icon-block);
+    block-size: var(--ds-size-icon-block);
+    overflow: visible;
+    fill: none;
+    stroke: var(--role-accent);
+    stroke-width: var(--border-size-2);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .sessionBody {
+    min-inline-size: 0;
+    max-inline-size: var(--ds-measure-reading);
+  }
+
+  .sessionTitle {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .meta {
+    margin: var(--size-px-1) 0 0;
+    color: var(--primary12);
+  }
+
+  .description {
+    margin: var(--ds-space-40) 0 0;
+    color: var(--primary12);
+  }
+}
+
+@layer states {
+  /* Current: the solid "now" dot alone; its dated label says the same in words [D58]. */
+  .current .markerCurrent {
+    display: block;
+  }
+
+  .current .markerOrigin,
+  .current .markerWaypoint,
+  .current .markerTerminal {
+    display: none;
+  }
+
+  /* Past and planned keep their waypoint X (or origin / terminal); words tell them apart. */
+  .past .markerCurrent,
+  .planned .markerCurrent {
+    display: none;
+  }
+
+  /* A marker set by the `marker` prop is the only shape rendered. */
+  .marker .markerFixed {
+    display: block;
+  }
+
+  /* A linked entry's ring sits around the entry, keyboard only [D45]. */
+  .entry .titleLink:focus-visible {
+    outline: none;
+  }
+
+  .entry:has(.titleLink:focus-visible) {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Entries never split; the date column prints left; every marker prints black. */
+    .entry,
+    .end {
+      grid-template-columns: minmax(0, 2fr) var(--timeline-rail) minmax(0, 6fr);
+      grid-template-areas: 'key rail body';
+      break-inside: avoid;
+    }
+
+    .dateKey {
+      padding-block-end: 0;
+      text-align: end;
+    }
+
+    .dateBlock .entry {
+      grid-template-columns: var(--size-px-9) minmax(0, 1fr);
+      grid-template-areas: 'key body';
+    }
+
+    /* The spine prints like the trail: 0.75 pt with 3 / 2.5 pt dashes [D142]. */
+    .spine {
+      stroke-width: var(--ds-print-trail-stroke);
+      stroke-dasharray: var(--ds-print-trail-dash) var(--ds-print-trail-gap);
+      stroke-linecap: butt;
+    }
+
+    .dateHead {
+      break-after: avoid;
+    }
+
+    .session {
+      break-inside: avoid;
+    }
+  }
+}

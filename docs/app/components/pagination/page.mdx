@@ -1,0 +1,47 @@
+# Pagination
+
+Moving through long paged lists: Previous and Next around the page numbers, or around a "Page 5 of 12" count.
+
+```tsx
+import { Pagination } from '@fairgarden-private/design/components/Pagination'
+```
+
+Pass the current `page`, the page `count` and `getHref`, which gives every page its own URL; `renderLink` builds each anchor, for example `(href) => <NextLink href={href} />`. Previous and Next are `text` Buttons rendered as anchors, in `type-label` caps with the `chevron_left` and `chevron_right` glyphs at the inline tier. Page numbers are `Link kind="nav"` in mono at label size with tabular figures, so a changing count never shifts the row. The current page is unlinked, bold and barred. On the first and last pages the Previous or Next control is omitted and its space kept, never shown disabled. While the list loads, mark the list region `aria-busy`; the pager stays put.
+
+## Numbered, compact, step, dots and more
+
+import { DemoPaginationForms } from './demos/forms'
+
+<DemoPaginationForms.Title />
+
+`numbered` (the default) reflows on its own width: below 768 px it shows the compact count; from 768 px the page numbers with one sibling on each side of the current page; from 1024 px two. `compact` keeps the count at every width, for lists over 50 pages. Below 360 px the words drop and the chevrons stand alone, still named "Previous" and "Next". The root is an inline-size container, so give it a width in shrink-to-fit layouts. Drag the frame's corner to watch the reflow.
+
+`step` is the pager for carousels and figures: icon-only ‹ › circles around a mono "3 of 12". Pass `onPageChange` to handle the buttons, `getHref` to make them links, or both. `dots` adds up to 8 position dots under the same count, the current one solid and larger; with more than 8 it is the plain step pager. Neither prints. `more` is for feeds: "Showing 20 of 54" over an outline "Show More" Button that links to the next page, so every step has a URL; pass `items` for the count. Page numbers and the Previous and Next words take the bare-text underline on hover, and the chevrons their heavier weight.
+
+<DemoPaginationForms />
+
+[See Demo](./demos/forms/)
+
+## On grounds
+
+import { DemoPaginationGrounds } from './demos/grounds'
+
+<DemoPaginationGrounds.Title />
+
+The chevrons take the glyph role: the accent on a page ground, the text ink on a deep field. Lists belong on reading grounds, so saturated fields are rare.
+
+<DemoPaginationGrounds />
+
+[See Demo](./demos/grounds/)
+
+In print the pager is hidden and its links print nothing. Pass `items` to print one state line in its place, "Items 41–50 of 118.", and `fullListHref` to follow it with the full list's link.
+
+## API Reference
+
+import { TypesPagination } from './types'
+
+<TypesPagination />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §9.9 (pagination) and §5.10.2 (reflow), with D165, D174 and D175.

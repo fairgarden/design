@@ -1,0 +1,11 @@
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(224px, 1fr));
+  gap: var(--size-px-3);
+  inline-size: 100%;
+}
+
+.face {
+  padding: var(--size-px-5);
+  border-radius: var(--ds-radius-8);
+}

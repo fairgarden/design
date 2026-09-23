@@ -1,0 +1,19 @@
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(176px, 1fr));
+  gap: var(--size-px-3);
+  inline-size: 100%;
+}
+
+.face {
+  display: grid;
+  gap: var(--size-px-3);
+  padding: var(--size-px-5);
+  border: var(--border-size-1) solid var(--role-edge);
+  border-radius: var(--ds-radius-8);
+}
+
+.name {
+  font-family: var(--ds-font-ui);
+  font-weight: var(--font-weight-6);
+}

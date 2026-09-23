@@ -1,0 +1,11 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-3);
+}
+
+.status {
+  margin: 0;
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-caption);
+  color: var(--role-muted);
+}

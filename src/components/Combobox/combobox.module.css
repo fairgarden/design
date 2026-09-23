@@ -1,0 +1,501 @@
+/*
+ * Combobox (§10.6). CVA function `combobox`. Parts: `base` (the field box,
+ * Base UI's InputGroup), `input`, `icon`, `clear`, `trigger` (with
+ * `chevron`), `chips` and each removable `chip` (§10.11: the Chip module's
+ * parts through `chipParts`; `chip` adds only the keyboard ring, the stack
+ * guard and the print comma), `popup`, `list`, `item`,
+ * `itemIndicator`, `itemText`, `match`, `group`, `groupLabel`, `separator`,
+ * `empty`, `status` (the loading and failure row, with `statusGlyph`),
+ * `addRow` (the creatable row, with `addGlyph`); `positioner` places the
+ * popup on --layer-3, and `edge` / `edgeLine` draw the disabled
+ * `line-dotted-fine` edge as true dots [D36, D68]. Colors are role
+ * variables only; local custom properties carry dimensions only. The popup
+ * is a portaled `white` page scope framed by --border-size-2 --primary12
+ * [D92, D139, D156].
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.input {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.item {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.groupLabel {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.empty,
+.status {
+  composes: typeBodyUi typeMuted from '../../utils/type.module.css';
+}
+
+.edgeLine {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+@layer base {
+  /* The field box (§10.1): --size-px-8 minimum, --radius-1, --border-size-1 --role-rule, open. */
+  .base {
+    /* Local dimensions. */
+    --combobox-edge: var(--border-size-1);
+    --combobox-radius: var(--radius-1);
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-2);
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
+    min-block-size: var(--size-px-8);
+    margin: 0;
+    padding-block: 0;
+    padding-inline: calc(var(--ds-space-12) + var(--border-size-1) - var(--combobox-edge)) 0;
+    border: var(--combobox-edge) solid var(--role-rule);
+    border-radius: var(--combobox-radius);
+    background: none;
+    color: var(--primary12);
+    cursor: text;
+  }
+
+  /* The value: type-body-ui in the box's ink; the ring is the box's. */
+  .input {
+    flex: 1 1 var(--size-px-9);
+    align-self: stretch;
+    min-inline-size: 0;
+    min-block-size: calc(var(--size-px-8) - 2 * var(--combobox-edge));
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    color: inherit;
+    text-overflow: ellipsis;
+    appearance: none;
+  }
+
+  /* The placeholder: --role-muted, one weight lighter in dark scopes [D170]. */
+  .input::placeholder {
+    color: var(--role-muted);
+    font-weight: max(
+      var(--type-weight-floor, 400),
+      calc(var(--type-weight, 400) - var(--ds-muted-weight-step))
+    );
+  }
+
+  /* Leading icon (search) and the chevron: --primary12, inline tier [D166]. */
+  .icon {
+    flex: none;
+    color: inherit;
+  }
+
+  /* Clear × and the chevron trigger: glyph cells with a --ds-size-hit target. */
+  .clear,
+  .trigger {
+    position: relative;
+    flex: none;
+    display: grid;
+    place-items: center;
+    align-self: stretch;
+    inline-size: var(--ds-size-hit);
+    min-block-size: var(--ds-size-hit);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--combobox-radius);
+    background: none;
+    color: inherit;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .chevron {
+    display: block;
+  }
+
+  /* Chips wrap inside the box, which grows and never scrolls sideways. */
+  .chips {
+    display: flex;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--size-px-1);
+    min-inline-size: 0;
+  }
+
+  /*
+   * The removable chip (§10.11) is the Chip module's (chipParts): here only
+   * what a focusable Base UI chip adds, its keyboard ring (states).
+   */
+  .chip {
+    cursor: default;
+    outline: 0;
+  }
+
+  .edge {
+    display: none;
+    position: absolute;
+    inset-block-start: calc(var(--ds-dot-fine) / 2);
+    inset-inline-start: calc(var(--ds-dot-fine) / 2);
+    inline-size: calc(100% - var(--ds-dot-fine));
+    block-size: calc(100% - var(--ds-dot-fine));
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .edgeLine {
+    fill: none;
+    stroke: var(--role-disabled-edge);
+    rx: calc(var(--combobox-radius) - var(--ds-dot-fine) / 2);
+  }
+
+  .positioner {
+    z-index: var(--layer-3);
+    outline: 0;
+  }
+
+  /* The overlay face: the white scope's --primary1, the --border-size-2 --primary12 frame, --ds-radius-8. */
+  .popup {
+    /* The clip reveal starts from the trigger side. */
+    --combobox-reveal-from: inset(0 0 100% 0);
+
+    box-sizing: border-box;
+    inline-size: var(--anchor-width);
+    max-inline-size: calc(100vw - 2 * var(--ds-space-margin));
+    border: var(--border-size-2) solid var(--primary12);
+    border-radius: var(--ds-radius-8);
+    background-color: var(--primary1);
+    color: var(--primary12);
+    clip-path: inset(0);
+    outline: 0;
+  }
+
+  /* At most 8 rows, then it scrolls; the height stays above the on-screen keyboard. */
+  .list {
+    box-sizing: border-box;
+    max-block-size: min(
+      var(--available-height, 100vh),
+      calc(8 * var(--ds-size-hit) + 2 * var(--size-px-1))
+    );
+    padding: var(--size-px-1);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-padding-block: var(--size-px-1);
+    outline: 0;
+  }
+
+  .list:empty {
+    padding: 0;
+  }
+
+  /* Items as Select (§10.5): --ds-size-hit rows, the ✓ column first. */
+  .item {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--size-px-3) minmax(0, 1fr);
+    align-items: center;
+    column-gap: var(--size-px-2);
+    min-block-size: var(--ds-size-hit);
+    padding-inline: var(--size-px-3);
+    border-radius: calc(var(--ds-radius-8) - var(--size-px-1));
+    color: var(--primary12);
+    cursor: default;
+    outline: 0;
+    user-select: none;
+  }
+
+  .item::before {
+    content: '';
+    display: none;
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    border-inline-start: var(--ds-stroke-3) solid var(--primary12);
+  }
+
+  .itemIndicator {
+    grid-column: 1;
+    display: inline-flex;
+    color: var(--primary12);
+  }
+
+  .itemText {
+    grid-column: 2;
+    min-inline-size: 0;
+  }
+
+  /* The matched substring: --primary12 at --font-weight-7; never color or fill (P2). */
+  .match {
+    background: none;
+    color: var(--primary12);
+    font-weight: var(--font-weight-7);
+  }
+
+  .group {
+    display: block;
+  }
+
+  .groupLabel {
+    padding-block: var(--size-px-2) var(--size-px-1);
+    padding-inline: var(--size-px-3);
+    color: var(--role-muted);
+  }
+
+  .separator {
+    margin-block: var(--size-px-1);
+    margin-inline: calc(-1 * var(--size-px-1));
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  /*
+   * The empty and loading rows: type-body-ui italic in --role-muted. They
+   * stay mounted as live regions, so only a row with words takes space.
+   */
+  .empty,
+  .status {
+    font-style: italic;
+  }
+
+  .empty:not(:empty),
+  .status:not(:empty) {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--size-px-2);
+    padding: var(--size-px-3);
+  }
+
+  /* A fetch failure: the danger glyph in --role-status and a --primary12 message. */
+  .statusError {
+    display: contents;
+    color: var(--primary12);
+    font-style: normal;
+  }
+
+  .statusGlyph {
+    flex: none;
+    inline-size: var(--size-px-3);
+    block-size: 1lh;
+    overflow: visible;
+    color: var(--role-status);
+    fill: var(--role-status-fill);
+    stroke: var(--role-status-fill);
+    stroke-width: var(--ds-stroke-1-5);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* The creatable row: "+ Add '…'" in --primary12. */
+  .addRow {
+    color: var(--primary12);
+  }
+
+  .addGlyph {
+    grid-column: 1;
+  }
+
+  @media (--forcedColors) {
+    .edgeLine {
+      stroke: currentColor;
+    }
+
+    .statusGlyph {
+      forced-color-adjust: none;
+      color: CanvasText;
+      fill: Canvas;
+      stroke: Canvas;
+    }
+  }
+
+  @media (--motionOK) {
+    .base {
+      transition-property: border-color, outline-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+
+    .chevron {
+      transition: rotate var(--ds-duration-quick) var(--ease-out-3);
+    }
+
+    /* The clip reveal (the edge wipes open), never a fade [D91]. */
+    .popup {
+      transition: clip-path var(--ds-duration-disclosure) var(--ease-out-3);
+    }
+  }
+
+  /* From --lg-n-above the popup may grow past the field, up to --size-sm. */
+  @media (--lg-n-above) {
+    .popup {
+      min-inline-size: var(--anchor-width);
+      inline-size: auto;
+      max-inline-size: max(var(--anchor-width), var(--size-sm));
+    }
+  }
+
+  /* Stack guard: chips keep their × and truncate their label [D73] (`.chips` outranks the chip's own cap). */
+  @media (--xs-n-below) {
+    .chips .chip {
+      max-inline-size: calc(100% - var(--ds-size-hit));
+    }
+  }
+}
+
+@layer variants {
+  /* Multiple: the box wraps chips and grows. */
+  .multiple {
+    flex-wrap: wrap;
+    padding-block: calc((var(--size-px-8) - var(--size-px-7)) / 2 - var(--combobox-edge));
+  }
+
+  .multiple .input {
+    min-block-size: var(--size-px-7);
+  }
+
+  /*
+   * Plate: the box face is the nested white scope's --primary1 (§10.1). The
+   * box is also a Ground face, whose own classes share the base layer, so
+   * its display and edge are restated here.
+   */
+  .plate {
+    display: flex;
+    border: var(--combobox-edge) solid var(--role-rule);
+    background-color: var(--primary1);
+    color: var(--primary12);
+  }
+}
+
+@layer states {
+  /* Hover (not disabled): the 1 px edge steps to --primary12 at the same weight [D140]. */
+  .base:hover:not([data-disabled], [data-invalid], [data-readonly]) {
+    border-color: var(--primary12);
+  }
+
+  /* Focus: the ring on any focus of the input, outside the box [D90]. */
+  .base[data-focused] {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  .input:focus-visible {
+    outline: none;
+  }
+
+  /* Open: the box edge goes to --primary12 and the chevron turns. */
+  .base[data-popup-open] {
+    border-color: var(--primary12);
+  }
+
+  .trigger[data-popup-open] .chevron {
+    rotate: 180deg;
+  }
+
+  /* The clear × and the trigger take their own ring (the chip × takes the Chip module's). */
+  .clear:focus-visible,
+  .trigger:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: calc(-1 * var(--border-size-2));
+  }
+
+  /* Pressed: the glyph's cell takes the inverse pair (§10.1 icon states). */
+  .clear:active {
+    background-color: var(--primary12);
+    color: var(--role-inverse);
+  }
+
+  /* A chip focused from the keyboard (Backspace, arrows) draws the ring. */
+  .chip:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  /* Error: the --border-size-2 edge in --role-status (the danger scale) [D141, D155]. */
+  .base[data-invalid] {
+    --combobox-edge: var(--border-size-2);
+
+    border-color: var(--role-status);
+  }
+
+  /* Disabled: dotted edge, --role-muted inks, no face, clear hidden; never dimmed [D16]. */
+  .base[data-disabled] {
+    --combobox-edge: 0px;
+
+    border-style: none;
+    background: none;
+    color: var(--role-muted);
+    cursor: default;
+  }
+
+  .base[data-disabled] .edge {
+    display: block;
+  }
+
+  .base[data-disabled] .clear {
+    display: none;
+  }
+
+  /* Read-only: the box is removed; a --border-size-1 --role-rule bottom rule remains. */
+  .base[data-readonly] {
+    border-width: 0 0 var(--border-size-1);
+    border-color: var(--role-rule);
+    border-radius: var(--ds-radius-none);
+    background: none;
+  }
+
+  /* Highlighted: --primary4 plus the start-edge bar; focus stays in the input [D145]. */
+  .item[data-highlighted] {
+    background-color: var(--primary4);
+  }
+
+  .item[data-highlighted]::before {
+    display: block;
+  }
+
+  /* Selected: the leading ✓ in --primary12 plus --font-weight-6; no fill, no bar [D145]. */
+  .item[data-selected] {
+    font-weight: var(--font-weight-6);
+  }
+
+  .item[data-disabled] {
+    background: none;
+    color: var(--role-muted);
+  }
+
+  .item[data-disabled]::before {
+    display: none;
+  }
+
+  /* Placement: a popup above the field reveals from its bottom edge. */
+  .popup[data-side='top'] {
+    --combobox-reveal-from: inset(100% 0 0 0);
+  }
+
+  /* The clip reveal from the trigger side [D91]; instant under --motionNotOK. */
+  .popup[data-starting-style],
+  .popup[data-ending-style] {
+    clip-path: var(--combobox-reveal-from);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Values print as text in the frame; multiple values comma-joined (the chips print as words, Chip's print rules). */
+    .clear,
+    .trigger,
+    .positioner {
+      display: none;
+    }
+
+    .chip:not(:last-of-type)::after {
+      content: ',';
+    }
+
+    .input::placeholder {
+      font-size: 0;
+    }
+  }
+}

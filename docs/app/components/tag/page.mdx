@@ -1,0 +1,51 @@
+# Tag
+
+The topic tag: a subject icon plus a caps label, with no container. It marks taxonomy and can link to its topic.
+
+```tsx
+import { Tag } from '@fairgarden-private/design/components/Tag'
+```
+
+Topic tags keep caps: author the label in sentence case. The icon is the tag's only color, in `--role-accent`; small label text never takes an accent. `icon` takes an inventory name or a registered subject symbol's SVG, drawn at the 20 px tag tier in `currentColor`. Pass `href` to make the tag a link: its label underlines on hover. Tags print as icon plus label.
+
+## Plain and linked
+
+import { DemoTagVariants } from './demos/variants'
+
+<DemoTagVariants.Title />
+
+<DemoTagVariants />
+
+[See Demo](./demos/variants/)
+
+## Primary and secondary
+
+import { DemoTagColor } from './demos/color'
+
+<DemoTagColor.Title />
+
+`secondary` is the taxonomy scale and colors only the icon. `primary` inks the label and focus ring.
+
+<DemoTagColor />
+
+[See Demo](./demos/color/)
+
+## On grounds
+
+import { DemoTagGrounds } from './demos/grounds'
+
+<DemoTagGrounds.Title />
+
+<DemoTagGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesTag } from './types'
+
+<TypesTag />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §10.11 (badge, tag and chip) and §6.10 (subject symbols).

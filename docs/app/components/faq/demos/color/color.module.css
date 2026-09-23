@@ -1,0 +1,19 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-7);
+  inline-size: 100%;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-12);
+  align-items: center;
+}
+
+.copy {
+  margin: 0;
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-body-ui);
+  line-height: var(--font-lineheight-3);
+}

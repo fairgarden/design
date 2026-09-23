@@ -1,0 +1,299 @@
+/*
+ * Stat block (§12.10; typography §8.8; counts §5.10.2). CVA function
+ * `statBlock`. Pure type, so it works on every ground: every text is
+ * --primary12; cell rules are --role-hairline; only the hero's mount takes
+ * the secondary (front disc --secondary9, under-disc --secondary7, the
+ * numeral on it --secondary-contrast). Colors are role variables only.
+ *
+ * Column counts: cells span a 12-track grid on the `stat-row` container
+ * (the root), so the cells can query it. `--stat-span` is a track count.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.label {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.numeral {
+  composes: typeStat from '../../utils/type.module.css';
+}
+
+.numeralCompact {
+  composes: typeStatCompact from '../../utils/type.module.css';
+}
+
+.unit {
+  composes: typeLead from '../../utils/type.module.css';
+}
+
+.unitCompact {
+  composes: typeSubhead from '../../utils/type.module.css';
+}
+
+.qualifier {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.delta {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.source {
+  composes: typeSmall from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .label,
+  .numeral,
+  .numeralCompact,
+  .unit,
+  .unitCompact,
+  .qualifier,
+  .delta,
+  .source {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .unit,
+  .unitCompact {
+    line-height: inherit;
+  }
+
+  /* Change: a ▲ or ▼ at --size-px-3 plus words, never color alone. */
+  .delta {
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-1);
+  }
+
+  .deltaGlyph {
+    flex: none;
+    inline-size: var(--size-px-3);
+    block-size: var(--size-px-3);
+    fill: currentColor;
+  }
+
+  @media (--forcedColors) {
+    .deltaGlyph {
+      forced-color-adjust: none;
+      fill: CanvasText;
+    }
+  }
+}
+
+@layer variants {
+  /* Row: rule-topped cells like spec cells; --border-size-1 --role-hairline. */
+  .row {
+    container: stat-row / inline-size;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--ds-space-margin);
+    row-gap: var(--size-px-5);
+  }
+
+  .cell {
+    --stat-span: 12;
+
+    grid-column: span var(--stat-span);
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-px-2);
+    min-inline-size: 0;
+    padding-block-start: var(--size-px-3);
+    border-block-start: var(--border-size-1) solid var(--role-hairline);
+  }
+
+  /* Four or more stats: every figure compact, at every width (§8.8). */
+  .compact .cell {
+    gap: var(--size-px-1);
+  }
+
+  /* Baseline, no container queries: four 2 × 2 (1-up past 5 characters), never auto-fit. */
+  .countTwo .cell,
+  .countFour .cell {
+    --stat-span: 6;
+  }
+
+  .long .cell {
+    --stat-span: 12;
+  }
+
+  @media (--md-n-above) {
+    .countTwo .cell {
+      --stat-span: 6;
+    }
+
+    .threeShort .cell {
+      --stat-span: 4;
+    }
+  }
+
+  @media (--lg-n-above) {
+    .countThree .cell {
+      --stat-span: 4;
+    }
+
+    .countFour .cell {
+      --stat-span: 3;
+    }
+  }
+
+  @media (--xs-n-below) {
+    .base .cell {
+      --stat-span: 12;
+    }
+  }
+
+  /* Container thresholds on stat-row (§5.10.2) refine the baseline. */
+  @container stat-row (width < 360px) {
+    .base .cell {
+      --stat-span: 12;
+    }
+  }
+
+  @container stat-row (360px <= width < 768px) {
+    .countTwo .cell,
+    .countFour .cell {
+      --stat-span: 6;
+    }
+
+    .countThree .cell,
+    .long .cell {
+      --stat-span: 12;
+    }
+  }
+
+  @container stat-row (768px <= width < 1024px) {
+    .countTwo .cell,
+    .countFour .cell {
+      --stat-span: 6;
+    }
+
+    .countThree .cell {
+      --stat-span: 12;
+    }
+
+    .threeShort .cell {
+      --stat-span: 4;
+    }
+  }
+
+  @container stat-row (width >= 1024px) {
+    .countTwo .cell {
+      --stat-span: 6;
+    }
+
+    .countThree .cell {
+      --stat-span: 4;
+    }
+
+    .countFour .cell {
+      --stat-span: 3;
+    }
+  }
+
+  /* Hero: one numeral centered on the blob mount (§6.6), a caption below. */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--ds-space-12);
+    text-align: center;
+  }
+
+  .mount {
+    position: relative;
+    display: grid;
+    place-items: center;
+    inline-size: var(--ds-size-art-s);
+    aspect-ratio: 142 / 140;
+  }
+
+  .mountArt {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    overflow: visible;
+  }
+
+  .mountFront {
+    fill: var(--secondary9);
+  }
+
+  .mountUnder {
+    fill: var(--secondary7);
+  }
+
+  .hero .numeral,
+  .hero .unit {
+    position: relative;
+    color: var(--secondary-contrast);
+  }
+
+  .caption {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--size-px-1);
+  }
+
+  /* Inline: the numeral in running text, its qualifier at the text's size. */
+  .inline {
+    display: inline;
+  }
+
+  .numeralInline {
+    font-weight: var(--font-weight-7);
+    font-variant-numeric: var(--ds-numerals-data);
+  }
+
+  .inline .qualifier {
+    font-size: inherit;
+    line-height: inherit;
+  }
+}
+
+@layer print {
+  @media print {
+    /* Blocks print 4-up if the figures fit, else 2 × 2; cells never split (§8.8, §5.12). */
+    .cell {
+      --stat-span: 12;
+
+      break-inside: avoid;
+    }
+
+    .countTwo .cell {
+      --stat-span: 6;
+    }
+
+    .countThree .cell {
+      --stat-span: 4;
+    }
+
+    .countFour .cell {
+      --stat-span: 3;
+    }
+
+    .long .cell {
+      --stat-span: 6;
+    }
+
+    /* The mount is decoration: hidden, so the remap cannot turn its discs black; the numeral stays. */
+    .mountArt {
+      display: none;
+    }
+
+    .hero {
+      break-inside: avoid;
+    }
+  }
+}

@@ -1,0 +1,55 @@
+# Input
+
+Single-line text, email, password, telephone and URL, plus multi-line text: Base UI's Input (Field.Control) in the field box, inside a `Field`.
+
+```tsx
+import { Input } from '@fairgarden-private/design/components/Input'
+```
+
+The box is open by default: a `--border-size-1` `--role-rule` edge that steps to `--primary12` on hover, at the same weight. The ring shows on any focus, pointer included. The placeholder is never the label and ends in "…". `className` and `style` go to the box, so set its width to the expected answer (`style={{ inlineSize: '8ch' }}` for a postcode). Stepped numbers use NumberField, choices use Select or Combobox, and site search is Search.
+
+## Variants and states
+
+import { DemoInputStates } from './demos/states'
+
+<DemoInputStates.Title />
+
+`prefix`, `suffix` and `icon` adorn the box. `labelInside` draws the label in the 56 px box, with the value below it, larger. `variant="underline"` is a lone bottom rule for dense settings rows and printable blanks. `multiline` is the textarea, with an optional `limit` count. `reveal` adds a "Show" / "Hide" toggle to a password. `butted="end"` joins the `action` cell: the icon-only 64 × 48 px cell at base, with its label from `--md-n-above` when `labelled`. Invalid fields take a `--border-size-2` danger edge; read-only fields lose the box and keep a bottom rule; disabled fields draw a dotted edge.
+
+<DemoInputStates />
+
+[See Demo](./demos/states/)
+
+## Primary and secondary
+
+import { DemoInputColor } from './demos/color'
+
+<DemoInputColor.Title />
+
+`primary` sets the edge, value, icon and ring. `secondary` is unused at rest; while the Field is invalid it becomes the danger scale. The action cell takes the scope's action scale.
+
+<DemoInputColor />
+
+[See Demo](./demos/color/)
+
+## On grounds
+
+import { DemoInputGrounds } from './demos/grounds'
+
+<DemoInputGrounds.Title />
+
+The same field on paper and forest. `plate` makes the box a nested `white` face: use it only on a patterned ground (grain, speckle, dotgrid), where a `--role-rule` edge may not sit.
+
+<DemoInputGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesInput } from './types'
+
+<TypesInput />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §10.1 (the field box) and §10.3 (input).

@@ -1,0 +1,43 @@
+.grid {
+  display: grid;
+  grid-template-columns: auto minmax(0, auto) minmax(0, auto);
+  gap: var(--size-px-2) var(--size-px-7);
+  align-items: center;
+  justify-content: start;
+}
+
+.row {
+  display: contents;
+}
+
+.head {
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-label);
+  font-weight: var(--font-weight-6);
+  color: var(--role-muted);
+}
+
+.name,
+.weight {
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-font-size-caption);
+}
+
+.weight {
+  color: var(--role-muted);
+}
+
+/* Narrow previews: tighter columns, and the weight wraps under its glyph. */
+@media (--sm-n-below) {
+  .grid {
+    column-gap: var(--size-px-3);
+  }
+}
+
+.sample {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-12);
+  align-items: center;
+  min-block-size: var(--ds-size-hit);
+}

@@ -1,0 +1,13 @@
+.row {
+  display: flex;
+  justify-content: flex-end;
+  inline-size: 100%;
+}
+
+/* A stand-in wordmark in the logo slot. */
+.wordmark {
+  font-family: var(--ds-font-display);
+  font-size: var(--font-size-4);
+  font-weight: var(--font-weight-7);
+  line-height: 1;
+}

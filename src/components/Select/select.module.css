@@ -1,0 +1,398 @@
+/*
+ * Select (§10.5). CVA function `select`. Parts: `base` (the trigger),
+ * `value`, `icon` (the chevron), `swatch` (with `swatchRing`), `popup`,
+ * `list`, `item`, `itemText`, `itemIndicator`, `group`, `groupLabel`,
+ * `separator`; `positioner` places the popup on --layer-3, and `edge` /
+ * `edgeLine` draw the disabled `line-dotted-fine` edge as true dots
+ * [D36, D68]. Colors are role variables only; local custom properties carry
+ * dimensions only. The popup is a portaled `white` page scope framed by
+ * --border-size-2 --primary12 [D92, D139, D156].
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.value {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.item {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.groupLabel {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.edgeLine {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+@layer base {
+  /* The trigger: the §10.1 field box, chevron at the end. */
+  .base {
+    /* Local dimensions. */
+    --select-edge: var(--border-size-1);
+    --select-radius: var(--radius-1);
+    --select-underline: var(--border-size-2);
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-2);
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
+    block-size: var(--size-px-8);
+    margin: 0;
+    padding-block: 0;
+    padding-inline: calc(var(--ds-space-12) + var(--border-size-1) - var(--select-edge));
+    border: var(--select-edge) solid var(--role-rule);
+    border-radius: var(--select-radius);
+    background: none;
+    color: var(--primary12);
+    text-align: start;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .value {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-2);
+    min-inline-size: 0;
+    overflow: hidden;
+    color: inherit;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* The chevron: expand_more, inline tier; it rotates 180° while open [D166]. */
+  .icon {
+    flex: none;
+    display: inline-flex;
+    color: inherit;
+  }
+
+  /* The swatch: a --ds-space-12 disc of the product's color (content), ringed in --primary12. */
+  .swatch {
+    flex: none;
+    display: block;
+    inline-size: var(--ds-space-12);
+    block-size: var(--ds-space-12);
+    overflow: visible;
+  }
+
+  .swatchRing {
+    stroke: var(--primary12);
+    stroke-width: var(--border-size-1);
+  }
+
+  .edge {
+    display: none;
+    position: absolute;
+    inset-block-start: calc(var(--ds-dot-fine) / 2);
+    inset-inline-start: calc(var(--ds-dot-fine) / 2);
+    inline-size: calc(100% - var(--ds-dot-fine));
+    block-size: calc(100% - var(--ds-dot-fine));
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .edgeLine {
+    fill: none;
+    stroke: var(--role-disabled-edge);
+    rx: calc(var(--select-radius) - var(--ds-dot-fine) / 2);
+  }
+
+  /* The popup sits --size-px-2 below its trigger on --layer-3. */
+  .positioner {
+    z-index: var(--layer-3);
+    outline: 0;
+  }
+
+  /*
+   * The overlay face: the white scope's --primary1, the --border-size-2
+   * --primary12 frame in both modes, --ds-radius-8; at least the trigger's
+   * width, and never wider than the viewport minus the page margins.
+   */
+  .popup {
+    /* The clip reveal starts from the trigger side. */
+    --select-reveal-from: inset(0 0 100% 0);
+
+    box-sizing: border-box;
+    min-inline-size: var(--anchor-width);
+    max-inline-size: calc(100vw - 2 * var(--ds-space-margin));
+    border: var(--border-size-2) solid var(--primary12);
+    border-radius: var(--ds-radius-8);
+    background-color: var(--primary1);
+    color: var(--primary12);
+    clip-path: inset(0);
+    outline: 0;
+  }
+
+  /* At most 8 items tall, then the list scrolls. */
+  .list {
+    box-sizing: border-box;
+    max-block-size: min(
+      var(--available-height, 100vh),
+      calc(8 * var(--ds-size-hit) + 2 * var(--size-px-1))
+    );
+    padding: var(--size-px-1);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-padding-block: var(--size-px-1);
+    outline: 0;
+  }
+
+  /* Items: --ds-size-hit rows at every width, --size-px-3 padding; highlight radius 8 − 4 [D40]. */
+  .item {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--size-px-3) minmax(0, 1fr);
+    align-items: center;
+    column-gap: var(--size-px-2);
+    min-block-size: var(--ds-size-hit);
+    padding-inline: var(--size-px-3);
+    border-radius: calc(var(--ds-radius-8) - var(--size-px-1));
+    color: var(--primary12);
+    cursor: default;
+    outline: 0;
+    user-select: none;
+  }
+
+  /* The highlight bar: a --ds-stroke-3 start edge in --primary12, drawn as a border so it survives forced colors. */
+  .item::before {
+    content: '';
+    display: none;
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    border-inline-start: var(--ds-stroke-3) solid var(--primary12);
+  }
+
+  .itemIndicator {
+    grid-column: 1;
+    display: inline-flex;
+    color: var(--primary12);
+  }
+
+  .itemText {
+    grid-column: 2;
+    min-inline-size: 0;
+  }
+
+  .group {
+    display: block;
+  }
+
+  .groupLabel {
+    padding-block: var(--size-px-2) var(--size-px-1);
+    padding-inline: var(--size-px-3);
+    color: var(--role-muted);
+  }
+
+  /* The one popup group separator: --border-size-1 --role-rule across the panel. */
+  .separator {
+    margin-block: var(--size-px-1);
+    margin-inline: calc(-1 * var(--size-px-1));
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  @media (--md-n-above) {
+    /* From --md-n-above the popup is the trigger's width, up to 360 px. */
+    .popup {
+      max-inline-size: max(var(--anchor-width), var(--ds-size-overlay-max));
+    }
+  }
+
+  @media (--forcedColors) {
+    .edgeLine {
+      stroke: currentColor;
+    }
+  }
+
+  @media (--motionOK) {
+    .base {
+      transition-property: border-color, border-width, outline-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+
+    .icon {
+      transition: rotate var(--ds-duration-quick) var(--ease-out-3);
+    }
+
+    /* The clip reveal (the edge wipes open), never a fade [D91]. */
+    .popup {
+      transition: clip-path var(--ds-duration-disclosure) var(--ease-out-3);
+    }
+  }
+}
+
+@layer variants {
+  /* Boxed (default): the field box. */
+  .outline {
+    border-style: solid;
+  }
+
+  /*
+   * Underline: no box; the trigger's text and chevron over a --border-size-2
+   * --role-accent underline the width of the trigger only; it hugs its
+   * content and keeps a --ds-size-hit target.
+   */
+  .underline {
+    --select-radius: var(--ds-radius-none);
+
+    display: inline-flex;
+    inline-size: auto;
+    max-inline-size: 100%;
+    block-size: auto;
+    min-block-size: var(--ds-size-hit);
+    padding-inline: 0;
+    border-width: 0 0 var(--select-underline);
+    border-color: var(--role-accent);
+  }
+
+  /*
+   * Plate: the box face is the nested white scope's --primary1 (§10.1). The
+   * trigger is also a Ground face, whose own classes share the base layer,
+   * so its display and edge are restated here.
+   */
+  .plate {
+    display: flex;
+    border: var(--select-edge) solid var(--role-rule);
+    background-color: var(--primary1);
+    color: var(--primary12);
+  }
+}
+
+@layer states {
+  /* The placeholder: --role-muted, one weight lighter in dark scopes [D170]. */
+  .value[data-placeholder] {
+    color: var(--role-muted);
+    font-weight: max(
+      var(--type-weight-floor, 400),
+      calc(var(--type-weight, 400) - var(--ds-muted-weight-step))
+    );
+  }
+
+  /*
+   * Hover (not disabled, invalid or read-only): the boxed edge steps
+   * --role-rule → --primary12 [D140]; the underline steps --role-accent →
+   * --primary12 at the same --border-size-2 weight (derived), so only the
+   * open state takes --ds-stroke-3 and hover never reads as open [D181].
+   */
+  .base:hover:not([data-disabled], [data-invalid], [data-readonly]) {
+    border-color: var(--primary12);
+  }
+
+  /* Open: the boxed edge goes to --primary12, the underline to --ds-stroke-3, the chevron turns. */
+  .base[data-popup-open] {
+    border-color: var(--primary12);
+  }
+
+  .base.underline[data-popup-open] {
+    --select-underline: var(--ds-stroke-3);
+
+    border-color: var(--role-accent);
+  }
+
+  .icon[data-popup-open] {
+    rotate: 180deg;
+  }
+
+  /* Focus: keyboard only (the trigger is not a text-entry control) [D45]. */
+  .base:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  /* Error: the --border-size-2 edge in --role-status; the underline keeps --role-accent, now the danger scale. */
+  .base[data-invalid] {
+    --select-edge: var(--border-size-2);
+
+    border-color: var(--role-status);
+  }
+
+  .underline[data-invalid] {
+    border-color: var(--role-accent);
+  }
+
+  /* Disabled: dotted edge (the SVG), --role-muted inks, no face; never dimmed [D16]. */
+  .base[data-disabled] {
+    --select-edge: 0px;
+    --select-underline: 0px;
+
+    border-style: none;
+    background: none;
+    color: var(--role-muted);
+    cursor: default;
+  }
+
+  .base[data-disabled] .edge {
+    display: block;
+  }
+
+  .base[data-disabled] .swatchRing {
+    stroke-dasharray: 0 var(--ds-dot-fine-pitch);
+    stroke-linecap: round;
+  }
+
+  /* Read-only: the box is removed; a --border-size-1 --role-rule bottom rule remains. */
+  .base[data-readonly] {
+    border-width: 0 0 var(--border-size-1);
+    border-color: var(--role-rule);
+    border-radius: var(--ds-radius-none);
+    background: none;
+  }
+
+  /* Highlighted: --primary4 plus the start-edge bar [D145]. */
+  .item[data-highlighted] {
+    background-color: var(--primary4);
+  }
+
+  .item[data-highlighted]::before {
+    display: block;
+  }
+
+  /* Selected: the leading ✓ in --primary12 plus --font-weight-6; no fill, no bar [D145]. */
+  .item[data-selected] {
+    font-weight: var(--font-weight-6);
+  }
+
+  /* A disabled item is --role-muted and never highlighted. */
+  .item[data-disabled] {
+    background: none;
+    color: var(--role-muted);
+  }
+
+  .item[data-disabled]::before {
+    display: none;
+  }
+
+  /* Placement: a popup above its trigger reveals from its bottom edge. */
+  .popup[data-side='top'] {
+    --select-reveal-from: inset(100% 0 0 0);
+  }
+
+  /* The clip reveal from the trigger side [D91]; instant under --motionNotOK. */
+  .popup[data-starting-style],
+  .popup[data-ending-style] {
+    clip-path: var(--select-reveal-from);
+  }
+}
+
+@layer print {
+  @media print {
+    /* The chosen value prints in its frame; the chevron is interaction only. */
+    .icon {
+      display: none;
+    }
+
+    .positioner {
+      display: none;
+    }
+  }
+}

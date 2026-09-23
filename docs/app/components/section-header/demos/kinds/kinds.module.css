@@ -1,0 +1,10 @@
+.band {
+  padding-block: var(--ds-space-section);
+}
+
+.container {
+  display: grid;
+  gap: var(--size-px-10);
+  inline-size: min(100% - 2 * var(--ds-space-margin), var(--ds-container-content));
+  margin-inline: auto;
+}

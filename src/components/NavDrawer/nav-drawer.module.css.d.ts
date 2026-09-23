@@ -1,0 +1,32 @@
+declare const styles: {
+  readonly "bar": string;
+  readonly "base": string;
+  readonly "childItem": string;
+  readonly "childLink": string;
+  readonly "childList": string;
+  readonly "close": string;
+  readonly "closeLabel": string;
+  readonly "directLink": string;
+  readonly "footer": string;
+  readonly "footerAction": string;
+  readonly "footerLink": string;
+  readonly "footerList": string;
+  readonly "footerLocale": string;
+  readonly "glyph": string;
+  readonly "group": string;
+  readonly "groupRow": string;
+  readonly "item": string;
+  readonly "linkLabel": string;
+  readonly "list": string;
+  readonly "logo": string;
+  readonly "logoMark": string;
+  readonly "menuIcon": string;
+  readonly "menuLabel": string;
+  readonly "menuTrigger": string;
+  readonly "nav": string;
+  readonly "panel": string;
+  readonly "rowLabel": string;
+  readonly "scroll": string;
+};
+export = styles;
+

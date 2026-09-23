@@ -1,0 +1,342 @@
+/*
+ * Type roles (§1.5.6, §3.3). Compose into a module part, in a
+ * top-level rule outside any @layer (Lightning CSS rejects nested composes):
+ *   .label { composes: typeButton from '../../utils/type.module.css'; }
+ * Sizes are rem tokens (fluid 360 → 1024 px); leading unitless; tracking em.
+ * Every role publishes --type-weight and --type-weight-floor so typeMuted
+ * can step muted text down by --ds-muted-weight-step on dark scopes without
+ * the component knowing the mode [D170, D175].
+ * Print sizes come from the print remap of the size tokens (print.css).
+ */
+@layer base {
+  .typeDisplayXl {
+    --type-weight: var(--font-weight-7);
+    --type-weight-floor: 100;
+    font-family: var(--ds-font-display);
+    font-variation-settings: var(--ds-font-display-settings);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-display-xl);
+    line-height: var(--ds-leading-display);
+    letter-spacing: var(--ds-tracking-tight);
+  }
+
+  .typeDisplay {
+    --type-weight: var(--font-weight-7);
+    --type-weight-floor: 100;
+    font-family: var(--ds-font-display);
+    font-variation-settings: var(--ds-font-display-settings);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-display);
+    line-height: var(--font-lineheight-0);
+    letter-spacing: var(--ds-tracking-tight);
+  }
+
+  .typeH2 {
+    --type-weight: var(--font-weight-7);
+    --type-weight-floor: 100;
+    font-family: var(--ds-font-display);
+    font-variation-settings: var(--ds-font-display-settings);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-h2);
+    line-height: var(--font-lineheight-0);
+    letter-spacing: 0;
+  }
+
+  .typeItemhead {
+    --type-weight: var(--font-weight-7);
+    --type-weight-floor: 100;
+    font-family: var(--ds-font-display);
+    font-variation-settings: var(--ds-font-display-settings);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-itemhead);
+    line-height: var(--font-lineheight-0);
+    letter-spacing: 0;
+  }
+
+  .typeKicker {
+    --type-weight: var(--font-weight-7);
+    --type-weight-floor: 100;
+    font-family: var(--ds-font-display);
+    font-variation-settings: var(--ds-font-display-settings);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-kicker);
+    line-height: var(--font-lineheight-0);
+    letter-spacing: 0;
+  }
+
+  .typeSubhead {
+    --type-weight: var(--font-weight-6);
+    --type-weight-floor: 100;
+    font-family: var(--ds-font-ui);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-subhead);
+    line-height: var(--font-lineheight-1);
+    letter-spacing: 0;
+  }
+
+  .typeLead {
+    --type-weight: var(--font-weight-4);
+    --type-weight-floor: 100;
+    font-family: var(--ds-font-ui);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-lead);
+    line-height: var(--font-lineheight-3);
+    letter-spacing: 0;
+  }
+
+  .typeQuote {
+    --type-weight: var(--font-weight-5);
+    --type-weight-floor: 100;
+    font-family: var(--ds-font-display);
+    font-style: italic;
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-quote);
+    line-height: var(--font-lineheight-1);
+    letter-spacing: 0;
+  }
+
+  .typeBody {
+    --type-weight: var(--font-weight-4);
+    --type-weight-floor: 100;
+    font-family: var(--ds-font-text);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-body);
+    line-height: var(--ds-leading-reading);
+    letter-spacing: 0;
+    font-variant-numeric: var(--ds-numerals-prose);
+  }
+
+  .typeBodyUi {
+    --type-weight: var(--font-weight-4);
+    --type-weight-floor: 100;
+    font-family: var(--ds-font-ui);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-body-ui);
+    line-height: var(--font-lineheight-3);
+    letter-spacing: 0;
+  }
+
+  /* Serif in light scopes, UI sans in dark scopes via --ds-font-fine [D152]. */
+  .typeSecondaryName {
+    --type-weight: var(--font-weight-4);
+    --type-weight-floor: 100;
+    font-family: var(--ds-font-fine);
+    font-style: italic;
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-body-ui);
+    line-height: var(--font-lineheight-2);
+    letter-spacing: 0;
+  }
+
+  .typeFootnote {
+    --type-weight: var(--font-weight-4);
+    --type-weight-floor: 400;
+    font-family: var(--ds-font-fine);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-footnote);
+    line-height: var(--font-lineheight-3);
+    letter-spacing: 0;
+    font-variant-numeric: var(--ds-numerals-prose);
+  }
+
+  /* Button labels: title case, authored; no tracking, no caps [D160]. */
+  .typeButtonLg {
+    --type-weight: var(--font-weight-7);
+    --type-weight-floor: 400;
+    font-family: var(--ds-font-ui);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-button-lg);
+    line-height: var(--ds-leading-display);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .typeButton {
+    --type-weight: var(--font-weight-7);
+    --type-weight-floor: 400;
+    font-family: var(--ds-font-ui);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-button);
+    line-height: var(--ds-leading-display);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .typeButtonSm {
+    --type-weight: var(--font-weight-7);
+    --type-weight-floor: 400;
+    font-family: var(--ds-font-ui);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-label);
+    line-height: var(--ds-leading-display);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .typeFieldLabel {
+    --type-weight: var(--font-weight-6);
+    --type-weight-floor: 400;
+    font-family: var(--ds-font-ui);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-button);
+    line-height: var(--font-lineheight-1);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  /* Caps for wayfinding only; author sentence case, CSS sets the caps. */
+  .typeLabel {
+    --type-weight: var(--font-weight-6);
+    --type-weight-floor: 400;
+    font-family: var(--ds-font-ui);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-label);
+    line-height: var(--font-lineheight-1);
+    letter-spacing: var(--font-letterspacing-3);
+    text-transform: uppercase;
+  }
+
+  .typeEyebrow {
+    --type-weight: var(--font-weight-6);
+    --type-weight-floor: 400;
+    font-family: var(--ds-font-ui);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-eyebrow);
+    line-height: var(--font-lineheight-1);
+    letter-spacing: var(--font-letterspacing-4);
+    text-transform: uppercase;
+  }
+
+  .typeCaption {
+    --type-weight: var(--font-weight-4);
+    --type-weight-floor: 400;
+    font-family: var(--ds-font-ui);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-caption);
+    line-height: var(--font-lineheight-2);
+    letter-spacing: 0;
+  }
+
+  .typeSmall {
+    --type-weight: var(--font-weight-4);
+    --type-weight-floor: 400;
+    font-family: var(--ds-font-ui);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-label);
+    line-height: var(--font-lineheight-2);
+    letter-spacing: 0;
+  }
+
+  .typeData {
+    --type-weight: var(--font-weight-4);
+    --type-weight-floor: 400;
+    font-family: var(--ds-font-mono);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-caption);
+    line-height: var(--ds-leading-compact);
+    letter-spacing: 0;
+    font-variant-numeric: var(--ds-numerals-data);
+  }
+
+  /* Large mono readout: the Number Field `readout` kind (§10.4), tabular so digits never shift. */
+  .typeReadout {
+    --type-weight: var(--font-weight-4);
+    --type-weight-floor: 400;
+    font-family: var(--ds-font-mono);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-h2);
+    line-height: var(--ds-leading-display);
+    letter-spacing: 0;
+    font-variant-numeric: var(--ds-numerals-data);
+  }
+
+  .typeUrl {
+    --type-weight: var(--font-weight-4);
+    --type-weight-floor: 400;
+    font-family: var(--ds-font-mono);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-url);
+    line-height: var(--font-lineheight-1);
+    letter-spacing: 0;
+    overflow-wrap: anywhere;
+  }
+
+  /* System serif fallbacks never set stats; the display stack leads. Display-xl on screen, 24 pt in print. */
+  .typeStat {
+    --type-weight: var(--font-weight-7);
+    --type-weight-floor: 100;
+    font-family: var(--ds-font-display);
+    font-variation-settings: var(--ds-font-display-settings);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-stat);
+    line-height: var(--ds-leading-display);
+    letter-spacing: var(--ds-tracking-tight);
+    font-variant-numeric: var(--ds-numerals-data);
+  }
+
+  .typeStatCompact {
+    --type-weight: var(--font-weight-7);
+    --type-weight-floor: 100;
+    font-family: var(--ds-font-display);
+    font-variation-settings: var(--ds-font-display-settings);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-h2);
+    line-height: var(--ds-leading-display);
+    letter-spacing: 0;
+    font-variant-numeric: var(--ds-numerals-data);
+  }
+
+  /* Bold lead that opens a paragraph; keeps its paragraph's size. */
+  .typeRunin {
+    --type-weight: var(--font-weight-7);
+    --type-weight-floor: 400;
+    font-family: var(--ds-font-ui);
+    font-weight: var(--type-weight);
+  }
+
+  .typeMarquee {
+    --type-weight: var(--font-weight-8);
+    --type-weight-floor: 100;
+    font-family: var(--ds-font-ui);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-marquee);
+    line-height: var(--ds-leading-display);
+    letter-spacing: var(--font-letterspacing-2);
+    text-transform: uppercase;
+  }
+
+  .typeLockupCaps {
+    --type-weight: var(--font-weight-9);
+    --type-weight-floor: 100;
+    font-family: var(--ds-font-ui);
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-display);
+    line-height: var(--font-lineheight-00);
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .typeLockupAccent {
+    --type-weight: var(--font-weight-8);
+    --type-weight-floor: 100;
+    font-family: var(--ds-font-display);
+    font-variation-settings: var(--ds-font-accent-settings);
+    font-style: italic;
+    font-weight: var(--type-weight);
+    font-size: calc(var(--ds-font-size-display) * var(--ds-lockup-accent-factor));
+    line-height: var(--font-lineheight-00);
+    letter-spacing: 0;
+  }
+
+  /*
+   * Muted text: --role-muted, one weight lighter on dark scopes, floored at
+   * 400 below ~16 px. Compose after the role (it is declared last so it wins).
+   */
+  .typeMuted {
+    color: var(--role-muted);
+    font-weight: max(
+      var(--type-weight-floor, 400),
+      calc(var(--type-weight, 400) - var(--ds-muted-weight-step))
+    );
+  }
+}

@@ -1,0 +1,358 @@
+/*
+ * Feature Grid (§12.6). The root `base` is the inline-size container
+ * `feature-grid`; `list` queries it. Parts: base, header, list, cell, icon,
+ * numeral, drawing, heading (`caption` in the glossary kind), body, link
+ * (a title Link), insetRule / columnRule (the numbered separators, each
+ * cell's ::before), frame (a faced Card, which draws its own edge and face).
+ * Pure line and type: colors are role variables only; local custom
+ * properties carry dimensions only:
+ *   --feature-grid-gap   the column gutter (= --ds-space-margin) [D42]
+ *   --feature-grid-row   the gap between rows (--ds-space-56, the rhythm's "next")
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.heading {
+  composes: typeItemhead from '../../utils/type.module.css';
+}
+
+.caption {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.body {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.numeral {
+  composes: typeItemhead from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base {
+    --feature-grid-gap: var(--ds-space-margin);
+    --feature-grid-row: var(--ds-space-56);
+
+    container: feature-grid / inline-size;
+    min-inline-size: 0;
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .header {
+    margin-block-end: var(--size-px-7);
+  }
+
+  /* Baseline (§1.11.11): one stacked column; the viewport fallbacks follow. */
+  .list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--feature-grid-row) var(--feature-grid-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Rhythm (LTA footer block): leader → 16 → heading → 32 → body; 56 to the next cell. */
+  .cell {
+    position: relative; /* the stretched title link's positioned ancestor */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-inline-size: 0;
+  }
+
+  /* Block-tier icon, filled in --role-accent (--primary12 on saturated grounds [D14]). */
+  .icon {
+    display: block;
+    flex: none;
+    inline-size: var(--ds-size-icon-block);
+    block-size: var(--ds-size-icon-block);
+    margin-block-end: var(--size-px-3);
+    color: var(--role-accent);
+    fill: currentColor;
+  }
+
+  .icon > svg {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* Numeral: a --ds-size-control-xl outline circle at --ds-stroke-1-5, zero-padded data figures. */
+  .numeral {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    inline-size: var(--ds-size-control-xl);
+    block-size: var(--ds-size-control-xl);
+    margin-block-end: var(--size-px-3);
+    border: var(--ds-stroke-1-5) solid var(--primary12);
+    border-radius: var(--radius-round);
+    color: var(--primary12);
+    font-variant-numeric: var(--ds-numerals-data);
+  }
+
+  .numeral::before {
+    content: counter(feature, decimal-leading-zero);
+  }
+
+  /* Glossary drawing: geometric line art in --primary12 at the spot size; never scaled. */
+  .drawing {
+    display: block;
+    flex: none;
+    inline-size: var(--size-px-9);
+    block-size: var(--size-px-9);
+    margin-block-end: var(--size-px-3);
+    color: var(--primary12);
+  }
+
+  .drawing > svg {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    fill: none;
+    stroke: currentColor;
+  }
+
+  .heading,
+  .caption {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .body {
+    margin: var(--size-px-7) 0 0;
+    color: var(--primary12);
+  }
+
+  /* Viewport fallback (no container queries): 3-up from --md-n-above, 4-up from --lg-n-above. */
+  @media (--md-n-above) {
+    .list {
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(calc((100% - 2 * var(--feature-grid-gap)) / 3), 1fr)
+      );
+    }
+  }
+
+  @media (--lg-n-above) {
+    .list {
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(calc((100% - 3 * var(--feature-grid-gap)) / 4), 1fr)
+      );
+    }
+  }
+
+  /* Container (§5.10.2): stacked below 768 px, 3-up from 768, up to 4-up from 1024, never more. */
+  @container feature-grid (width < 768px) {
+    .list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @container feature-grid (768px <= width < 1024px) {
+    .list {
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(calc((100% - 2 * var(--feature-grid-gap)) / 3), 1fr)
+      );
+    }
+  }
+
+  @container feature-grid (width >= 1024px) {
+    .list {
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(calc((100% - 3 * var(--feature-grid-gap)) / 4), 1fr)
+      );
+    }
+  }
+}
+
+@layer variants {
+  /* Icon (LTA footer blocks): block icon → heading → body, whitespace only. */
+  .kindIcon .cell {
+    align-items: flex-start;
+  }
+
+  /*
+   * Numbered (Rocco): centered within --size-content-2 while stacked, cells
+   * separated by --border-size-1 --role-rule inset rules (--ds-space-40 in
+   * from each side), centered in the row gap. Once cells sit in a row the
+   * separator turns into a vertical column rule in the gutter; it is dropped
+   * at the start of each row.
+   */
+  .numbered .list {
+    counter-reset: feature;
+  }
+
+  .numbered .cell {
+    counter-increment: feature;
+    align-items: center;
+    max-inline-size: var(--size-content-2);
+    margin-inline: auto;
+    inline-size: 100%;
+    text-align: center;
+  }
+
+  .numbered .cell + .cell::before {
+    content: '';
+    position: absolute;
+    inset-block-start: calc(var(--feature-grid-row) / -2);
+    inset-inline: var(--ds-space-40);
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  @media (--md-n-above) {
+    .numbered .cell + .cell::before {
+      inset-block: 0;
+      inset-inline: calc(var(--feature-grid-gap) / -2) auto;
+      border-block-start: 0;
+      border-inline-start: var(--border-size-1) solid var(--role-rule);
+    }
+
+    .numbered .cell:nth-child(3n + 1)::before {
+      display: none;
+    }
+  }
+
+  @media (--lg-n-above) {
+    .numbered .cell:nth-child(3n + 1)::before {
+      display: block;
+    }
+
+    .numbered .cell:nth-child(4n + 1)::before {
+      display: none;
+    }
+  }
+
+  @container feature-grid (width < 768px) {
+    .numbered .cell + .cell::before,
+    .numbered .cell:nth-child(n)::before {
+      display: block;
+      inset-block: calc(var(--feature-grid-row) / -2) auto;
+      inset-inline: var(--ds-space-40);
+      border-block-start: var(--border-size-1) solid var(--role-rule);
+      border-inline-start: 0;
+    }
+
+    .numbered .cell:first-child::before {
+      display: none;
+    }
+  }
+
+  @container feature-grid (768px <= width < 1024px) {
+    .numbered .cell + .cell::before {
+      display: block;
+      inset-block: 0;
+      inset-inline: calc(var(--feature-grid-gap) / -2) auto;
+      border-block-start: 0;
+      border-inline-start: var(--border-size-1) solid var(--role-rule);
+    }
+
+    .numbered .cell:nth-child(3n + 1)::before {
+      display: none;
+    }
+  }
+
+  @container feature-grid (width >= 1024px) {
+    .numbered .cell + .cell::before {
+      display: block;
+      inset-block: 0;
+      inset-inline: calc(var(--feature-grid-gap) / -2) auto;
+      border-block-start: 0;
+      border-inline-start: var(--border-size-1) solid var(--role-rule);
+    }
+
+    .numbered .cell:nth-child(4n + 1)::before {
+      display: none;
+    }
+  }
+
+  /* Rule-topped (Audubon): a --role-hairline column rule opens each cell; rules break at the gutter. */
+  .ruleTopped .cell {
+    padding-block-start: var(--size-px-3);
+    border-block-start: var(--border-size-1) solid var(--role-hairline);
+  }
+
+  /* Framed (Spoak): 2 × 2 inside the faced frame; the frame sits in the outer scope. */
+  .framed .frame {
+    border-radius: var(--ds-radius-8);
+  }
+
+  @media (--md-n-above) {
+    .framed .list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @container feature-grid (width < 768px) {
+    .framed .list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @container feature-grid (width >= 768px) {
+    .framed .list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* Glossary (Prepositions Diagram Sheet): drawings with caps captions, no rules. */
+  .glossary .caption + .body {
+    margin-block-start: var(--ds-space-12);
+  }
+}
+
+@layer states {
+  /* The linked cell's ring sits around the cell, keyboard only [D45]; it replaces the link's own. */
+  .cell .link:focus-visible {
+    outline: none;
+  }
+
+  .cell:has(.link:focus-visible) {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Cells print 2-up, whole; icons print black and the frame's face drops through the remap.
+       The page margin prints as 0, so the gutter takes its own print step. */
+    .base {
+      --feature-grid-gap: var(--size-px-5);
+    }
+
+    .header {
+      break-after: avoid;
+    }
+
+    .list,
+    .framed .list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cell {
+      break-inside: avoid;
+    }
+
+    .numbered .cell + .cell::before,
+    .numbered .cell:nth-child(n)::before {
+      display: block;
+      inset-block: 0;
+      inset-inline: calc(var(--feature-grid-gap) / -2) auto;
+      border-block-start: 0;
+      border-inline-start: var(--border-size-1) solid var(--role-rule);
+    }
+
+    .numbered .cell:nth-child(2n + 1)::before {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,71 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-7);
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.example {
+  display: grid;
+  gap: var(--size-px-2);
+  min-inline-size: 0;
+}
+
+.name {
+  margin: 0;
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-label);
+  font-weight: var(--font-weight-6);
+  letter-spacing: var(--font-letterspacing-3);
+  text-transform: uppercase;
+  color: var(--role-muted);
+}
+
+.panel {
+  max-block-size: 208px;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-body-ui);
+  line-height: var(--font-lineheight-3);
+  color: var(--primary12);
+}
+
+.list > li {
+  padding-block: var(--size-px-1);
+}
+
+.row {
+  display: flex;
+  gap: var(--size-px-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cell {
+  flex: none;
+  inline-size: var(--size-px-10);
+  padding-block: var(--size-px-3);
+  border-block-start: var(--border-size-1) solid var(--role-hairline);
+  font-family: var(--ds-font-ui);
+  color: var(--primary12);
+  scroll-snap-align: start;
+}
+
+.slide {
+  flex: none;
+  inline-size: 180px;
+  block-size: var(--size-px-11);
+  padding: var(--size-px-3);
+  box-sizing: border-box;
+  border: var(--border-size-1) solid var(--role-rule);
+  border-radius: var(--ds-radius-8);
+  font-family: var(--ds-font-ui);
+  color: var(--primary12);
+  scroll-snap-align: start;
+}

@@ -1,0 +1,277 @@
+/*
+ * FAQ (§12.5): the §10.13 Ruled accordion with the Strong top rule, set as a
+ * content module. Parts: `base` (the section), `header`, `title`, `intro`,
+ * `list` (Accordion Root), `item`, `heading` (the h3), `trigger` (the row),
+ * `icon` (keyed only), `question`, `glyph` (the LTA disclosure glyph, drawn
+ * by the Collapsible module), `openBar`, `panel`, `answer`, `contact`.
+ * Dense module: line semantics only, never a fill on the open item. Colors
+ * are role variables only; local custom properties carry dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. The trigger carries the
+ * question's type role so the glyph can align to its first line (1lh). */
+.title {
+  composes: typeH2 from '../../utils/type.module.css';
+}
+
+.intro {
+  composes: typeLead from '../../utils/type.module.css';
+}
+
+.trigger {
+  composes: typeItemhead from '../../utils/type.module.css';
+}
+
+.answer {
+  composes: typeBody from '../../utils/type.module.css';
+}
+
+.contact {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.item {
+  composes: lineSolid from '../../utils/line.module.css';
+}
+
+@layer base {
+  .base {
+    --faq-bar-inset: 0px;
+
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  /* Chapter stack (§3.5 Recipe A): H2, then --ds-space-stack to the first rule. */
+  .header {
+    display: grid;
+    gap: var(--size-px-5);
+    margin-block-end: var(--ds-space-stack);
+  }
+
+  /* Section head in --role-heading; the item heads below are --primary12 [D60]. */
+  .title {
+    margin: 0;
+    color: var(--role-heading);
+  }
+
+  .intro {
+    margin: 0;
+    max-inline-size: var(--ds-measure-reading);
+    color: var(--primary12);
+  }
+
+  .list {
+    margin: 0;
+  }
+
+  /* Rules: the first is the Strong top (--border-size-2 --primary12); the rest --role-rule, closing after the last. */
+  .item {
+    border-width: 0;
+    border-block-start-width: var(--border-size-1);
+    border-color: var(--role-rule);
+  }
+
+  .item:first-child {
+    border-block-start-width: var(--border-size-2);
+    border-block-start-color: var(--primary12);
+  }
+
+  .item:last-child {
+    border-block-end-width: var(--border-size-1);
+  }
+
+  .heading {
+    margin: 0;
+  }
+
+  /* The row: ≥ --ds-size-control-xl tall, --size-px-3 vertical padding. */
+  .trigger {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--size-px-3);
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: var(--ds-size-control-xl);
+    margin: 0;
+    padding-block: var(--size-px-3);
+    padding-inline: var(--faq-bar-inset) 0;
+    border: 0;
+    background: none;
+    color: var(--primary12);
+    text-align: start;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .question {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    text-wrap: balance;
+    /* The bare-text hover underline's color, weight and offset (§10.1) [D181]. */
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  /* Trailing, top-aligned to the question's first line; it swaps direction, never rotates [D109]. */
+  .glyph {
+    flex: none;
+    margin-block: calc((1lh - var(--size-px-4)) / 2);
+  }
+
+  /* The optional open bar: a --ds-stroke-3 line at the row's start edge, shown under `barred`. */
+  .openBar {
+    display: none;
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    border-inline-start: var(--ds-stroke-3) solid var(--primary12);
+  }
+
+  /* The §10.13 clip reveal [D91]: the panel's edge wipes open; never a fade. */
+  .panel {
+    block-size: var(--accordion-panel-height);
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  /* Answers: text serif within the reading measure; --ds-space-12 below the question, --size-px-5 below. */
+  .answer {
+    max-inline-size: var(--ds-measure-reading);
+    padding-block: 0 var(--size-px-5);
+    padding-inline-start: var(--faq-bar-inset);
+    color: var(--primary12);
+  }
+
+  .contact {
+    margin: var(--size-px-5) 0 0;
+    color: var(--primary12);
+  }
+
+  @media (--motionOK) {
+    .panel {
+      transition-property: block-size;
+      transition-duration: var(--ds-duration-disclosure);
+      transition-timing-function: var(--ease-out-3);
+    }
+
+    /* Hover transition [D181]: --ds-duration-quick, --ease-out-3. */
+    .question {
+      transition-property: text-decoration-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer variants {
+  /* Ruled (default) and split rows are bare: no leading icon. */
+  .ruled .icon,
+  .split .icon {
+    display: none;
+  }
+
+  /* Keyed detail: a leading block icon per row; answers indent to the question column. */
+  .keyed .icon {
+    margin-block: calc((1lh - var(--ds-size-icon-block)) / 2);
+    color: var(--primary12);
+  }
+
+  .keyed .answer {
+    padding-inline-start: calc(var(--faq-bar-inset) + var(--ds-size-icon-block) + var(--size-px-3));
+  }
+
+  /* Barred: every row keeps the bar's inset, so questions stay aligned open or closed. */
+  .barred {
+    --faq-bar-inset: var(--ds-space-12);
+  }
+
+  /* Split (§12.5): a page-grid placement from --lg-n-above, header in 4 of 12 columns, the list in 8. */
+  @media (--lg-n-above) {
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      column-gap: var(--ds-space-margin);
+      align-items: start;
+    }
+
+    .split .header {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+      margin-block-end: 0;
+    }
+
+    .split .list,
+    .split .contact {
+      grid-column: 2;
+    }
+  }
+}
+
+@layer states {
+  /* Expanded: the question-to-answer gap closes to --ds-space-12. */
+  .trigger[data-panel-open] {
+    padding-block-end: var(--ds-space-12);
+  }
+
+  .barred .trigger[data-panel-open] .openBar {
+    display: block;
+  }
+
+  /*
+   * Hover: the question takes the bare-text underline, --role-accent at
+   * --border-size-2, offset --size-px-1; the glyph does not change
+   * (§12.5, §10.13) [D109, D181].
+   */
+  .trigger:not([data-disabled]):hover .question {
+    text-decoration-line: underline;
+  }
+
+  /* Focus: the ring around the row, inset --border-size-2 from the rules. */
+  .trigger:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: calc(-2 * var(--border-size-2));
+  }
+
+  .panel[data-starting-style],
+  .panel[data-ending-style] {
+    block-size: 0;
+  }
+}
+
+@layer print {
+  @media print {
+    /* All answers print expanded; glyphs and the open bar hide; each pair stays together (§12.5). */
+    .glyph,
+    .openBar,
+    .barred .trigger[data-panel-open] .openBar {
+      display: none;
+    }
+
+    .item {
+      break-inside: avoid;
+    }
+
+    .trigger,
+    .trigger[data-panel-open] {
+      min-block-size: 0;
+      padding-block-end: var(--ds-space-12);
+    }
+
+    .panel,
+    .panel[data-starting-style],
+    .panel[data-ending-style] {
+      block-size: auto;
+      overflow: visible;
+    }
+
+    .panel[hidden] {
+      display: block;
+      content-visibility: visible;
+    }
+  }
+}

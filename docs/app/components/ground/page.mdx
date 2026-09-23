@@ -1,0 +1,81 @@
+# Ground
+
+The ground scope: paints one of the 16 presets as a band, a field or a face, publishes its primary, secondary and action scales and its container edge, and tells every component inside it which role map to use.
+
+```tsx
+import { Ground } from '@fairgarden-private/design/components/Ground'
+```
+
+Ground writes `data-ground`, `data-tone` and `data-scheme` (and `data-theme` where the scope fixes its mode) and provides the scope through React context. Components inside take their colors from it; nothing below a Ground chooses a mode. It also publishes `--role-edge`, the edge that cards, faces and panels inside it draw.
+
+`kind` is its structural axis, and each preset belongs to one kind. The props type is a discriminated union, so a preset outside its kind is a type error.
+
+| `kind` | Presets | Mode | Geometry | `--role-edge` |
+| --- | --- | --- | --- | --- |
+| `band` (default) | The page grounds: `paper`, `white`, `tide`, `meadow`, `pollen`, `apricot`, `rose`, `heather`; and `night`, for the footer and the media hero only | Page grounds follow the page mode; `night` is always dark | Full-bleed section or the page root, with a seam rule that shows only on the night band in dark mode | `--role-rule` |
+| `field` | `forest`, `royal`, `brick` (always dark); `leaf`, `amber`, `clay`, `pink` (always light) | Fixed | Inset inside the content container, with padding, a radius and its own `--primary12` edge; never full-bleed. `framed` makes it the page's one framed feature field | `--primary12` |
+| `face` | The page grounds, as a card face, plate or panel; `night` only with `onMedia`, for the media Button | On a page ground it follows the mode; inside a field or the night band it is a light island | Set by the composing component | `--primary10`, or `--primary12` as a light island |
+
+## Page grounds
+
+import { DemoGroundPageGrounds } from './demos/page-grounds'
+
+<DemoGroundPageGrounds.Title />
+
+A page takes `paper`, `white` or one pastel as its page ground, with `paper` and `white` as its secondary bands; two pastels never meet. Each page ground paints the same step in both modes: the pastels are step 3 of their hue, a pastel in light mode and a rich near-black in dark mode. They share one ladder: rule step 10, hairline step 8 (7 in dark mode), and no soft fills, so components take their outline form. Amber is the action on all eight.
+
+<DemoGroundPageGrounds />
+
+[See Demo](./demos/page-grounds/)
+
+## Fields
+
+import { DemoGroundFields } from './demos/fields'
+
+<DemoGroundFields.Title />
+
+Saturated color arrives only as a field: a card, a CTA or campaign panel, a brand or program panel. A field sits inside the content container with page ground around it, so two fields never touch. It keeps its mode in both page modes and draws its own `--primary12` edge, which carries the boundary wherever tone does not. The solid fields carry one ink: the action becomes the ink pill, and every hover that would change only an ink also underlines.
+
+<DemoGroundFields />
+
+[See Demo](./demos/fields/)
+
+## Kinds
+
+import { DemoGroundKinds } from './demos/kinds'
+
+<DemoGroundKinds.Title />
+
+Each page ground has a companion field, which replaces the old inverse pairs. Use it for inverse placements and for the Dialog's solid cover (`companionField(preset)` returns it):
+
+| Page ground | Companion field |
+| --- | --- |
+| `paper`, `white`, `meadow`, `pollen` | `forest` |
+| `tide`, `heather` | `royal` |
+| `apricot`, `rose` | `brick` |
+
+<DemoGroundKinds />
+
+[See Demo](./demos/kinds/)
+
+## Overrides
+
+import { DemoGroundOverrides } from './demos/overrides'
+
+<DemoGroundOverrides.Title />
+
+`primary`, `secondary` and `action` override the preset's scales for the whole scope. Section heads, link underlines and rules re-resolve from the new scales. Inside tinted or solid scopes, use only pairings the §2 matrix verifies.
+
+<DemoGroundOverrides />
+
+[See Demo](./demos/overrides/)
+
+## API Reference
+
+import { TypesGround } from './types'
+
+<TypesGround />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §1.4.2 (ground families and presets), §1.5.3 (role maps) and §1.11.5 (the ground scope component) [D176–D181].

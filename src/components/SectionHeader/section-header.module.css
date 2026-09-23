@@ -1,0 +1,319 @@
+/*
+ * Section Header & Eyebrow (§11.8). CVA function `sectionHeader` in
+ * SectionHeader.tsx. Parts: base, eyebrow, eyebrowRule (the Separator),
+ * numberRow and number (technical), kickerRow, kicker, trail (with
+ * trailPath and marker), art, topicTag, heading, lede, seeAll (with
+ * seeAllLabel, seeAllArrow and printUrl), action. Type roles come by
+ * composition or from type.module.css in the component; colors follow the
+ * §11.8 Color roles table through role variables only.
+ *
+ * Gaps are visual gaps [D74]: text parts trim their half-leading where the
+ * browser supports `text-box`, so eyebrow → rule → content measure 14 / 19
+ * (--ds-space-eyebrow-rule / --ds-space-eyebrow-content) [D100].
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.eyebrowRule {
+  composes: lineSolid from '../../utils/line.module.css';
+}
+
+.trailPath {
+  composes: lineDashed from '../../utils/line.module.css';
+}
+
+.seeAll {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.printUrl {
+  composes: typeUrl from '../../utils/type.module.css';
+}
+
+@layer base {
+  /* One column of named rows; "See all" joins the heading row from --lg-n-above. */
+  .base {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'top'
+      'rule'
+      'heading'
+      'lede'
+      'seeAll'
+      'action';
+    justify-items: start;
+    min-inline-size: 0;
+    color: var(--primary12);
+  }
+
+  .eyebrow,
+  .numberRow,
+  .kickerRow,
+  .art,
+  .topicTag {
+    grid-area: top;
+  }
+
+  .eyebrow {
+    margin: 0;
+    color: var(--primary12);
+    text-box: trim-both cap alphabetic;
+  }
+
+  /* Eyebrow baseline → hairline 14, hairline → first cap 19; margin to margin, never full-bleed. */
+  .eyebrowRule {
+    grid-area: rule;
+    justify-self: stretch;
+    margin-block: var(--ds-space-eyebrow-rule) var(--ds-space-eyebrow-content);
+    border-width: 0;
+    border-block-start-width: var(--border-size-1);
+    border-color: var(--role-hairline);
+  }
+
+  .heading {
+    grid-area: heading;
+    margin: 0;
+    color: var(--role-heading);
+    text-box: trim-both cap alphabetic;
+  }
+
+  .lede {
+    grid-area: lede;
+    max-inline-size: var(--ds-measure-reading);
+    margin: var(--size-px-5) 0 0;
+    color: var(--primary12);
+    text-box: trim-both cap alphabetic;
+  }
+
+  .action {
+    grid-area: action;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ds-space-12);
+    margin-block-start: var(--size-px-5);
+  }
+
+  /* Technical: the mono number and the caps label with a colon. */
+  .numberRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--ds-space-12);
+    margin: 0;
+    color: var(--primary12);
+    text-box: trim-both cap alphabetic;
+  }
+
+  .number {
+    color: var(--primary12);
+  }
+
+  /* Trail kicker: the kicker threaded by the trail, --ds-space-halo either side. */
+  .kickerRow {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-halo);
+    max-inline-size: 100%;
+    margin-block-end: var(--ds-space-56);
+  }
+
+  .kicker {
+    min-inline-size: 0;
+    margin: 0;
+    color: var(--role-heading);
+  }
+
+  /* ornament-trail (§4.7.1): line-dashed at --border-size-2 in --role-accent; fixed art. */
+  .trail {
+    display: block;
+    flex: none;
+    overflow: visible;
+    color: var(--role-accent);
+    fill: none;
+    stroke: currentColor;
+  }
+
+  .marker {
+    fill: none;
+    stroke-width: var(--ds-stroke-1-5);
+    stroke-dasharray: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Anchored: the sticker at --ds-size-art-s; its halo touches the cap tops, no gap. */
+  .art {
+    inline-size: var(--ds-size-art-s);
+  }
+
+  .art > * {
+    display: block;
+    max-inline-size: 100%;
+    block-size: auto;
+  }
+
+  .topicTag {
+    margin-block-end: var(--size-px-3);
+  }
+
+  /* "See all →": a standalone link, underlined at rest, --ds-size-hit tall. */
+  .seeAll {
+    grid-area: seeAll;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-px-2);
+    min-block-size: var(--ds-size-hit);
+    margin-block-start: var(--size-px-5);
+    border-radius: var(--radius-1);
+    color: var(--primary12);
+    text-decoration: none;
+  }
+
+  .seeAllLabel {
+    text-decoration-line: underline;
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--ds-stroke-1-5);
+    text-underline-offset: 0.15em;
+    text-decoration-skip-ink: none;
+  }
+
+  .seeAllArrow {
+    color: var(--role-glyph);
+  }
+
+  .printUrl {
+    display: none;
+  }
+
+  @media (--motionOK) {
+    .seeAllLabel {
+      transition: color var(--ds-duration-quick) var(--ease-out-3);
+    }
+  }
+
+  /* From --lg-n-above "See all" sits at the heading row's end, baseline-aligned. */
+  @media (--lg-n-above) {
+    .base {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        'top top'
+        'rule rule'
+        'heading seeAll'
+        'lede lede'
+        'action action';
+    }
+
+    .heading {
+      align-self: last baseline;
+    }
+
+    .seeAll {
+      align-self: last baseline;
+      margin-block-start: 0;
+      margin-inline-start: var(--ds-space-40);
+    }
+  }
+}
+
+@layer variants {
+  /* Band level: the section head in --role-heading; module level: the item head in --primary12 [D60]. */
+  .band .heading {
+    color: var(--role-heading);
+  }
+
+  .module .heading {
+    color: var(--primary12);
+  }
+
+  /* Editorial, anchored and topic openers sit left over reading content. */
+  .editorial,
+  .anchored,
+  .topic {
+    justify-items: start;
+    text-align: start;
+  }
+
+  /* Trail kicker: kicker row left-weighted by its trail, the heading centred below. */
+  .trailed {
+    justify-items: center;
+    text-align: center;
+  }
+
+  /* Scene opener: heading, lede and pill centred; headline at the centred measure (§5.4). */
+  .scene {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .scene .heading {
+    max-inline-size: var(--size-content-2);
+  }
+
+  .trailed .lede,
+  .scene .lede {
+    margin-inline: auto;
+  }
+
+  .trailed .action,
+  .scene .action {
+    justify-content: center;
+  }
+
+  /* Technical: the label takes its colon. */
+  .technical .eyebrow::after {
+    content: ':';
+  }
+}
+
+@layer states {
+  /* Arrow-link hover [D181]: the label takes --role-link-hover, the arrow the
+     next tier's weight (Icon weight="interactive" in an iconHost); the rest
+     underline stays. Where the hover ink is --primary12 the underline
+     already carries it. */
+  .seeAll:hover .seeAllLabel {
+    color: var(--role-link-hover);
+  }
+
+  .seeAll:active .seeAllLabel {
+    text-decoration-color: var(--primary12);
+    text-decoration-thickness: var(--border-size-2);
+  }
+
+  .seeAll:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Kept with what follows; never ends a page (§11.8, §7.9.2). */
+    .base {
+      break-inside: avoid;
+      break-after: avoid;
+    }
+
+    /* The trail prints at 0.75 pt with a 3 / 2.5 pt dash; markers kept. */
+    .trailPath {
+      stroke-width: 0.75pt;
+      stroke-dasharray: 3pt 2.5pt;
+      stroke-linecap: butt;
+    }
+
+    /* "See all" prints as "Label (short URL)" (§7.6). */
+    .seeAll {
+      min-block-size: auto;
+    }
+
+    .seeAllArrow {
+      display: none;
+    }
+
+    .printUrl {
+      display: inline;
+    }
+  }
+}

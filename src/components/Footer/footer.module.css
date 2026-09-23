@@ -1,0 +1,683 @@
+/*
+ * Footer (§11.13). CVA function `footer`. The root is a `kind="band"`
+ * Ground (night by default), which paints the ground and draws the top
+ * seam in --role-seam (--primary12 on a dark page) [D179].
+ * Color roles (§11.13): block icon, group chevron (the named footer
+ * exception) and contact underline --role-accent; text, headings, sitemap
+ * links, address and colophon --primary12; legal text --role-muted over a
+ * --role-rule rule; every rule that bounds or separates --role-rule (dark
+ * --slate9 on night) [D173]; newsletter column rule --role-rule; sign-off
+ * --role-tint; hover --role-link-hover [D181]; current: the --ds-stroke-3
+ * start-edge bar in --primary12. Colors are role variables only; local
+ * custom properties carry dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.blockHeading {
+  composes: typeItemhead from '../../utils/type.module.css';
+}
+
+.blockBody,
+.link,
+.contact,
+.address {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.groupHeading,
+.cell,
+.contactLabel {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.contactValue {
+  composes: typeBody from '../../utils/type.module.css';
+}
+
+.legal,
+.colophon,
+.imprint {
+  composes: typeSmall from '../../utils/type.module.css';
+}
+
+.imprintUrl {
+  composes: typeUrl from '../../utils/type.module.css';
+}
+
+.wordmark {
+  composes: typeDisplayXl from '../../utils/type.module.css';
+}
+
+@layer base {
+  /* The band: top --ds-space-56 (--size-px-10 from --lg-n-above), bottom --ds-space-40. */
+  .base {
+    display: block;
+    /* As a grid or flex item, the band takes its track's width, never its content's min-content. */
+    min-inline-size: 0;
+    padding-block: var(--ds-space-56) var(--ds-space-40);
+    color: var(--primary12);
+  }
+
+  /* The frame container: --ds-container-content inside the page margins. */
+  .container {
+    box-sizing: content-box;
+    display: grid;
+    gap: var(--size-px-7);
+    max-inline-size: var(--ds-container-content);
+    margin-inline: auto;
+    padding-inline: var(--ds-space-margin);
+  }
+
+  /* Action blocks: the container `footer-blocks`; blocks → sitemap --size-px-10. */
+  .blocks {
+    container: footer-blocks / inline-size;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--ds-space-56) var(--ds-space-margin);
+    margin-block-end: calc(var(--size-px-10) - var(--size-px-7));
+  }
+
+  /* Icon → heading --size-px-3; heading → body --size-px-7; body → action --size-px-7 (LTA). */
+  .block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-inline-size: 0;
+  }
+
+  .blockIcon {
+    display: block;
+    margin-block-end: var(--size-px-3);
+    color: var(--role-accent);
+  }
+
+  .blockIcon > :where(svg) {
+    display: block;
+    inline-size: var(--ds-size-icon-block);
+    block-size: var(--ds-size-icon-block);
+  }
+
+  .blockHeading {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .blockBody {
+    margin-block-start: var(--size-px-7);
+    color: var(--primary12);
+  }
+
+  .blockBody > :where(p) {
+    margin: 0;
+  }
+
+  .blockAction {
+    margin-block-start: var(--size-px-7);
+    align-self: stretch;
+  }
+
+  /* The main row: brand, contact and social, then the sitemap (the 12-column split is a frame rule). */
+  .main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--size-px-7) var(--ds-space-margin);
+    min-inline-size: 0;
+  }
+
+  .brand {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: var(--size-px-3);
+    min-inline-size: 0;
+  }
+
+  /* Address: mixed case, unlabeled lines, never caps and never italic. */
+  .address {
+    color: var(--primary12);
+    font-style: normal;
+  }
+
+  /* Contact line: middle dots with word spaces; type-body-ui's line pitch is ≥ --size-px-5 [D62]. */
+  .contact {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .contactLink {
+    color: var(--primary12);
+    text-decoration-line: underline;
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--ds-stroke-1-5);
+    text-underline-offset: 0.15em;
+    text-decoration-skip-ink: none;
+  }
+
+  /* Social: outline icons at the tag tier (20 px) or text, each in a --ds-size-hit target. */
+  .social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--size-px-2);
+    margin: 0;
+    margin-inline-start: calc((var(--ds-size-hit) - var(--size-px-4)) / -2);
+    padding: 0;
+    list-style: none;
+  }
+
+  .socialLink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--ds-size-hit);
+    min-block-size: var(--ds-size-hit);
+    border-radius: var(--radius-1);
+    color: var(--primary12);
+    text-decoration-line: none;
+  }
+
+  .socialIcon,
+  .socialIcon > :where(svg) {
+    display: block;
+    inline-size: var(--size-px-4);
+    block-size: var(--size-px-4);
+  }
+
+  /* The sitemap: the container `footer-sitemap` its groups query. */
+  .sitemap {
+    container: footer-sitemap / inline-size;
+    min-inline-size: 0;
+  }
+
+  /*
+   * Link groups. Baseline: stacked and open; viewport fallbacks 2-up at
+   * --md-n-above and 4-up at --lg-n-above; the container rules follow.
+   */
+  .groups {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--size-px-7) var(--ds-space-margin);
+  }
+
+  .group {
+    min-inline-size: 0;
+  }
+
+  .groupHeading {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  /* The group head link: a Link list link (`kind="nav"` with `list`), which owns its ink and states [D181]. */
+  .groupLink {
+    gap: var(--ds-space-12);
+  }
+
+  /* The group chevron: chevron_right, inline tier, --role-accent on every ground (§9.1). */
+  .chevron {
+    color: var(--role-accent);
+  }
+
+  .links {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /*
+   * Sitemap links: type-body-ui, no rest underline. They are Link list
+   * links (`kind="nav"` with `list`): Link sets the --ds-size-hit row, so
+   * every link meets the hit minimum (navigation, not prose), the ink, the
+   * external mark and the states [D43, D80, D181].
+   */
+  .link {
+    box-sizing: border-box;
+  }
+
+  /* The section's own link heads its list at base (the Accordion), › after a --ds-space-12 gap. */
+  .link .chevron {
+    margin-inline-start: var(--ds-space-12);
+  }
+
+  /* The newsletter column: behind its rule; the rule is horizontal while the column stacks. */
+  .column {
+    position: relative;
+    min-inline-size: 0;
+  }
+
+  .columnRule {
+    display: block;
+    margin-block-end: var(--size-px-7);
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  .backToTop {
+    margin: 0;
+  }
+
+  /*
+   * Legal row: a --border-size-1 --role-rule rule above (a boundary [D173]);
+   * type-small at --font-weight-6 in --role-muted. Base: links stacked, ©
+   * last; from --md-n-above one line, © left, links right.
+   */
+  .legal {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-px-2) var(--size-px-5);
+    padding-block-start: var(--size-px-3);
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+    color: var(--role-muted);
+    font-weight: var(--font-weight-6);
+  }
+
+  .legalLinks {
+    display: flex;
+    flex-direction: column;
+    gap: 0 var(--size-px-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Legal links: Link's `muted` ancestor ink (`kind="nav"`), with its color-only hover [D181]. */
+  .legalLink {
+    box-sizing: border-box;
+  }
+
+  .copyright {
+    margin: 0;
+  }
+
+  .colophon {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  /* Print only. */
+  .imprint {
+    display: none;
+  }
+
+  .imprintName,
+  .imprintLine {
+    margin: 0;
+  }
+
+  .imprintName {
+    font-weight: var(--font-weight-7);
+  }
+
+  /* Accordion at base, open groups from --md-n-above; shown only above 24 links [D174]. */
+  .sitemapAccordion {
+    display: none;
+  }
+
+  /* Link animates its own list and legal links. */
+  @media (--motionOK) {
+    .socialLink,
+    .contactLink {
+      transition-property: color, text-decoration-color, text-decoration-thickness;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+
+  /* Frame (viewport): band padding from --lg-n-above. */
+  @media (--lg-n-above) {
+    .base {
+      padding-block-start: var(--size-px-10);
+    }
+  }
+}
+
+@layer variants {
+  /* Field guide: from --md-n-above the legal row runs on one line, © left, links right. */
+  @media (--md-n-above) {
+    .legal {
+      flex-direction: row-reverse;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .legalLinks {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+
+  /*
+   * Field guide, from --lg-n-above (frame): 12 columns, brand, contact and
+   * social in 1–4, the sitemap in 5–12. With the newsletter column: brand
+   * above the sitemap in 1–7, the newsletter in 8–12 behind a vertical
+   * rule [D187].
+   */
+  @media (--lg-n-above) {
+    .guide .main {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+
+    .guide .brand {
+      grid-column: 1 / span 4;
+    }
+
+    .guide .sitemap {
+      grid-column: 5 / -1;
+    }
+
+    .newsletterColumn .brand,
+    .newsletterColumn .sitemap {
+      grid-column: 1 / span 7;
+    }
+
+    .newsletterColumn .column {
+      grid-column: 8 / -1;
+      grid-row: 1 / span 2;
+    }
+
+    .newsletterColumn .columnRule {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: calc(var(--ds-space-margin) / -2);
+      margin: 0;
+      border-block-start: 0;
+      border-inline-start: var(--border-size-1) solid var(--role-rule);
+    }
+  }
+
+  /* Blocks: viewport fallback 3-up from --lg-n-above; the container rules refine it. */
+  @media (--lg-n-above) {
+    .blocks {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @container footer-blocks (width < 944px) {
+    .blocks {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @container footer-blocks (width >= 944px) {
+    .blocks {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  /* Groups: viewport fallbacks 2-up at --md-n-above, 4-up at --lg-n-above (3-up beside the newsletter). */
+  @media (--md-n-above) {
+    .groups {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (--lg-n-above) {
+    .groups {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .newsletterColumn .groups {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  /* Groups on `footer-sitemap`: 2-up from 480 px, 4-up from 600 px (4 × 120 + 3 × 40); capped at 3 [D187]. */
+  @container footer-sitemap (width < 480px) {
+    .groups {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @container footer-sitemap (480px <= width < 600px) {
+    .groups {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @container footer-sitemap (width >= 600px) {
+    .groups {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .newsletterColumn .groups {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  /* Above 24 links the groups collapse into an Accordion at base only; at 24 or fewer they stay open. */
+  @media (--md-n-below) {
+    .collapsed .sitemapAccordion {
+      display: block;
+    }
+
+    .collapsed .groups {
+      display: none;
+    }
+  }
+
+  /* Sign-off: a large wordmark in the tint, cropped by the band's bottom edge. */
+  .signoff {
+    padding-block-end: 0;
+  }
+
+  /*
+   * The wordmark's box stops at about three quarters of its line, so the
+   * band's bottom edge crops the glyphs (the band itself never clips, so a
+   * straddle card above stays whole).
+   */
+  .wordmark {
+    box-sizing: content-box;
+    max-inline-size: var(--ds-container-content);
+    block-size: 0.75em;
+    margin: var(--size-px-7) auto 0;
+    padding-inline: var(--ds-space-margin);
+    overflow: clip;
+    color: var(--role-tint);
+    font-size: calc(var(--ds-font-size-display-xl) * 3);
+    line-height: 1;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  /*
+   * Ruled grid: a page ground opened by the chrome rule; a full-bleed
+   * --border-size-1 cell grid of caps link cells (≥ --size-px-9 tall,
+   * centered); contact rows as caps label plus serif value. Cells 2-up from
+   * 480 px of the sitemap, 4-up from 600 px (viewport fallbacks
+   * --md-n-above, --lg-n-above).
+   */
+  .ruled {
+    padding-block-start: 0;
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  .cells {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0 0 var(--size-px-7);
+    padding: 0;
+    border-block-end: var(--border-size-1) solid var(--role-rule);
+    list-style: none;
+  }
+
+  .cells > li + li {
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  /* A cell is a Link list link; its block box and pitch are restated in the compounds layer, over Link's. */
+  .cell {
+    justify-content: center;
+    padding-inline: var(--size-px-3);
+    text-align: center;
+  }
+
+  @media (--md-n-above) {
+    .cells {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cells > li {
+      border-block-start: var(--border-size-1) solid var(--role-rule);
+      border-inline-end: var(--border-size-1) solid var(--role-rule);
+    }
+
+    .cells > li:nth-child(-n + 2) {
+      border-block-start: 0;
+    }
+  }
+
+  @media (--lg-n-above) {
+    .cells {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .cells > li:nth-child(-n + 4) {
+      border-block-start: 0;
+    }
+  }
+
+  .contactRows {
+    display: grid;
+    margin: 0;
+  }
+
+  .contactRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: var(--size-px-3);
+    align-items: baseline;
+    padding-block: var(--size-px-2);
+    border-block-end: var(--border-size-1) solid var(--role-rule);
+  }
+
+  .contactLabel,
+  .contactValue {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  /* Minimal: a --border-size-1 top rule; the logo, one link line, the legal row, the colophon. */
+  .minimal {
+    padding-block-start: var(--size-px-7);
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  .linkLine {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--size-px-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+}
+
+@layer compounds {
+  /* Ruled cells fill their grid cell: a block flex box at --size-px-9, over Link's inline `nav` row. */
+  .cell {
+    display: flex;
+    min-block-size: var(--size-px-9);
+  }
+}
+
+@layer states {
+  /*
+   * Hover [D181]: sitemap, group, cell, back-to-top and legal links are
+   * Link list and muted links, which own their color-only hover (the
+   * underline where --role-link-hover resolves to --primary12), press and
+   * ring. Social links take --role-link-hover only; contact links,
+   * underlined at rest, take the body link's hover. No circle, lift or
+   * fill.
+   */
+  .socialLink:hover {
+    color: var(--role-link-hover);
+  }
+
+  .contactLink:hover {
+    color: var(--role-link-hover);
+    text-decoration-thickness: var(--border-size-2);
+  }
+
+  /* Forced colors flatten inks, so every color-only hover adds an underline or outline [D181]. */
+  @media (--forcedColors) {
+    .socialLink:hover {
+      outline: var(--border-size-2) solid currentColor;
+    }
+  }
+
+  /*
+   * Current page: a --ds-stroke-3 --primary12 start-edge bar and weight 700,
+   * hanging in the gutter, in place of Link's current underline [D15]. The
+   * list parent raises these over Link's `nav` current rule.
+   */
+  .links .link[aria-current='page'],
+  .linkLine .link[aria-current='page'],
+  .cells .cell[aria-current='page'],
+  .legalLinks .legalLink[aria-current='page'] {
+    margin-inline-start: calc(-1 * (var(--ds-stroke-3) + var(--size-px-2)));
+    padding-inline-start: var(--size-px-2);
+    border-inline-start: var(--ds-stroke-3) solid var(--primary12);
+    color: var(--primary12);
+    font-weight: var(--font-weight-7);
+    text-decoration-line: none;
+  }
+
+  .cells .cell[aria-current='page'] {
+    margin-inline-start: 0;
+  }
+
+  /* Focus: the 2 px --primary12 ring at a 2 px offset, keyboard only [D45]; Link rings its own links. */
+  .socialLink:focus-visible,
+  .contactLink:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  /* Cells ring inside their grid cell. */
+  .cells .cell:focus-visible {
+    outline-offset: calc(-1 * var(--border-size-2) * 2);
+  }
+}
+
+@layer print {
+  @media print {
+    /*
+     * Only the imprint prints (§7.12.3): organization, address, contact
+     * written out, "Printed on", ©, colophon, in black at 8–8.5 pt above a
+     * 0.75 pt rule. The sitemap (built from the panel data [D187]), social
+     * links, buttons, forms, sign-off and back-to-top drop.
+     */
+    .base {
+      padding-block: var(--size-px-3) 0;
+    }
+
+    .blocks,
+    .main,
+    .sitemap,
+    .social,
+    .backToTop,
+    .legal,
+    .colophon,
+    .wordmark,
+    .brand,
+    .address,
+    .contactRows {
+      display: none;
+    }
+
+    .container {
+      display: block;
+      padding: 0;
+    }
+
+    .imprint {
+      display: grid;
+      gap: var(--size-px-1);
+      padding-block-start: var(--size-px-2);
+      border-block-start: var(--border-size-1) solid var(--primary12);
+      color: var(--primary12);
+      break-inside: avoid;
+    }
+  }
+}

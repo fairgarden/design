@@ -1,0 +1,76 @@
+# Form
+
+Anything submitted: a Base UI Form, one column at `--size-sm`, with an error summary at the top and an action row at the end. Instant-apply settings are switches, not forms.
+
+```tsx
+import {
+  Form,
+  FormActions,
+  FormRow,
+  FormSummary,
+} from '@fairgarden-private/design/components/Form'
+```
+
+The root is the inline-size container `form`: short pairs share a row from 480 px of form width, framed fieldsets tighten below 360 px, and a butted submit turns icon-only there. Base UI validates on submit and then re-validates failed fields as they change.
+
+## Summary, pairs and actions
+
+import { DemoFormStates } from './demos/states'
+
+<DemoFormStates.Title />
+
+`FormSummary` is the danger Alert with a `type-subhead` heading and a link to each failing field; render it only while there are errors, and it takes focus when it appears. `FormRow` holds a short pair in a 2:1 split. In `FormActions`, author the solid submit last: it shows first and full width at base and rightmost from `--md-n-above`. `busy` makes the form inert while the submit reads "Sending…".
+
+<DemoFormStates />
+
+[See Demo](./demos/states/)
+
+## Primary scale
+
+import { DemoFormColor } from './demos/color'
+
+<DemoFormColor.Title />
+
+The Form's `primary` reaches every field inside it; `secondary` is accepted and unused.
+
+<DemoFormColor />
+
+[See Demo](./demos/color/)
+
+## On grounds
+
+import { DemoFormGrounds } from './demos/grounds'
+
+<DemoFormGrounds.Title />
+
+On forest the field roles take the deep ground's map and the submit stays amber.
+
+<DemoFormGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesForm, TypesFormAdditional } from './types'
+
+### Form
+
+<TypesForm.Form />
+
+### FormSummary
+
+<TypesForm.FormSummary />
+
+### FormRow and FormActions
+
+<TypesForm.FormRow />
+
+<TypesForm.FormActions />
+
+### Additional types
+
+<TypesFormAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §10.2 (field, fieldset and form) and §5.10.2 (the form's container thresholds).

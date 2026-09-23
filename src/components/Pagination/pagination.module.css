@@ -1,0 +1,400 @@
+/*
+ * Pagination (§9.9). CVA function `pagination` in Pagination.tsx. Parts:
+ * base (the nav, the `pagination` container), list, item, page (a number:
+ * Link kind="nav"), current, gap ("…"), step / prev / next (Previous and
+ * Next: `text` Buttons; on the step pager, icon-only outline Buttons), word
+ * (their label), status (statusWord + statusCount), dots / dot (the step
+ * pager's position dots), more (the "Show More" Button), visuallyHidden,
+ * printLine. Colors follow the §9.9 Color roles table through role
+ * variables only; the arrows' --role-glyph, the page numbers' hover and the
+ * step buttons' states come from Button and Link. Local custom properties
+ * carry dimensions only:
+ *   --pagination-dot          a dot's diameter (10 px)
+ *   --pagination-dot-current  the current dot's diameter (12 px)
+ *
+ * Tier classes: `near` marks what the 1-sibling row shows, `far` what the
+ * 2-sibling row shows; the media and container rules below pick one.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. Previous and Next are caps
+ * wayfinding (`type-label`) [D165]; the figures take `type-data`'s mono face
+ * and tabular numerals at `type-label` size [D174, D175]. */
+.step {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.page {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.current {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.gap {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.statusCount {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.statusWord {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.printLine {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+@layer base {
+  /* Previous at the start, Next at the end, the numbers centered; an omitted
+     end keeps its column, so the row stays put. --ds-space-40 above. */
+  .base {
+    container: pagination / inline-size;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: var(--ds-space-12);
+    margin-block-start: var(--ds-space-40);
+    color: var(--primary12);
+    white-space: nowrap;
+  }
+
+  .prev {
+    grid-row: 1;
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  .next {
+    grid-row: 1;
+    grid-column: 3;
+    justify-self: end;
+  }
+
+  .list {
+    display: none;
+    grid-row: 1;
+    grid-column: 2;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .item {
+    display: none;
+  }
+
+  /* "Page 5 of 12": the word in `type-caption`, the count mono (§9.9). */
+  .status {
+    display: block;
+    grid-row: 1;
+    grid-column: 2;
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  /* Current: unlinked, on the same --ds-size-hit cell as a page link. */
+  .current {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--ds-size-hit);
+    min-block-size: var(--ds-size-hit);
+    color: var(--primary12);
+  }
+
+  /* The current bar: --ds-stroke-3, --size-px-4 wide, under the numeral. A
+     border, so it survives forced colors. Physical offsets: centering is
+     direction-agnostic with the translate. */
+  .current::after {
+    content: '';
+    position: absolute;
+    bottom: var(--ds-space-12);
+    left: 50%;
+    display: none;
+    inline-size: var(--size-px-4);
+    border-block-end: var(--ds-stroke-3) solid var(--primary12);
+    translate: -50% 0;
+  }
+
+  /* Gap "…": --role-muted, not focusable, on a --ds-size-hit cell. */
+  .gap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--ds-size-hit);
+    min-block-size: var(--ds-size-hit);
+    color: var(--role-muted);
+  }
+
+  /*
+   * Previous and Next words: pagination is bare text, so their hover is the
+   * bare-text underline, as a page number's, not the `text` Button's ink
+   * (§9.9) [D181]. The word keeps --primary12 and, as an inline block,
+   * carries its own underline instead of the Button label's.
+   */
+  .word {
+    display: inline-block;
+    color: var(--primary12);
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  /* The step pager's dots: 10 px --ds-stroke-1-5 --primary12 outlines, --size-px-2 apart. */
+  .dots {
+    --pagination-dot: var(--ds-size-pager-dot);
+    --pagination-dot-current: var(--ds-size-pager-dot-current);
+
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-2);
+  }
+
+  .dot {
+    flex: none;
+    box-sizing: border-box;
+    inline-size: var(--pagination-dot);
+    block-size: var(--pagination-dot);
+    border: var(--ds-stroke-1-5) solid var(--primary12);
+    border-radius: var(--radius-round);
+  }
+
+  @media (--motionOK) {
+    .word {
+      transition-property: text-decoration-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+
+  .visuallyHidden {
+    position: absolute;
+    inline-size: var(--border-size-1);
+    block-size: var(--border-size-1);
+    margin: calc(var(--border-size-1) * -1);
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .printLine {
+    display: none;
+    grid-column: 1 / -1;
+    margin: 0;
+    white-space: normal;
+  }
+}
+
+@layer variants {
+  /* Figures at `type-label` size (P4) [D174]. */
+  .page,
+  .current,
+  .gap,
+  .statusCount {
+    font-size: var(--ds-font-size-label);
+  }
+
+  /* A number: a --ds-size-hit square hit area, no box, no rest underline [D80]. */
+  .page {
+    justify-content: center;
+    min-inline-size: var(--ds-size-hit);
+  }
+
+  /* Compact: "Page 5 of 12" between the steps at every width. */
+  .compact .status {
+    display: block;
+  }
+
+  /*
+   * Step pager: icon-only ‹ › circles (--ds-size-control-md) around the
+   * mono "3 of 12", centred; an omitted end keeps its column (§9.9).
+   */
+  .kindStep,
+  .kindDots {
+    grid-template-columns: var(--ds-size-control-md) auto var(--ds-size-control-md);
+    justify-content: center;
+  }
+
+  /* With dots: the dots between the circles, the count still shown under them. */
+  .kindDots .dots {
+    grid-row: 1;
+    grid-column: 2;
+    justify-self: center;
+  }
+
+  .kindDots .status {
+    grid-row: 2;
+    justify-self: center;
+    margin-block-start: var(--size-px-2);
+  }
+
+  /* Show more: "Showing 20 of 54" over the outline Button, centred. */
+  .kindMore {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: var(--size-px-3);
+  }
+
+  /* Numbered, container-first [D163]. Baseline: the compact status. Viewport
+     fallback: numbered from --md-n-above with 1 sibling, 2 from --lg-n-above. */
+  @media (--md-n-above) {
+    .numbered .list {
+      display: flex;
+    }
+
+    .numbered .status {
+      display: none;
+    }
+
+    .near {
+      display: flex;
+    }
+  }
+
+  @media (--lg-n-above) {
+    .item {
+      display: none;
+    }
+
+    .far {
+      display: flex;
+    }
+  }
+
+  /* Container thresholds (§5.10.2): from 768 px numbered with 1 sibling, from
+     1024 px 2 siblings. The row drops siblings; it never wraps. */
+  @container pagination (width < 768px) {
+    .numbered .list {
+      display: none;
+    }
+
+    .numbered .status {
+      display: block;
+    }
+  }
+
+  @container pagination (width >= 768px) {
+    .numbered .list {
+      display: flex;
+    }
+
+    .numbered .status {
+      display: none;
+    }
+
+    .item {
+      display: none;
+    }
+
+    .near {
+      display: flex;
+    }
+  }
+
+  @container pagination (width >= 1024px) {
+    .item {
+      display: none;
+    }
+
+    .far {
+      display: flex;
+    }
+  }
+
+  /* Stack guard: below 360 px the words drop and the chevrons stand alone on
+     their --ds-size-hit targets, still named "Previous" and "Next" [D166].
+     The Button's gap closes with the word. */
+  @media (--xs-n-below) {
+    .step {
+      column-gap: 0;
+    }
+
+    .word {
+      position: absolute;
+      inline-size: var(--border-size-1);
+      block-size: var(--border-size-1);
+      margin: calc(var(--border-size-1) * -1);
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+  }
+
+  @container pagination (width < 360px) {
+    .step {
+      column-gap: 0;
+    }
+
+    .word {
+      position: absolute;
+      inline-size: var(--border-size-1);
+      block-size: var(--border-size-1);
+      margin: calc(var(--border-size-1) * -1);
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+  }
+}
+
+@layer states {
+  /* Current: the --ds-stroke-3 bar in --primary12 plus --font-weight-7. */
+  .current[aria-current='page'] {
+    font-weight: var(--font-weight-7);
+  }
+
+  .current[aria-current='page']::after {
+    display: block;
+  }
+
+  /* The current dot: solid --primary12 and larger, so shape and size change, not only fill. */
+  .dot[aria-current='true'] {
+    inline-size: var(--pagination-dot-current);
+    block-size: var(--pagination-dot-current);
+    background-color: var(--primary12);
+  }
+
+  /* Previous / Next hover: the bare-text underline on the word [D181]. */
+  .step:hover .word {
+    text-decoration-line: underline;
+  }
+
+  /* Pressed: the underline at --border-size-2 in --primary12. */
+  .step:active .word {
+    text-decoration-line: underline;
+    text-decoration-color: var(--primary12);
+  }
+}
+
+@layer print {
+  @media print {
+    /* The pager is hidden and its links print nothing [D80]; with `items`,
+       one state line prints in its place, the full-list URL per §7.6. */
+    .base {
+      display: block;
+      margin-block-start: 0;
+    }
+
+    .prev,
+    .next,
+    .list,
+    .status,
+    .dots,
+    .more {
+      display: none;
+    }
+
+    .printLine {
+      display: block;
+      margin-block-start: var(--size-px-3);
+    }
+  }
+}

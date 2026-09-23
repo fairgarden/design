@@ -1,0 +1,30 @@
+declare const styles: {
+  readonly "action": string;
+  readonly "bar": string;
+  readonly "base": string;
+  readonly "brandDrawing": string;
+  readonly "compact": string;
+  readonly "frame": string;
+  readonly "iconButtons": string;
+  readonly "inner": string;
+  readonly "locale": string;
+  readonly "logo": string;
+  readonly "logoMark": string;
+  readonly "masthead": string;
+  readonly "menuSlot": string;
+  readonly "nav": string;
+  readonly "ruled": string;
+  readonly "skipLink": string;
+  readonly "slot": string;
+  readonly "strip": string;
+  readonly "tools": string;
+  readonly "utility": string;
+  readonly "utilityInner": string;
+  readonly "utilityItem": string;
+  readonly "utilityLabel": string;
+  readonly "utilityLink": string;
+  readonly "utilityList": string;
+  readonly "utilityNav": string;
+};
+export = styles;
+

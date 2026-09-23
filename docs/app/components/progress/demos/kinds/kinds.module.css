@@ -1,0 +1,13 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-5);
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-12);
+  align-items: center;
+}

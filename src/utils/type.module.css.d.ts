@@ -1,0 +1,34 @@
+declare const styles: {
+  readonly "typeBody": string;
+  readonly "typeBodyUi": string;
+  readonly "typeButton": string;
+  readonly "typeButtonLg": string;
+  readonly "typeButtonSm": string;
+  readonly "typeCaption": string;
+  readonly "typeData": string;
+  readonly "typeDisplay": string;
+  readonly "typeDisplayXl": string;
+  readonly "typeEyebrow": string;
+  readonly "typeFieldLabel": string;
+  readonly "typeFootnote": string;
+  readonly "typeH2": string;
+  readonly "typeItemhead": string;
+  readonly "typeKicker": string;
+  readonly "typeLabel": string;
+  readonly "typeLead": string;
+  readonly "typeLockupAccent": string;
+  readonly "typeLockupCaps": string;
+  readonly "typeMarquee": string;
+  readonly "typeMuted": string;
+  readonly "typeQuote": string;
+  readonly "typeReadout": string;
+  readonly "typeRunin": string;
+  readonly "typeSecondaryName": string;
+  readonly "typeSmall": string;
+  readonly "typeStat": string;
+  readonly "typeStatCompact": string;
+  readonly "typeSubhead": string;
+  readonly "typeUrl": string;
+};
+export = styles;
+

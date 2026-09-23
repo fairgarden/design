@@ -1,0 +1,55 @@
+# Switch
+
+A Base UI Switch for a setting that takes effect the moment it flips, with a label and an "On" / "Off" state word.
+
+```tsx
+import { Switch } from '@fairgarden-private/design/components/Switch'
+```
+
+Label the setting, not the action. In a form that is submitted later, use a Checkbox instead, and never use a switch for a choice that isn't on or off. Off → on changes the thumb's position and shape (ring → disc), the edge weight and the fill, so the state never rests on fill alone.
+
+## States
+
+import { DemoSwitchStates } from './demos/states'
+
+<DemoSwitchStates.Title />
+
+`kind="row"` (default) puts the label left and the switch right, with a hairline rule under each row; `kind="inline"` puts the switch first. Hover gives an off track a soft `--primary3` fill where soft fills apply, lightens an on track to `--role-select-hover` and underlines the label; the edge and thumb never change. Disabled draws a dotted track and a muted thumb ring. While a change saves remotely, pass `aria-busy`: the state word reads "Saving…" and the switch is inert; on failure revert `checked` and explain in a toast.
+
+<DemoSwitchStates />
+
+[See Demo](./demos/states/)
+
+## Primary and secondary
+
+import { DemoSwitchColor } from './demos/color'
+
+<DemoSwitchColor.Title />
+
+`secondary` drives the on track and thumb through `--role-select`; `primary` drives the off track, the thumb ring, the label and the state word. Neither is defaulted.
+
+<DemoSwitchColor />
+
+[See Demo](./demos/color/)
+
+## On grounds
+
+import { DemoSwitchGrounds } from './demos/grounds'
+
+<DemoSwitchGrounds.Title />
+
+On is green on paper and the inverse pair on forest and the saturated grounds. In print the graphic is hidden and each row prints as "Label: On".
+
+<DemoSwitchGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesSwitch } from './types'
+
+<TypesSwitch />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §10.9 (switch) and §10.1 (the selected fill).

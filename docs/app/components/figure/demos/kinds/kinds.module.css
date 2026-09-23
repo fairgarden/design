@@ -1,0 +1,46 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-7);
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.photo {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.sky {
+  fill: var(--secondary4);
+}
+
+.hills {
+  fill: var(--secondary8);
+}
+
+.water {
+  fill: var(--primary6);
+}
+
+.reeds {
+  fill: none;
+  stroke: var(--primary12);
+  stroke-width: var(--border-size-2);
+  stroke-linecap: round;
+}
+
+.drawing {
+  display: block;
+  inline-size: var(--size-px-14);
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+.line {
+  fill: none;
+  stroke: var(--primary12);
+  stroke-width: var(--border-size-2);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

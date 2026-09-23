@@ -1,0 +1,53 @@
+/*
+ * Alert Dialog (§10.14). CVA function `alertDialog` in AlertDialog.tsx.
+ * Parts: base (the panel, beside the Dialog's own base), glyph. The panel,
+ * body, title, description and action bar are the Dialog's
+ * (dialog.module.css); this module adds only the Alert's status glyph:
+ * ▲ with ! (warning) or ◆ with × (danger) at --ds-size-icon-block above the
+ * title, in --role-status of the status scale, which the glyph carries as
+ * its own secondary, with its inner mark [D58, D129, D141, D155].
+ */
+
+@layer base {
+  /* Local dimension: the glyph's inset matches the panel's padding at each tier. */
+  .base {
+    --alert-dialog-inset: var(--size-px-3);
+  }
+
+  @media (--lg-n-above) {
+    .base {
+      --alert-dialog-inset: var(--size-px-7);
+    }
+  }
+
+  /*
+   * The status glyph at the block tier: shape and inner mark in
+   * --role-status (currentColor); knockouts in --role-status-fill. Drawn on
+   * a 20 px grid, so the inner mark scales with the glyph.
+   */
+  .glyph {
+    flex: none;
+    display: block;
+    inline-size: var(--ds-size-icon-block);
+    block-size: var(--ds-size-icon-block);
+    margin-block-start: var(--alert-dialog-inset);
+    margin-inline: var(--alert-dialog-inset);
+    overflow: visible;
+    color: var(--role-status);
+    fill: var(--role-status-fill);
+    stroke: var(--role-status-fill);
+    stroke-width: var(--ds-stroke-1-5);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Forced colors: keep the shape and its knockout mark legible. */
+  @media (--forcedColors) {
+    .glyph {
+      forced-color-adjust: none;
+      color: CanvasText;
+      fill: Canvas;
+      stroke: Canvas;
+    }
+  }
+}

@@ -1,0 +1,552 @@
+/*
+ * Newsletter Signup (§11.11). CVA functions `newsletter` and
+ * `newsletterStatus`. Field, Input, Checkbox, Form and Button keep their
+ * own modules (§1.11.1); this module lays out the card, the rows and the
+ * copy.
+ * Color roles (§11.11): icon --role-accent; heading --primary12 (band
+ * --role-heading); pitch --primary12; field box: the ground's --role-rule
+ * edge (Input), a `white` face plate on a grained card; submit: the action
+ * roles (Button); legal --primary12, links underlined in --role-accent
+ * (Link); status glyph --role-status (the status scale's --secondary11, or
+ * --primary12 on one-ink grounds), word --primary12; the straddle card: a
+ * `royal` field, edge --role-edge (its --primary12, drawn by Ground), grain
+ * --role-grain-dark only. Colors are role variables only; local custom
+ * properties carry dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.heading {
+  composes: typeItemhead from '../../utils/type.module.css';
+}
+
+.bandHeading {
+  composes: typeH2 from '../../utils/type.module.css';
+}
+
+.pitch {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.legal {
+  composes: typeSmall from '../../utils/type.module.css';
+}
+
+.statusText {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.printLine {
+  composes: typeSmall from '../../utils/type.module.css';
+}
+
+.printUrl {
+  composes: typeUrl from '../../utils/type.module.css';
+}
+
+/* The card's grain (royal grain is one-sided: --role-grain-dark only, §1.5.16). */
+.grainedCard {
+  composes: patternGrain from '../../utils/pattern.module.css';
+}
+
+/* Reading pages: the body role, so the reading measure (66ch) matches the prose column's. */
+.reading {
+  composes: typeBody from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base {
+    display: block;
+    min-inline-size: 0;
+    color: var(--primary12);
+  }
+
+  /* The content: the inline-size container `newsletter` its rows query. */
+  .content {
+    container: newsletter / inline-size;
+    min-inline-size: 0;
+  }
+
+  .layout {
+    display: grid;
+    gap: var(--size-px-5);
+    min-inline-size: 0;
+  }
+
+  .intro {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: var(--ds-space-12);
+    min-inline-size: 0;
+  }
+
+  /* Block-tier icon (36 px) in --role-accent, --size-px-3 above the heading (LTA). */
+  .icon {
+    display: block;
+    inline-size: var(--ds-size-icon-block);
+    block-size: var(--ds-size-icon-block);
+    margin-block-end: calc(var(--size-px-3) - var(--ds-space-12));
+    color: var(--role-accent);
+  }
+
+  .icon > :where(svg, img) {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .heading {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .bandHeading {
+    margin: 0;
+    color: var(--role-heading);
+  }
+
+  .pitch {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .formArea {
+    min-inline-size: 0;
+  }
+
+  /* The field row: the email field grows; a pill joins it once both fit, and wraps (full width) otherwise. */
+  .fields {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--ds-space-12);
+    min-inline-size: 0;
+  }
+
+  .fields > :where(*) {
+    flex: 999 1 var(--size-px-12);
+    min-inline-size: 0;
+  }
+
+  .fields > .submit {
+    flex: 1 0 auto;
+  }
+
+  .emailField,
+  .postcodeField {
+    min-inline-size: 0;
+  }
+
+  /* The consent Checkbox sits under the fields, before the legal line. */
+  .consent {
+    align-self: flex-start;
+  }
+
+  /* Legal line: type-small at --font-weight-6; links are Links, underlined at rest. */
+  .legal {
+    margin: 0;
+    color: var(--primary12);
+    font-weight: var(--font-weight-6);
+  }
+
+  /*
+   * Status (§1.5.4): the glyph at the tag tier in --role-status, knockouts
+   * in --role-status-fill; the word and sentence in --primary12. Focus moves
+   * here on success; the ring shows for keyboard users only.
+   */
+  .status {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: var(--size-px-2);
+    color: var(--primary12);
+    scroll-margin-block: var(--ds-space-margin);
+  }
+
+  .statusGlyph {
+    display: block;
+    inline-size: var(--size-px-4);
+    block-size: var(--size-px-4);
+    block-size: 1lh;
+    overflow: visible;
+    color: var(--role-status);
+    fill: var(--role-status-fill);
+    stroke: var(--role-status-fill);
+    stroke-width: var(--ds-stroke-1-5);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .statusText {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .statusTitle {
+    font-weight: var(--font-weight-7);
+  }
+
+  .visuallyHidden {
+    position: absolute;
+    inline-size: var(--border-size-1);
+    block-size: var(--border-size-1);
+    margin: calc(var(--border-size-1) * -1);
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .printLine {
+    display: none;
+  }
+
+  @media (--forcedColors) {
+    .statusGlyph {
+      forced-color-adjust: none;
+      color: CanvasText;
+      fill: Canvas;
+      stroke: Canvas;
+    }
+  }
+}
+
+@layer variants {
+  /*
+   * Success replaces the form (● with its check, "Subscribed", one
+   * sentence); a server-failure warning (▲ with !) sits above the submit,
+   * its message at weight 600 like a field error. Each takes its status
+   * scale as secondary through the scale class beside it [D129].
+   */
+  .success {
+    padding-block: var(--size-px-2);
+  }
+
+  .warning .statusText {
+    font-weight: var(--font-weight-6);
+  }
+
+  /* Inline (footer): icon → heading → pitch → the field with its butted cell, then the legal line. */
+  .inline .layout {
+    gap: var(--size-px-5);
+  }
+
+  /*
+   * Straddle card (§5.6.2): a royal field at --ds-radius-conditional-20
+   * (square where a phone runs it edge to edge), padding --size-px-4 (the
+   * nominal radius). The column width at base; --size-sm, centered, from
+   * --md-n-above. It rises across the seam of the band it opens by
+   * --newsletter-overlap (measured), sits above both grounds, and keeps
+   * --ds-space-56 before the lower band's content.
+   */
+  .straddle {
+    position: relative;
+    z-index: var(--layer-1);
+    margin-block: calc(-1 * var(--newsletter-overlap, 0px)) var(--ds-space-56);
+  }
+
+  .card {
+    padding: var(--size-px-4);
+    border-radius: var(--ds-radius-conditional-20);
+  }
+
+  .straddle .card {
+    margin-inline: auto;
+  }
+
+  @media (--md-n-above) {
+    .straddle .card {
+      max-inline-size: var(--size-sm);
+    }
+  }
+
+  /* Heading → field --size-px-7; between fields --ds-space-12; fields → legal → button --size-px-5. */
+  .straddle .layout {
+    gap: var(--size-px-7);
+  }
+
+  .straddle .intro {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .straddle .fields {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+  }
+
+  .straddle .fields > :where(*) {
+    flex: none;
+  }
+
+  .straddle .legal {
+    text-align: center;
+  }
+
+  .straddle .form,
+  .reading .form {
+    max-inline-size: none;
+  }
+
+  /* The submit pill: full width at base in the single-column form; it hugs its label from --md-n-above [D106]. */
+  .straddle .submit {
+    inline-size: 100%;
+  }
+
+  @media (--md-n-above) {
+    .straddle .submit {
+      inline-size: auto;
+      align-self: center;
+    }
+  }
+
+  /*
+   * Reading pages [D187]: from --lg-n-above the card aligns to the reading
+   * column's start edge and widens to the reading measure, lifting the
+   * --size-sm cap, so Email and Postcode share a row (the Form's own 480 px
+   * rule). Scene pages keep --size-sm, centered.
+   */
+  @media (--lg-n-above) {
+    .reading {
+      max-inline-size: var(--ds-measure-reading);
+      margin-inline: auto;
+    }
+
+    .reading .card {
+      max-inline-size: none;
+      margin-inline: 0;
+    }
+  }
+
+  /* Grained card: the grain layer sits under the content, which stays above it. */
+  .grained .content {
+    position: relative;
+  }
+
+  /*
+   * Band: a large headline, the pitch, then the field and pill. Field and
+   * pill side by side from 480 px of container (viewport fallback
+   * --md-n-above); the band splits 6 + 6 from 768 px (fallback
+   * --lg-n-above).
+   */
+  .band .submit {
+    inline-size: 100%;
+  }
+
+  @media (--md-n-above) {
+    .band .fields {
+      flex-wrap: nowrap;
+    }
+
+    .band .submit {
+      inline-size: auto;
+    }
+  }
+
+  @media (--lg-n-above) {
+    .band .layout {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      align-items: end;
+      column-gap: var(--ds-space-margin);
+    }
+
+    .band .intro {
+      grid-column: 1 / span 6;
+    }
+
+    .band .formArea {
+      grid-column: 7 / -1;
+    }
+  }
+
+  @container newsletter (width < 480px) {
+    .band .fields {
+      flex-wrap: wrap;
+    }
+
+    .band .submit {
+      inline-size: 100%;
+    }
+  }
+
+  @container newsletter (width >= 480px) {
+    .band .fields {
+      flex-wrap: nowrap;
+    }
+
+    .band .submit {
+      inline-size: auto;
+    }
+  }
+
+  @container newsletter (width < 768px) {
+    .band .layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .band .intro,
+    .band .formArea {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @container newsletter (width >= 768px) {
+    .band .layout {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      align-items: end;
+      column-gap: var(--ds-space-margin);
+    }
+
+    .band .intro {
+      grid-column: 1 / span 6;
+    }
+
+    .band .formArea {
+      grid-column: 7 / -1;
+    }
+  }
+
+  /*
+   * Ruled row (Rocco): a serif prompt cell, the input cell and a square
+   * submit cell, --border-size-1 --role-rule rules, square. Baseline: the
+   * prompt stacks above the input and submit pair; three cells in one row
+   * from 768 px of container (viewport fallback --lg-n-above).
+   */
+  .ruled .content {
+    border-block: var(--border-size-1) solid var(--role-rule);
+  }
+
+  .ruled .layout {
+    gap: 0;
+  }
+
+  .ruled .intro {
+    padding: var(--size-px-3);
+    border-block-end: var(--border-size-1) solid var(--role-rule);
+  }
+
+  .ruled .heading {
+    font-family: var(--ds-font-text);
+  }
+
+  .ruled .form {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0;
+    max-inline-size: none;
+  }
+
+  .ruled .fields {
+    flex: 1 1 var(--size-px-12);
+    padding: var(--size-px-3);
+  }
+
+  .ruled .submit {
+    margin: var(--size-px-3);
+    border-radius: var(--ds-radius-none);
+  }
+
+  .ruled .legal {
+    flex-basis: 100%;
+    padding: 0 var(--size-px-3) var(--size-px-3);
+  }
+
+  @media (--lg-n-above) {
+    .ruled .layout {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    }
+
+    .ruled .intro {
+      border-block-end: 0;
+      border-inline-end: var(--border-size-1) solid var(--role-rule);
+    }
+  }
+
+  @container newsletter (width < 768px) {
+    .ruled .layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ruled .intro {
+      border-block-end: var(--border-size-1) solid var(--role-rule);
+      border-inline-end: 0;
+    }
+  }
+
+  @container newsletter (width >= 768px) {
+    .ruled .layout {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    }
+
+    .ruled .intro {
+      border-block-end: 0;
+      border-inline-end: var(--border-size-1) solid var(--role-rule);
+    }
+  }
+}
+
+@layer states {
+  .status:focus {
+    outline: none;
+  }
+
+  .status:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+}
+
+@layer print {
+  @media print {
+    /*
+     * One 0.75 pt box: the heading and "Subscribe at <URL>" (§7.12.3). The
+     * fields, legal text, grain and icon drop; the straddle reflows in the
+     * flow with no seam.
+     */
+    .straddle {
+      margin-block: var(--size-px-3);
+    }
+
+    .card {
+      padding: 0;
+      border: 0;
+    }
+
+    .content {
+      padding: var(--size-px-3);
+      border: var(--border-size-1) solid var(--primary12);
+      break-inside: avoid;
+    }
+
+    .ruled .content {
+      border: var(--border-size-1) solid var(--primary12);
+    }
+
+    .ruled .intro {
+      padding: 0;
+      border: 0;
+    }
+
+    .icon,
+    .pitch,
+    .formArea {
+      display: none;
+    }
+
+    .layout {
+      display: block;
+    }
+
+    .printLine {
+      display: block;
+      margin: 0;
+      margin-block-start: var(--size-px-2);
+      color: var(--primary12);
+    }
+  }
+}

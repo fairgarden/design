@@ -1,0 +1,55 @@
+# Autocomplete
+
+Free text with suggestions, where any value is valid and suggestions help, such as addresses: Base UI's Autocomplete, inside a `Field`. Site and collection search compose it in Search.
+
+```tsx
+import { Autocomplete } from '@fairgarden-private/design/components/Autocomplete'
+```
+
+Suggestions are `{ value, label? }` objects, or titled groups; a chosen suggestion only fills the input, and Enter submits the typed text. There is no ✓, because nothing stays selected. When the server filters the suggestions, pass `filter={null}` and the current `items`.
+
+## Suggestions and states
+
+import { DemoAutocompleteStates } from './demos/states'
+
+<DemoAutocompleteStates.Title />
+
+No row is highlighted until the arrow keys move; the highlighted row takes the `--primary4` soft fill and the `--ds-stroke-3` start bar, and matches are marked by weight. `loading` shows "Searching…" in a polite live region; `error` shows the danger glyph and a message instead of silently closing; the empty row keeps what the user typed.
+
+<DemoAutocompleteStates />
+
+[See Demo](./demos/states/)
+
+## Primary and secondary
+
+import { DemoAutocompleteColor } from './demos/color'
+
+<DemoAutocompleteColor.Title />
+
+`primary` sets the box, value and icons; `secondary` is unused at rest and becomes the danger scale while invalid.
+
+<DemoAutocompleteColor />
+
+[See Demo](./demos/color/)
+
+## On grounds
+
+import { DemoAutocompleteGrounds } from './demos/grounds'
+
+<DemoAutocompleteGrounds.Title />
+
+The box follows its ground; the popup renders in a portal as the `white` scope.
+
+<DemoAutocompleteGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesAutocomplete } from './types'
+
+<TypesAutocomplete />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §10.6 (combobox and autocomplete).

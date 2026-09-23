@@ -1,0 +1,64 @@
+# Tokens
+
+Every non-color value comes from Open Props, used as shipped, or from a `--ds-` extension. A `--ds-` token never holds a color.
+
+## Units
+
+| Quantity | Unit |
+| --- | --- |
+| Text size | `rem` (fluid clamps from 360 px to 1024 px) |
+| Letter spacing | `em` |
+| Line height | unitless |
+| Spacing, strokes, radii, sizes | `px` |
+| Measure | `ch` |
+| Print | `pt` and `mm` |
+
+## Spacing
+
+The Open Props px series, plus three system steps. The rem, fluid and relative size series are not used for spacing.
+
+| Token | Value | Typical use |
+| --- | --- | --- |
+| `--size-px-1` | 4 px | Icon-to-label nudge |
+| `--size-px-2` | 8 px | Tight gaps; halo |
+| `--ds-space-12` | 12 px | Tag icon gap, tight stacks |
+| `--size-px-3` | 16 px | Mobile margin, component padding |
+| `--size-px-5` | 24 px | Heading to body |
+| `--size-px-7` | 32 px | Card padding |
+| `--ds-space-40` | 40 px | Block gap, desktop margin |
+| `--ds-space-56` | 56 px | Section spacing, mobile |
+| `--size-px-10` | 80 px | Section spacing, desktop |
+
+`--ds-space-section` and `--ds-space-margin` step up with the page's breakpoints. All gaps are visual: baseline or rule to cap top. The only off-series values are the named exceptions `--ds-space-stack`, `--ds-space-eyebrow-rule` and `--ds-space-eyebrow-content`.
+
+Density is set per module, never by breakpoint: a Ground's `density` (`compact`, `default` or `spacious`) is written as `data-density` and sets `--ds-space-section` and the table cell padding for everything inside it.
+
+## Strokes and radii
+
+| Token | Value | Job |
+| --- | --- | --- |
+| `--border-size-1` | 1 px | Rules; table, field and card borders |
+| `--ds-stroke-1-5` | 1.5 px | Badge edges, link underline |
+| `--border-size-2` | 2 px | Control edges, outline buttons, focus ring, hover underline |
+| `--ds-stroke-3` | 3 px | Active-tab bar, dialog border |
+| `--radius-1` | 2 px | Inputs, joined controls, tabs |
+| `--ds-radius-8` | 8 px | Photos, standard cards, panels |
+| `--ds-radius-20` | 20 px | Block-edge cards |
+| `--ds-radius-feature` | ≈ 1/7 of the container, at most 64 px | The framed feature field |
+| `--radius-round` | pill | Standalone buttons, badges, tags |
+
+`--ds-radius-conditional-8` and `--ds-radius-conditional-20` keep the full radius while a surface is narrower than the viewport and drop to 0 when it runs full-bleed.
+
+## Sizing, breakpoints and motion
+
+- **Controls:** `--size-px-7` (32 px, small), `--ds-size-control-md` (40 px, default), `--size-px-8` (48 px, large), `--ds-size-control-xl` (56 px); every target is at least `--ds-size-hit` (44 px).
+- **Custom media** drive the page frame: `--sm-n-above` (480 px), `--md-n-above` (768 px), `--lg-n-above` (1024 px), `--xl-n-above` (1440 px), plus `--ds-nav-inline-n-above` (1024 px by default), where the inline Navigation Bar replaces the drawer. Modules reflow on container queries as a progressive enhancement.
+- **Motion:** `--ds-duration-quick` (120 ms) for state changes and hover, `--ds-duration-disclosure` (200 ms) for reveals, `--ease-out-3`; everything is instant under reduced motion. `--ds-delay-tooltip` (500 ms) and `--ds-delay-nav-open` / `--ds-delay-nav-close` (150 / 300 ms) have number mirrors in `utils/tokens.ts` for Base UI.
+
+A few `--ds-` tokens are switches that the role maps set per scope: `--ds-edge-shaped` (whether a shaped edge draws), `--ds-link-hover-line` and `--ds-soft-hover-line` (whether a hover underlines), and `--ds-series-fill` / `--ds-series-pattern` (flat chart fills or one-ink patterns). Components read them; they never set them.
+
+## Banned
+
+No shadows, no transparency, no gradients, and no lift, transform or shadow on hover (§1.3) [D181]. Depth comes from rules, edges and ground changes.
+
+Full specification: `DESIGN-SYSTEM.md` §1.5 (token architecture) and §1.11.7 (units policy); companion guide §E.

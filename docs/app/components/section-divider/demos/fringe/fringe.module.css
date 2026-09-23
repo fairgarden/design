@@ -1,0 +1,30 @@
+.page {
+  display: grid;
+  inline-size: 100%;
+}
+
+.band {
+  padding-block: var(--ds-space-section);
+}
+
+.container {
+  display: grid;
+  gap: var(--size-px-3);
+  inline-size: min(100% - 2 * var(--ds-space-margin), var(--ds-container-content));
+  margin-inline: auto;
+}
+
+.head {
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-font-size-kicker);
+  font-weight: var(--font-weight-7);
+  color: var(--role-heading);
+}
+
+.text {
+  margin: 0;
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-body-ui);
+  color: var(--primary12);
+}

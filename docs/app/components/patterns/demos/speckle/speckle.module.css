@@ -1,0 +1,21 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-5);
+  inline-size: 100%;
+}
+
+.band {
+  display: grid;
+  gap: var(--size-px-3);
+  justify-items: start;
+  padding: var(--size-px-7) var(--size-px-5);
+}
+
+.display {
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-font-size-h2);
+  font-weight: var(--font-weight-7);
+  line-height: var(--ds-leading-display);
+  color: var(--primary12);
+}

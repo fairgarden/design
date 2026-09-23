@@ -1,0 +1,22 @@
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(264px, 1fr));
+  gap: var(--size-px-3);
+  inline-size: 100%;
+}
+
+.face {
+  display: grid;
+  align-content: start;
+  gap: var(--size-px-5);
+  min-inline-size: 0;
+  padding: var(--size-px-5);
+  border-radius: var(--ds-radius-8);
+}
+
+.name {
+  margin: 0;
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-caption);
+  font-weight: var(--font-weight-6);
+}

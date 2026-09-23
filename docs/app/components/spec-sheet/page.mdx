@@ -1,0 +1,59 @@
+# Spec Sheet
+
+An item's measurable attributes: a species' size and range, a product's dimensions, a menu item's allergens. It wraps the spec grid and the leader list with the sheet's heading, lead, provenance line, optional figure and "More Details" disclosure. The densest module: rules only, no ornament.
+
+```tsx
+import { SpecGridItem, SpecListItem, SpecSheet } from '@fairgarden-private/design/components/SpecSheet'
+```
+
+`kind` picks the build: `glance` (default) is the rule-topped At a Glance grid of `SpecGridItem`s; `leader` a single column of "Label ···· Value" `SpecListItem`s; `form-box` the grid inside a ruled box; `manual` a double-line frame for a full-page item. `heading` is the chapter-stack H2 in the section-head color; at `headingLevel` 3 or 4 it becomes a module head.
+
+## At a Glance and the split
+
+import { DemoSpecSheetGlance } from './demos/glance'
+
+<DemoSpecSheetGlance.Title />
+
+On reference pages `identity` heads the reading column: the portrait, the common name and the italic secondary name. With `split`, from 1024 px of viewport the lead and provenance line take the first half of the reading span and the grid the second; the grid's own container keeps it 2-up. Below 1024 px the lead stacks above the grid. Nothing is sticky: Audubon's sticky rail and aside cards are not adopted. `more` adds a "More Details" Collapsible that prints expanded; a linked book title in the provenance line is a Link around a `cite`.
+
+<DemoSpecSheetGlance />
+
+[See Demo](./demos/glance/)
+
+## Leader, form box and manual
+
+import { DemoSpecSheetKinds } from './demos/kinds'
+
+<DemoSpecSheetKinds.Title />
+
+The leader list holds its value column to the reading measure; a value that would wrap drops under its label and loses the leader. The form box draws a ruled box around the grid. The manual page frames its content in a double line. A `figure` sits beside the sheet from 1024 px of the sheet's own width (sheet 5, figure 7).
+
+<DemoSpecSheetKinds />
+
+[See Demo](./demos/kinds/)
+
+## Grounds and print
+
+Page grounds are the home; on forest or the night band the rules and labels take that scope's roles, and on a saturated field only a quick-facts block of up to 4 cells belongs. The sheet prints as on screen, stacked, with black 0.75 pt rules and leaders; cells never split across pages.
+
+## API Reference
+
+import { TypesSpecSheet, TypesSpecSheetAdditional } from './types'
+
+### SpecSheet
+
+<TypesSpecSheet.SpecSheet />
+
+### SpecGridItem and SpecListItem
+
+<TypesSpecSheet.SpecGridItem />
+
+<TypesSpecSheet.SpecListItem />
+
+### Additional types
+
+<TypesSpecSheetAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §12.7 (spec sheet, D188), §8.3 (spec grid) and §5.10.2 (module reflow).

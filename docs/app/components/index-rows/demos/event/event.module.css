@@ -1,0 +1,14 @@
+.pairs {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--size-px-1) var(--size-px-3);
+  margin: var(--size-px-3) 0;
+}
+
+.pairs dt {
+  font-weight: var(--font-weight-6);
+}
+
+.pairs dd {
+  margin: 0;
+}

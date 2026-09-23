@@ -1,0 +1,19 @@
+/* The band's bottom edge is the burst's origin: 40 px below the action. */
+.band {
+  display: grid;
+  gap: var(--size-px-7);
+  justify-items: center;
+  inline-size: 100%;
+  padding: var(--ds-space-56) var(--size-px-5) var(--ds-space-40);
+  text-align: center;
+}
+
+.display {
+  max-inline-size: var(--size-content-2);
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-font-size-h2);
+  font-weight: var(--font-weight-7);
+  line-height: var(--ds-leading-display);
+  color: var(--primary12);
+}

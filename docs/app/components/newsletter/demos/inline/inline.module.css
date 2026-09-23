@@ -1,0 +1,15 @@
+.band {
+  inline-size: 100%;
+  padding: var(--size-px-7) var(--ds-space-margin);
+}
+
+.column {
+  max-inline-size: var(--size-sm);
+}
+
+.icon {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--border-size-2);
+  stroke-linejoin: round;
+}

@@ -1,0 +1,63 @@
+# Accordion
+
+A Base UI Accordion for long reference content scanned by heading: ruled rows, each a heading that opens its panel in place.
+
+```tsx
+import { Accordion, AccordionItem } from '@fairgarden-private/design/components/Accordion'
+```
+
+The glyph is LTA's disclosure glyph: two thin arrows that point outward while collapsed and inward while expanded, muted then in the text ink. It swaps direction and never rotates; chevrons are kept for popups. Several items may be open at once. Panels open with a clip reveal, instantly under reduced motion, and stay in the DOM so find-in-page reaches them and print shows every panel expanded. Never hide content a task depends on, and never convert an accordion into tabs.
+
+## Glyphs and the strong top
+
+import { DemoAccordionVariants } from './demos/variants'
+
+<DemoAccordionVariants.Title />
+
+`glyph="disclosure"` is the default. `headed` draws a `--border-size-2` rule above the first item when the accordion follows a heading. `glyph="plusminus"` is the documented alternate for product UI; never mix the two on one page. A disabled item mutes its title and glyph, but prefer removing it.
+
+<DemoAccordionVariants />
+
+[See Demo](./demos/variants/)
+
+## Primary scale
+
+import { DemoAccordionColor } from './demos/color'
+
+<DemoAccordionColor.Title />
+
+`primary` drives every part. The expanded glyph is the text ink, not an accent, so `secondary` is unused.
+
+<DemoAccordionColor />
+
+[See Demo](./demos/color/)
+
+## On grounds
+
+import { DemoAccordionGrounds } from './demos/grounds'
+
+<DemoAccordionGrounds.Title />
+
+<DemoAccordionGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesAccordion, TypesAccordionAdditional } from './types'
+
+### Accordion
+
+<TypesAccordion.Accordion />
+
+### AccordionItem
+
+<TypesAccordion.AccordionItem />
+
+### Additional types
+
+<TypesAccordionAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §10.13 (accordion and collapsible).

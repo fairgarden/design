@@ -1,0 +1,28 @@
+/*
+ * Mode blocks (§1.11.9), follow-OS strategy: light on :root and
+ * [data-theme="light"]; dark on [data-theme="dark"] and, screen only, on an
+ * html without data-theme="light". The attribute block follows the :root
+ * block. Scale values and the per-scale contrast inks live in colors.css.
+ */
+@layer theme {
+  :root,
+  [data-theme='light'] {
+    color-scheme: light;
+    --ds-font-fine: var(--ds-font-text);
+    --ds-muted-weight-step: 0;
+  }
+
+  [data-theme='dark'] {
+    color-scheme: dark;
+    --ds-font-fine: var(--ds-font-ui);
+    --ds-muted-weight-step: 100;
+  }
+
+  @media only screen and (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      color-scheme: dark;
+      --ds-font-fine: var(--ds-font-ui);
+      --ds-muted-weight-step: 100;
+    }
+  }
+}

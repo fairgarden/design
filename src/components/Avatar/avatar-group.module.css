@@ -1,0 +1,72 @@
+/*
+ * Avatar Group (§10.12). Parts: `base` (the row), `item` (each avatar's
+ * --role-halo ring, a --size-px-1 halo-colored clearance), `more` (the
+ * "+N" initials avatar). Overlap −25% of the diameter. 3 avatars at base,
+ * up to 5 from --lg-n-above. Local custom properties carry dimensions only:
+ *   --avatar-group-size  the avatars' diameter, from the size class
+ */
+
+@layer base {
+  .base {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    max-inline-size: 100%;
+  }
+
+  /* The separation ring: --role-halo (--primary1 in every scope and mode) [D150]. */
+  .item {
+    display: inline-flex;
+    flex: none;
+    padding: var(--size-px-1);
+    border-radius: var(--radius-round);
+    background-color: var(--role-halo);
+  }
+
+  .item + .item {
+    margin-inline-start: calc(-0.25 * var(--avatar-group-size) - 2 * var(--size-px-1));
+  }
+
+  .more {
+    cursor: default;
+  }
+
+  /* 3 plus "+N" at base; up to 5 from --lg-n-above, each tier with its own count. */
+  .extra,
+  .moreWide {
+    display: none;
+  }
+
+  @media (--lg-n-above) {
+    .extra,
+    .moreWide {
+      display: inline-flex;
+    }
+
+    .moreBase {
+      display: none;
+    }
+  }
+}
+
+@layer variants {
+  .xs {
+    --avatar-group-size: var(--size-px-5);
+  }
+
+  .sm {
+    --avatar-group-size: var(--size-px-7);
+  }
+
+  .md {
+    --avatar-group-size: var(--ds-size-control-md);
+  }
+
+  .lg {
+    --avatar-group-size: var(--size-px-9);
+  }
+
+  .xl {
+    --avatar-group-size: var(--ds-size-avatar-xl);
+  }
+}

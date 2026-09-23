@@ -1,0 +1,13 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-7);
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.note {
+  margin: 0;
+  font-family: var(--ds-font-text);
+  font-size: var(--ds-font-size-footnote);
+  color: var(--primary12);
+}

@@ -1,0 +1,27 @@
+.stack {
+  display: grid;
+  /* One track the preview's width; an auto track grows to the fields' min-content. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ds-space-40);
+  inline-size: 100%;
+}
+
+.label {
+  margin: 0 0 var(--size-px-2);
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-caption);
+  color: var(--role-muted);
+}
+
+/* A short scrolling frame, so the docked bar sticks inside the demo, not the page. */
+.dockFrame {
+  block-size: 180px;
+  overflow: auto;
+  border: var(--border-size-1) solid var(--role-rule);
+}
+
+.dockFrame p {
+  margin: 0;
+  padding: var(--size-px-3) var(--ds-space-margin);
+  font-family: var(--ds-font-text);
+}

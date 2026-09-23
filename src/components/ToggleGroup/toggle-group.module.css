@@ -1,0 +1,139 @@
+/*
+ * Toggle Group (§9.4). CVA function `toggleGroup`. Parts: `base` (the group
+ * container: the segmented outline, or the wrapping row of toggles or
+ * chips), `divider` (the --border-size-1 --role-rule between segmented
+ * cells, inserted by the component) and `groupLabel` (the visible label
+ * before the group). The group lays out its toggles and draws the
+ * container and dividers; each Toggle styles its own parts.
+ *
+ * Colors are role variables only; no local custom properties.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.groupLabel {
+  composes: typeFieldLabel from '../../utils/type.module.css';
+}
+
+@layer base {
+  /* Baseline: toggles and chips flex-wrap, never scroll (§5.10.2). */
+  .base {
+    container: toggle-group / inline-size;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--size-px-2);
+    min-inline-size: 0;
+  }
+
+  /* The group label: type-field-label in --primary12, --size-px-2 above the group. */
+  .groupLabel {
+    display: block;
+    margin-block-end: var(--size-px-2);
+    color: var(--primary12);
+  }
+
+  .divider {
+    flex: none;
+    align-self: stretch;
+    border-inline-start: var(--border-size-1) solid var(--role-rule);
+  }
+}
+
+@layer variants {
+  .outline {
+    gap: var(--size-px-2);
+  }
+
+  /* Chips sit --size-px-2 apart both ways. */
+  .chip {
+    gap: var(--size-px-2);
+  }
+
+  /*
+   * The segmented container: joined cells in one --border-size-2 --primary12
+   * outline, --radius-1 (the 40 px cells plus the edge make 44 px). At
+   * baseline the 2–3 cells are equal; from 768 px they hug their labels,
+   * so this container sizes to its content and is not a query container.
+   */
+  .segmented {
+    container-type: normal;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 0;
+    border: var(--border-size-2) solid var(--primary12);
+    border-radius: var(--radius-1);
+  }
+
+  .segmented > :not(.divider) {
+    flex: 1 1 0;
+  }
+
+  @media (--md-n-above) {
+    .segmented {
+      display: inline-flex;
+      vertical-align: top;
+    }
+
+    .segmented > :not(.divider) {
+      flex: 0 0 auto;
+    }
+  }
+
+  @container (width < 768px) {
+    .segmented {
+      display: flex;
+    }
+
+    .segmented > :not(.divider) {
+      flex: 1 1 0;
+    }
+  }
+
+  @container (width >= 768px) {
+    .segmented {
+      display: inline-flex;
+    }
+
+    .segmented > :not(.divider) {
+      flex: 0 0 auto;
+    }
+  }
+}
+
+@layer states {
+  /* Orientation (Base UI's prop) decides which edge carries the dividers. */
+  .base[data-orientation='vertical'] {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .base[data-orientation='vertical'] > .divider {
+    border-inline-start-width: 0;
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  /* A divider beside the pressed cell is hidden; the cell's own inverse pair bounds it. */
+  [data-pressed] + .divider,
+  .divider:has(+ [data-pressed]) {
+    visibility: hidden;
+  }
+
+  /* Disabled: the dividers either side of a disabled cell (or all, for a disabled group) turn dotted. */
+  .base[data-disabled] > .divider,
+  [data-disabled] + .divider,
+  .divider:has(+ [data-disabled]) {
+    border-style: dotted;
+  }
+}
+
+@layer print {
+  @media print {
+    /* Hidden: the result prints as a caption ("Units: metric · View: month") (§9.4). */
+    .base,
+    .groupLabel {
+      display: none;
+    }
+  }
+}

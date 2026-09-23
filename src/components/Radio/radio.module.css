@@ -1,0 +1,449 @@
+/*
+ * Radio (§10.8). CVA functions `radio` (the row) and `radioFeedback` (quiz
+ * feedback). The root `base` is the row, a <label> wrapping Radio.Root
+ * (`circle`), so the whole row is the hit target; the row reads the
+ * circle's Base UI attributes through :has() and writes no state of its
+ * own. Parts: base, circle, indicator (the 8 px ●), label, description,
+ * swatch (the color disc), swatchMark (a nested overlay-face Ground holding
+ * a --primary12 dot), edge / edgeLine (the disabled `line-dotted-fine` edge
+ * in SVG [D36, D68]), feedback, feedbackGlyph, feedbackWord.
+ *
+ * Colors are role variables only; the swatch disc's color is content,
+ * passed inline by the component. Local custom properties carry dimensions:
+ *   --radio-edge         circle edge width (2 → 3 px checked)
+ *   --radio-pill-edge    option pill edge width (1 → 2 px checked)
+ *   --radio-swatch-ring  swatch ring width (1 px)
+ *   --radio-edge-radius  radius the disabled dotted edge follows
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.base {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.description {
+  composes: typeCaption typeMuted from '../../utils/type.module.css';
+}
+
+.feedback {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.edgeLine {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+@layer base {
+  .base {
+    position: relative; /* holds Base UI's hidden input */
+    display: grid;
+    align-items: start;
+    align-content: center;
+    box-sizing: border-box;
+    min-block-size: var(--ds-size-hit);
+    min-inline-size: 0;
+    color: var(--primary12);
+  }
+
+  /* The circle: --size-px-4, a --border-size-2 --primary12 edge; aligned to the first line. */
+  .circle {
+    --radio-edge: var(--border-size-2);
+    --radio-edge-radius: calc(var(--size-px-4) / 2);
+
+    grid-area: circle;
+    position: relative;
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+    inline-size: var(--size-px-4);
+    block-size: var(--size-px-4);
+    margin-block: calc((1lh - var(--size-px-4)) / 2) 0;
+    margin-inline: 0 var(--ds-space-12);
+    border: var(--radio-edge) solid var(--primary12);
+    border-radius: var(--radius-round);
+    background: none;
+  }
+
+  /* The ● control glyph: --size-px-2 in --role-select-mark (not a status glyph [D58]). */
+  .indicator {
+    display: block;
+    inline-size: var(--size-px-2);
+    block-size: var(--size-px-2);
+    border-radius: var(--radius-round);
+    background-color: var(--role-select-mark);
+  }
+
+  /* The bare-text hover underline's color, weight and offset (§10.1) [D181]. */
+  .label {
+    grid-area: label;
+    color: var(--primary12);
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  .description {
+    grid-area: description;
+    margin-block-start: var(--size-px-1);
+  }
+
+  /* Disabled edge host: covers the border box once the solid edge is removed. */
+  .edge {
+    display: none;
+    position: absolute;
+    inset-block-start: calc(var(--ds-dot-fine) / 2);
+    inset-inline-start: calc(var(--ds-dot-fine) / 2);
+    inline-size: calc(100% - var(--ds-dot-fine));
+    block-size: calc(100% - var(--ds-dot-fine));
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .edgeLine {
+    fill: none;
+    stroke: var(--role-disabled-edge);
+    rx: calc(var(--radio-edge-radius) - var(--ds-dot-fine) / 2);
+  }
+
+  /* The swatch disc: --size-px-7, ringed in --border-size-1 --primary12. Its color is content. */
+  .swatch {
+    --radio-swatch-ring: var(--border-size-1);
+
+    grid-area: 1 / 1;
+    box-sizing: border-box;
+    inline-size: var(--size-px-7);
+    block-size: var(--size-px-7);
+    border: var(--radio-swatch-ring) solid var(--primary12);
+    border-radius: var(--radius-round);
+  }
+
+  /*
+   * The swatch mark: a nested overlay-face scope, so it reads on any disc
+   * and any ground: a --primary1 knockout disc holding a --primary12 dot.
+   * `.indicator .swatchMark` outranks the composed Ground's own display.
+   */
+  .indicator .swatchMark {
+    display: grid;
+    place-items: center;
+    inline-size: var(--size-px-3);
+    block-size: var(--size-px-3);
+    border-radius: var(--radius-round);
+    background-color: var(--primary1);
+  }
+
+  .swatchMark::after {
+    content: '';
+    inline-size: var(--size-px-2);
+    block-size: var(--size-px-2);
+    border-radius: var(--radius-round);
+    background-color: var(--primary12);
+  }
+
+  /* Quiz feedback: the status glyph plus a word, never the glyph alone [D58]. */
+  .feedback {
+    grid-area: feedback;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-px-2);
+    margin-block-start: var(--size-px-1);
+    color: var(--primary12);
+  }
+
+  .feedbackGlyph {
+    flex: none;
+    inline-size: var(--size-px-4);
+    block-size: var(--size-px-4);
+    overflow: visible;
+    color: var(--role-status);
+    fill: var(--role-status-fill);
+    stroke: var(--role-status-fill);
+    stroke-width: var(--ds-stroke-1-5);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* The word: --primary12, or the status scale's step 12 on the tone-on-tone ground [D173]. */
+  .feedbackWord {
+    color: var(--role-status-text);
+    font-weight: var(--font-weight-6);
+  }
+
+  @media (--forcedColors) {
+    .edgeLine {
+      stroke: currentColor;
+    }
+
+    .indicator {
+      forced-color-adjust: none;
+      background-color: CanvasText;
+    }
+
+    .indicator .swatchMark {
+      forced-color-adjust: none;
+      background-color: Canvas;
+    }
+
+    .swatchMark::after {
+      background-color: CanvasText;
+    }
+
+    .feedbackGlyph {
+      forced-color-adjust: none;
+      color: CanvasText;
+      fill: Canvas;
+      stroke: Canvas;
+    }
+  }
+
+  /* Hover transitions [D181]: --ds-duration-quick, --ease-out-3. */
+  @media (--motionOK) {
+    .circle,
+    .base,
+    .swatch,
+    .label {
+      transition-property: border-color, background-color, text-decoration-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer variants {
+  /* Standard: circle, then label, description and feedback; --ds-space-12 gap. */
+  .standard {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      'circle label'
+      '. description'
+      '. feedback';
+  }
+
+  /*
+   * The option pill: a --size-px-8 pill, --radius-round, a --border-size-1
+   * --role-rule edge; checked, a leading ● appears. The padding absorbs the
+   * 1 → 2 px edge step. The circle holds only the ●; the pill takes the ring.
+   */
+  .pill {
+    --radio-pill-edge: var(--border-size-1);
+    --radio-edge-radius: calc(var(--size-px-8) / 2);
+
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      'circle label feedback'
+      '. description description';
+    align-items: center;
+    min-block-size: var(--size-px-8);
+    padding-block: calc(var(--size-px-2) + var(--border-size-1) - var(--radio-pill-edge));
+    padding-inline: calc(var(--size-px-5) + var(--border-size-1) - var(--radio-pill-edge));
+    border: var(--radio-pill-edge) solid var(--role-rule);
+    border-radius: var(--radius-round);
+  }
+
+  .pill .circle {
+    inline-size: auto;
+    block-size: auto;
+    margin: 0;
+    border-style: none;
+  }
+
+  .pill .indicator {
+    margin-inline-end: var(--size-px-2);
+  }
+
+  .pill .feedback {
+    margin-block-start: 0;
+    margin-inline-start: var(--ds-space-12);
+  }
+
+  /*
+   * Swatch: the circle becomes the --ds-size-hit target holding the disc
+   * and the mark; the name is the accessible label, shown in print.
+   */
+  .kindSwatch {
+    display: inline-grid;
+    grid-template-areas: 'circle' 'label' 'description' 'feedback';
+    justify-items: center;
+    align-content: start;
+  }
+
+  .kindSwatch .circle {
+    --radio-edge-radius: calc(var(--size-px-7) / 2);
+
+    inline-size: var(--ds-size-hit);
+    block-size: var(--ds-size-hit);
+    margin: 0;
+    border-style: none;
+  }
+
+  .kindSwatch .indicator {
+    grid-area: 1 / 1;
+    inline-size: auto;
+    block-size: auto;
+    background: none;
+  }
+
+  /* The disabled dotted ring follows the disc, not the hit area. */
+  .kindSwatch .edge {
+    inset-block-start: calc((var(--ds-size-hit) - var(--size-px-7) + var(--ds-dot-fine)) / 2);
+    inset-inline-start: calc((var(--ds-size-hit) - var(--size-px-7) + var(--ds-dot-fine)) / 2);
+    inline-size: calc(var(--size-px-7) - var(--ds-dot-fine));
+    block-size: calc(var(--size-px-7) - var(--ds-dot-fine));
+  }
+
+  .kindSwatch .label {
+    position: absolute;
+    inline-size: var(--border-size-1);
+    block-size: var(--border-size-1);
+    margin: calc(var(--border-size-1) * -1);
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (--forcedColors) {
+    .kindSwatch .indicator {
+      background: none;
+    }
+  }
+}
+
+@layer states {
+  /* Checked: --role-select fill, --role-select-mark ●, --ds-stroke-3 --role-select-edge (§10.1). */
+  .standard .circle[data-checked] {
+    --radio-edge: var(--ds-stroke-3);
+
+    border-color: var(--role-select-edge);
+    background-color: var(--role-select);
+  }
+
+  /* The checked pill: --role-select fill, --border-size-2 --role-select-edge, label and ● in the mark ink [D96]. */
+  .pill:has(.circle[data-checked]) {
+    --radio-pill-edge: var(--border-size-2);
+
+    border-color: var(--role-select-edge);
+    background-color: var(--role-select);
+  }
+
+  .pill:has(.circle[data-checked]) .label {
+    color: var(--role-select-mark);
+  }
+
+  /* The chosen swatch: a --ds-stroke-3 --primary12 ring outside a --size-px-1 ground gap. */
+  .circle[data-checked] > .swatch {
+    outline: var(--ds-stroke-3) solid var(--primary12);
+    outline-offset: var(--size-px-1);
+  }
+
+  /*
+   * Hover (not disabled, not read-only) [D181]. Edges and the swatch ring
+   * never change, so hover cannot read as checked. An unchecked circle
+   * takes the outline hover, a --primary3 fill (--role-soft-hover: none
+   * where soft fills drop); a checked circle or pill moves its fill to
+   * --role-select-hover, label and ● unchanged. The standard label and a
+   * swatch's name label (shown in print) take the bare-text underline.
+   */
+  .standard:not(:has([data-disabled], [data-readonly])):hover .circle[data-unchecked] {
+    background-color: var(--role-soft-hover);
+  }
+
+  .standard:not(:has([data-disabled], [data-readonly])):hover .circle[data-checked],
+  .pill:not(:has([data-disabled], [data-readonly])):hover:has(.circle[data-checked]) {
+    background-color: var(--role-select-hover);
+  }
+
+  .standard:not(:has([data-disabled], [data-readonly])):hover .label,
+  .kindSwatch:not(:has([data-disabled], [data-readonly])):hover .label {
+    text-decoration-line: underline;
+  }
+
+  /* An unchecked pill carries hover by its edge: --role-rule → --primary12 at the same weight [D140]. */
+  .pill:not(:has([data-disabled], [data-readonly], [data-checked])):hover {
+    border-color: var(--primary12);
+  }
+
+  /* Focus: 2 px --primary12 ring at a 2 px offset, keyboard only [D45]; on the pill for pills. */
+  .circle:focus-visible {
+    outline: var(--ds-focus-width) solid var(--primary12);
+    outline-offset: var(--ds-focus-offset);
+  }
+
+  .pill .circle:focus-visible {
+    outline-style: none;
+  }
+
+  .pill:has(.circle:focus-visible) {
+    outline: var(--ds-focus-width) solid var(--primary12);
+    outline-offset: var(--ds-focus-offset);
+  }
+
+  /*
+   * Disabled (radio or group): the dotted edge in --role-rule (--primary12
+   * on one-ink grounds [D85]), fill dropped, ● and label --role-muted.
+   * Never dimmed [D16].
+   */
+  .circle[data-disabled] {
+    --radio-edge: 0px;
+
+    border-style: none;
+    background: none;
+  }
+
+  .circle[data-disabled] > .indicator {
+    background-color: var(--role-muted);
+  }
+
+  .circle[data-disabled] > .edge {
+    display: block;
+  }
+
+  .base:has(.circle[data-disabled]) .label {
+    color: var(--role-muted);
+  }
+
+  .pill:has(.circle[data-disabled]) {
+    --radio-pill-edge: 0px;
+
+    border-style: none;
+    background: none;
+  }
+
+  .pill:has(.circle[data-disabled]) > .edge {
+    display: block;
+  }
+
+  .kindSwatch:has(.circle[data-disabled]) .indicator {
+    background: none;
+  }
+
+  .circle[data-disabled] > .swatch {
+    border-style: none;
+  }
+}
+
+@layer print {
+  @media print {
+    /* Rings print at 0.75 pt with a black ● when chosen (§10.8). */
+    .circle {
+      --radio-edge: var(--border-size-1);
+    }
+
+    /* Swatches print as outlined circles with their names beneath. */
+    .kindSwatch .label {
+      position: static;
+      inline-size: auto;
+      block-size: auto;
+      margin: 0;
+      overflow: visible;
+      clip-path: none;
+      white-space: normal;
+    }
+
+    /* Disabled controls do not print (§10.1). */
+    .base:has(.circle[data-disabled]) {
+      display: none;
+    }
+  }
+}

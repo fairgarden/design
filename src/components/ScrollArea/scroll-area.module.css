@@ -1,0 +1,247 @@
+/*
+ * Scroll Area (§10.19). CVA function `scrollArea`.
+ * Parts: `base` (Root, the positioned frame), `viewport`, `content`,
+ * `scrollbar` (the gutter and its centered hairline track), `thumb`,
+ * `corner`, and `edge` (`edgeStart`, `edgeEnd`): the hard overflow rules,
+ * never a fade [D21, D68]. Colors are role variables only; local custom
+ * properties carry dimensions only.
+ *
+ * Local properties:
+ *   --scroll-area-gutter      the scrollbar gutter, reserved so content never shifts
+ *   --scroll-area-thumb       thumb thickness; widens on hover and drag
+ *   --scroll-area-edge-start  `none` hides the start edge (a pinned table column draws it)
+ *   --scroll-area-max-block   the root's cap, written by the `maxBlockSize` prop
+ */
+
+@layer base {
+  .base {
+    --scroll-area-gutter: var(--ds-space-12);
+    --scroll-area-thumb: var(--size-px-1);
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    max-block-size: var(--scroll-area-max-block, none);
+  }
+
+  .viewport {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    min-inline-size: 0;
+    overscroll-behavior: contain;
+  }
+
+  /* The gutter: a centered --border-size-1 --role-hairline track. */
+  .scrollbar {
+    display: flex;
+    box-sizing: border-box;
+  }
+
+  .scrollbar::before {
+    content: '';
+    position: absolute;
+    border: 0 solid var(--role-hairline);
+    pointer-events: none;
+  }
+
+  .scrollbar[data-orientation='vertical'] {
+    justify-content: center;
+    inline-size: var(--scroll-area-gutter);
+  }
+
+  .scrollbar[data-orientation='vertical']::before {
+    inset-block: 0;
+    inset-inline-start: calc(50% - var(--border-size-1) / 2);
+    border-inline-start-width: var(--border-size-1);
+  }
+
+  .scrollbar[data-orientation='horizontal'] {
+    align-items: center;
+    block-size: var(--scroll-area-gutter);
+  }
+
+  .scrollbar[data-orientation='horizontal']::before {
+    inset-inline: 0;
+    inset-block-start: calc(50% - var(--border-size-1) / 2);
+    border-block-start-width: var(--border-size-1);
+  }
+
+  /* The thumb: --role-rule, --radius-round; its fill is its own edge (≥ 3:1) [D12]. */
+  .thumb {
+    position: relative;
+    flex: none;
+    border-radius: var(--radius-round);
+    background-color: var(--role-rule);
+  }
+
+  .scrollbar[data-orientation='vertical'] .thumb {
+    inline-size: var(--scroll-area-thumb);
+  }
+
+  .scrollbar[data-orientation='horizontal'] .thumb {
+    block-size: var(--scroll-area-thumb);
+  }
+
+  .corner {
+    display: none;
+  }
+
+  /* Overflow edges: shown per side by the states layer. */
+  .edge {
+    display: none;
+    position: absolute;
+    border: 0 solid var(--role-rule);
+    pointer-events: none;
+  }
+
+  @media (--forcedColors) {
+    .thumb {
+      forced-color-adjust: none;
+      background-color: CanvasText;
+    }
+  }
+}
+
+@layer variants {
+  /* Panel: vertical, capped at half the viewport unless `maxBlockSize` sets the cap; the gutter always reserved. */
+  .panel {
+    max-block-size: var(--scroll-area-max-block, 50dvh);
+  }
+
+  .panel .viewport {
+    padding-inline-end: var(--scroll-area-gutter);
+  }
+
+  .panel .edgeStart {
+    inset-block-start: 0;
+    inset-inline: 0 var(--scroll-area-gutter);
+    border-block-start-width: var(--border-size-2);
+  }
+
+  .panel .edgeEnd {
+    inset-block-end: 0;
+    inset-inline: 0 var(--scroll-area-gutter);
+    border-block-end-width: var(--border-size-2);
+  }
+
+  /* Wide and rail: horizontal; scroll-snap follows the content's own snap points. */
+  .wide .viewport {
+    scroll-snap-type: x proximity;
+  }
+
+  .rail .viewport {
+    scroll-snap-type: x mandatory;
+  }
+
+  .wide .edgeStart,
+  .rail .edgeStart {
+    inset-inline-start: 0;
+    inset-block: 0 var(--scroll-area-gutter);
+    border-inline-start-width: var(--border-size-2);
+  }
+
+  .wide .edgeEnd,
+  .rail .edgeEnd {
+    inset-inline-end: 0;
+    inset-block: 0 var(--scroll-area-gutter);
+    border-inline-end-width: var(--border-size-2);
+  }
+
+  /* Rail: a --border-size-2 --role-hairline track with a --primary12 thumb, square ends. */
+  .rail .scrollbar::before {
+    inset-block-start: calc(50% - var(--border-size-2) / 2);
+    border-block-start-width: var(--border-size-2);
+  }
+
+  .rail .thumb {
+    --scroll-area-thumb: var(--border-size-2);
+
+    border-radius: var(--ds-radius-none);
+    background-color: var(--primary12);
+  }
+}
+
+@layer states {
+  /* The horizontal gutter is reserved while there is something to scroll. */
+  .wide[data-has-overflow-x] .viewport,
+  .rail[data-has-overflow-x] .viewport {
+    padding-block-end: var(--scroll-area-gutter);
+  }
+
+  /* Panel scrollbar: shown on hover, scroll and focus. */
+  .panel .scrollbar {
+    visibility: hidden;
+  }
+
+  .panel .scrollbar[data-hovering],
+  .panel .scrollbar[data-scrolling],
+  .panel:focus-within .scrollbar {
+    visibility: visible;
+  }
+
+  /* The thumb widens on hover and scroll (6 px), and darkens to --primary12 while dragged. */
+  .scrollbar[data-hovering] .thumb,
+  .scrollbar[data-scrolling] .thumb {
+    --scroll-area-thumb: calc(var(--size-px-1) * 1.5);
+  }
+
+  .thumb:active {
+    --scroll-area-thumb: calc(var(--size-px-1) * 1.5);
+
+    background-color: var(--primary12);
+  }
+
+  .rail .scrollbar[data-hovering] .thumb,
+  .rail .scrollbar[data-scrolling] .thumb,
+  .rail .thumb:active {
+    --scroll-area-thumb: var(--border-size-2);
+  }
+
+  /* Each edge rule appears only while content is hidden on that side. */
+  .panel[data-overflow-y-start] .edgeStart,
+  .wide[data-overflow-x-start] .edgeStart,
+  .rail[data-overflow-x-start] .edgeStart {
+    display: var(--scroll-area-edge-start, block);
+  }
+
+  .panel[data-overflow-y-end] .edgeEnd,
+  .wide[data-overflow-x-end] .edgeEnd,
+  .rail[data-overflow-x-end] .edgeEnd {
+    display: block;
+  }
+
+  /* Focus: the 2 px --primary12 ring at a 2 px offset, keyboard only [D45]. */
+  .viewport:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Unfold: content prints at full height; scrollbars, rails and edges are hidden (§10.19). */
+    .base {
+      display: block;
+      max-block-size: none;
+    }
+
+    /* The viewport's `overflow: scroll` and the content's `min-width` are inline styles. */
+    .viewport {
+      overflow: visible !important;
+      max-block-size: none;
+      padding: 0;
+    }
+
+    .content {
+      min-inline-size: 0 !important;
+    }
+
+    .scrollbar,
+    .corner,
+    .edge {
+      display: none;
+    }
+  }
+}

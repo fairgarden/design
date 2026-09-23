@@ -1,0 +1,214 @@
+/*
+ * Collapsible (§10.13) and the LTA disclosure glyph [D109]. Parts: `base`
+ * (the root), `trigger`, `glyph` (the shared disclosure glyph, drawn as
+ * inline SVG: `glyphOut` collapsed, `glyphIn` expanded), `label`, `panel`
+ * and its padded inner `content`. Pure type and line, so it resolves on any
+ * ground; colors are role variables only and local custom properties carry
+ * dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.trigger {
+  composes: typeButton from '../../utils/type.module.css';
+}
+
+.content {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base {
+    color: var(--primary12);
+  }
+
+  /*
+   * The disclosure glyph: a monoline drawing in currentColor, --role-muted
+   * collapsed. Tier classes publish --glyph-size and --glyph-stroke; the
+   * stroke is non-scaling, so it stays at its token at either size.
+   */
+  .glyph {
+    display: block;
+    flex: none;
+    inline-size: var(--glyph-size);
+    block-size: var(--glyph-size);
+    overflow: visible;
+    color: var(--role-muted);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: var(--glyph-stroke);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .glyphIn {
+    display: none;
+  }
+
+  /* Forced colors: the glyph keeps the text color, so it survives. */
+  @media (--forcedColors) {
+    .glyph {
+      color: CanvasText;
+    }
+  }
+
+  /* The whole trigger is the target, at least --ds-size-hit tall (§9.1). */
+  .trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-px-2);
+    box-sizing: border-box;
+    min-block-size: var(--ds-size-hit);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--primary12);
+    text-align: start;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  /* The bare-text hover underline's color, weight and offset (§10.1) [D181]. */
+  .label {
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  .openLabel {
+    display: none;
+  }
+
+  /* The clip reveal (§1.5.15) [D91]: the panel's edge wipes open; its content is clipped, never faded. */
+  .panel {
+    block-size: var(--collapsible-panel-height);
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  .content {
+    color: var(--primary12);
+  }
+
+  @media (--motionOK) {
+    .panel {
+      transition-property: block-size;
+      transition-duration: var(--ds-duration-disclosure);
+      transition-timing-function: var(--ease-out-3);
+    }
+
+    /* Hover transitions [D181]: --ds-duration-quick, --ease-out-3. */
+    .label,
+    .glyph {
+      transition-property: text-decoration-color, stroke-width;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer variants {
+  /*
+   * Tiers (§10.13): trigger rows 20 px at 1.5 px; chrome 16 px at 1.25 px.
+   * Each also publishes the next tier's weight, which a glyph host swaps in.
+   */
+  .glyphRow {
+    --glyph-size: var(--size-px-4);
+    --glyph-stroke: var(--ds-stroke-1-5);
+    --glyph-stroke-emphasis: var(--border-size-2);
+  }
+
+  .glyphChrome {
+    --glyph-size: var(--size-px-3);
+    --glyph-stroke: var(--ds-stroke-1-25);
+    --glyph-stroke-emphasis: var(--ds-stroke-1-5);
+  }
+}
+
+@layer states {
+  /* Expanded: arrows turn inward, in --primary12; an instant swap, never a rotation [D109]. */
+  [data-panel-open] .glyph {
+    color: var(--primary12);
+  }
+
+  [data-panel-open] .glyphOut {
+    display: none;
+  }
+
+  [data-panel-open] .glyphIn {
+    display: inline;
+  }
+
+  [data-panel-open] .closedLabel {
+    display: none;
+  }
+
+  [data-panel-open] .openLabel {
+    display: inline;
+  }
+
+  /* Disabled: label and glyph --role-muted; the one ink on grounds with no muted tier [D85]. */
+  [data-disabled] .glyph {
+    color: var(--role-muted);
+  }
+
+  .trigger[data-disabled] {
+    color: var(--role-muted);
+    cursor: default;
+  }
+
+  /*
+   * Hover (not disabled): the label takes the bare-text underline,
+   * --role-accent at --border-size-2, offset --size-px-1; the disclosure
+   * glyph does not change (§10.13) [D109, D181].
+   */
+  .trigger:not([data-disabled]):hover .label {
+    text-decoration-line: underline;
+  }
+
+  /*
+   * A glyph host (an icon-only control whose only content is the glyph,
+   * such as the staircase and section-bar toggles, §9.8, §11.7) swaps the
+   * glyph to the next tier's weight on hover and press, like Icon's
+   * `iconHost` (§10.1 icon states) [D181]. Trigger rows never host it.
+   */
+  .glyphHost:not([data-disabled], :disabled):is(:hover, :active) .glyph {
+    --glyph-stroke: var(--glyph-stroke-emphasis);
+  }
+
+  /* Focus: 2 px --primary12 ring at a 2 px offset, keyboard only [D45]. */
+  .trigger:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  /* The panel's clip reveal runs from and to a zero block size. */
+  .panel[data-starting-style],
+  .panel[data-ending-style] {
+    block-size: 0;
+  }
+}
+
+@layer print {
+  @media print {
+    /* Disclosures print expanded: glyph and trigger hidden, the panel shown (§7.7). */
+    .glyph,
+    .trigger {
+      display: none;
+    }
+
+    .panel,
+    .panel[data-starting-style],
+    .panel[data-ending-style] {
+      block-size: auto;
+      overflow: visible;
+    }
+
+    .panel[hidden] {
+      display: block;
+      content-visibility: visible;
+    }
+  }
+}

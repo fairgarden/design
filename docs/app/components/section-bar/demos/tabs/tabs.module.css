@@ -1,0 +1,28 @@
+.page {
+  outline: none;
+  inline-size: 100%;
+}
+
+/* Jumps land clear of the docked bar. */
+.section {
+  scroll-margin-block-start: var(--size-px-9);
+  min-block-size: var(--size-px-13);
+  padding: var(--size-px-7) var(--ds-space-margin);
+}
+
+.heading {
+  margin: 0 0 var(--size-px-3);
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-font-size-h2);
+  font-weight: var(--font-weight-7);
+  color: var(--role-heading);
+}
+
+.text {
+  max-inline-size: var(--ds-measure-reading);
+  margin: 0;
+  font-family: var(--ds-font-text);
+  font-size: var(--ds-font-size-body);
+  line-height: var(--ds-leading-reading);
+  color: var(--primary12);
+}

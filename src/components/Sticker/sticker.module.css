@@ -1,0 +1,87 @@
+/*
+ * Sticker (§6.5). Parts: base (the sized box), art (the SVG), the scope
+ * (the nested white Ground, an SVG group, so it paints no box), halo (the
+ * asset's pre-expanded halo path), line (the line art), detail (interior
+ * lines). Colors are role variables of the sticker's own scope: the halo
+ * --primary1, named directly [D144]; the line --role-heading, section-head
+ * rank for hand art [D60]. Bare, the line takes the host's --role-heading.
+ * Local custom properties carry dimensions only:
+ *   --sticker-size          the native width (--ds-size-art-s or -l)
+ *   --sticker-stroke        the silhouette weight
+ *   --sticker-stroke-detail the interior weight, one step lighter
+ */
+
+@layer base {
+  .base {
+    --sticker-size: var(--ds-size-art-s);
+    --sticker-stroke: var(--ds-stroke-3);
+    --sticker-stroke-detail: var(--border-size-2);
+
+    display: inline-block;
+    flex: none;
+    inline-size: var(--sticker-size);
+    max-inline-size: 100%;
+    vertical-align: top;
+  }
+
+  .art {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    overflow: visible;
+  }
+
+  /* The halo: a --primary1 face under ink, never an edge (§6.5). */
+  .halo {
+    fill: var(--primary1);
+    stroke: none;
+  }
+
+  /* Monoline art (§6.2): one ink, round caps and joins, fixed strokes at every rendered size. */
+  .line {
+    color: var(--role-heading);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: var(--sticker-stroke);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .line * {
+    vector-effect: non-scaling-stroke;
+  }
+
+  .detail {
+    stroke-width: var(--sticker-stroke-detail);
+  }
+}
+
+@layer variants {
+  /* S: 152 px, silhouette --ds-stroke-3, interior --border-size-2 (§6.2). */
+  .s {
+    --sticker-size: var(--ds-size-art-s);
+    --sticker-stroke: var(--ds-stroke-3);
+    --sticker-stroke-detail: var(--border-size-2);
+  }
+
+  /* L: 312 px, silhouette --ds-stroke-4, interior --ds-stroke-3 (§6.2). */
+  .l {
+    --sticker-size: var(--ds-size-art-l);
+    --sticker-stroke: var(--ds-stroke-4);
+    --sticker-stroke-detail: var(--ds-stroke-3);
+  }
+
+  /* Bare: the host scope's --role-heading, no halo (the line's color is already that role). */
+  .bare .line {
+    color: var(--role-heading);
+  }
+}
+
+@layer print {
+  @media print {
+    /* The halo remaps to white and vanishes; the line prints black; never split. */
+    .base {
+      break-inside: avoid;
+    }
+  }
+}

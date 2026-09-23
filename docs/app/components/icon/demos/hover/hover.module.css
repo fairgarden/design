@@ -1,0 +1,62 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--size-px-3);
+  align-items: center;
+}
+
+.button {
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--ds-size-hit);
+  block-size: var(--ds-size-hit);
+  padding: 0;
+  border: var(--border-size-2) solid var(--primary12);
+  border-radius: var(--radius-round);
+  background: none;
+  color: var(--primary12);
+  cursor: pointer;
+}
+
+.button:not(:disabled):active {
+  background-color: var(--primary12);
+  color: var(--role-inverse);
+}
+
+.button:disabled {
+  border-width: var(--ds-dot-fine);
+  border-style: dotted;
+  border-color: var(--role-rule);
+  color: var(--role-muted);
+  cursor: default;
+}
+
+.button:focus-visible,
+.link:focus-visible {
+  outline: var(--ds-focus-width) solid var(--primary12);
+  outline-offset: var(--ds-focus-offset);
+}
+
+.link {
+  display: inline-flex;
+  gap: var(--size-px-1);
+  align-items: center;
+  min-block-size: var(--ds-size-hit);
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-label);
+  font-weight: var(--font-weight-6);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--primary12);
+}
+
+.link:hover {
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--ds-stroke-1-5);
+  text-underline-offset: 0.2em;
+}
+
+.glyph {
+  color: var(--role-glyph);
+}

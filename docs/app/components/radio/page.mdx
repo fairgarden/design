@@ -1,0 +1,82 @@
+# Radio
+
+A Base UI Radio in its own label row, always inside a Radio Group, for one choice from 2–7 visible options, quiz answers included.
+
+```tsx
+import { Radio, RadioFeedback } from '@fairgarden-private/design/components/Radio'
+import { RadioGroup } from '@fairgarden-private/design/components/RadioGroup'
+```
+
+The whole row is the hit target. Checked is a `--role-select` fill, an 8 px ● in `--role-select-mark` and a 3 px `--role-select-edge`. Arrow keys move the selection and Tab leaves the group. With eight or more options use a Select; to switch views use a Toggle Group or Tabs.
+
+## States and quiz feedback
+
+import { DemoRadioStates } from './demos/states'
+
+<DemoRadioStates.Title />
+
+Hover gives an unchecked circle a soft `--primary3` fill where soft fills apply, lightens a checked circle or pill to `--role-select-hover` and underlines the label in the accent; edges never change on hover. A disabled radio or group draws dotted edges and muted labels, never dimmed; say "(unavailable)" where the reason matters. `feedback` takes a `RadioFeedback`: the success glyph with "Correct" or the danger glyph with "Not quite", always a glyph plus a word.
+
+<DemoRadioStates />
+
+[See Demo](./demos/states/)
+
+## Option pills and swatches
+
+import { DemoRadioKinds } from './demos/kinds'
+
+<DemoRadioKinds.Title />
+
+`kind="pill"` stacks 48 px option pills; the checked pill fills with `--role-select`, takes a 2 px edge and gains a leading ●, and hover steps its edge to `--primary12`. Pills always stack. `kind="swatch"` shows a 32 px disc whose color is content (`swatch`); the chosen disc gains a 3 px ring outside a ground gap and a knockout ● that reads on any color. The swatch's name is its accessible label and prints beneath it; let the legend echo the choice ("Color: Moss").
+
+<DemoRadioKinds />
+
+[See Demo](./demos/kinds/)
+
+## Primary and secondary
+
+import { DemoRadioColor } from './demos/color'
+
+<DemoRadioColor.Title />
+
+`secondary` drives the checked fill, dot and edge; `primary` the circles, labels, swatch rings and focus ring. Neither is defaulted, and the secondary never becomes the danger scale.
+
+<DemoRadioColor />
+
+[See Demo](./demos/color/)
+
+## On grounds
+
+import { DemoRadioGrounds } from './demos/grounds'
+
+<DemoRadioGrounds.Title />
+
+On paper the selection is green; on forest and the saturated grounds it is the inverse pair, for option pills too.
+
+<DemoRadioGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesRadio, TypesRadioAdditional } from './types'
+
+### Radio
+
+<TypesRadio.Radio />
+
+### RadioGroup
+
+<TypesRadio.RadioGroup />
+
+### RadioFeedback
+
+<TypesRadio.RadioFeedback />
+
+### Additional types
+
+<TypesRadioAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §10.8 (radio group) and §10.1 (the selected fill).

@@ -1,0 +1,330 @@
+/*
+ * Link (§9.3). CVA function `link` in Link.tsx.
+ * Parts: base (the anchor: text and underline), text (standalone label),
+ * glyph (› chevron, ↗ external arrow-open), visitedMark (`index` only),
+ * visuallyHidden ("(external site)"), printUrl (short URL, print only).
+ * Colors follow the §9.3 Color roles table through role variables only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.printUrl {
+  composes: typeUrl from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base,
+  .text {
+    text-decoration-thickness: var(--ds-stroke-1-5);
+    text-underline-offset: 0.15em;
+    /* Unbroken through descenders, so it prints as a clean rule (§9.3 Tokens). */
+    text-decoration-skip-ink: none;
+  }
+
+  .base {
+    color: var(--primary12);
+    text-decoration-line: none;
+    border-radius: var(--radius-1);
+    /* The focus ring wraps each line fragment with its own radius (§9.3). */
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  .glyph {
+    display: inline-block;
+    flex: none;
+    inline-size: var(--size-px-3);
+    block-size: var(--size-px-3);
+    vertical-align: -0.125em;
+  }
+
+  /* Material Symbols Rounded chevron_right, inline tier (§6.10) [D166]. */
+  .chevron {
+    color: var(--role-glyph);
+    fill: currentColor;
+  }
+
+  /* Custom arrow-open external mark (§1.5.12, §6.10 exception) in the text ink. */
+  .arrow {
+    color: var(--primary12);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: var(--ds-stroke-1-25);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Material Symbols Rounded check, inline tier; always present, space reserved. */
+  .visitedMark {
+    margin-inline-start: 0.25em;
+  }
+
+  .visuallyHidden {
+    position: absolute;
+    inline-size: var(--border-size-1);
+    block-size: var(--border-size-1);
+    margin: calc(var(--border-size-1) * -1);
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .printUrl {
+    display: none;
+  }
+
+  /* Hover transitions [D181]: --ds-duration-quick, --ease-out-3; instant under --motionNotOK. */
+  @media (--motionOK) {
+    .base,
+    .text {
+      transition:
+        color var(--ds-duration-quick) var(--ease-out-3),
+        text-decoration-color var(--ds-duration-quick) var(--ease-out-3),
+        text-decoration-thickness var(--ds-duration-quick) var(--ease-out-3);
+    }
+  }
+
+  /* Forced colors: the visited mark is removed (§9.3). */
+  @media (--forcedColors) {
+    .visitedMark {
+      display: none;
+    }
+  }
+}
+
+.standalone {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+@layer variants {
+  /* Inline: surrounding type; --role-accent underline at --ds-stroke-1-5. */
+  .inline {
+    text-decoration-line: underline;
+    text-decoration-color: var(--role-accent);
+  }
+
+  /* Standalone: type-label caps module link, underline under the label only,
+     › after a --ds-space-12 gap; 44 px tall [D160, D165]. */
+  .standalone {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-12);
+    min-block-size: var(--ds-size-hit);
+    vertical-align: middle;
+  }
+
+  .standalone .text {
+    text-decoration-line: underline;
+    text-decoration-color: var(--role-accent);
+  }
+
+  /* External: the arrow-open mark joins the last word at a word-space gap. */
+  .external .arrow {
+    margin-inline-start: 0.25em;
+  }
+
+  /* Navigation: component type, no rest underline [D80]; 44 px tall. */
+  .nav {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--ds-size-hit);
+  }
+
+  /* Title: no rest underline; the hit area stretches over the item [D157].
+     The item (§12.1) is the positioned ancestor. */
+  .title {
+    text-underline-offset: 0.1em;
+  }
+
+  .title::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Note reference and back-reference: surrounding ink, never underlined,
+     with a --size-px-5 target [D62, D174]. */
+  .noteref,
+  .backref {
+    position: relative;
+    color: inherit;
+  }
+
+  .noteref::before,
+  .backref::before {
+    content: '';
+    position: absolute;
+    /* Physical offsets: centering is direction-agnostic with the translate. */
+    top: 50%;
+    left: 50%;
+    inline-size: max(100%, var(--size-px-5));
+    block-size: max(100%, var(--size-px-5));
+    translate: -50% -50%;
+  }
+
+  /* Muted: the ancestor ink at rest, as a breadcrumb's ancestors (§9.8) [D80]. */
+  .muted {
+    color: var(--role-muted);
+  }
+
+  /* Visited mark at rest: the ground color, so the reserved ✓ is invisible. */
+  .index .visitedMark {
+    color: var(--role-ground);
+    fill: var(--role-ground);
+  }
+}
+
+@layer states {
+  .base:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  /*
+   * Hover [D181]: an ink change, never a transform.
+   * - Body link (inline): the rest underline stays; the text takes
+   *   --role-link-hover and the underline thickens to --border-size-2.
+   * - Chevron link (standalone): the label takes --role-link-hover; the ›
+   *   swaps to the next tier's weight (Icon weight="interactive").
+   * - Bare navigation text (nav): a --border-size-2 --role-accent underline
+   *   at a --size-px-1 offset (bar and utility items, page numbers, toolbar
+   *   links).
+   * - Card title link (title): --role-link-hover only, plus the underline
+   *   where --role-link-hover is --primary12 (--ds-link-hover-line).
+   * - List link (nav list, below; nav-panel, footer, drawer and breadcrumb
+   *   lists) and the muted ancestor (muted): the same color-only hover.
+   * Press keeps the [D84] line change: the underline thickens and turns
+   * --primary12.
+   */
+  .inline:hover {
+    color: var(--role-link-hover);
+    text-decoration-thickness: var(--border-size-2);
+  }
+
+  .inline:active {
+    text-decoration-color: var(--primary12);
+    text-decoration-thickness: var(--border-size-2);
+  }
+
+  .standalone:hover .text {
+    color: var(--role-link-hover);
+  }
+
+  .standalone:active .text {
+    text-decoration-color: var(--primary12);
+    text-decoration-thickness: var(--border-size-2);
+  }
+
+  .nav:not([aria-current='page'], [data-active]):hover {
+    text-decoration-line: underline;
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  .nav:active {
+    text-decoration-line: underline;
+    text-decoration-color: var(--primary12);
+    text-decoration-thickness: var(--border-size-2);
+  }
+
+  /* Current: the --ds-stroke-3 bar plus --font-weight-7 (nav only). */
+  .nav[aria-current='page'],
+  .nav[data-active] {
+    text-decoration-line: underline;
+    text-decoration-color: var(--primary12);
+    text-decoration-thickness: var(--ds-stroke-3);
+    font-weight: var(--font-weight-7);
+  }
+
+  .title:hover {
+    color: var(--role-link-hover);
+    text-decoration-line: var(--ds-link-hover-line);
+    text-decoration-color: var(--role-accent);
+  }
+
+  /*
+   * List link (nav-panel, footer, drawer and breadcrumb lists) and the muted
+   * ancestor ink (breadcrumb ancestors): --role-link-hover only, plus a
+   * --ds-stroke-1-5 --role-accent underline where that ink is --primary12
+   * (--ds-link-hover-line). On `nav` it replaces the bar item's bare-text
+   * underline (§9.3, §9.8) [D181].
+   */
+  .list:hover,
+  .muted:hover {
+    color: var(--role-link-hover);
+  }
+
+  .nav.list:not([aria-current='page'], [data-active]):hover,
+  .nav.muted:not([aria-current='page'], [data-active]):hover {
+    text-decoration-line: var(--ds-link-hover-line);
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--ds-stroke-1-5);
+    text-underline-offset: 0.15em;
+  }
+
+  .title:focus-visible {
+    text-decoration-line: underline;
+    text-decoration-color: var(--role-accent);
+  }
+
+  .title:active {
+    text-decoration-line: underline;
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+  }
+
+  .noteref:hover,
+  .noteref:active,
+  .backref:hover,
+  .backref:active {
+    font-weight: var(--font-weight-7);
+  }
+
+  /*
+   * Forced colors flatten inks, so every color-only hover adds an underline
+   * [D181]; the list selectors match the rule above, so they win it.
+   */
+  @media (--forcedColors) {
+    .inline:hover,
+    .standalone:hover .text,
+    .title:hover,
+    .list:hover,
+    .muted:hover,
+    .nav.list:not([aria-current='page'], [data-active]):hover,
+    .nav.muted:not([aria-current='page'], [data-active]):hover {
+      text-decoration-line: underline;
+    }
+  }
+
+  /* :visited may change color properties only, so the mark swaps ink (R6, D175). */
+  .index:visited .visitedMark {
+    color: var(--primary12);
+    fill: var(--primary12);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Visited marks and back-references never print (§7.6, D174). */
+    .visitedMark,
+    .backref {
+      display: none;
+    }
+
+    .standalone,
+    .nav {
+      min-block-size: auto;
+    }
+
+    /* Short URLs print inline in parentheses (§7.6.1); inline-block keeps the
+       underline off the URL. */
+    .printUrl {
+      display: inline-block;
+      margin-inline-start: 0.25em;
+    }
+  }
+}

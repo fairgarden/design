@@ -1,0 +1,25 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-5);
+  inline-size: 100%;
+}
+
+.row {
+  display: grid;
+  gap: var(--size-px-2);
+}
+
+.name {
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-font-size-caption);
+  color: var(--role-muted);
+}
+
+/* A vertical separator needs a stretching flex or grid parent. */
+.inline {
+  display: flex;
+  gap: var(--size-px-3);
+  align-items: stretch;
+  min-block-size: var(--size-px-5);
+  font-family: var(--ds-font-ui);
+}

@@ -1,0 +1,23 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-5);
+  inline-size: 100%;
+}
+
+.list {
+  display: grid;
+  gap: var(--ds-space-12);
+}
+
+.group {
+  display: grid;
+  gap: var(--size-px-2);
+}
+
+.legend {
+  margin: 0;
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-button);
+  font-weight: var(--font-weight-6);
+  color: var(--primary12);
+}

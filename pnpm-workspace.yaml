@@ -1,0 +1,9 @@
+packages:
+  - docs
+
+linkWorkspacePackages: true
+
+onlyBuiltDependencies:
+  - unrs-resolver
+
+saveWorkspaceProtocol: false

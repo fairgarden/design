@@ -1,0 +1,29 @@
+.text {
+  max-inline-size: var(--ds-measure-reading);
+  margin: 0;
+  font-family: var(--ds-font-text);
+  font-size: var(--ds-font-size-body);
+  line-height: var(--ds-leading-reading);
+  color: var(--primary12);
+}
+
+.thumb {
+  box-sizing: border-box;
+  border: var(--border-size-1) solid var(--role-rule);
+  color: var(--primary12);
+}
+
+.ridge {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--border-size-1);
+  stroke-linejoin: round;
+}
+
+.trail {
+  fill: none;
+  stroke: var(--role-accent);
+  stroke-width: var(--border-size-2);
+  stroke-dasharray: 5 4;
+  stroke-linecap: round;
+}

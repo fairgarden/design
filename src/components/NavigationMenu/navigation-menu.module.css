@@ -1,0 +1,636 @@
+/*
+ * Navigation Menu (§9.6) [D182]. CVA functions `navigationMenu` (the bar
+ * root, `base`) and `navigationMenuContent` (a panel, `content` with its
+ * kind class) in NavigationMenu.tsx.
+ *
+ * Bar parts: base, list, item, trigger / barLink (the item), hit (the
+ * 44 px target that carries the ring), label, chevron. The open, current
+ * and parent-of-current bars are the item's ::after border, flush with the
+ * bar's bottom rule; hover is an accent underline under the label, so the
+ * three never look alike [D182].
+ *
+ * Panel parts: positioner, popup (+ popupOverview, popupAttached),
+ * viewport, content (+ dropdown, overview, index), link (a row in Link's
+ * list-link build, `kind="nav"` with `list`, which owns its states),
+ * listItem, dropdownList; overview: overviewInner, withPromo, overviewMain,
+ * featuredBlock, featured, featuredLabel, featuredGlyph, description,
+ * tierRule, search, groups, group, heading, headingLabel, headingGlyph,
+ * groupList, promoCell, promo, promoMedia; index: indexBody, indexRoot,
+ * categoryList, categoryItem, categoryTrigger, categoryLabel, linkPane,
+ * linkPaneContent, paneList, featuredBarCell, featuredBar,
+ * featuredBarGlyph.
+ *
+ * The popup is the portaled `white` overlay scope: face --primary1, edge
+ * --primary12 at --border-size-2, never --role-rule [D92, D156]; no shadow,
+ * blur or scrim. Colors are role variables only.
+ *
+ * Hooks a host frame may set (dimensions only): --navigation-menu-item-gap,
+ * --navigation-menu-item-padding and --navigation-menu-item-rule (the
+ * Navigation Bar's `ruled` cells).
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.label {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.trigger {
+  composes: iconHost from '../Icon/icon.module.css';
+}
+
+.link {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.featured {
+  composes: typeItemhead from '../../utils/type.module.css';
+  composes: iconHost from '../Icon/icon.module.css';
+}
+
+.description {
+  composes: typeBodyUi typeMuted from '../../utils/type.module.css';
+}
+
+.heading {
+  composes: typeLabel from '../../utils/type.module.css';
+  composes: iconHost from '../Icon/icon.module.css';
+}
+
+.categoryTrigger {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.featuredBar {
+  composes: typeItemhead from '../../utils/type.module.css';
+  composes: iconHost from '../Icon/icon.module.css';
+}
+
+@layer base {
+  /* ── The bar ───────────────────────────────────────────────────────── */
+
+  .base {
+    display: flex;
+    align-self: stretch;
+    min-block-size: var(--ds-size-hit);
+    color: var(--primary12);
+  }
+
+  .list {
+    display: flex;
+    align-items: stretch;
+    gap: var(--navigation-menu-item-gap, var(--size-px-5));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .item {
+    display: flex;
+    align-items: stretch;
+    padding-inline: var(--navigation-menu-item-padding, 0px);
+    border-inline-start: var(--navigation-menu-item-rule, 0px) solid var(--role-rule);
+  }
+
+  .item:first-child {
+    border-inline-start-width: 0;
+  }
+
+  /* The item fills the bar's height, so its bar sits on the bar's bottom rule. */
+  .trigger,
+  .barLink {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--primary12);
+    font: inherit;
+    text-decoration-line: none;
+    white-space: nowrap; /* bar items never wrap [D183] */
+    cursor: pointer;
+    appearance: none;
+  }
+
+  /* Open, current and parent-of-current bars: a border, so they survive forced colors. */
+  .trigger::after,
+  .barLink::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    border-block-end: 0 solid var(--primary12);
+    pointer-events: none;
+  }
+
+  /* The target: at least --ds-size-hit square, label then chevron --size-px-1 apart. */
+  .hit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--size-px-1);
+    box-sizing: border-box;
+    min-block-size: var(--ds-size-hit);
+    min-inline-size: var(--ds-size-hit);
+  }
+
+  .label {
+    color: var(--primary12);
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  /* expand_more at the inline tier, in --role-glyph [D155]. */
+  .chevron {
+    display: inline-flex;
+    flex: none;
+    color: var(--role-glyph);
+  }
+
+  /* ── The panel frame ───────────────────────────────────────────────── */
+
+  .positioner {
+    z-index: var(--layer-3);
+  }
+
+  .popup {
+    --navigation-menu-clip-from: inset(0 0 100% 0);
+    --navigation-menu-clip-rest: inset(calc(-1 * var(--size-px-2)));
+
+    box-sizing: border-box;
+    border: 0 solid var(--primary12);
+    background-color: var(--primary1);
+    color: var(--primary12);
+    clip-path: var(--navigation-menu-clip-rest);
+  }
+
+  /* Overview: full-bleed under the bar, square, a --border-size-2 bottom edge [D92]. */
+  .popupOverview {
+    inline-size: var(--anchor-width, 100vw);
+    border-block-end-width: var(--border-size-2);
+    border-radius: var(--ds-radius-none);
+  }
+
+  /*
+   * Index and dropdown: attached under the bar but not full-bleed, so the
+   * top corners are square and the bottom ones --ds-radius-8; the edge runs
+   * down the sides and across the bottom, and the top meets the bar's rule
+   * [D182].
+   */
+  .popupAttached {
+    min-inline-size: min(
+      max(var(--ds-size-menu-min), var(--anchor-width, 0px)),
+      calc(100vw - 2 * var(--ds-space-margin))
+    );
+    max-inline-size: calc(100vw - 2 * var(--ds-space-margin));
+    border-inline-width: var(--border-size-2);
+    border-block-end-width: var(--border-size-2);
+    border-start-start-radius: var(--ds-radius-none);
+    border-start-end-radius: var(--ds-radius-none);
+    border-end-start-radius: var(--ds-radius-8);
+    border-end-end-radius: var(--ds-radius-8);
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  .viewport {
+    position: relative;
+  }
+
+  .content {
+    box-sizing: border-box;
+  }
+
+  .listItem {
+    display: block;
+  }
+
+  .dropdownList,
+  .groupList,
+  .paneList {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /*
+   * A panel row: a --ds-size-hit pitch in type-body-ui, no rest underline
+   * [D80]. Link's list-link build (`kind="nav"` with `list`) gives its ink
+   * and its hover, press and current states; the row's full width and
+   * underline offset are restated in the compounds layer, above Link's.
+   */
+  .link {
+    box-sizing: border-box;
+    padding-inline: var(--size-px-2);
+    margin-inline: calc(-1 * var(--size-px-2));
+  }
+
+  /* ── Dropdown ──────────────────────────────────────────────────────── */
+
+  /* 200 px to --size-px-14 wide (§9.1). */
+  .dropdown {
+    min-inline-size: var(--ds-size-menu-min);
+  }
+
+  .dropdownList {
+    box-sizing: border-box;
+    min-inline-size: var(--ds-size-menu-min);
+    max-inline-size: var(--size-px-14);
+    padding-block: var(--size-px-2);
+    padding-inline: var(--size-px-3);
+  }
+
+  /* ── Overview (LTA) ────────────────────────────────────────────────── */
+
+  /* Content on the 12-column grid of --ds-container-content, aligned with the bar's container. */
+  .overview {
+    --navigation-menu-overview-size: min(
+      calc(var(--anchor-width, 100vw) - 2 * var(--ds-space-margin)),
+      var(--ds-container-content)
+    );
+
+    padding-block: var(--size-px-7) var(--size-px-8);
+  }
+
+  .overviewInner {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--ds-space-margin);
+    box-sizing: border-box;
+    inline-size: var(--navigation-menu-overview-size);
+    margin-inline-start: calc(
+      (var(--anchor-width, 100vw) - var(--navigation-menu-overview-size)) / 2
+    );
+  }
+
+  .overviewMain {
+    grid-column: 1 / -1;
+    min-inline-size: 0;
+  }
+
+  .promoCell {
+    grid-column: 9 / -1;
+    min-inline-size: 0;
+  }
+
+  .promo {
+    inline-size: 100%;
+  }
+
+  /* Overview link, then the description --size-px-2 below, the tier rule --size-px-5 below that. */
+  .featuredBlock {
+    padding-block-end: var(--size-px-5);
+  }
+
+  .featured,
+  .featuredBar,
+  .heading {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-px-1);
+    box-sizing: border-box;
+    min-block-size: var(--ds-size-hit);
+    margin: 0;
+    text-decoration-line: none;
+  }
+
+  .featured {
+    color: var(--role-heading);
+  }
+
+  .featuredLabel,
+  .headingLabel {
+    text-decoration-color: var(--primary12);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  /* The overview link and group heading ›: --role-accent of the white scope. */
+  .featuredGlyph,
+  .headingGlyph {
+    flex: none;
+    color: var(--role-accent);
+  }
+
+  .description {
+    margin: var(--size-px-2) 0 0;
+  }
+
+  /* The tier rule spans the link-group columns (a hairline Separator). */
+  .tierRule {
+    inline-size: 100%;
+  }
+
+  .search {
+    max-inline-size: var(--size-sm);
+    margin-block-start: var(--size-px-5);
+  }
+
+  /* Groups: up to 4-up across 12 columns; 2-up in columns 1–8 beside a promo. */
+  .groups {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: var(--ds-space-margin);
+    row-gap: var(--size-px-5);
+    margin-block-start: var(--size-px-5);
+  }
+
+  .group {
+    min-inline-size: 0;
+  }
+
+  .heading {
+    color: var(--primary12);
+  }
+
+  /* ── Index (Audubon) ───────────────────────────────────────────────── */
+
+  /* At most 2 × --size-px-14: the category list, then a pane of at least --size-px-14. */
+  .index {
+    inline-size: calc(2 * var(--size-px-14));
+    max-inline-size: 100%;
+  }
+
+  .indexBody {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .indexRoot {
+    display: grid;
+    grid-template-columns: var(--size-px-13) minmax(var(--size-px-14), 1fr);
+  }
+
+  .categoryList {
+    margin: 0;
+    padding-block: var(--size-px-2);
+    padding-inline: 0;
+    list-style: none;
+  }
+
+  .categoryItem {
+    display: block;
+  }
+
+  .categoryTrigger {
+    position: relative;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: var(--ds-size-hit);
+    margin: 0;
+    padding-block: 0;
+    padding-inline: var(--size-px-3);
+    border: 0;
+    background: none;
+    color: var(--primary12);
+    text-align: start;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  /* The selected category's start-edge bar: a border, never a fill alone. */
+  .categoryTrigger::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    border-inline-start: 0 solid var(--primary12);
+    pointer-events: none;
+  }
+
+  .categoryLabel {
+    text-decoration-color: var(--primary12);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  .linkPane {
+    position: relative;
+    min-inline-size: 0;
+  }
+
+  .linkPaneContent {
+    box-sizing: border-box;
+    inline-size: 100%;
+  }
+
+  .paneList {
+    padding-block: var(--size-px-2);
+    padding-inline: var(--size-px-3);
+  }
+
+  /* The featured bar across both panes, above a --role-hairline rule. */
+  .featuredBarCell {
+    padding-block: var(--size-px-2);
+    padding-inline: var(--size-px-3);
+    border-block-start: var(--border-size-1) solid var(--role-hairline);
+  }
+
+  .featuredBar {
+    color: var(--primary12);
+  }
+
+  .featuredBarGlyph {
+    flex: none;
+    color: var(--role-glyph);
+  }
+
+  /* Hover transitions [D181]: color only, --ds-duration-quick; nothing moves. */
+  @media (--motionOK) {
+    .label,
+    .featured,
+    .featuredLabel,
+    .headingLabel,
+    .categoryLabel {
+      transition-property: color, text-decoration-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+
+    /* First open only: the clip reveal from the top; switching and closing stay instant [D182]. */
+    .popup {
+      transition-property: clip-path;
+      transition-duration: var(--ds-duration-disclosure);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer variants {
+  .withPromo .overviewMain {
+    grid-column: 1 / span 8;
+  }
+
+  .withPromo .groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* The promo's image is 16:9 (the card's own media is 3:2). */
+  .promoMedia {
+    aspect-ratio: var(--ratio-widescreen);
+  }
+}
+
+@layer compounds {
+  /* A panel row spans its list item (Link's `nav` is inline-flex); its current underline sits --size-px-1 below. */
+  .link {
+    display: flex;
+    text-underline-offset: var(--size-px-1);
+  }
+}
+
+@layer states {
+  /* ── Bar items ─────────────────────────────────────────────────────── */
+
+  /* Hover (not disabled) [D181]: the bare-text underline, --role-accent at --border-size-2, offset --size-px-1. */
+  .trigger:not([data-disabled]):hover .label,
+  .barLink:hover .label {
+    text-decoration-line: underline;
+  }
+
+  /* Pressed: a --ds-stroke-3 underline in --primary12 under the label (derived; flagged). */
+  .trigger:not([data-disabled]):active .label,
+  .barLink:active .label {
+    text-decoration-line: underline;
+    text-decoration-color: var(--primary12);
+    text-decoration-thickness: var(--ds-stroke-3);
+  }
+
+  /* Parent of current (aria-current="true", path prefix): the bar at --border-size-2. */
+  .trigger[aria-current='true']::after,
+  .barLink[aria-current='true']::after {
+    border-block-end-width: var(--border-size-2);
+  }
+
+  /* Current (data-active, aria-current="page"): the --ds-stroke-3 bar plus --font-weight-7. */
+  .barLink[data-active]::after {
+    border-block-end-width: var(--ds-stroke-3);
+  }
+
+  .barLink[data-active] .label {
+    font-weight: var(--font-weight-7);
+  }
+
+  /* Open (data-popup-open): the --ds-stroke-3 bar flush with the bar's rule; the chevron flips. */
+  .trigger[data-popup-open]::after {
+    border-block-end-width: var(--ds-stroke-3);
+  }
+
+  .chevron[data-popup-open] {
+    rotate: 180deg;
+  }
+
+  /* Focus: the 2 px --primary12 ring at a 2 px offset, on the hit area [D45]. */
+  .trigger:focus-visible,
+  .barLink:focus-visible {
+    outline: none;
+  }
+
+  .trigger:focus-visible .hit,
+  .barLink:focus-visible .hit {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  /* ── Panel links (every kind) ──────────────────────────────────────── */
+
+  /*
+   * Hover, press and current come from Link's list-link build [D181]. The
+   * ring sits just inside the row, so the scroll area never clips it
+   * (`.content` outranks Link's own ring rule).
+   */
+  .content .link:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: calc(-1 * var(--border-size-2));
+  }
+
+  /* ── Chevron links: overview link, group headings, featured bar ────── */
+
+  /* Hover: label --role-link-hover, › the next tier's weight (Icon weight="interactive"). */
+  .featured:hover .featuredLabel,
+  .heading:hover .headingLabel,
+  .featuredBar:hover .featuredLabel {
+    color: var(--role-link-hover);
+    text-decoration-line: var(--ds-link-hover-line);
+  }
+
+  .featured:active .featuredLabel,
+  .heading:active .headingLabel,
+  .featuredBar:active .featuredLabel {
+    text-decoration-line: underline;
+    text-decoration-thickness: var(--border-size-2);
+  }
+
+  /* On the section landing page: --font-weight-7 plus a --ds-stroke-3 underline. */
+  .featured[data-active] .featuredLabel,
+  .heading[data-active] .headingLabel,
+  .featuredBar[data-active] .featuredLabel {
+    font-weight: var(--font-weight-7);
+    text-decoration-line: underline;
+    text-decoration-thickness: var(--ds-stroke-3);
+  }
+
+  .featured:focus-visible,
+  .heading:focus-visible,
+  .featuredBar:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  /* ── Index categories ──────────────────────────────────────────────── */
+
+  .categoryTrigger:hover .categoryLabel {
+    color: var(--role-link-hover);
+    text-decoration-line: var(--ds-link-hover-line);
+  }
+
+  .categoryTrigger:active .categoryLabel {
+    text-decoration-line: underline;
+    text-decoration-thickness: var(--border-size-2);
+  }
+
+  /* Selected (data-popup-open): the --ds-stroke-3 start-edge bar plus --font-weight-7. */
+  .categoryTrigger[data-popup-open] {
+    font-weight: var(--font-weight-7);
+  }
+
+  .categoryTrigger[data-popup-open]::before {
+    border-inline-start-width: var(--ds-stroke-3);
+  }
+
+  .categoryTrigger:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: calc(-1 * var(--border-size-2));
+  }
+
+  /* ── Forced colors: a color-only hover also underlines [D181] ──────── */
+
+  @media (--forcedColors) {
+    .featured:hover .featuredLabel,
+    .heading:hover .headingLabel,
+    .featuredBar:hover .featuredLabel,
+    .categoryTrigger:hover .categoryLabel {
+      text-decoration-line: underline;
+    }
+  }
+
+  /* ── Motion: the first open's clip reveal from the top [D91, D182] ─── */
+
+  .popup[data-starting-style] {
+    clip-path: var(--navigation-menu-clip-from);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Hidden, an open panel included; the §7.8 masthead replaces navigation (§7.7). */
+    .base,
+    .positioner {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,103 @@
+# Card
+
+A self-contained, linked item among peers, composed from semantic HTML with optional parts for media, title, meta, body and footer.
+
+```tsx
+import {
+  Card,
+  CardBody,
+  CardMeta,
+  CardTitle,
+  CardTitleLink,
+} from '@fairgarden-private/design/components/Card'
+```
+
+`CardTitleLink` is the card's one primary link: its hit area stretches over the whole card, and the card draws the focus ring outside its frame. The root is an inline-size container, so give it a width in shrink-to-fit layouts.
+
+## Kinds
+
+import { DemoCardKinds } from './demos/kinds'
+
+<DemoCardKinds.Title />
+
+Editorial cards are bare by default; `faced` adds a face and an edge. `kind="block"` is the featured block-edge card, one family per page. `kind="entry"` is the hero's compact entry card: a white face with a 2 px `--primary12` edge, the square `CardMedia` image flush to its start edge and as tall as the card, then a `CardKicker` category in caps and the title link. It stays horizontal at every width; the Hero lays up to three of them across its bottom edge.
+
+<DemoCardKinds />
+
+[See Demo](./demos/kinds/)
+
+## Lead, footers and unavailable
+
+import { DemoCardLead } from './demos/lead'
+
+<DemoCardLead.Title />
+
+`lead` makes the one lead card of a grid horizontal once its `card-grid` container reaches 944 px: the media takes 5 of 12 columns and the text the other 7, and a faced card's photo runs flush down its start edge. Below that it stacks like any card. Cards in a grid row share one height, and `CardFooter` is pinned to the bottom, so a row's actions line up. `disabled` marks an unavailable card (a sold-out product, a past event): a dotted edge, muted title and body, and no action. Say why in words, with a Badge. `CardChoice` holds an option card's Checkbox or Radio; when it's checked the edge steps to 2 px in the selection edge color.
+
+<DemoCardLead />
+
+[See Demo](./demos/lead/)
+
+## Primary and secondary
+
+import { DemoCardColor } from './demos/color'
+
+<DemoCardColor.Title />
+
+`primary` and `secondary` pass through to the card's face scope, so rules, text and the title's accent re-resolve together.
+
+<DemoCardColor />
+
+[See Demo](./demos/color/)
+
+## On grounds
+
+import { DemoCardGrounds } from './demos/grounds'
+
+<DemoCardGrounds.Title />
+
+A faced card nests its own Ground: `white` on a page ground, and a `paper` light island inside a field (forest, leaf) or the night band. Its edge is that face's own edge color, so it stays visible on every ground.
+
+<DemoCardGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesCard, TypesCardAdditional } from './types'
+
+### Card
+
+<TypesCard.Card />
+
+### CardTitle and CardTitleLink
+
+<TypesCard.CardTitle />
+
+<TypesCard.CardTitleLink />
+
+### CardMeta, CardBody and CardFooter
+
+<TypesCard.CardMeta />
+
+<TypesCard.CardBody />
+
+<TypesCard.CardFooter />
+
+### CardChoice
+
+<TypesCard.CardChoice />
+
+### CardMedia and CardKicker
+
+<TypesCard.CardMedia />
+
+<TypesCard.CardKicker />
+
+### Additional types
+
+<TypesCardAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §12.2 (card).

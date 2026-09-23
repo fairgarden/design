@@ -1,0 +1,312 @@
+/*
+ * Tokens (§1.5): Open Props non-color primitives, used as shipped, plus every
+ * --ds- system extension. --ds- never holds a color [D112]. Units [D123]:
+ * text rem, tracking em, leading unitless; spacing, strokes, radii and sizes
+ * px; measure ch; print pt and mm (print values: print.css).
+ */
+@import 'open-props/sizes.min.css' layer(tokens);
+@import 'open-props/fonts.min.css' layer(tokens);
+@import 'open-props/borders.min.css' layer(tokens);
+@import 'open-props/easings.min.css' layer(tokens);
+@import 'open-props/zindex.min.css' layer(tokens);
+@import 'open-props/aspects.min.css' layer(tokens);
+
+@layer tokens {
+  :root {
+    /* Spacing (§1.5.10): Open Props --size-px-* plus the system steps. */
+    --ds-space-12: 12px;
+    --ds-space-40: 40px;
+    --ds-space-56: 56px;
+    --ds-space-stack: 36px; /* named exception: H2 baseline → chapter hairline */
+    --ds-space-eyebrow-rule: 14px; /* named exception [D100] */
+    --ds-space-eyebrow-content: 19px; /* named exception [D100] */
+    --ds-space-halo: var(--size-px-2);
+    --ds-space-section: var(--ds-space-56);
+    --ds-space-margin: var(--size-px-3);
+
+    /* Strokes (§1.5.7): with --border-size-1 and --border-size-2. */
+    --ds-stroke-0-75: 0.75px;
+    --ds-stroke-1-25: 1.25px;
+    --ds-stroke-1-5: 1.5px;
+    --ds-stroke-3: 3px;
+    --ds-stroke-4: 4px;
+    --ds-stroke-8: 8px;
+
+    /* Line geometry (§1.5.8, §4.6–§4.8). */
+    --ds-dot-fine: 1px;
+    --ds-dot-fine-pitch: 3px;
+    --ds-dot: 2px;
+    --ds-dot-pitch: 5px;
+    --ds-dot-bold: 4px;
+    --ds-dot-bold-pitch: 9px;
+    --ds-dash-fine: 4px;
+    --ds-dash-fine-gap: 3px;
+    --ds-dash: 5px;
+    --ds-dash-gap: 4px;
+    --ds-double-gap: 4px;
+    --ds-double-hair-gap: 3px;
+
+    /* Pattern geometry (§1.5.9). */
+    --ds-speckle-grid: 16px;
+    --ds-speckle-dot: 2px;
+    --ds-sunburst-dot: 2.5px;
+    --ds-sunburst-radius: 290px;
+    --ds-sunburst-pitch: 6.5px;
+    --ds-awning-stripe: 24px;
+    --ds-dotgrid-dot: 1.5px;
+    --ds-dotgrid-pitch: 16px;
+    --ds-dotgrid-fine-dot: 1px;
+    --ds-dotgrid-fine-pitch: 8px;
+    --ds-graph-pitch: 16px;
+    --ds-ruled-pitch: 27px;
+    --ds-hatch-pitch: 6px;
+    --ds-hatch-tile: 8px;
+    --ds-dotscreen-dot: 1.25px;
+    --ds-dotscreen-dot-heavy: 2px;
+    --ds-dotscreen-pitch-1: 6px;
+    --ds-dotscreen-pitch-2: 5px;
+    --ds-dotscreen-pitch-3: 4px;
+
+    /* Ornaments, terminals and markers (§1.5.16). */
+    --ds-ornament-dot: 5px;
+    --ds-ornament-dot-gap: 10px;
+    --ds-ornament-star: 9px;
+    --ds-zigzag-amplitude: 6px;
+    --ds-zigzag-period: 12px;
+    --ds-fringe-tick: 6px;
+    --ds-fringe-pitch: 4px;
+    /*
+     * The hill [D189]: amplitude 4.6% of the band's width, clamped between
+     * these (the max is reached at about 1391 px); crest at 0.667 × width,
+     * the right end falling 30% of the rise; no horizon rule on screen.
+     */
+    --ds-edge-hill-min: 12px;
+    --ds-edge-hill-max: var(--size-px-9); /* 64 px */
+    --ds-arrow-head: 6px;
+    --ds-arrow-tick: 8px;
+    --ds-mark-arm: 12px;
+    --ds-mark-overhang: 6px;
+    --ds-marker-trail: 5px;
+    --ds-marker-timeline: 8px;
+    --ds-marker-waypoint: 9px;
+    --ds-marker-current: 10px;
+
+    /* Radii (§1.5.11): with --radius-1 (2 px) and --radius-round. */
+    --ds-radius-none: 0;
+    --ds-radius-8: 8px;
+    --ds-radius-20: 20px;
+    /* ≈ 1/7 of the frame's width, max 64 px; the frame's parent is its container. */
+    --ds-radius-feature: min(calc(100cqi / 7), var(--size-px-9));
+    /* Conditional radii [D171]: full radius while narrower than the viewport, 0 when full-bleed. */
+    --ds-radius-conditional-8: clamp(0px, calc(100vw - 100%) * 1e5, var(--ds-radius-8));
+    --ds-radius-conditional-20: clamp(0px, calc(100vw - 100%) * 1e5, var(--ds-radius-20));
+
+    /* Type families (§1.5.5) [D159]; --ds-font-fine is set per mode (theme.css). */
+    --ds-font-display: 'Fraunces Variable', 'Source Serif 4 Variable', var(--font-old-style);
+    --ds-font-text: 'Source Serif 4 Variable', var(--font-transitional);
+    --ds-font-ui: 'Figtree Variable', var(--font-geometric-humanist);
+    --ds-font-mono: 'IBM Plex Mono', var(--font-mono);
+    --ds-font-display-settings: 'SOFT' 0, 'WONK' 0;
+    --ds-font-accent-settings: 'SOFT' 100, 'WONK' 1;
+
+    /* Type sizes (§1.5.6): rem, fluid from 360 px to 1024 px. */
+    --ds-font-size-display-xl: clamp(2.5625rem, calc(2.5625rem + 1.125 * (100vw - 22.5rem) / 41.5), 3.6875rem); /* 41 → 59 px */
+    --ds-font-size-display: clamp(2.125rem, calc(2.125rem + 0.9375 * (100vw - 22.5rem) / 41.5), 3.0625rem); /* 34 → 49 px */
+    --ds-font-size-h2: clamp(1.75rem, calc(1.75rem + 0.375 * (100vw - 22.5rem) / 41.5), 2.125rem); /* 28 → 34 px */
+    --ds-font-size-itemhead: clamp(1.375rem, calc(1.375rem + 0.125 * (100vw - 22.5rem) / 41.5), var(--font-size-4)); /* 22 → 24 px */
+    --ds-font-size-kicker: clamp(1.125rem, calc(1.125rem + 0.125 * (100vw - 22.5rem) / 41.5), var(--font-size-3)); /* 18 → 20 px */
+    --ds-font-size-subhead: clamp(1.125rem, calc(1.125rem + 0.0625 * (100vw - 22.5rem) / 41.5), 1.1875rem); /* 18 → 19 px */
+    --ds-font-size-lead: clamp(var(--font-size-3), calc(1.25rem + 0.125 * (100vw - 22.5rem) / 41.5), 1.375rem); /* 20 → 22 px */
+    --ds-font-size-quote: clamp(var(--font-size-4), calc(1.5rem + 0.5 * (100vw - 22.5rem) / 41.5), var(--font-size-5)); /* 24 → 32 px */
+    --ds-font-size-body: clamp(1.0625rem, calc(1.0625rem + 0.0625 * (100vw - 22.5rem) / 41.5), 1.125rem); /* 17 → 18 px */
+    --ds-font-size-body-ui: clamp(var(--font-size-1), calc(1rem + 0.0625 * (100vw - 22.5rem) / 41.5), 1.0625rem); /* 16 → 17 px */
+    --ds-font-size-marquee: clamp(1.375rem, calc(1.375rem + 0.25 * (100vw - 22.5rem) / 41.5), 1.625rem); /* 22 → 26 px */
+    --ds-font-size-button-lg: 1.0625rem; /* 17 px */
+    --ds-font-size-button: clamp(0.875rem, calc(0.875rem + 0.0625 * (100vw - 22.5rem) / 41.5), 0.9375rem); /* 14 → 15 px */
+    --ds-font-size-footnote: 0.9375rem; /* 15 px */
+    --ds-font-size-caption: 0.875rem; /* 14 px */
+    --ds-font-size-eyebrow: clamp(0.8125rem, calc(0.8125rem + 0.0625 * (100vw - 22.5rem) / 41.5), 0.875rem); /* 13 → 14 px */
+    --ds-font-size-label: 0.8125rem; /* 13 px */
+    --ds-font-size-url: 8pt; /* print only */
+    /* type-stat: display-xl on screen, 24 pt in print (§1.5.6, §8.8), where display-xl prints 26 pt (print.css). */
+    --ds-font-size-stat: var(--ds-font-size-display-xl);
+    --ds-lockup-accent-factor: 1.45; /* provisional: compute from font metrics [D64] */
+
+    /* Leading, tracking, numerals, measure (§1.5.6). */
+    --ds-leading-display: 1;
+    --ds-leading-compact: 1.4;
+    --ds-leading-reading: 1.6;
+    --ds-tracking-tight: -0.01em;
+    --ds-numerals-prose: oldstyle-nums proportional-nums;
+    --ds-numerals-data: lining-nums tabular-nums;
+    --ds-measure-reading: 66ch;
+    --ds-measure-print: 66ch;
+
+    /* Sizing and hit targets (§1.5.12). */
+    --ds-size-control-md: 40px;
+    --ds-size-control-xl: 56px;
+    --ds-size-hit: 44px;
+    --ds-size-icon-block: 36px;
+    --ds-size-bar-utility: 36px;
+    --ds-size-art-s: 152px;
+    --ds-size-art-l: 312px;
+    --ds-size-art-plate-wide: 640px;
+    --ds-size-thumb: 72px;
+    --ds-size-avatar-xl: 128px;
+    --ds-size-tick-minor: 6px; /* slider minor tick */
+    --ds-size-pager-dot: 10px; /* step pager position dot, outlined (§9.9) */
+    --ds-size-pager-dot-current: 12px; /* the current dot, solid (§9.9) */
+
+    /* Overlay panels (§10.1, §9.7, §10.16). JS mirrors: utils/tokens.ts. */
+    --ds-size-tooltip: 280px; /* tooltip max width */
+    --ds-size-overlay-max: 360px; /* anchored panel max width (popover, preview card, select list) */
+    --ds-size-menu-min: 200px; /* menu min width */
+    --ds-popup-offset: var(--size-px-2); /* 8 px, panel to trigger */
+    --ds-popup-clearance: var(--size-px-3); /* 16 px, panel to viewport edge (base --ds-space-margin) */
+
+    /*
+     * Table density (§8.2, §1.5.16) [D83, D169]: cell padding, the minimum
+     * row pitch and the row-rule switch, so a Ground's data-density reaches
+     * every Table inside it (the density sets below). --ds-table-row-rule is
+     * the width of the --role-rule row rule that replaces the --role-hairline
+     * one: 0 while padding holds --ds-space-12, --border-size-1 when compact.
+     */
+    --ds-table-pad-block: var(--ds-space-12);
+    --ds-table-pad-inline: var(--size-px-3);
+    --ds-table-row-min: 0px;
+    --ds-table-row-rule: 0px;
+
+    /* Containers (§1.5.13): with --size-sm (480 px) and --size-content-2. */
+    --ds-container-content: 1120px;
+    --ds-container-wide: 1360px;
+
+    /* Focus (§1.5.14): 2 px ring at a 2 px offset, color --primary12. */
+    --ds-focus-width: var(--border-size-2);
+    --ds-focus-offset: var(--border-size-2);
+
+    /* Motion (§1.5.15): with --ease-out-3. */
+    --ds-duration-instant: 0ms;
+    --ds-duration-quick: 120ms;
+    --ds-duration-disclosure: 200ms;
+    --ds-delay-tooltip: 500ms;
+    --ds-duration-toast: 6s;
+    /* Desktop Navigation Menu hover intent [D182]; JS mirror: utils/tokens.ts. */
+    --ds-delay-nav-open: 150ms;
+    --ds-delay-nav-close: 300ms;
+
+    /* Media (§1.5.16): with --ratio-widescreen, --ratio-portrait, --ratio-square. */
+    --ds-ratio-photo: 3 / 2;
+
+    /* Print (§1.5.13, §1.5.16). */
+    --ds-print-margin-inline: 18mm;
+    --ds-print-margin-block: 20mm;
+    --ds-print-live-width: 174mm;
+    --ds-print-figure-max: 100mm;
+    --ds-print-hero-max: 60mm;
+    --ds-print-qr: 22mm;
+    /* The trail and timeline spines in print: 0.75 pt, 3 pt dash, 2.5 pt gap (§1.5.8, §4.7.1) [D142]. */
+    --ds-print-trail-stroke: 0.75pt;
+    --ds-print-trail-dash: 3pt;
+    --ds-print-trail-gap: 2.5pt;
+  }
+
+  @media (--sm-n-above) {
+    :root {
+      --ds-space-margin: var(--size-px-5);
+    }
+  }
+
+  @media (--md-n-above) {
+    :root {
+      --ds-space-margin: var(--size-px-7);
+    }
+  }
+
+  @media (--lg-n-above) {
+    :root {
+      --ds-space-margin: var(--ds-space-40);
+      --ds-space-section: var(--size-px-10);
+      --ds-ruled-pitch: 29px;
+    }
+  }
+
+  /* Reduced motion: every duration is instant (§1.5.15). */
+  @media (--motionNotOK) {
+    :root {
+      --ds-duration-quick: var(--ds-duration-instant);
+      --ds-duration-disclosure: var(--ds-duration-instant);
+    }
+  }
+
+  /* Density sets (§1.5.16), set per module, never by breakpoint (§5.8). */
+  [data-density='spacious'] {
+    --ds-space-section: var(--size-px-10);
+  }
+
+  /* Default and spacious keep the default table; restated so a nested module resets a compact parent. */
+  [data-density='default'],
+  [data-density='spacious'] {
+    --ds-table-pad-block: var(--ds-space-12);
+    --ds-table-pad-inline: var(--size-px-3);
+    --ds-table-row-min: 0px;
+    --ds-table-row-rule: 0px;
+  }
+
+  /* Compact: cells --size-px-2 × --ds-space-12, rows ≥ 32 px, --role-rule row rules [D83]. */
+  [data-density='compact'] {
+    --ds-space-section: var(--size-px-7);
+    --ds-table-pad-block: var(--size-px-2);
+    --ds-table-pad-inline: var(--ds-space-12);
+    --ds-table-row-min: var(--size-px-7);
+    --ds-table-row-rule: var(--border-size-1);
+  }
+
+  @media (--lg-n-above) {
+    [data-density='spacious'] {
+      --ds-space-section: var(--size-px-11);
+    }
+
+    [data-density='compact'] {
+      --ds-space-section: var(--ds-space-40);
+    }
+  }
+}
+
+/* ── Added by the icons-and-patterns work (pattern.module.css) ───────────── */
+@layer tokens {
+  :root {
+    /*
+     * Shaped-edge switch (§4.9.2) [D179]: the `display` of a shaped edge's
+     * drawn layer (ornament-fringe, the hill). A shaped edge sits only on a
+     * band seam that tone separates, which in v1 is the night band against
+     * a page ground in light mode. The role maps (roles.css) set `none` on
+     * every other scope, and on the night band wherever its --role-seam turns
+     * visible (dark mode), so the band shows its straight seam rule instead.
+     */
+    --ds-edge-shaped: block;
+
+    /*
+     * Hover underline switches [D181], `none` or `underline`, set per scope
+     * by the role maps (roles.css), like --ds-edge-shaped:
+     * - --ds-link-hover-line: `underline` where --role-link-hover is
+     *   --primary12 (saturated fields, royal, brick, dark rose and heather),
+     *   so a hover that would change only an ink also underlines;
+     * - --ds-soft-hover-line: `underline` where soft fills drop (the
+     *   pastels, forest, the solid fields), so the outline Button's hover
+     *   takes the bare-text underline instead of its --primary3 fill.
+     */
+    --ds-link-hover-line: none;
+    --ds-soft-hover-line: none;
+
+    /*
+     * Chart sequential-cell switches (§8.7) [D125, D167], `display` values
+     * set per scope by the role maps (roles.css), like --ds-edge-shaped: a
+     * light base ground (and a `white` plate) shows the flat screen fills
+     * (--ds-series-fill: inline); every other ground shows the one-ink
+     * patterns on screen (--ds-series-pattern: inline). The odd-slot ink is
+     * the --role-series-odd alias.
+     */
+    --ds-series-fill: inline;
+    --ds-series-pattern: none;
+  }
+}

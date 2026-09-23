@@ -1,0 +1,84 @@
+# Toolbar
+
+A compact row of tools acting on one object or region: a list's count and actions, formatting controls, a context bar or the controls under a figure.
+
+```tsx
+import {
+  Toolbar,
+  ToolbarButton,
+  ToolbarCount,
+  ToolbarGroup,
+  ToolbarMore,
+  ToolbarSeparator,
+} from '@fairgarden-private/design/components/Toolbar'
+```
+
+A Base UI Toolbar: one Tab stop enters it, arrow keys move within it, and it remembers the last focused item. `ToolbarButton` is a `text` Button by default, so its hover, press and focus come from the Button; disabled buttons stay focusable so their names can be read. Add a Toggle or a Menu trigger through `ToolbarItem`'s `render`, and a Link with `ToolbarLink`. Groups sit `--size-px-1` apart inside and divide with short vertical rules. The row takes the band's ground and has no face of its own. Avoid saturated fields, and never float a toolbar or stack two sticky bars.
+
+## List and figure toolbars
+
+import { DemoToolbarKinds } from './demos/kinds'
+
+<DemoToolbarKinds.Title />
+
+`list` (the default) puts the mono count first and its actions at the end. `figure` spreads its groups under the figure. A toolbar reflows on its own width and never scrolls or wraps: below 768 px a `text` Button with an icon shows only its glyph, its label kept as the accessible name and shown in a tooltip, and `lowPriority` items leave the row for `ToolbarMore`, whose menu lists them again. From 768 px labels and low-priority items return and "More" goes. The root is an inline-size container named `toolbar`. Drag a frame's corner to watch the reflow.
+
+<DemoToolbarKinds />
+
+[See Demo](./demos/kinds/)
+
+`format` is a start-aligned row of icon toggles and buttons in groups. `context` is the docked bar: pass `docked` for the top edge's one sticky bar, opaque on the band's ground with a rule on the content side; swap it with the header, never stack the two.
+
+## On grounds
+
+import { DemoToolbarGrounds } from './demos/grounds'
+
+<DemoToolbarGrounds.Title />
+
+Items keep their own roles: labels in the text ink, glyphs in the glyph role, separators and the bottom rule in the rule role.
+
+<DemoToolbarGrounds />
+
+[See Demo](./demos/grounds/)
+
+In print the toolbar is hidden. Pass `caption` to print the state it carries as one line in its place, such as "54 items · Sorted by name".
+
+## API Reference
+
+import { TypesToolbar, TypesToolbarAdditional } from './types'
+
+### Toolbar
+
+<TypesToolbar.Toolbar />
+
+### ToolbarButton
+
+<TypesToolbar.ToolbarButton />
+
+### ToolbarGroup and ToolbarSeparator
+
+<TypesToolbar.ToolbarGroup />
+
+<TypesToolbar.ToolbarSeparator />
+
+### ToolbarItem and ToolbarLink
+
+<TypesToolbar.ToolbarItem />
+
+<TypesToolbar.ToolbarLink />
+
+### ToolbarCount, ToolbarMore and ToolbarBottomRule
+
+<TypesToolbar.ToolbarCount />
+
+<TypesToolbar.ToolbarMore />
+
+<TypesToolbar.ToolbarBottomRule />
+
+### Additional types
+
+<TypesToolbarAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §9.11 (toolbar), §9.12 (separators) and §5.10.2 (reflow).

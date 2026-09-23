@@ -1,0 +1,326 @@
+/*
+ * Search (§9.10). CVA function `search`. The module styles only Search's
+ * own parts: `base` (the search landmark), `magnifier`, `rules` (the
+ * rule-bounded field, with `rulesEdge` / `rulesEdgeLine` for its dotted
+ * disabled rules), `popup`, `list`, `group`, `groupLabel`, `item`,
+ * `itemIcon`, `itemText`, `match`, `secondaryName`, `seeAll`, `status`,
+ * `bar` (docked); `positioner` places the popup on --layer-3. The boxed
+ * field is the Input's box (§10.1), the submit a `solid` Button butted to
+ * it, and the clear and header trigger icon-only Buttons: their parts are
+ * left to their own modules (§1.11.1). Colors are role variables only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.item {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.groupLabel {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.secondaryName {
+  composes: typeCaption typeMuted from '../../utils/type.module.css';
+}
+
+.status {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.rulesEdgeLine {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+@layer base {
+  /* The landmark: in-page filters run full width at base and --size-sm from --md-n-above. */
+  .base {
+    display: block;
+    inline-size: 100%;
+    min-inline-size: 0;
+    color: var(--primary12);
+  }
+
+  .form {
+    display: block;
+    margin: 0;
+  }
+
+  /* The magnifier: Material Symbols Rounded `search`, inline tier, decorative, --primary12 [D166]. */
+  .magnifier {
+    flex: none;
+    color: inherit;
+  }
+
+  /*
+   * Rule-bounded: no box; the field sits between two --border-size-2
+   * --primary12 rules the width of the container (Sofar Sounds).
+   */
+  .rules {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-2);
+    box-sizing: border-box;
+    inline-size: 100%;
+    block-size: var(--size-px-8);
+    padding-inline: var(--ds-space-12);
+    border-block: var(--border-size-2) solid var(--primary12);
+    color: var(--primary12);
+    cursor: text;
+  }
+
+  .rulesEdge {
+    display: none;
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .rulesEdgeLine {
+    fill: none;
+    stroke: var(--role-disabled-edge);
+  }
+
+  .positioner {
+    z-index: var(--layer-3);
+    outline: 0;
+  }
+
+  /* The §9.1 panel at field width: the white scope's face, the --border-size-2 --primary12 frame. */
+  .popup {
+    /* The clip reveal starts from the trigger side. */
+    --search-reveal-from: inset(0 0 100% 0);
+
+    box-sizing: border-box;
+    inline-size: var(--anchor-width);
+    max-inline-size: calc(100vw - 2 * var(--ds-space-margin));
+    border: var(--border-size-2) solid var(--primary12);
+    border-radius: var(--ds-radius-8);
+    background-color: var(--primary1);
+    color: var(--primary12);
+    clip-path: inset(0);
+    outline: 0;
+  }
+
+  /* 8 rows visible, then it scrolls. */
+  .list {
+    box-sizing: border-box;
+    max-block-size: min(
+      var(--available-height, 100vh),
+      calc(8 * var(--ds-size-hit) + 2 * var(--size-px-1))
+    );
+    padding: var(--size-px-1);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-padding-block: var(--size-px-1);
+    outline: 0;
+  }
+
+  .list:empty {
+    padding: 0;
+  }
+
+  /* Groups: a type-label head, and a --border-size-1 --role-rule rule above every group but the first. */
+  .group {
+    display: block;
+  }
+
+  .group + .group {
+    margin-block-start: var(--size-px-1);
+    padding-block-start: var(--size-px-1);
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  .groupLabel {
+    padding-block: var(--size-px-2) var(--size-px-1);
+    padding-inline: var(--size-px-3);
+    color: var(--role-muted);
+  }
+
+  /* Suggestion rows: --ds-size-hit, type-body-ui; an optional type icon; highlight radius 8 − 4 [D40]. */
+  .item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-2);
+    min-block-size: var(--ds-size-hit);
+    padding-inline: var(--size-px-3);
+    border-radius: calc(var(--ds-radius-8) - var(--size-px-1));
+    color: var(--primary12);
+    text-decoration-line: none;
+    cursor: default;
+    outline: 0;
+    user-select: none;
+  }
+
+  .item::before {
+    content: '';
+    display: none;
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    border-inline-start: var(--ds-stroke-3) solid var(--primary12);
+  }
+
+  .itemIcon {
+    flex: none;
+    color: var(--primary12);
+  }
+
+  .itemText {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: var(--size-px-2);
+    min-inline-size: 0;
+  }
+
+  /* Matches are marked by weight, not color, which survives every ground and B/W. */
+  .match {
+    background: none;
+    color: var(--primary12);
+    font-weight: var(--font-weight-7);
+  }
+
+  /* The secondary name: italic type-caption in --role-muted (Audubon's Latin names). */
+  .secondaryName {
+    font-style: italic;
+  }
+
+  /* "See all": a standalone link row (§9.3), set off by the group rule. */
+  .seeAll {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--ds-size-hit);
+    padding-inline: var(--size-px-3);
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  /* Status: "12 results", or a plain-word "No results" with a next step; never a red error (P10). */
+  .status {
+    color: var(--primary12);
+  }
+
+  .status:not(:empty) {
+    padding: var(--size-px-2) var(--size-px-3);
+  }
+
+  /* Docked: a full-width opaque bar at least --ds-size-hit tall, a --border-size-1 rule on its content side. */
+  .bar {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    min-block-size: var(--ds-size-hit);
+    padding-block: var(--size-px-2);
+    padding-inline: var(--ds-space-margin);
+    border-block-end: var(--border-size-1) solid var(--role-rule);
+    background-color: var(--role-ground);
+  }
+
+  .bar > * {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+
+  @media (--forcedColors) {
+    .rulesEdgeLine {
+      stroke: currentColor;
+    }
+  }
+
+  @media (--motionOK) {
+    /* The clip reveal (the edge wipes open), never a fade [D91]. */
+    .popup {
+      transition: clip-path var(--ds-duration-disclosure) var(--ease-out-3);
+    }
+  }
+}
+
+@layer variants {
+  /* Boxed (default): the Input's field box with the butted submit. */
+  .boxed {
+    display: block;
+  }
+
+  .ruled {
+    display: block;
+  }
+
+  /* In-page filters: --size-sm from --md-n-above. */
+  @media (--md-n-above) {
+    .boxed,
+    .ruled {
+      max-inline-size: var(--size-sm);
+    }
+  }
+
+  /* Docked: the top edge's one bar while open, on --layer-2, never stacked under another [D89]. */
+  .docked {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: var(--layer-2);
+  }
+}
+
+@layer states {
+  /* Focus: the ring on any focus of the input, outside the rules [D90]. */
+  .rules[data-focused] {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  /* Disabled: the rules become `line-dotted-fine` in --role-rule; inks --role-muted [D16]. */
+  .rules[data-disabled] {
+    border-block-style: none;
+    padding-block: var(--border-size-2);
+    color: var(--role-muted);
+  }
+
+  .rules[data-disabled] .rulesEdge {
+    display: block;
+  }
+
+  /* Highlighted: --primary4 plus a --ds-stroke-3 start bar, as Menu [D145]. */
+  .item[data-highlighted] {
+    background-color: var(--primary4);
+  }
+
+  .item[data-highlighted]::before {
+    display: block;
+  }
+
+  .item[data-disabled] {
+    background: none;
+    color: var(--role-muted);
+  }
+
+  .item[data-disabled]::before {
+    display: none;
+  }
+
+  /* Placement: a popup above the field reveals from its bottom edge. */
+  .popup[data-side='top'] {
+    --search-reveal-from: inset(100% 0 0 0);
+  }
+
+  /* The clip reveal from the trigger side [D91]; instant under --motionNotOK. */
+  .popup[data-starting-style],
+  .popup[data-ending-style] {
+    clip-path: var(--search-reveal-from);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Fields, triggers and popups are interaction only; a results page prints its heading and hits. */
+    .base,
+    .positioner {
+      display: none;
+    }
+  }
+}

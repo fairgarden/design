@@ -1,0 +1,15 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-7);
+  justify-items: center;
+  inline-size: 100%;
+}
+
+.text {
+  max-inline-size: var(--ds-measure-reading);
+  margin: 0;
+  font-family: var(--ds-font-text);
+  font-size: var(--ds-font-size-body);
+  line-height: var(--ds-leading-reading);
+  color: var(--primary12);
+}

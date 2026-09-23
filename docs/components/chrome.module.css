@@ -1,0 +1,253 @@
+/*
+ * The docs chrome, built from the design system's tokens and role variables
+ * only: no literal colors, shadows, opacity or gradients (§1.3). Rules and
+ * hairlines separate regions; the page frame reflows on Open Props custom
+ * media, resolved by the postcss pipeline.
+ */
+.page {
+  min-block-size: 100dvh;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--size-px-3);
+  align-items: center;
+  justify-content: space-between;
+  min-block-size: var(--ds-size-control-xl);
+  padding: var(--size-px-2) var(--ds-space-margin);
+  border-block-end: var(--border-size-1) solid var(--role-rule);
+}
+
+@media (--lg-n-above) {
+  .header {
+    min-block-size: var(--size-px-9);
+  }
+}
+
+.brand {
+  composes: typeKicker from '../../src/utils/type.module.css';
+  color: var(--role-heading);
+  text-decoration: none;
+}
+
+.frame {
+  display: grid;
+  gap: var(--ds-space-40);
+  max-inline-size: var(--ds-container-wide);
+  margin-inline: auto;
+  padding-inline: var(--ds-space-margin);
+}
+
+@media (--md-n-above) {
+  .frame {
+    grid-template-columns: 240px minmax(0, 1fr);
+  }
+}
+
+.main {
+  min-inline-size: 0;
+  padding-block: var(--ds-space-40) var(--ds-space-section);
+}
+
+/*
+ * Navigation: caps for wayfinding [D165]; current page marked by a bar.
+ * Below --md-n-above the list follows the page, under a rule, so a phone
+ * opens on the content rather than on 80 links (the header keeps Search).
+ */
+.nav {
+  order: 1;
+  padding-block: var(--ds-space-40);
+  border-block-start: var(--border-size-1) solid var(--role-hairline);
+}
+
+@media (--md-n-above) {
+  .nav {
+    order: 0;
+    position: sticky;
+    inset-block-start: 0;
+    align-self: start;
+    max-block-size: 100dvh;
+    overflow-y: auto;
+    border-block-start: none;
+    border-inline-end: var(--border-size-1) solid var(--role-hairline);
+  }
+}
+
+.navList,
+.navPages {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navSection + .navSection {
+  margin-block-start: var(--size-px-5);
+}
+
+.navHeading {
+  composes: typeEyebrow from '../../src/utils/type.module.css';
+  display: flex;
+  align-items: center;
+  min-block-size: var(--ds-size-hit);
+  color: var(--role-heading);
+  text-decoration: none;
+}
+
+.navLink {
+  composes: typeBodyUi from '../../src/utils/type.module.css';
+  display: flex;
+  align-items: center;
+  min-block-size: var(--ds-size-hit);
+  padding-inline-start: var(--size-px-3);
+  border-inline-start: var(--ds-stroke-3) solid var(--role-ground);
+  color: var(--primary12);
+  text-decoration: none;
+
+  &:hover {
+    border-inline-start-color: var(--role-hairline);
+  }
+
+  &[aria-current='page'] {
+    border-inline-start-color: var(--primary12);
+    font-weight: var(--font-weight-6);
+  }
+}
+
+/* Search */
+.search {
+  position: relative;
+  inline-size: min(100%, 320px);
+}
+
+.searchInput {
+  composes: typeBodyUi from '../../src/utils/type.module.css';
+  inline-size: 100%;
+  min-block-size: var(--ds-size-control-md);
+  padding-inline: var(--ds-space-12);
+  border: var(--border-size-1) solid var(--role-rule);
+  border-radius: var(--radius-1);
+  background-color: var(--primary1);
+  color: var(--primary12);
+
+  &:hover {
+    border-color: var(--primary12);
+  }
+
+  /* Text entry shows the ring on any focus [D90]. */
+  &:focus {
+    outline: var(--ds-focus-width) solid var(--primary12);
+    outline-offset: var(--ds-focus-offset);
+  }
+}
+
+/* Anchored panel: a white-style face with the --border-size-2 ink frame [D92]. */
+.results {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: calc(100% + var(--size-px-1));
+  z-index: var(--layer-3);
+  max-block-size: 60dvh;
+  margin: 0;
+  padding: var(--size-px-2) 0;
+  overflow-y: auto;
+  border: var(--border-size-2) solid var(--primary12);
+  border-radius: var(--ds-radius-8);
+  background-color: var(--primary1);
+  list-style: none;
+}
+
+.resultGroup {
+  composes: typeLabel from '../../src/utils/type.module.css';
+  padding: var(--size-px-2) var(--ds-space-12) var(--size-px-1);
+  color: var(--role-muted);
+}
+
+.resultLink {
+  composes: typeBodyUi from '../../src/utils/type.module.css';
+  display: flex;
+  align-items: center;
+  min-block-size: var(--ds-size-hit);
+  padding-inline: var(--ds-space-12);
+  color: var(--primary12);
+  text-decoration: none;
+
+  &:hover {
+    background-color: var(--primary3);
+    text-decoration: underline;
+    text-decoration-color: var(--role-accent);
+  }
+}
+
+.noResults {
+  composes: typeCaption from '../../src/utils/type.module.css';
+  padding: var(--size-px-2) var(--ds-space-12);
+  color: var(--role-muted);
+}
+
+/* Section index cards: every face has an edge [D12]. */
+.index {
+  display: grid;
+  gap: var(--size-px-3);
+  margin: var(--size-px-5) 0 0;
+  padding: 0;
+  list-style: none;
+  container: index / inline-size;
+}
+
+@container index (width >= 608px) {
+  .index {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.indexCard {
+  display: grid;
+  gap: var(--size-px-1);
+  block-size: 100%;
+  padding: var(--size-px-5);
+  border: var(--border-size-1) solid var(--role-rule);
+  border-radius: var(--ds-radius-8);
+  color: var(--primary12);
+  text-decoration: none;
+
+  &:hover {
+    border-color: var(--primary12);
+  }
+}
+
+.indexTitle {
+  composes: typeItemhead from '../../src/utils/type.module.css';
+}
+
+.indexDescription {
+  composes: typeCaption typeMuted from '../../src/utils/type.module.css';
+}
+
+.demoTitle {
+  composes: typeSubhead from '../../src/utils/type.module.css';
+  margin-block: var(--ds-space-40) var(--size-px-3);
+
+  & a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+/* Print (§7): the page prints alone; the sidebar and Search are screen wayfinding. */
+@media print {
+  .frame {
+    display: block;
+    max-inline-size: none;
+    padding-inline: 0;
+  }
+
+  .nav,
+  .search {
+    display: none;
+  }
+
+  .main {
+    padding-block: 0;
+  }
+}

@@ -1,0 +1,12 @@
+/*
+ * System custom media (§1.5.13) [D183]. Provided to every file, global or
+ * module, through @csstools/postcss-global-data (postcss.config.js and
+ * docs/postcss.config.mjs), beside Open Props' media.min.css. The
+ * definitions are consumed at build time and emit nothing.
+ *
+ * --ds-nav-inline-n-above: where the inline Navigation Bar replaces the
+ * drawer. A build-time constant: 1024 px by default (the --lg-n-above
+ * value); a site whose bar exceeds its fit budget points its PostCSS
+ * global data at its own file that sets 1440 px (the --xl-n-above value).
+ */
+@custom-media --ds-nav-inline-n-above (min-width: 1024px);

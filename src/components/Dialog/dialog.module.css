@@ -1,0 +1,257 @@
+/*
+ * Dialog (§10.14). CVA functions `dialog` (the panel) and `dialogBackdrop`
+ * (the optional solid cover) in Dialog.tsx; Alert Dialog composes this panel.
+ * Parts: base (the popup panel), topBar, eyebrow, title, close, body,
+ * description, actions, backdrop.
+ *
+ * The face is the `white` overlay scope's --primary1 and the frame is
+ * --ds-stroke-3 --primary12 in both modes, never --role-rule [D92, D156].
+ * No tinted backdrop: the frame, the titled top bar, the inert page and the
+ * full-screen sheet carry the modal state [D24 → D121]. Below --md-n-above
+ * the panel is a full-screen opaque sheet; from it, centered. Motion is
+ * instant or a clip reveal, never a fade [D91]. Colors are role variables
+ * only; local custom properties carry dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.base {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.eyebrow {
+  composes: typeEyebrow from '../../utils/type.module.css';
+}
+
+.title {
+  composes: typeItemhead from '../../utils/type.module.css';
+}
+
+.description {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+@layer base {
+  /* The sheet (base): full screen, opaque, square, no outer frame. */
+  .base {
+    --dialog-inset: var(--size-px-3);
+    --dialog-clip-from: inset(0 0 100% 0);
+
+    position: fixed;
+    inset: 0;
+    z-index: var(--layer-4);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    inline-size: 100%;
+    block-size: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0 solid var(--primary12);
+    border-radius: var(--ds-radius-none);
+    background-color: var(--primary1);
+    color: var(--primary12);
+    clip-path: inset(0);
+  }
+
+  /* Centered panel: --size-sm wide, at least --ds-space-40 from every edge, framed. */
+  @media (--md-n-above) {
+    .base {
+      inline-size: min(var(--size-sm), calc(100% - 2 * var(--ds-space-40)));
+      block-size: fit-content;
+      max-block-size: calc(100% - 2 * var(--ds-space-40));
+      margin: auto;
+      border-width: var(--ds-stroke-3);
+      border-radius: var(--ds-radius-8);
+    }
+  }
+
+  @media (--lg-n-above) {
+    .base {
+      --dialog-inset: var(--size-px-7);
+    }
+  }
+
+  /* Top bar: title, optional eyebrow and close; the sheet draws its rule underneath. */
+  .topBar {
+    flex: none;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: var(--size-px-3);
+    min-block-size: var(--ds-size-control-xl);
+    padding: var(--dialog-inset);
+    border-block-end: var(--ds-stroke-3) solid var(--primary12);
+  }
+
+  @media (--md-n-above) {
+    .topBar {
+      border-block-end-width: 0;
+    }
+  }
+
+  .eyebrow {
+    grid-column: 1;
+    color: var(--primary12);
+  }
+
+  /* The title is an item head, not a section head [D60]. */
+  .title {
+    grid-column: 1;
+    color: var(--primary12);
+  }
+
+  .close {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  /*
+   * Body: scrolls between the bars. Its block edges are the §10.19 overflow
+   * rules, drawn in the face color (invisible, as an edge equal to its fill
+   * is [D12]) until content is hidden in that direction.
+   */
+  .body {
+    flex: 1 1 auto;
+    display: grid;
+    align-content: start;
+    row-gap: var(--size-px-3);
+    min-block-size: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--dialog-inset);
+    border-block: var(--border-size-2) solid var(--primary1);
+    border-block-start-width: 0;
+  }
+
+  @media (--md-n-above) {
+    .body {
+      padding-block-start: 0;
+      border-block-start-width: var(--border-size-2);
+    }
+  }
+
+  .description {
+    color: var(--primary12);
+  }
+
+  /* Action bar: stacked, solid action first, each hugging its label [D106]; docked at the sheet's foot. */
+  .actions {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ds-space-12);
+    padding: var(--dialog-inset);
+  }
+
+  @media (--md-n-above) {
+    .actions {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+  }
+
+  /* Stack guard: the eyebrow drops; the action bar already stacks at base [D73]. */
+  @media (--xs-n-below) {
+    .eyebrow {
+      display: none;
+    }
+  }
+
+  /* Colorless by default: it only catches outside presses. */
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: var(--layer-4);
+  }
+
+  /* The clip reveal: the edge wipes open from the top [D91]. */
+  @media (--motionOK) {
+    .base {
+      transition-property: clip-path;
+      transition-duration: var(--ds-duration-disclosure);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer variants {
+  /* Wide: the detail-view width, --ds-measure-reading, from --md-n-above. */
+  @media (--md-n-above) {
+    .wide {
+      inline-size: min(var(--ds-measure-reading), calc(100% - 2 * var(--ds-space-40)));
+    }
+  }
+
+  /*
+   * Solid cover [D88 → D121]: a `kind="field"` Ground of the companion field
+   * paints it, fully opaque, at full-viewport geometry with no edge [D177].
+   * Below --md-n-above the sheet already covers the page.
+   */
+  .covered {
+    display: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+  }
+
+  @media (--md-n-above) {
+    .covered {
+      display: block;
+    }
+  }
+}
+
+@layer states {
+  .base[data-starting-style],
+  .base[data-ending-style] {
+    clip-path: var(--dialog-clip-from);
+  }
+
+  /* Focus parked on the panel itself (opened by touch): the ring sits inside the frame. */
+  .base:focus-visible {
+    outline: var(--ds-focus-width) solid var(--primary12);
+    outline-offset: calc(-2 * var(--ds-focus-width));
+  }
+
+  /* Overflow edges: --border-size-2 --role-rule while content is hidden in that direction (§10.19). */
+  .body[data-overflow-y-start] {
+    border-block-start-color: var(--role-rule);
+  }
+
+  .body[data-overflow-y-end] {
+    border-block-end-color: var(--role-rule);
+  }
+}
+
+@layer print {
+  @media print {
+    /* An open modal prints alone [D174]: every other child of the body drops. */
+    :global(body):has(.base[data-open]) > :not(:has(.base)) {
+      display: none;
+    }
+
+    /* The panel flows at full height; its frame prints through the remap. */
+    .base {
+      position: static;
+      inline-size: auto;
+      block-size: auto;
+      max-block-size: none;
+      margin: 0;
+      clip-path: none;
+    }
+
+    .body {
+      overflow: visible;
+      border-block-width: 0;
+    }
+
+    .backdrop {
+      display: none;
+    }
+  }
+}

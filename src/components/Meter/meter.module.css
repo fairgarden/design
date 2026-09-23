@@ -1,0 +1,384 @@
+/*
+ * Meter (§10.18; constructions §8.9). CVA functions `meter` and
+ * `meterStatus`. Ink only: track edges, indicators, filled cells, ticks,
+ * the arrow and labels are --primary12; the track interior shows the
+ * ground; ring tracks are --role-hairline. No part uses the secondary, so a
+ * meter never reads as a chart series. Status glyphs take --role-status of
+ * their own status scale. Colors are role variables only.
+ *
+ * Print [D126]: the indicator and filled cells compose `patternHatch`. On
+ * screen its --primary12 marks sit on the part's own --primary12 fill and
+ * disappear into it; in print the fill drops and the 45° hatch (its layer
+ * carries `print-color-adjust: exact`) prints black inside the outline,
+ * closed by an edge at the value.
+ *
+ * Local properties (counts and positions, never colors):
+ *   --meter-stops, --meter-stop-index   ordinal geometry, set inline
+ *   --meter-threshold                   the threshold position, set inline
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.label {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.value {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.stopLabel {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.statusText {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.indicator {
+  composes: patternHatch from '../../utils/pattern.module.css';
+}
+
+.cellFilled {
+  composes: patternHatch from '../../utils/pattern.module.css';
+}
+
+@layer base {
+  /* Label and value above a full-width track (§8.9 responsive baseline). */
+  .base {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'label readout'
+      'track track';
+    align-items: baseline;
+    gap: var(--size-px-1) var(--size-px-3);
+    min-inline-size: 0;
+    color: var(--primary12);
+  }
+
+  .label {
+    grid-area: label;
+    color: var(--primary12);
+  }
+
+  .readout {
+    grid-area: readout;
+    justify-self: end;
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--size-px-1) var(--size-px-2);
+  }
+
+  .value {
+    color: var(--primary12);
+    white-space: nowrap;
+  }
+
+  /* Linear: a --border-size-1 outlined --primary12 track, 8 px tall, square in data modules. */
+  .track {
+    grid-area: track;
+    align-self: center;
+    position: relative;
+    box-sizing: content-box;
+    block-size: calc(var(--size-px-2) - 2 * var(--border-size-1));
+    border: var(--border-size-1) solid var(--primary12);
+    border-radius: var(--ds-radius-none);
+  }
+
+  /* Solid --primary12; its height is Base UI's inline `inherit`. Only the value edge prints as a line. */
+  .indicator {
+    display: block;
+    box-sizing: border-box;
+    border-width: 0;
+    border-inline-end-width: var(--border-size-1);
+    background-color: var(--primary12);
+  }
+
+  /* Threshold: a --ds-space-12 tick at --border-size-2 across the track (a border, so it prints). */
+  .threshold {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: var(--meter-threshold);
+    inline-size: 0;
+    block-size: var(--ds-space-12);
+    margin-block-start: calc(var(--ds-space-12) / -2);
+    margin-inline-start: calc(var(--border-size-2) / -2);
+    border-inline-start: var(--border-size-2) solid var(--primary12);
+  }
+
+  /* Segmented: outlined --ds-space-12 cells, --border-size-1, 2 px apart; filled cells solid. */
+  .cell {
+    flex: none;
+    box-sizing: border-box;
+    inline-size: var(--ds-space-12);
+    block-size: var(--ds-space-12);
+    border: var(--border-size-1) solid var(--primary12);
+  }
+
+  .cellFilled {
+    background-color: var(--primary12);
+  }
+
+  /* Ordinal: a --border-size-1 track with stop ticks, caps labels under the stops. */
+  .stop {
+    position: absolute;
+    inset-block-start: var(--ds-space-12);
+    inset-inline-start: calc((var(--meter-stop-index) + 0.5) / var(--meter-stops) * 100%);
+    block-size: var(--size-px-2);
+    margin-inline-start: calc(var(--border-size-1) / -2);
+    border-inline-start: var(--border-size-1) solid var(--primary12);
+  }
+
+  .stopActive {
+    margin-inline-start: calc(var(--border-size-2) / -2);
+    border-inline-start-width: var(--border-size-2);
+  }
+
+  /* The active stop's arrow-triangle: outlined, never filled (§1.5.8). */
+  .arrow {
+    display: none;
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: calc((var(--meter-stop-index) + 0.5) / var(--meter-stops) * 100%);
+    inline-size: var(--ds-space-12);
+    block-size: var(--size-px-2);
+    margin-inline-start: calc(var(--ds-space-12) / -2);
+    overflow: visible;
+    fill: none;
+    stroke: var(--primary12);
+    stroke-width: var(--ds-stroke-1-25);
+    stroke-linejoin: round;
+  }
+
+  .stops {
+    grid-area: stops;
+    display: grid;
+    grid-template-columns: repeat(var(--meter-stops), minmax(0, 1fr));
+    column-gap: var(--size-px-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .stopLabel {
+    color: var(--primary12);
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  /* The active label is bold and one step larger, so it never depends on the arrow alone. */
+  .stopLabelActive {
+    --type-weight: var(--font-weight-7);
+
+    font-weight: var(--type-weight);
+    font-size: var(--ds-font-size-caption);
+  }
+
+  /* Ring: a --border-size-2 --primary12 arc over a --role-hairline track, always with its value. */
+  .ring {
+    grid-area: track;
+    display: block;
+    inline-size: var(--size-px-4);
+    block-size: var(--size-px-4);
+    overflow: visible;
+  }
+
+  .ringTrack,
+  .ringArc {
+    fill: none;
+    stroke-width: var(--border-size-2);
+  }
+
+  .ringTrack {
+    stroke: var(--role-hairline);
+  }
+
+  .ringArc {
+    stroke: var(--primary12);
+  }
+
+  /* Status: the §1.5.4 glyph in --role-status (its status scale) plus the word in --primary12. */
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-px-1);
+  }
+
+  .success,
+  .warning,
+  .danger {
+    color: var(--primary12);
+  }
+
+  .statusGlyph {
+    flex: none;
+    display: block;
+    inline-size: var(--size-px-3);
+    block-size: var(--size-px-3);
+    overflow: visible;
+    color: var(--role-status);
+    fill: var(--role-status-fill);
+    stroke: var(--role-status-fill);
+    stroke-width: var(--ds-stroke-1-5);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .statusText {
+    color: var(--primary12);
+  }
+
+  /* The meter-panel container (§10.18): a stack of meters that reflow on its width. */
+  .panel {
+    container: meter-panel / inline-size;
+    /* Size containment leaves no intrinsic width: fill the box, never collapse as a flex or shrink-to-fit item. */
+    inline-size: 100%;
+    display: grid;
+    gap: var(--size-px-5);
+    min-inline-size: 0;
+  }
+
+  @media (--forcedColors) {
+    .indicator,
+    .cellFilled {
+      forced-color-adjust: none;
+      background-color: CanvasText;
+    }
+
+    .ringArc {
+      forced-color-adjust: none;
+      stroke: CanvasText;
+    }
+
+    .statusGlyph {
+      forced-color-adjust: none;
+      color: CanvasText;
+      fill: Canvas;
+      stroke: Canvas;
+    }
+  }
+}
+
+@layer variants {
+  .steps .track {
+    justify-self: start;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--border-size-2);
+    block-size: auto;
+    border-width: 0;
+  }
+
+  /* Ordinal: arrow, 4 px, ticks crossing the 1 px line; labels below; the value is the active label. */
+  .ordinal {
+    grid-template-areas:
+      'label readout'
+      'track track'
+      'stops stops';
+  }
+
+  .ordinal .track {
+    block-size: var(--size-px-4);
+    border-width: 0;
+  }
+
+  .ordinal .track::before {
+    content: '';
+    position: absolute;
+    inset-block-start: calc(var(--ds-space-12) + var(--size-px-1));
+    inset-inline: calc(50% / var(--meter-stops));
+    border-block-start: var(--border-size-1) solid var(--primary12);
+  }
+
+  .ordinal .arrow {
+    display: block;
+  }
+
+  /* Ring: inline, the ring beside its value; its tracks pack at the start even when stretched in a panel. */
+  .kindRing {
+    display: inline-grid;
+    grid-template-columns: auto auto auto;
+    grid-template-areas: 'label track readout';
+    justify-content: start;
+    align-items: center;
+    column-gap: var(--size-px-2);
+  }
+
+  /* Viewport fallback: label | track | value in one row from --md-n-above… */
+  @media (--md-n-above) {
+    .bar,
+    .steps {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+      grid-template-areas: 'label track readout';
+    }
+
+    /* The ordinal scale takes the track column, its labels under it. */
+    .ordinal {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+      grid-template-areas:
+        'label track readout'
+        '. stops .';
+    }
+  }
+
+  /* …refined by the meter-panel container: stacked below 768 px, rows from 768 (§5.10.2). */
+  @container meter-panel (width < 768px) {
+    .bar,
+    .steps {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        'label readout'
+        'track track';
+    }
+
+    .ordinal {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        'label readout'
+        'track track'
+        'stops stops';
+    }
+  }
+
+  @container meter-panel (width >= 768px) {
+    .bar,
+    .steps {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+      grid-template-areas: 'label track readout';
+    }
+
+    .ordinal {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+      grid-template-areas:
+        'label track readout'
+        '. stops .';
+    }
+  }
+
+  /*
+   * Below 360 px of the panel, ordinal labels turn vertical (§10.18), all
+   * kept: each reads upward and hangs from its tick, so a long word never
+   * breaks mid-word in a narrow column.
+   */
+  @container meter-panel (width < 360px) {
+    .stopLabel {
+      justify-self: center;
+      writing-mode: sideways-lr;
+      text-align: end;
+      overflow-wrap: normal;
+    }
+  }
+}
+
+@layer print {
+  @media print {
+    /* Linear and segmented values print as the 45° hatch (composed); the numeral and status stay. */
+    .base {
+      break-inside: avoid;
+    }
+  }
+}

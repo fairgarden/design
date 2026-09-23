@@ -1,0 +1,59 @@
+# Slider
+
+A Base UI Slider for approximate values where relative position matters: an outlined track, an ink indicator and a tall thumb, with the value always shown in text.
+
+```tsx
+import { Slider } from '@fairgarden-private/design/components/Slider'
+```
+
+The label and value sit above a full-width track; `formatValue` adds a unit or a derived rate ("1M (≈24 WPM)"). Arrow keys step, Page Up and Page Down step by ten, Home and End jump to the ends. Never make a slider the only way to enter a precise value; exact values belong in a Number Field.
+
+## States
+
+import { DemoSliderStates } from './demos/states'
+
+<DemoSliderStates.Title />
+
+Hover gives the thumb a soft `--primary3` face; dragging steps its edge to 3 px, and a drag chip in the overlay face shows the value above the thumb. `stepped` adds the tick scale: 12 px major ticks with labels (`marks`, by default the ends and midpoint) and 6 px minor ticks at each `step`; labels thin to the ends and midpoint below 768 px and to the ends below 360 px. A range passes an array value and names each thumb with `thumbLabels`. Disabled draws dotted track and thumb edges and removes the indicator, but the value stays.
+
+<DemoSliderStates />
+
+[See Demo](./demos/states/)
+
+## Primary scale
+
+import { DemoSliderColor } from './demos/color'
+
+<DemoSliderColor.Title />
+
+`primary` drives every part: the track edge, indicator, thumb edge, ticks and value. `secondary` is unused.
+
+<DemoSliderColor />
+
+[See Demo](./demos/color/)
+
+## On grounds
+
+import { DemoSliderGrounds } from './demos/grounds'
+
+<DemoSliderGrounds.Title />
+
+The thumb face is `--role-halo`, the scope's step 1 on every ground and in both modes, ringed by its `--primary12` edge. In print the control is hidden and the slider prints as "Label: value".
+
+<DemoSliderGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesSlider, TypesSliderAdditional } from './types'
+
+<TypesSlider.Slider />
+
+### Additional types
+
+<TypesSliderAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §10.10 (slider).

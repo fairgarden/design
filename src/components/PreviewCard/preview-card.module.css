@@ -1,0 +1,177 @@
+/*
+ * Preview Card (§10.15). CVA function `previewCard` in PreviewCard.tsx.
+ * Parts: positioner (the layer), base (the popup), arrow (the tail's box)
+ * and tail (its drawing), thumb, title, description, domain.
+ *
+ * The anchored overlay surface (§10.1): the `white` scope's --primary1 face,
+ * a --border-size-2 --primary12 frame in both modes [D92, D156],
+ * --ds-radius-8, 240–360 px wide, --size-px-3 padding. Motion is instant or
+ * a clip reveal from the trigger side, never a fade [D91]. Shown only with
+ * hover and a fine pointer. Colors are role variables only; local custom
+ * properties carry dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.base {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.title {
+  composes: typeItemhead from '../../utils/type.module.css';
+}
+
+.description {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.domain {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+@layer base {
+  .positioner {
+    z-index: var(--layer-3);
+  }
+
+  .base {
+    --preview-card-tail-inline: var(--ds-space-12);
+    --preview-card-tail-block: calc(var(--ds-space-12) / 2 + var(--border-size-2));
+    --preview-card-bleed: calc(-1 * var(--preview-card-tail-block));
+    --preview-card-clip-from: inset(var(--preview-card-bleed));
+
+    position: relative;
+    display: grid;
+    row-gap: var(--size-px-2);
+    box-sizing: border-box;
+    inline-size: max-content;
+    min-inline-size: min(var(--size-px-13), calc(100vw - 2 * var(--ds-space-margin)));
+    max-inline-size: min(var(--ds-size-overlay-max), calc(100vw - 2 * var(--ds-space-margin)));
+    padding: var(--size-px-3);
+    border: var(--border-size-2) solid var(--primary12);
+    border-radius: var(--ds-radius-8);
+    background-color: var(--primary1);
+    color: var(--primary12);
+    clip-path: inset(var(--preview-card-bleed));
+  }
+
+  /* The thumbnail: 16:9, the nested radius floored at --radius-1 [D40]. */
+  .thumb {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: var(--ratio-widescreen);
+    object-fit: cover;
+    border-radius: max(var(--radius-1), calc(var(--ds-radius-8) - var(--size-px-3)));
+  }
+
+  .title,
+  .description {
+    color: var(--primary12);
+  }
+
+  .domain {
+    color: var(--role-muted);
+  }
+
+  .arrow {
+    display: flex;
+    inline-size: var(--preview-card-tail-inline);
+    block-size: var(--preview-card-tail-block);
+  }
+
+  .tail {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    overflow: visible;
+    fill: var(--primary1);
+    stroke: var(--primary12);
+    stroke-width: var(--border-size-2);
+  }
+
+  @media (--motionOK) {
+    .base {
+      transition-property: clip-path;
+      transition-duration: var(--ds-duration-disclosure);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+
+  /* Hover and a fine pointer only: on touch, stylus and coarse pointers the link simply navigates. */
+  @media (--touch), (--stylus), (--pointer) {
+    .positioner,
+    .base {
+      display: none;
+    }
+  }
+}
+
+@layer states {
+  .base[data-side='bottom'] {
+    --preview-card-clip-from: inset(
+      var(--preview-card-bleed) var(--preview-card-bleed) 100% var(--preview-card-bleed)
+    );
+  }
+
+  .base[data-side='top'] {
+    --preview-card-clip-from: inset(
+      100% var(--preview-card-bleed) var(--preview-card-bleed) var(--preview-card-bleed)
+    );
+  }
+
+  .base[data-side='left'],
+  .base[data-side='inline-start'] {
+    --preview-card-clip-from: inset(
+      var(--preview-card-bleed) var(--preview-card-bleed) var(--preview-card-bleed) 100%
+    );
+  }
+
+  .base[data-side='right'],
+  .base[data-side='inline-end'] {
+    --preview-card-clip-from: inset(
+      var(--preview-card-bleed) 100% var(--preview-card-bleed) var(--preview-card-bleed)
+    );
+  }
+
+  .base[data-starting-style],
+  .base[data-ending-style] {
+    clip-path: var(--preview-card-clip-from);
+  }
+
+  .base[data-instant] {
+    transition: none;
+  }
+
+  .arrow[data-side='bottom'] {
+    inset-block-start: calc(-1 * var(--preview-card-tail-block));
+  }
+
+  .arrow[data-side='top'] {
+    inset-block-end: calc(-1 * var(--preview-card-tail-block));
+    rotate: 180deg;
+  }
+
+  .arrow[data-side='left'],
+  .arrow[data-side='inline-start'] {
+    inset-inline-end: calc(-1 * (var(--preview-card-tail-inline) + var(--preview-card-tail-block)) / 2);
+    rotate: 90deg;
+  }
+
+  .arrow[data-side='right'],
+  .arrow[data-side='inline-end'] {
+    inset-inline-start: calc(-1 * (var(--preview-card-tail-inline) + var(--preview-card-tail-block)) / 2);
+    rotate: -90deg;
+  }
+}
+
+@layer print {
+  @media print {
+    /* Hidden; the link behind the card prints per [D79] (§7.6). */
+    .positioner,
+    .base {
+      display: none;
+    }
+  }
+}

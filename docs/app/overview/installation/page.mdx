@@ -1,0 +1,78 @@
+# Installation
+
+Add the package, import the global stylesheet and the fonts once, and wrap the app in `ClientProvider`.
+
+## Install
+
+The package ships source components built on Base UI, which is a peer dependency alongside React.
+
+```bash
+pnpm add @fairgarden-private/design @base-ui/react
+```
+
+The rest comes with the package: the fonts (Fontsource), Recharts for [Chart](../../components/chart/page.mdx), and the Material Symbols Rounded icons, generated as per-icon SVG paths, so there is no icon font to load.
+
+## Maps
+
+[Map](../../components/map/page.mdx)'s vector base draws OpenStreetMap data from a Protomaps PMTiles archive with MapLibre GL JS. Its three libraries are optional peer dependencies: install them only in apps that pass `pmtiles` to a `Map`.
+
+```bash
+pnpm add maplibre-gl pmtiles @protomaps/basemaps
+```
+
+They load with a dynamic import when a PMTiles map mounts, so pages without one never fetch them, and MapLibre's stylesheet is not needed. Under a bundler, copy `maplibre-gl-worker.mjs` and `maplibre-gl-shared.mjs` from `maplibre-gl/dist` to one public directory and pass its URL as `pmtiles.workerUrl`. The only credit is "© OpenStreetMap", which the map draws below its frame. A drawn map (`drawing`) needs none of this.
+
+## Global CSS and fonts
+
+Import both once, in the app shell. Components import their own CSS Modules; only these two are manual.
+
+```tsx filename=layout.tsx
+import '@fairgarden-private/design/utils/global.css'
+import '@fairgarden-private/design/utils/fonts'
+```
+
+- **`global.css`** declares the cascade layer order, then the reset, the tokens, the 31 Radix scales with their light and dark values, the mode blocks, the role maps and the print remap.
+- **`fonts`** self-hosts the four families (Fraunces, Source Serif 4, Figtree and IBM Plex Mono) from Fontsource under the SIL OFL, with no font CDN. See [Typography](../typography/page.mdx).
+
+## ClientProvider
+
+`ClientProvider` gives the design system and Base UI the locale and its writing direction. Place it once, inside `<html lang>`. `useLocale()` reads it back.
+
+```tsx filename=layout.tsx
+import { ClientProvider } from '@fairgarden-private/design/utils/ClientProvider'
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <ClientProvider locale="en-US">{children}</ClientProvider>
+      </body>
+    </html>
+  )
+}
+```
+
+The page root is a `paper` band. Wrap regions in a [Ground](../../components/ground/page.mdx) to change it.
+
+## Light and dark mode
+
+The system follows the operating system by default. Mode is chosen in global CSS, never in a component (§1.11.9).
+
+| On `<html>` | Result |
+| --- | --- |
+| No `data-theme` | Follows the OS: under `prefers-color-scheme: dark` the dark block applies to `:root:not([data-theme="light"])` (screen only) |
+| `data-theme="light"` | Forces light |
+| `data-theme="dark"` | Forces dark |
+
+Setting the attribute, and setting it before first paint, is the app shell's job. A page with no stored choice sets nothing and needs no script. Print always renders light.
+
+## Components never see the mode
+
+There is no mode prop, and no component module contains a `data-theme` or `prefers-color-scheme` selector. Each color is one `--{scale}{step}` variable, such as `--olive12`, that the mode blocks redefine, so a component reads the same `--primary12` in both modes and gets the right value.
+
+The eight page grounds follow the mode: `paper` and `white` turn dark, and each pastel paints its step 3, very light in light mode and near-black in dark mode. The night band and the fields write their own mode through Ground: `night`, `forest`, `royal` and `brick` stay dark, and `leaf`, `amber`, `clay` and `pink` stay light, whatever the page does.
+
+> [!NOTE]
+> `useColorScheme()` reports `light` or `dark` for non-CSS consumers only, such as the Map's MapLibre canvas (which rebuilds its style from the role variables when the mode changes), embeds and the `theme-color` meta. Charts are SVG in role variables and need no script. No component uses it to choose colors.
+
+Full specification: `DESIGN-SYSTEM.md` §1.11.9 (light and dark mode), §1.5.5 (fonts), §8.7 (charts) and §8.10 (maps); companion guide §A and §D.

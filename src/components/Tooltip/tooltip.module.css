@@ -1,0 +1,120 @@
+/*
+ * Tooltip (§10.16). Parts: `positioner` (the Base UI Positioner: its layer),
+ * `base` (the popup, a portaled overlay-scope face), `text`, and the
+ * trigger forms: `hint` (with `hintIcon` and the visually hidden
+ * `hintLabel`) and `term`. The popup appears instantly, never by fade; no
+ * shadow, blur or alpha. Colors are role variables only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.text {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.term {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+@layer base {
+  .positioner {
+    z-index: var(--layer-3);
+  }
+
+  /* The face: --primary1 of the overlay scope inside the [D92] frame, --border-size-2 --primary12. */
+  .base {
+    box-sizing: border-box;
+    max-inline-size: min(var(--ds-size-tooltip), var(--available-width));
+    padding: var(--size-px-1) var(--size-px-2);
+    border: var(--border-size-2) solid var(--primary12);
+    border-radius: var(--radius-1);
+    background-color: var(--primary1);
+    color: var(--primary12);
+    overflow-wrap: break-word;
+  }
+
+  .text {
+    display: block;
+    color: var(--primary12);
+  }
+}
+
+@layer variants {
+  /* Hint: the Material `help` glyph at the inline tier in --primary12, a 24 px target (inline exemption, §9.1). */
+  .hint {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-round);
+    background: none;
+    color: var(--primary12);
+    vertical-align: middle;
+    cursor: help;
+    appearance: none;
+  }
+
+  .hint::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    inline-size: var(--size-px-5);
+    block-size: var(--size-px-5);
+    translate: -50% -50%;
+  }
+
+  .hintIcon {
+    color: inherit;
+  }
+
+  .hintLabel {
+    position: absolute;
+    overflow: hidden;
+    clip-path: inset(50%);
+    inline-size: 1px;
+    block-size: 1px;
+    white-space: nowrap;
+  }
+
+  /* Term: running text with a `line-dotted-fine` underline in --role-rule at a 2 px offset. */
+  .term {
+    display: inline;
+    margin: 0;
+    padding: 0 0 var(--border-size-2);
+    border-width: 0;
+    border-block-end-width: var(--ds-dot-fine);
+    border-color: var(--role-rule);
+    background: none;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-align: inherit;
+    cursor: help;
+    appearance: none;
+  }
+}
+
+@layer states {
+  /* Focus: the 2 px --primary12 ring at a 2 px offset, keyboard only [D45]. */
+  .hint:focus-visible,
+  .term:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Tooltips never print; the hint glyph is interaction-only. The term's dotted underline prints as the cue. */
+    .positioner,
+    .base,
+    .hint {
+      display: none;
+    }
+  }
+}

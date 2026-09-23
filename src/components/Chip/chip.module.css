@@ -1,0 +1,171 @@
+/*
+ * Chip (§10.11): the removable chip. CVA function `chip`. It matches the
+ * Combobox's chips (combobox.module.css) part for part, so the two read as
+ * one component.
+ * Color roles (§10.11): edge --role-rule at --ds-stroke-1-5; label and ×
+ * --primary12; × pressed: the inverse pair; disabled: --role-muted label
+ * and ×, `line-dotted-fine` edge in --role-disabled-edge (--role-rule, or
+ * --primary12 on one-ink grounds [D85]). Colors are role variables only;
+ * local custom properties carry dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.base {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.edgeLine {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+@layer base {
+  /* --size-px-7 tall, --size-px-3 start padding; the × cell closes the end. */
+  .base {
+    --chip-height: var(--size-px-7);
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    max-inline-size: 100%;
+    block-size: var(--chip-height);
+    padding-inline: var(--size-px-3);
+    border: var(--ds-stroke-1-5) solid var(--role-rule);
+    border-radius: var(--radius-round);
+    color: var(--primary12);
+    vertical-align: middle;
+  }
+
+  /* With its ×, the start padding stays and the cell takes the end. */
+  .removable {
+    padding-inline-end: 0;
+  }
+
+  .label {
+    min-inline-size: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* The × in its own cell, full chip height, with a --ds-size-hit target. */
+  .remove {
+    position: relative;
+    flex: none;
+    display: grid;
+    place-items: center;
+    inline-size: var(--chip-height);
+    block-size: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-round);
+    background: none;
+    color: var(--primary12);
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .remove::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: var(--ds-size-hit);
+    block-size: var(--ds-size-hit);
+    translate: -50% -50%;
+  }
+
+  /* Disabled edge host: covers the border box once the solid edge is removed. */
+  .edge {
+    display: none;
+    position: absolute;
+    inset-block-start: calc(var(--ds-dot-fine) / 2);
+    inset-inline-start: calc(var(--ds-dot-fine) / 2);
+    inline-size: calc(100% - var(--ds-dot-fine));
+    block-size: calc(100% - var(--ds-dot-fine));
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .edgeLine {
+    fill: none;
+    stroke: var(--role-disabled-edge);
+    rx: calc(var(--chip-height) / 2 - var(--ds-dot-fine) / 2);
+  }
+
+  @media (--forcedColors) {
+    .edgeLine {
+      stroke: currentColor;
+    }
+  }
+
+  @media (--motionOK) {
+    .remove {
+      transition-property: color, background-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer states {
+  /* The × takes its own ring, inside the cell (Combobox parity). */
+  .remove:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: calc(-1 * var(--border-size-2));
+  }
+
+  /* Hover: the glyph's next tier weight comes from iconHost (§10.1). Forced colors add an outline [D181]. */
+  @media (--forcedColors) {
+    .remove:not([data-disabled]):hover {
+      outline: var(--border-size-2) solid currentColor;
+      outline-offset: calc(-1 * var(--border-size-2));
+    }
+  }
+
+  /* Pressed: the × cell takes the inverse pair (§10.1 icon states). */
+  .remove:not([data-disabled]):active {
+    background-color: var(--primary12);
+    color: var(--role-inverse);
+  }
+
+  /* Disabled: fill none, muted ink, the dotted edge; the solid edge's width moves into the padding. */
+  .base[data-disabled] {
+    padding-inline-start: calc(var(--size-px-3) + var(--ds-stroke-1-5));
+    border-style: none;
+    color: var(--role-muted);
+  }
+
+  .base[data-disabled] .edge {
+    display: block;
+  }
+
+  .remove[data-disabled] {
+    color: var(--role-muted);
+    cursor: default;
+  }
+}
+
+@layer print {
+  @media print {
+    /* Removable chips print as words (§10.11). */
+    .base {
+      block-size: auto;
+      padding: 0;
+      border: 0;
+    }
+
+    .label {
+      overflow: visible;
+      white-space: normal;
+    }
+
+    .remove,
+    .edge {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,270 @@
+/*
+ * Toast (§10.17). CVA function `toast` in Toast.tsx.
+ * Parts: viewport (the docked bar's host: the `white` scope), base (a toast:
+ * the bar itself), glyph, message, title, description, queue, actions,
+ * action, close.
+ *
+ * A full-width bar docked to the bottom viewport edge on --layer-5, never a
+ * floating card [D25]: the `white` scope's --primary1 face and a
+ * --border-size-2 --primary12 rule on its content side only [D23, D89],
+ * content aligned to --ds-container-content. Action cells are full-height
+ * `type-button` text cells divided by --border-size-1 --role-rule. One
+ * toast shows at a time. Motion is instant or a clip reveal from the bottom
+ * edge, never a fade [D91]. Colors are role variables only; local custom
+ * properties carry dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.base {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.title {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.description {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.queue {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.action {
+  composes: typeButton from '../../utils/type.module.css';
+}
+
+@layer base {
+  /* The host: docked, full width, no paint of its own (the toast is the bar). */
+  .viewport {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: var(--layer-5);
+    margin: 0;
+    padding: 0;
+    color: var(--primary12);
+  }
+
+  /*
+   * The bar at base: glyph, message, queue count and close in one row; the
+   * action cells drop to a second row of equal cells under a rule.
+   */
+  .base {
+    --toast-clip-from: inset(100% 0 0 0);
+
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      'glyph message queue close'
+      'actions actions actions actions';
+    align-items: center;
+    column-gap: var(--ds-space-12);
+    box-sizing: border-box;
+    min-block-size: var(--ds-size-control-xl);
+    padding-inline: max(
+      var(--ds-space-margin),
+      calc((100% - var(--ds-container-content)) / 2)
+    );
+    border-block-start: var(--border-size-2) solid var(--primary12);
+    background-color: var(--primary1);
+    color: var(--primary12);
+    clip-path: inset(0);
+  }
+
+  .glyph {
+    grid-area: glyph;
+    display: block;
+    inline-size: var(--size-px-4);
+    block-size: var(--size-px-4);
+    overflow: visible;
+    color: var(--role-status);
+    fill: var(--role-status-fill);
+    stroke: var(--role-status-fill);
+    stroke-width: var(--ds-stroke-1-5);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .message {
+    grid-area: message;
+    min-inline-size: 0;
+    padding-block: var(--ds-space-12);
+  }
+
+  .title,
+  .description {
+    color: var(--primary12);
+  }
+
+  .queue {
+    grid-area: queue;
+    color: var(--role-muted);
+    white-space: nowrap;
+  }
+
+  .actions {
+    grid-area: actions;
+    display: flex;
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  /* A full-height text cell; the rules between cells are its inline-start edges. */
+  .action {
+    flex: 1 1 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: var(--ds-size-hit);
+    margin: 0;
+    padding-block: 0;
+    padding-inline: var(--size-px-5);
+    border: 0;
+    border-inline-start: var(--border-size-1) solid var(--role-rule);
+    background: none;
+    color: var(--primary12);
+    white-space: nowrap;
+    text-decoration-thickness: var(--ds-stroke-1-5);
+    text-underline-offset: 0.15em;
+    appearance: none;
+  }
+
+  .action:first-child {
+    border-inline-start-width: 0;
+  }
+
+  .close {
+    grid-area: close;
+  }
+
+  /* One row from --md-n-above: the cells sit between the message and the close X, full height. */
+  @media (--md-n-above) {
+    .base {
+      grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+      grid-template-areas: 'glyph message queue actions close';
+    }
+
+    .actions {
+      align-self: stretch;
+      border-block-start-width: 0;
+    }
+
+    .action {
+      flex: none;
+    }
+
+    .action:first-child {
+      border-inline-start-width: var(--border-size-1);
+    }
+  }
+
+  @media (--motionOK) {
+    .base {
+      transition-property: clip-path;
+      transition-duration: var(--ds-duration-disclosure);
+      transition-timing-function: var(--ease-out-3);
+    }
+
+    /* Hover and press transitions [D181]: --ds-duration-quick, --ease-out-3. */
+    .action {
+      transition-property: color, background-color, text-decoration-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+
+  @media (--forcedColors) {
+    .glyph {
+      forced-color-adjust: none;
+      color: CanvasText;
+      fill: Canvas;
+      stroke: Canvas;
+    }
+  }
+}
+
+@layer variants {
+  /* The message's lead: `type-body-ui` at --font-weight-6. */
+  .title {
+    --type-weight: var(--font-weight-6);
+  }
+}
+
+@layer states {
+  /* Enter and exit: a clip reveal from the bottom edge [D91]. */
+  .base[data-starting-style],
+  .base[data-ending-style] {
+    clip-path: var(--toast-clip-from);
+  }
+
+  /* A closing toast lies over its successor, so the bar never grows while it wipes out. */
+  .base[data-ending-style] {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+  }
+
+  /* One visible at a time; the queue count reports the rest. */
+  .base[data-limited] {
+    display: none;
+  }
+
+  .base:focus-visible,
+  .viewport:focus-visible {
+    outline: var(--ds-focus-width) solid var(--primary12);
+    outline-offset: calc(-2 * var(--ds-focus-width));
+  }
+
+  /*
+   * Action cell hover (not disabled, not busy): the §9.2 `text` Button
+   * hover [D181]. The label takes --role-link-hover, underlined in
+   * --role-accent only where that ink is --primary12 (--ds-link-hover-line);
+   * forced colors add the underline.
+   */
+  .action:not([data-disabled], [aria-busy='true']):hover {
+    color: var(--role-link-hover);
+    text-decoration-line: var(--ds-link-hover-line);
+    text-decoration-color: var(--role-accent);
+  }
+
+  @media (--forcedColors) {
+    .action:not([data-disabled], [aria-busy='true']):hover {
+      text-decoration-line: underline;
+    }
+  }
+
+  /* Pressed: the inverse pair [D84]. */
+  .action:not([data-disabled], [aria-busy='true']):active {
+    background-color: var(--primary12);
+    color: var(--role-inverse);
+  }
+
+  /* Focus: the ring inside the cell. */
+  .action:focus-visible {
+    outline: var(--ds-focus-width) solid var(--primary12);
+    outline-offset: calc(-2 * var(--ds-focus-width));
+  }
+
+  /* Busy: rest roles kept, width held, "Undoing…" [D84]. */
+  .action[aria-busy='true'] {
+    min-inline-size: var(--toast-action-rest-width, auto);
+    cursor: progress;
+  }
+
+  .action[data-disabled] {
+    color: var(--role-muted);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Hidden: nothing only a toast says may be needed on paper. */
+    .viewport {
+      display: none;
+    }
+  }
+}

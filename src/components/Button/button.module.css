@@ -1,0 +1,390 @@
+/*
+ * Button (§9.2; worked example §1.11.10). CVA function `button`.
+ * Parts: `base` (container: edge, radius, focus ring), `label`, `icon`, and
+ * `edge` / `edgeLine`, the SVG that draws the disabled `line-dotted-fine`
+ * edge as true dots [D36, D68]. Colors are role variables only; local custom
+ * properties carry dimensions only. Label case is authored, never set here.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.edgeLine {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+@layer base {
+  .base {
+    /* Local dimensions. Size classes publish --button-height. */
+    --button-padding-inline: var(--size-px-5);
+    --button-edge: var(--border-size-2);
+    --button-edge-radius: calc(var(--button-height) / 2);
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--size-px-3);
+    box-sizing: border-box;
+    block-size: var(--button-height);
+    margin: 0;
+    padding-block: 0;
+    padding-inline: var(--button-padding-inline);
+    border: var(--button-edge) solid;
+    border-radius: var(--radius-round);
+    background: none;
+    white-space: nowrap;
+    text-decoration-line: none;
+    appearance: none;
+  }
+
+  /* Every target reaches --ds-size-hit; a smaller control extends it invisibly (§9.1) [D43]. */
+  .base::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    inline-size: var(--ds-size-hit);
+    block-size: var(--ds-size-hit);
+    min-inline-size: 100%;
+    min-block-size: 100%;
+    translate: -50% -50%;
+  }
+
+  .label {
+    text-decoration-thickness: var(--ds-stroke-1-5);
+    text-underline-offset: 0.15em;
+  }
+
+  .icon {
+    flex: none;
+  }
+
+  /* Disabled edge host: covers the border box once the solid edge is removed. */
+  .edge {
+    display: none;
+    position: absolute;
+    inset-block-start: calc(var(--ds-dot-fine) / 2);
+    inset-inline-start: calc(var(--ds-dot-fine) / 2);
+    inline-size: calc(100% - var(--ds-dot-fine));
+    block-size: calc(100% - var(--ds-dot-fine));
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .edgeLine {
+    fill: none;
+    stroke: var(--role-disabled-edge);
+    rx: calc(var(--button-edge-radius) - var(--ds-dot-fine) / 2);
+  }
+
+  @media (--forcedColors) {
+    .edgeLine {
+      stroke: currentColor;
+    }
+  }
+
+  /* Hover and press transitions [D181]: --ds-duration-quick, --ease-out-3; instant under --motionNotOK. */
+  @media (--motionOK) {
+    .base,
+    .label {
+      transition-property: color, background-color, border-color, text-decoration-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+.sm {
+  composes: typeButtonSm from '../../utils/type.module.css';
+}
+
+.md {
+  composes: typeButton from '../../utils/type.module.css';
+}
+
+.lg {
+  composes: typeButton from '../../utils/type.module.css';
+}
+
+.xl {
+  composes: typeButtonLg from '../../utils/type.module.css';
+}
+
+@layer variants {
+  /* Size: height and type role; padding is --size-px-5 at every size. */
+  .sm {
+    --button-height: var(--size-px-7);
+  }
+
+  .md {
+    --button-height: var(--ds-size-control-md);
+  }
+
+  .lg {
+    --button-height: var(--size-px-8);
+  }
+
+  .xl {
+    --button-height: var(--ds-size-control-xl);
+  }
+
+  /*
+   * The action fill. Its secondary falls back to the scope's action scale
+   * [D133]; an explicit `secondary` class wins from the scales layer.
+   */
+  .solid {
+    --secondary1: var(--action1);
+    --secondary2: var(--action2);
+    --secondary3: var(--action3);
+    --secondary4: var(--action4);
+    --secondary5: var(--action5);
+    --secondary6: var(--action6);
+    --secondary7: var(--action7);
+    --secondary8: var(--action8);
+    --secondary9: var(--action9);
+    --secondary10: var(--action10);
+    --secondary11: var(--action11);
+    --secondary12: var(--action12);
+    --secondary-contrast: var(--action-contrast);
+    --secondary-hover: var(--action-hover);
+
+    border-color: var(--role-action-edge);
+    background-color: var(--role-action);
+    color: var(--role-action-label);
+  }
+
+  /* The outline twin: --primary12 edge and label, no fill. */
+  .outline {
+    border-color: var(--primary12);
+    color: var(--primary12);
+  }
+
+  /* No container: label --primary12, glyph --role-glyph [D155]. */
+  .text {
+    --button-padding-inline: 0px;
+    --button-edge: 0px;
+
+    block-size: auto;
+    border-style: none;
+    color: var(--primary12);
+  }
+
+  .text .icon {
+    color: var(--role-glyph);
+  }
+
+  /* Circle (width = height) with a centered glyph; the label is the accessible name, visually hidden. */
+  .iconOnly {
+    --button-padding-inline: 0px;
+
+    inline-size: var(--button-height);
+    block-size: var(--button-height);
+  }
+
+  .iconOnly .label {
+    position: absolute;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .iconOnly .icon {
+    color: inherit;
+  }
+
+  /* Media button face: the wrapping night Ground's ground, --primary12 outline and glyph. */
+  .onMedia {
+    border-color: var(--primary12);
+    background-color: var(--role-ground);
+    color: var(--primary12);
+  }
+
+  /* Butted to a field (§10.3): --radius-1 outside, --ds-radius-none at the seam. */
+  .buttedStart {
+    --button-edge-radius: var(--radius-1);
+
+    border-start-start-radius: var(--ds-radius-none);
+    border-end-start-radius: var(--ds-radius-none);
+    border-start-end-radius: var(--radius-1);
+    border-end-end-radius: var(--radius-1);
+  }
+
+  .buttedEnd {
+    --button-edge-radius: var(--radius-1);
+
+    border-start-start-radius: var(--radius-1);
+    border-end-start-radius: var(--radius-1);
+    border-start-end-radius: var(--ds-radius-none);
+    border-end-end-radius: var(--ds-radius-none);
+  }
+}
+
+@layer compounds {
+  /* Media button: --size-px-7 square, --radius-1, --border-size-1 outline. */
+  .iconOnlyOnMedia {
+    --button-height: var(--size-px-7);
+    --button-edge: var(--border-size-1);
+    --button-edge-radius: var(--radius-1);
+
+    border-radius: var(--radius-1);
+  }
+
+  /* Icon-only butted: keeps the §10.3 cell instead of the circle. */
+  .iconOnlyButtedStart,
+  .iconOnlyButtedEnd {
+    --button-height: var(--size-px-8);
+
+    inline-size: var(--size-px-9);
+  }
+}
+
+@layer states {
+  /*
+   * Hover (not disabled, not busy) [D181]. It changes a fill or an ink only,
+   * never the edge, a transform or a shadow:
+   * - solid: the fill moves to --role-action-hover (the action scale's
+   *   lighter neighbour, step 10 in a dark scope; the ink pill --primary11);
+   *   label and edge unchanged, no underline;
+   * - outline: a --primary3 fill (--role-soft-hover); where soft fills drop
+   *   it stays the ground and the label takes the bare-text underline
+   *   (--ds-soft-hover-line);
+   * - text: the label takes --role-link-hover, underlined where that is
+   *   --primary12 (--ds-link-hover-line); the glyph swaps to the next tier's
+   *   weight through Icon weight="interactive" (as on icon-only buttons).
+   */
+  .solid:not([data-disabled], [aria-busy='true']):hover {
+    background-color: var(--role-action-hover);
+  }
+
+  .outline:not([data-disabled], [aria-busy='true']):hover {
+    background-color: var(--role-soft-hover);
+  }
+
+  .outline:not([data-disabled], [aria-busy='true']):hover .label {
+    text-decoration-line: var(--ds-soft-hover-line);
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  .text:not([data-disabled], [aria-busy='true']):hover .label {
+    color: var(--role-link-hover);
+    text-decoration-line: var(--ds-link-hover-line);
+    text-decoration-color: var(--role-accent);
+  }
+
+  /*
+   * Forced colors flatten author fills and inks, so a hover adds a
+   * --border-size-2 outline on a contained or outline button and an
+   * underline on a text button, in the system colors [D181].
+   */
+  @media (--forcedColors) {
+    .solid:not([data-disabled], [aria-busy='true']):hover,
+    .outline:not([data-disabled], [aria-busy='true']):hover {
+      outline: var(--border-size-2) solid currentColor;
+      outline-offset: var(--border-size-2);
+    }
+
+    .text:not([data-disabled], [aria-busy='true']):hover .label {
+      text-decoration-line: underline;
+    }
+  }
+
+  /* Pressed: the inverse pair; the edge is unchanged [D84, D96]. */
+  .outline:not([data-disabled], [aria-busy='true']):active,
+  .onMedia:not([data-disabled], [aria-busy='true']):active {
+    background-color: var(--primary12);
+    color: var(--role-inverse);
+  }
+
+  /*
+   * The ink pill (rest fill already --primary12) presses to a --primary1
+   * face with a --primary12 label [D144]. roles.css has no alias for that
+   * swap yet; without one this falls back to the inverse pair.
+   */
+  .solid:not([data-disabled], [aria-busy='true']):active {
+    background-color: var(--role-action-pressed);
+    color: var(--role-action-pressed-label);
+  }
+
+  .text:not([data-disabled], [aria-busy='true']):active .label {
+    text-decoration-line: underline;
+    text-decoration-thickness: var(--border-size-2);
+  }
+
+  /* Focus: 2 px --primary12 ring at a 2 px offset, keyboard only [D45]. */
+  .base:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  /*
+   * Disabled: fill removed, --role-muted ink, `line-dotted-fine` edge in
+   * --role-rule drawn by the edge part; never dimmed [D16]. The solid
+   * edge's width moves into the padding, so the button keeps its size.
+   */
+  .base[data-disabled] {
+    padding-inline: calc(var(--button-padding-inline) + var(--button-edge));
+    border-style: none;
+    background: none;
+    color: var(--role-muted);
+  }
+
+  .base[data-disabled] .edge {
+    display: block;
+  }
+
+  /* The media button keeps its face so the glyph stays legible on the photo. */
+  .onMedia[data-disabled] {
+    background-color: var(--role-ground);
+  }
+
+  /* A text button's glyph is removed; an icon-only glyph stays, muted. */
+  .text[data-disabled] .icon {
+    visibility: hidden;
+  }
+
+  .iconOnly[data-disabled] .icon {
+    visibility: visible;
+  }
+
+  /* Busy: rest roles kept, width held at its rest width, inert, no spinner [D84]. */
+  .base[aria-busy='true'] {
+    min-inline-size: var(--button-rest-width, auto);
+    cursor: progress;
+  }
+}
+
+@layer print {
+  @media print {
+    /* Action, icon-only, disabled and busy buttons are hidden (§9.2, §9.1). */
+    .base:not([href]),
+    .iconOnly,
+    .base[data-disabled],
+    .base[aria-busy='true'] {
+      display: none;
+    }
+
+    /* A navigating outline twin drops its edge to --border-size-1, so rank survives (§1.4.5). */
+    .outline[href] {
+      --button-edge: var(--border-size-1);
+    }
+
+    /* A navigating text button prints like a link (§9.3). */
+    .text[href] .label {
+      text-decoration-line: underline;
+    }
+
+    /* A navigating button prints "Label (URL)" (§7.6). */
+    .base[href]::after {
+      content: '(' attr(href) ')';
+      position: static;
+      inline-size: auto;
+      block-size: auto;
+      min-inline-size: 0;
+      min-block-size: 0;
+      translate: none;
+    }
+  }
+}

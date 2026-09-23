@@ -1,0 +1,170 @@
+/*
+ * Shared frame for code blocks, demos and type signatures. Tokens and role
+ * variables only: every fill has an edge [D12]; no shadow, opacity or
+ * gradient.
+ */
+.root {
+  margin-block: var(--size-px-5);
+  border: var(--border-size-1) solid var(--role-rule);
+  border-radius: var(--ds-radius-8);
+  background-color: var(--primary1);
+  overflow: hidden;
+}
+
+.preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--size-px-3);
+  align-items: center;
+  padding: var(--size-px-7);
+  border-block-end: var(--border-size-1) solid var(--role-rule);
+  background-color: var(--role-ground);
+}
+
+.toolbar {
+  composes: typeLabel from '../../src/utils/type.module.css';
+  display: flex;
+  gap: var(--size-px-2);
+  align-items: center;
+  min-block-size: var(--ds-size-hit);
+  padding-inline: var(--size-px-3);
+  border-block-end: var(--border-size-1) solid var(--role-hairline);
+  color: var(--role-muted);
+}
+
+.fileName {
+  margin-inline-end: auto;
+  text-transform: none;
+  letter-spacing: 0;
+  font-family: var(--ds-font-mono);
+}
+
+.tab {
+  composes: typeLabel from '../../src/utils/type.module.css';
+  min-block-size: var(--ds-size-hit);
+  padding-inline: var(--size-px-2);
+  padding-block-end: var(--ds-stroke-3);
+  border: none;
+  background: none;
+  color: var(--role-muted);
+  text-transform: none;
+  letter-spacing: 0;
+  font-family: var(--ds-font-mono);
+  cursor: pointer;
+
+  /* The current bar: a line change, not a color change alone [D84]. */
+  &[aria-pressed='true'] {
+    padding-block-end: 0;
+    border-block-end: var(--ds-stroke-3) solid var(--primary12);
+    color: var(--primary12);
+  }
+
+  &:focus-visible {
+    outline: var(--ds-focus-width) solid var(--primary12);
+    outline-offset: calc(var(--ds-focus-offset) * -1);
+  }
+}
+
+.tabs {
+  display: flex;
+  gap: var(--size-px-1);
+  margin-inline-end: auto;
+}
+
+.copy {
+  composes: typeButtonSm from '../../src/utils/type.module.css';
+  min-block-size: var(--size-px-7);
+  padding-inline: var(--size-px-3);
+  border: var(--border-size-2) solid var(--primary12);
+  border-radius: var(--radius-round);
+  background: none;
+  color: var(--primary12);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--primary3);
+  }
+
+  &:focus-visible {
+    outline: var(--ds-focus-width) solid var(--primary12);
+    outline-offset: var(--ds-focus-offset);
+  }
+}
+
+.pre {
+  margin: 0;
+  padding-block: var(--size-px-3);
+  overflow-x: auto;
+  tab-size: 2;
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-font-size-caption);
+  line-height: var(--ds-leading-reading);
+  color: var(--primary12);
+
+  & :global(code) {
+    display: block;
+    min-inline-size: fit-content;
+  }
+
+  & :global(.frame) {
+    display: block;
+    padding-inline: var(--size-px-3);
+  }
+
+  & :global(.frame[data-lined]) {
+    white-space: normal;
+    line-height: 0;
+  }
+
+  & :global(.frame[data-lined] .line) {
+    display: block;
+    white-space: pre;
+    line-height: var(--ds-leading-reading);
+  }
+
+  & :global(.frame[data-frame-type='highlighted']),
+  & :global(.line[data-hl]) {
+    border-inline-start: var(--border-size-2) solid var(--role-accent);
+    background-color: var(--primary3);
+  }
+
+  & :global(mark) {
+    background-color: var(--primary4);
+    color: inherit;
+  }
+}
+
+/* Type signatures in API tables: no frame, inline in the cell. */
+.typePre {
+  margin: 0;
+  white-space: pre-wrap;
+  /* Long type names (React.ImgHTMLAttributes<HTMLImageElement>) break
+     rather than run past a 390 px viewport. */
+  overflow-wrap: anywhere;
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-font-size-caption);
+  line-height: var(--ds-leading-compact);
+  color: var(--primary12);
+}
+
+/* Print: paper cannot scroll, so code lines wrap inside the frame instead of running off the page (§7). */
+@media print {
+  /* The copy control is screen-only. */
+  .copy {
+    display: none;
+  }
+
+  .pre {
+    overflow-x: visible;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+
+    & :global(code) {
+      min-inline-size: 0;
+    }
+
+    & :global(.frame[data-lined] .line) {
+      white-space: pre-wrap;
+    }
+  }
+}

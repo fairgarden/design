@@ -1,0 +1,30 @@
+declare const styles: {
+  readonly "base": string;
+  readonly "caption": string;
+  readonly "cell": string;
+  readonly "compact": string;
+  readonly "countFour": string;
+  readonly "countThree": string;
+  readonly "countTwo": string;
+  readonly "delta": string;
+  readonly "deltaGlyph": string;
+  readonly "hero": string;
+  readonly "inline": string;
+  readonly "label": string;
+  readonly "long": string;
+  readonly "mount": string;
+  readonly "mountArt": string;
+  readonly "mountFront": string;
+  readonly "mountUnder": string;
+  readonly "numeral": string;
+  readonly "numeralCompact": string;
+  readonly "numeralInline": string;
+  readonly "qualifier": string;
+  readonly "row": string;
+  readonly "source": string;
+  readonly "threeShort": string;
+  readonly "unit": string;
+  readonly "unitCompact": string;
+};
+export = styles;
+

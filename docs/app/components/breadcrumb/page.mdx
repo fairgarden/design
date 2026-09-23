@@ -1,0 +1,45 @@
+# Breadcrumb
+
+Where the page sits in the hierarchy: one line of caps crumbs, the LTA staircase in the section bar, or a single parent link.
+
+```tsx
+import { Breadcrumb } from '@fairgarden-private/design/components/Breadcrumb'
+```
+
+Pass the ancestors root first as `items` and the page's own title as `current`. The current page comes last, unlinked, heavier and marked `aria-current="page"`; ancestors are `--role-muted` at weight 400, and thin chevrons separate them. Author labels in sentence case: `type-label` sets the caps. Ancestors are `Link kind="nav" muted`: on hover only their ink changes, to `--role-link-hover` (underlined where that ink is the text ink), and they share the Link's press and focus ring. A level with no `href` has no page and shows as plain text. `renderLink` builds each anchor, for example `(href) => <NextLink href={href} />`. Use a breadcrumb on pages two or more levels deep, never as a history trail.
+
+## Kinds
+
+import { DemoBreadcrumbKinds } from './demos/kinds'
+
+<DemoBreadcrumbKinds.Title />
+
+`inline` (the default) is the in-page breadcrumb, and it reflows on its own width: below 768 px it is the parent link alone; from 768 px it is one line, collapsing the middle into a "…" menu past four levels; from 1024 px it shows up to six. It is an inline-size container, so give it a width in shrink-to-fit layouts. `staircase` is the section-bar form: below a 768 px viewport the toggle and truncated title open one indented row per level, and from there it is one line (four levels, six from 1024 px) whose crumbs truncate and whose current crumb, in bold, acts as the title. The section bar renders that line with `withStaircase={false}` and opens the staircase in its own panel. `parent` is always the parent link. Drag the frame's corner to watch the reflow.
+
+<DemoBreadcrumbKinds />
+
+[See Demo](./demos/kinds/)
+
+## On grounds
+
+import { DemoBreadcrumbGrounds } from './demos/grounds'
+
+<DemoBreadcrumbGrounds.Title />
+
+On a page ground the ancestors and chevrons are muted and the current page takes the text ink. On a deep field the crumbs take the dark scale's paper-colored ink, and where the muted role resolves to the text ink itself (some deep fields and every saturated one), weight and last position tell the current page apart.
+
+<DemoBreadcrumbGrounds />
+
+[See Demo](./demos/grounds/)
+
+In print the breadcrumb is replaced by one plain line of caps, ancestors joined by " / ", the current page omitted and no URLs. Pass `printLine={false}` where a page masthead prints the path instead.
+
+## API Reference
+
+import { TypesBreadcrumb } from './types'
+
+<TypesBreadcrumb />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §9.8 (breadcrumb), §5.10.2 (reflow) and §7.8 (print), with D80 and D165.

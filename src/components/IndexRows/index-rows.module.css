@@ -1,0 +1,460 @@
+/*
+ * Ruled Index Rows (§12.11). The root `base` is the listing's inline-size
+ * container (unnamed); the row layout queries it. Parts: base, header,
+ * list, row, key (with rank, date or thumb), rule (the text column: it
+ * carries the row rule, from the text column to the module edge, and the
+ * event column rule), title (`titleUi` for ranked and related), titleLink
+ * (a title Link), count, meta (`metaCaps` for articles), dek, currentBar
+ * (the rule's ::before), disclosure, eventHeading, trigger, triggerLabel,
+ * glyph (the shared LTA glyph), details (the Collapsible Panel), footer.
+ * Dense module: line semantics only. Colors are role variables only; local
+ * custom properties carry dimensions only:
+ *   --index-rows-pad   the row's vertical padding (--ds-space-12 ranked and
+ *                      related, --size-px-3 article and event)
+ *   --index-rows-gap   the gap between the key column and the text column
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.title {
+  composes: typeItemhead from '../../utils/type.module.css';
+}
+
+.titleUi {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.rank {
+  composes: typeBodyUi typeMuted from '../../utils/type.module.css';
+}
+
+.count {
+  composes: typeBodyUi typeMuted from '../../utils/type.module.css';
+}
+
+.date {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.meta {
+  composes: typeCaption typeMuted from '../../utils/type.module.css';
+}
+
+.metaCaps {
+  composes: typeLabel typeMuted from '../../utils/type.module.css';
+}
+
+.dek {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.trigger {
+  composes: typeItemhead from '../../utils/type.module.css';
+}
+
+.rule {
+  composes: lineSolid from '../../utils/line.module.css';
+}
+
+@layer base {
+  .base {
+    --index-rows-pad: var(--size-px-3);
+    --index-rows-gap: var(--size-px-3);
+
+    container-type: inline-size;
+    /* Size containment leaves no intrinsic width: fill the box, never collapse as a flex or shrink-to-fit item. */
+    inline-size: 100%;
+    min-inline-size: 0;
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .header {
+    margin-block-end: var(--size-px-3);
+  }
+
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* The row: key column (optional) and text column; the item is the stretched link's anchor. */
+  .row {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: var(--index-rows-gap);
+    min-inline-size: 0;
+  }
+
+  .key {
+    min-inline-size: 0;
+    padding-block: var(--index-rows-pad);
+  }
+
+  /* The text column carries the row rule; rules never run under the key column (LTA). */
+  .rule {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: var(--size-px-1);
+    min-inline-size: 0;
+    padding-block: var(--index-rows-pad);
+    border-width: 0;
+    border-block-end-width: var(--border-size-1);
+    border-color: var(--role-hairline);
+  }
+
+  .title,
+  .titleUi {
+    max-inline-size: var(--ds-measure-reading);
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .count {
+    margin-inline-start: var(--size-px-1);
+  }
+
+  .meta,
+  .metaCaps {
+    margin: 0;
+  }
+
+  .dek {
+    max-inline-size: var(--ds-measure-reading);
+    margin: var(--size-px-1) 0 0;
+    color: var(--primary12);
+  }
+
+  .date {
+    color: var(--primary12);
+    white-space: nowrap;
+  }
+
+  .footer {
+    margin-block-start: var(--size-px-5);
+  }
+
+  /* Event disclosure (§10.13): the title is the trigger, the LTA glyph trails it. */
+  .disclosure {
+    display: grid;
+    gap: var(--size-px-1);
+    min-inline-size: 0;
+  }
+
+  .eventHeading {
+    margin: 0;
+  }
+
+  /* The details: body, key–value pairs and a sm Button, within the reading measure. */
+  .details {
+    max-inline-size: var(--ds-measure-reading);
+  }
+
+  .trigger {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--size-px-3);
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: var(--ds-size-hit);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--role-muted);
+    text-align: start;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .triggerLabel {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    max-inline-size: var(--ds-measure-reading);
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--ds-stroke-1-5);
+    text-underline-offset: 0.15em;
+  }
+
+  /* Hover transition [D181]: --ds-duration-quick, --ease-out-3; instant under --motionNotOK. */
+  @media (--motionOK) {
+    .trigger {
+      transition-property: color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+
+  /* Aligned to the title's first line. */
+  .glyph {
+    margin-block-start: calc((1lh - var(--size-px-4)) / 2);
+  }
+}
+
+@layer variants {
+  /* Ranked and related titles: type-body-ui at --font-weight-6 (above the composed role's own weight). */
+  .titleUi {
+    font-weight: var(--font-weight-6);
+  }
+
+  /* Ranked (LTA): a 2.5ch muted rank column, labels with counts, --ds-space-12 rows. */
+  .ranked {
+    --index-rows-pad: var(--ds-space-12);
+  }
+
+  .ranked .row {
+    grid-template-columns: 2.5ch minmax(0, 1fr);
+  }
+
+  .ranked .rank {
+    font-variant-numeric: var(--ds-numerals-data);
+    text-align: end;
+  }
+
+  /* Related (Audubon): a --ds-size-thumb thumbnail --size-px-2 from the title. */
+  .related {
+    --index-rows-pad: var(--ds-space-12);
+    --index-rows-gap: var(--size-px-2);
+  }
+
+  .related .row {
+    grid-template-columns: var(--ds-size-thumb) minmax(0, 1fr);
+  }
+
+  .thumb > img {
+    display: block;
+    inline-size: var(--ds-size-thumb);
+    block-size: var(--ds-size-thumb);
+    border-radius: var(--ds-radius-8);
+    object-fit: cover;
+  }
+
+  /* Event (Desaina): table-like, so --role-rule rules; the date sits above the title at base. */
+  .event .rule {
+    border-color: var(--role-rule);
+  }
+
+  .event .date {
+    padding-block-end: 0;
+  }
+
+  .event .date + .rule {
+    padding-block-start: var(--size-px-1);
+  }
+
+  /* Viewport fallback: the date key column from --md-n-above, right-aligned from --lg-n-above. */
+  @media (--md-n-above) {
+    .event .row {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 5fr);
+    }
+
+    .event .date {
+      padding-block-end: var(--index-rows-pad);
+    }
+
+    .event .date + .rule {
+      padding-block-start: var(--index-rows-pad);
+      padding-inline-start: var(--size-px-3);
+      border-inline-start-width: var(--border-size-1);
+    }
+  }
+
+  @media (--lg-n-above) {
+    .event .row {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+    }
+
+    .event .date {
+      text-align: end;
+    }
+
+    .article .rule {
+      grid-template-columns: minmax(0, 1fr) auto;
+      column-gap: var(--size-px-5);
+    }
+
+    .article .rule > * {
+      grid-column: 1;
+    }
+
+    .article .rule > .metaCaps {
+      grid-column: 2;
+      grid-row: 1;
+      text-align: end;
+    }
+  }
+
+  /* Container (§5.10.2): date above title below 768 px; key 3 of 8 from 768; 3 of 12 from 1024. */
+  @container (width < 768px) {
+    .event .row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .event .date {
+      padding-block-end: 0;
+      text-align: start;
+    }
+
+    .event .date + .rule {
+      padding-block-start: var(--size-px-1);
+      padding-inline-start: 0;
+      border-inline-start-width: 0;
+    }
+  }
+
+  @container (width >= 768px) {
+    .event .row {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 5fr);
+    }
+
+    .event .date {
+      padding-block-end: var(--index-rows-pad);
+      text-align: start;
+    }
+
+    .event .date + .rule {
+      padding-block-start: var(--index-rows-pad);
+      padding-inline-start: var(--size-px-3);
+      border-inline-start-width: var(--border-size-1);
+    }
+  }
+
+  @container (width >= 1024px) {
+    .event .row {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+    }
+
+    .event .date {
+      text-align: end;
+    }
+  }
+
+  /* Article: the meta moves to a right-aligned column only from 1024 px of container. */
+  @container (width < 1024px) {
+    .article .rule {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .article .rule > .metaCaps {
+      grid-column: 1;
+      grid-row: auto;
+      text-align: start;
+    }
+  }
+
+  @container (width >= 1024px) {
+    .article .rule {
+      grid-template-columns: minmax(0, 1fr) auto;
+      column-gap: var(--size-px-5);
+    }
+
+    .article .rule > * {
+      grid-column: 1;
+    }
+
+    .article .rule > .metaCaps {
+      grid-column: 2;
+      grid-row: 1;
+      text-align: end;
+    }
+  }
+}
+
+@layer states {
+  /* Focus: the ring around the row, inside the rules, keyboard only; it replaces the link's own. */
+  .row .titleLink:focus-visible {
+    outline: none;
+  }
+
+  .row:has(.titleLink:focus-visible) {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: calc(-1 * var(--border-size-2));
+  }
+
+  /* Current: a --ds-stroke-3 --primary12 bar at the start edge of the text column
+     (titles already sit at --font-weight-6 or heavier). */
+  .rule:has(.titleLink[aria-current]:not([aria-current='false']))::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: calc(-1 * (var(--size-px-2) + var(--ds-stroke-3)));
+    border-inline-start: var(--ds-stroke-3) solid var(--primary12);
+  }
+
+  /*
+   * Event hover (not disabled): the title takes --role-link-hover, color
+   * only, as a title link; the underline (--ds-stroke-1-5, --role-accent)
+   * is added where that ink is --primary12, and under forced colors
+   * (§12.11) [D181].
+   */
+  .trigger:not([data-disabled]):hover {
+    color: var(--role-link-hover);
+  }
+
+  .trigger:not([data-disabled]):hover .triggerLabel {
+    text-decoration-line: var(--ds-link-hover-line);
+  }
+
+  @media (--forcedColors) {
+    .trigger:not([data-disabled]):hover .triggerLabel {
+      text-decoration-line: underline;
+    }
+  }
+
+  .trigger:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  /* Expanded: the title moves from --role-muted to --primary12 and grows to type-h2 (Desaina). */
+  .trigger[data-panel-open] {
+    color: var(--primary12);
+    font-size: var(--ds-font-size-h2);
+  }
+}
+
+@layer print {
+  @media print {
+    /* A text list: rows whole, thumbnails dropped, event rows expanded with the date column left. */
+    .header {
+      break-after: avoid;
+    }
+
+    .row {
+      break-inside: avoid;
+    }
+
+    .thumb {
+      display: none;
+    }
+
+    .related .row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .event .row {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+    }
+
+    .event .date {
+      padding-block-end: var(--index-rows-pad);
+      text-align: start;
+    }
+
+    .event .date + .rule {
+      padding-block-start: var(--index-rows-pad);
+      padding-inline-start: var(--size-px-3);
+      border-inline-start-width: var(--border-size-1);
+    }
+
+    .trigger {
+      min-block-size: auto;
+      color: var(--primary12);
+    }
+  }
+}

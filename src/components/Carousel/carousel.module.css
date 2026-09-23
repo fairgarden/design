@@ -1,0 +1,236 @@
+/*
+ * Carousel (§12.4). CVA function `carousel`. The Scroll Area (`rail`)
+ * draws the viewport, the overflow edges, the --border-size-2 progress rail
+ * (--role-hairline track, --primary12 thumb) and their states; the Buttons
+ * draw the step pager. This module lays out the track, the slides and the
+ * control row.
+ * Color roles (§12.4): prev / next edge and glyph --primary12 at
+ * --border-size-2 (the outline icon-only Button; hover --primary3, pressed
+ * the inverse pair); count --primary12; rail --role-hairline; railThumb
+ * --primary12. Colors are role variables only; local custom properties
+ * carry dimensions only (--carousel-slide, --carousel-bleed,
+ * --carousel-ratio, a unitless ratio).
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.count {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.printSummary {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.printUrl {
+  composes: typeUrl from '../../utils/type.module.css';
+}
+
+@layer base {
+  /* The carousel root: the inline-size container `carousel` its slides query. */
+  .base {
+    container: carousel / inline-size;
+    display: grid;
+    gap: var(--size-px-3);
+    min-inline-size: 0;
+    color: var(--primary12);
+  }
+
+  .header {
+    min-inline-size: 0;
+  }
+
+  .list {
+    --carousel-slide: 88%;
+
+    display: flex;
+    gap: var(--ds-space-12);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* The trailing space: the last slide ends at the container edge at the end of the scroll. */
+  .list::after {
+    content: '';
+    flex: none;
+    inline-size: var(--carousel-bleed, 0px);
+    margin-inline-start: calc(-1 * var(--ds-space-12));
+  }
+
+  .slide {
+    flex: none;
+    inline-size: var(--carousel-slide);
+    min-inline-size: 0;
+    scroll-snap-align: start;
+  }
+
+  /* Control row: the count at the start ("3 of 8"), Previous and Next at the end; never over the slides. */
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--size-px-3);
+  }
+
+  .count {
+    margin: 0;
+    color: var(--primary12);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pager {
+    display: flex;
+    gap: var(--ds-space-12);
+  }
+
+  .printSummary {
+    display: none;
+  }
+
+  .photo {
+    margin: 0;
+  }
+}
+
+@layer variants {
+  /*
+   * The Scroll Area (its root, restyled in this layer so it wins over the
+   * Scroll Area's own cap): the first slide at the container's start edge,
+   * the end bleeding to the viewport edge (or the field's edge) by
+   * --carousel-bleed, which the component measures [D186].
+   */
+  .viewport {
+    max-inline-size: none;
+    margin-inline-end: calc(-1 * var(--carousel-bleed, 0px));
+  }
+
+  /*
+   * Slide widths. Baseline (stands alone, percentages of the track): card
+   * carousels 2 portrait slides + peek, post cards 1 landscape slide at
+   * ≈ 85%, photos 1 slide at ≈ 88%. Viewport fallback below 360 px: cards
+   * 1 + peek. The counts rise with the container's width, never falling
+   * back: at 768, cards 2 + peek (post 2 + peek); at 1024, cards 2 + peek,
+   * post 3 + peek, photos the 480 px strip [D186].
+   */
+  .cards .list {
+    --carousel-slide: calc((88% - var(--ds-space-12)) / 2);
+  }
+
+  .post .list {
+    --carousel-slide: 85%;
+  }
+
+  @media (--xs-n-below) {
+    .cards .list {
+      --carousel-slide: 85%;
+    }
+  }
+
+  @container carousel (width < 360px) {
+    .cards .list {
+      --carousel-slide: 85cqi;
+    }
+
+    .photos .list {
+      --carousel-slide: 88cqi;
+    }
+  }
+
+  @container carousel (width >= 360px) {
+    .cards .list {
+      --carousel-slide: calc((88cqi - var(--ds-space-12)) / 2);
+    }
+
+    .post .list {
+      --carousel-slide: 85cqi;
+    }
+
+    .photos .list {
+      --carousel-slide: 88cqi;
+    }
+  }
+
+  @container carousel (width >= 768px) {
+    .post .list {
+      --carousel-slide: calc((88cqi - var(--ds-space-12)) / 2);
+    }
+  }
+
+  @container carousel (width >= 1024px) {
+    .post .list {
+      --carousel-slide: calc((88cqi - 2 * var(--ds-space-12)) / 3);
+    }
+
+    /*
+     * The photo strip: a fixed --size-px-15 (480 px) track height, each
+     * slide as wide as its photo at that height (--carousel-ratio), so
+     * nothing is cropped; every caption visible and right-flush below.
+     */
+    .photos .slide {
+      inline-size: calc(var(--size-px-15) * var(--carousel-ratio, 1.5));
+    }
+  }
+
+  /* At either end that button is omitted and its space kept; the count states the position (§9.9). */
+  .atStart .prev,
+  .atEnd .next {
+    visibility: hidden;
+  }
+
+  /* Every slide fits: a static row, no controls (the rail hides itself without overflow). */
+  .static .controls {
+    display: none;
+  }
+
+  .static .list::after {
+    display: none;
+  }
+}
+
+@layer print {
+  @media print {
+    /* Controls, count, peek and rail are hidden; the track unfolds into a grid (§7.7). */
+    .controls,
+    .list::after {
+      display: none;
+    }
+
+    .viewport {
+      margin-inline-end: 0;
+    }
+
+    .list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--size-px-3);
+    }
+
+    .slide,
+    .photos .slide {
+      inline-size: auto;
+      break-inside: avoid;
+    }
+
+    /* Photo sets of up to 6 print 3-up, each photo at its own ratio, uncropped. */
+    .photos .list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    /* Over 6: the first slide, its caption and one line "n more images (short URL)" [D81]. */
+    .summarized .list {
+      display: block;
+    }
+
+    .summarized .slide + .slide {
+      display: none;
+    }
+
+    .printSummary {
+      display: block;
+      margin: 0;
+      color: var(--primary12);
+    }
+  }
+}

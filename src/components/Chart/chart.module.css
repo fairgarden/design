@@ -1,0 +1,376 @@
+/*
+ * Chart (§8.7) [D167, D125]. CVA function `chart`. Parts: `base` (the
+ * module wrapper, the container `chart`), `body` (the FigureMedia: legend
+ * and chart area), `legend` (+ `legendList`, `legendItem`, `legendLabel`,
+ * `swatch`, `stepLegend`, `stepBar`, `stepLabel`, `defs`), `chartArea`,
+ * `axisTitle`, `plot` (+ `plotBars`, `plotColumns`: the screen copies),
+ * `print` (the fixed print copy), `tooltip` (+ parts), the Recharts SVG parts
+ * (`gridLine`, `zeroLine`, `cursorBand`, `cursorLine`, ticks,
+ * labels, `stepFill`, `stepPattern`, pattern parts) and `dataTable`, the
+ * Collapsible holding the §8.2 Table. The Figure owns the caption (§8.5).
+ *
+ * Colors are role variables only. Recharts receives them as role-variable
+ * strings (fill, stroke); these rules add line geometry, type roles and
+ * structure. Local custom properties: none.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.axisTitle {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.legendLabel {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.stepLabel {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.categoryTick {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.valueTick {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.valueLabel {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.labelOnFill {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.endName {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.endValue {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.areaLabel {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.tooltipLabel {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.tooltipName {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.tooltipValue {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.gridLine {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+.cursorLine {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+@layer base {
+  /*
+   * The module wrapper: its own inline-size container [D163], named because
+   * the Figure inside is a container too and the parts answer to this one.
+   */
+  .base {
+    container: chart / inline-size;
+    display: grid;
+    gap: var(--size-px-3);
+    /* Size containment gives the chart no intrinsic width, so it fills its
+       box; as a shrink-to-fit or flex item it would collapse to its labels. */
+    inline-size: 100%;
+    min-inline-size: 0;
+    color: var(--primary12);
+  }
+
+  /* Baseline: the legend above the chart, in source order. */
+  .body {
+    display: grid;
+    gap: var(--size-px-3);
+    min-inline-size: 0;
+  }
+
+  .chartArea {
+    display: grid;
+    gap: var(--size-px-2);
+    min-inline-size: 0;
+  }
+
+  .axisTitle {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .plot {
+    position: relative;
+    min-inline-size: 0;
+  }
+
+  /* The column copy waits for its container threshold; the print copy for print. */
+  .plotColumns,
+  .print {
+    display: none;
+  }
+
+  /* Recharts' surface takes the ring when the accessibility layer focuses it. */
+  .plot svg:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  /* Legend: 16 px swatches edged in --border-size-1 --primary12, above the chart. */
+  .legend {
+    display: grid;
+    gap: var(--size-px-2);
+    align-content: start;
+  }
+
+  .legendList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--size-px-2) var(--size-px-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .legendItem {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-px-2);
+  }
+
+  .legendLabel {
+    color: var(--primary12);
+  }
+
+  .swatch {
+    flex: none;
+    inline-size: var(--size-px-3);
+    block-size: var(--size-px-3);
+    overflow: visible;
+  }
+
+  /* The legend's own pattern defs: rendered, zero-size, so the patterns resolve. */
+  .defs {
+    position: absolute;
+    inline-size: 0;
+    block-size: 0;
+    overflow: hidden;
+  }
+
+  /* Sequential legend: a framed stepped bar with end labels (Crab Fit). */
+  .stepLegend {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--size-px-2);
+  }
+
+  .stepBar {
+    flex: none;
+    inline-size: calc(5 * var(--size-px-3) + var(--border-size-1));
+    block-size: calc(var(--size-px-3) + var(--border-size-1));
+    overflow: visible;
+  }
+
+  .stepLabel {
+    color: var(--primary12);
+  }
+
+  /*
+   * Sequential cells: the scope's switches (roles.css) show the flat fill on
+   * a light base ground or a white plate, and the one-ink pattern elsewhere
+   * (§8.7); print always shows the pattern (below).
+   */
+  .stepFill {
+    display: var(--ds-series-fill, inline);
+  }
+
+  .stepPattern {
+    display: var(--ds-series-pattern, none);
+  }
+
+  /* SVG parts. Inks arrive as role-variable props; geometry and type here. */
+  .gridLine {
+    fill: none;
+    stroke: var(--role-rule);
+  }
+
+  .zeroLine line {
+    stroke-width: var(--border-size-1);
+  }
+
+  .cursorBand {
+    fill: none;
+    stroke: var(--primary12);
+    stroke-width: var(--border-size-1);
+  }
+
+  .cursorLine {
+    fill: none;
+    stroke: var(--primary12);
+  }
+
+  .categoryTick,
+  .valueTick,
+  .valueLabel,
+  .endLabel {
+    fill: var(--primary12);
+  }
+
+  /* Labels on data fills sit on a --role-halo knockout, 2 px beyond the glyphs [D125, D150]. */
+  .labelOnFill,
+  .areaLabel {
+    fill: var(--primary12);
+    stroke: var(--role-halo);
+    stroke-width: calc(2 * var(--border-size-2));
+    stroke-linejoin: round;
+    paint-order: stroke fill;
+  }
+
+  /* Tooltip: an anchored overlay, --border-size-2 --primary12 edge [D92], Tooltip roles, no shadow. */
+  .tooltip {
+    box-sizing: border-box;
+    max-inline-size: 280px;
+    padding: var(--size-px-1) var(--size-px-2);
+    border: var(--border-size-2) solid var(--primary12);
+    border-radius: var(--radius-1);
+    background-color: var(--primary1);
+    color: var(--primary12);
+  }
+
+  .tooltipLabel {
+    margin: 0 0 var(--size-px-1);
+    color: var(--primary12);
+  }
+
+  .tooltipList {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: var(--size-px-1) var(--size-px-2);
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tooltipItem {
+    display: contents;
+  }
+
+  .tooltipValue {
+    text-align: end;
+  }
+
+  /* Forced colors: text and lines take system colors; semantic marks stay, as marks. */
+  @media (--forcedColors) {
+    .categoryTick,
+    .valueTick,
+    .valueLabel,
+    .endLabel,
+    .labelOnFill,
+    .areaLabel {
+      fill: CanvasText;
+    }
+
+    .labelOnFill,
+    .areaLabel {
+      stroke: Canvas;
+    }
+
+    .gridLine,
+    .cursorBand,
+    .cursorLine {
+      stroke: CanvasText;
+    }
+
+    .patternMark {
+      fill: CanvasText;
+    }
+
+    .patternGround {
+      fill: Canvas;
+    }
+  }
+}
+
+@layer variants {
+  /* Forced one ink: sequential cells show their patterns on screen (§8.7). */
+  .oneInk .stepFill {
+    display: none;
+  }
+
+  .oneInk .stepPattern {
+    display: inline;
+  }
+
+  /* Container rules [D163] (§5.10.2): from 1024 px, columns and a side legend. */
+  @container chart (min-width: 1024px) {
+    .column .plotBars {
+      display: none;
+    }
+
+    .column .plotColumns {
+      display: block;
+    }
+
+    .withLegend {
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .withLegend .legendList {
+      flex-direction: column;
+      flex-wrap: nowrap;
+    }
+  }
+}
+
+@layer print {
+  @media print {
+    /* The fixed print copy replaces the screen copies: 174 mm, animation off. */
+    .plot {
+      display: none;
+    }
+
+    .print {
+      display: block;
+      inline-size: var(--ds-print-live-width);
+      max-inline-size: 100%;
+    }
+
+    /* Sequential cells: the flat fill hides and the print pattern shows (structural) [D126]. */
+    .stepFill {
+      display: none;
+    }
+
+    .stepPattern {
+      display: inline;
+    }
+
+    /* Standard dot screens print 1 pt dots, stated rather than scaled (§1.5.9). */
+    .patternDot {
+      r: 0.6667px;
+    }
+
+    /* The table prints only when values lived in the tooltip (§8.7). */
+    .dataTable {
+      display: none;
+    }
+
+    .printTable .dataTable {
+      display: block;
+    }
+  }
+}

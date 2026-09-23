@@ -1,0 +1,45 @@
+# Announcement Bar
+
+One short, authored site notice per page: a closure, a deadline, shipping terms, a policy change. An `aside` labelled "Announcement" with at most one link, an optional countdown and an optional dismiss button. It is not a Toast, never rotates messages and never carries form feedback.
+
+```tsx
+import { AnnouncementBar } from '@fairgarden-private/design/components/AnnouncementBar'
+```
+
+Place it full width at the top of the page; it sets its own content container. The message is up to two lines at base and one from 768 px; it is never truncated and never sticky, so it scrolls away with the page. The bar is 36 px tall for text alone and 44 px once it holds a link or the dismiss.
+
+## Bars and fields
+
+import { DemoAnnouncementBarBars } from './demos/bars'
+
+<DemoAnnouncementBarBars.Title />
+
+`kind="bar"` (default) is a page-ground bar (`white`, `paper` or the page's pastel through `preset`, or the surrounding ground when it names none) that always draws its bottom rule. `kind="field"` sets the notice in a full-container field (`forest` by default, `leaf`, `amber` or `brick`; never `pink` or `royal`) whose edge replaces the rule. `voice="mono"` sets dated notices in data caps, and `voice="dual"` adds one serif caps phrase through `AnnouncementBarAccent`. The countdown's boxed digits update once a minute and never flip; they fill in after the page loads. `dismissible` removes the bar at once, and `storageKey` remembers that per viewer.
+
+<DemoAnnouncementBarBars />
+
+[See Demo](./demos/bars/)
+
+## In print
+
+Hidden, unless `record` marks a notice that changes the page's meaning: it prints once, between two 0.75 pt rules, with its link's short URL. A countdown prints its end date ("Ends 30 Sept 2026").
+
+## API Reference
+
+import { TypesAnnouncementBar, TypesAnnouncementBarAdditional } from './types'
+
+### AnnouncementBar
+
+<TypesAnnouncementBar.AnnouncementBar />
+
+### AnnouncementBarAccent
+
+<TypesAnnouncementBar.AnnouncementBarAccent />
+
+### Additional types
+
+<TypesAnnouncementBarAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §11.4 (announcement bar; a page-ground bar or a full-container field per D180).

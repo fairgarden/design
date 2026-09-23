@@ -1,0 +1,87 @@
+# Hero
+
+The page's one opening statement and its single `h1`. A plain title block counts. Never text on a photo, never sized to the viewport, never animated on load.
+
+```tsx
+import { Hero, HeroLockup } from '@fairgarden-private/design/components/Hero'
+```
+
+The hero is a band: a page ground (by default the one it sits on), or `preset="night"` as the media hero. Pass `wayfinding` (a breadcrumb, eyebrow or badge), `title`, `lede` and `actions`: one `solid` pill at `size="lg"` and at most its outline twin. Below 360 px the pair stacks, primary first. Render it inside `main`.
+
+**The exit seam.** When something crosses the hero's bottom edge (the stacked photo, the entry cards, the rail's trail), or when the night hero ends on the hill or the fringe, the hero also renders the top of the next band, on `next`. That keeps the parts that land there in its colors. Open your next band on the same page ground.
+
+## Editorial and the media hero
+
+import { DemoHeroEditorial } from './demos/editorial'
+
+<DemoHeroEditorial.Title />
+
+A is type only: wayfinding, the display title (about 20ch, 2–3 lines), the lede and the actions, in the reading span. `landing` allows the larger display size from 1024 px. With a `photo` it becomes the centred media hero on the night band, with the captioned photo below the text. From 1024 px a photo hero may carry up to three `entries`: compact cards with a square image, a caps category and one link (each a `Card kind="entry"`), each 4 of 12 columns, straddling the bottom edge. Below 1024 px they stack under the hero. `edge="hill"` ends the night hero on the hill in light mode.
+
+<DemoHeroEditorial />
+
+[See Demo](./demos/editorial/)
+
+## Split photo
+
+import { DemoHeroSplit } from './demos/split'
+
+<DemoHeroSplit.Title />
+
+C sets a flat text band beside the photo from 1024 px: text in 5 columns, the photo in 7, top-aligned, reaching the container edge. Below 1024 px the photo follows the text, inset 24 px. The caption sits right-flush below it: the description, then the credit. `photoAction` puts an icon-only media Button on the photo's corner, and `plate` an opaque plate over its lower edge. `rail` pins "Explore the land" to the hero's bottom corner from 768 px, reading upward, flush with the viewport edge. Its dashed trail crosses into the next band from 1024 px. Below 768 px the rail is an inline link under the lede.
+
+<DemoHeroSplit />
+
+[See Demo](./demos/split/)
+
+## C, stacked
+
+import { DemoHeroStacked } from './demos/stacked'
+
+<DemoHeroStacked.Title />
+
+For editorial and reference pages, `stacked` keeps the reading axis centred. From 1024 px the text band sits in the reading span, then the photo in the same span crosses the night band's edge at its middle. The hill passes behind it, and the caption sits right-flush below it on the page ground. On a dark page the hill drops for the straight seam and the photo still straddles it.
+
+<DemoHeroStacked />
+
+[See Demo](./demos/stacked/)
+
+## Illustrated
+
+import { DemoHeroIllustrated } from './demos/illustrated'
+
+<DemoHeroIllustrated.Title />
+
+B pairs the text with a sticker drawing and its halo. At base the drawing sits on the headline, centred, at 152 px. From 1024 px the text takes 7 columns and the drawing, at 312 px, takes 5. It is the only hero that may carry a Display Lockup: pass `<HeroLockup caps="…" accent="…" />` as the title. `field` sets the lockup and drawing in the page's one `leaf` or `amber` campaign field.
+
+<DemoHeroIllustrated />
+
+[See Demo](./demos/illustrated/)
+
+## Technical
+
+import { DemoHeroTechnical } from './demos/technical'
+
+<DemoHeroTechnical.Title />
+
+D frames the title, a rule, a mono subtitle and the actions in a double rule. From 1024 px an `aside` column sits behind a vertical rule. The `cells` row reflows on its own width: one column below 360 px, 2-up from 360 px, 4-up from 480 px. Any dot grid or graph pattern stays outside the frame.
+
+<DemoHeroTechnical />
+
+[See Demo](./demos/technical/)
+
+## API Reference
+
+import { TypesHero, TypesHeroAdditional } from './types'
+
+<TypesHero.Hero />
+
+<TypesHero.HeroLockup />
+
+### Additional types
+
+<TypesHeroAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §11.9 (hero), §5.6.2 (straddles) and D185 (entry cards, the explore rail, "C, stacked").

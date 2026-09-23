@@ -1,0 +1,13 @@
+.stack {
+  display: grid;
+  gap: var(--ds-space-56);
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.head {
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-font-size-itemhead);
+  color: var(--primary12);
+}

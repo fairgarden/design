@@ -1,0 +1,24 @@
+.figure {
+  inline-size: 100%;
+}
+
+.chart {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.axis,
+.series {
+  fill: none;
+  stroke: var(--primary12);
+  stroke-linejoin: round;
+}
+
+.axis {
+  stroke-width: var(--border-size-1);
+}
+
+.series {
+  stroke-width: var(--border-size-2);
+}

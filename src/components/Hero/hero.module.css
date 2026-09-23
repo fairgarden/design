@@ -1,0 +1,766 @@
+/*
+ * Hero (§11.9) [D185]. CVA function `hero` in Hero.tsx. Parts: base (the
+ * band), container, layout, content (the text column), wayfinding, title,
+ * lockup (lockupCaps, lockupAccent), lede, actions, rail, railLabel,
+ * railArrow, compass, media (the figure), photo, iconButton, plate,
+ * caption, drawing, field, frame, aside, cells, cell (cellLabel,
+ * cellValue), and the exit seam: seam, seamRule, seamEdge, seamSpan,
+ * photoSpacer, seamCaption, entries (entryItem, entry: each a §12.2
+ * Card kind="entry", which draws its own face, edge, image and text
+ * [D185]), trail (trailPath, trailMarker). Colors follow the §11.9 Color
+ * roles table through role
+ * variables only. Local custom properties carry dimensions only:
+ *   --hero-span  the reading span, columns 3–10 of 12 (616 px at 1024),
+ *                resolved against the element that uses it
+ *
+ * Gaps are visual gaps [D74]: text parts trim half-leading where `text-box`
+ * is supported.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.caption {
+  composes: typeCaption typeMuted from '../../utils/type.module.css';
+}
+
+.seamCaption {
+  composes: typeCaption typeMuted from '../../utils/type.module.css';
+}
+
+.railLabel {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.cellLabel {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.cellValue {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.lockupCaps {
+  composes: typeLockupCaps from '../../utils/type.module.css';
+}
+
+.lockupAccent {
+  composes: typeLockupAccent from '../../utils/type.module.css';
+}
+
+.frame {
+  composes: lineDouble from '../../utils/line.module.css';
+}
+
+.trailPath {
+  composes: lineDashed from '../../utils/line.module.css';
+}
+
+@layer base {
+  /* The band: set by content, never 100vh; the rail is pinned to its corner. */
+  .base {
+    position: relative;
+    padding-block: var(--ds-space-40) var(--ds-space-56);
+  }
+
+  .container {
+    --hero-span: calc((100% - 11 * var(--ds-space-margin)) * 8 / 12 + 7 * var(--ds-space-margin));
+
+    inline-size: min(100% - 2 * var(--ds-space-margin), var(--ds-container-content));
+    margin-inline: auto;
+  }
+
+  /* Base: stacked, text band then media, in source order. */
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--size-px-7);
+    align-items: start;
+  }
+
+  .content {
+    min-inline-size: 0;
+  }
+
+  .wayfinding {
+    margin-block-end: var(--size-px-5);
+  }
+
+  /* type-display, about 20ch, balanced into 2–3 lines (§5.4). */
+  .title {
+    max-inline-size: 20ch;
+    margin: 0;
+    color: var(--role-heading);
+    text-wrap: balance;
+    text-box: trim-both cap alphabetic;
+  }
+
+  .lockup {
+    display: inline;
+  }
+
+  .lede {
+    max-inline-size: var(--ds-measure-reading);
+    margin: var(--size-px-7) 0 0;
+    color: var(--primary12);
+    text-box: trim-both cap alphabetic;
+  }
+
+  /* Primary first, the outline twin beside it at equal height, a --ds-space-12 gap. */
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ds-space-12);
+    margin-block-start: var(--size-px-5);
+  }
+
+  /* The photo figure: 3:2, conditional radius, inset --size-px-5 at base. */
+  .media {
+    position: relative;
+    z-index: var(--layer-1);
+    min-inline-size: 0;
+    margin-block: 0;
+    margin-inline: max(0px, calc(var(--size-px-5) - var(--ds-space-margin)));
+  }
+
+  .photo {
+    position: relative;
+    aspect-ratio: var(--ds-ratio-photo);
+    border-radius: var(--ds-radius-conditional-8);
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  .photo > img,
+  .photo > picture,
+  .photo > video {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /* Right-flush, --size-px-2 below the photo: description, then credit. */
+  .caption {
+    margin: var(--size-px-2) 0 0;
+    text-align: end;
+  }
+
+  /* Sticker drawing: fixed art steps, never fluid [D78]. */
+  .drawing {
+    inline-size: var(--ds-size-art-s);
+    min-inline-size: 0;
+  }
+
+  .drawing > * {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  /* The explore rail, base: an inline link under the lede. */
+  .rail {
+    margin-block-start: var(--size-px-3);
+  }
+
+  .railArrow {
+    margin-inline-start: var(--size-px-2);
+  }
+
+  .compass {
+    display: none;
+  }
+
+  /* Technical frame: line-double in --primary12; its face is the band ground, so a pattern stops at it. */
+  .frame {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--size-px-5);
+    padding: var(--size-px-5);
+    border-color: var(--primary12);
+    outline-color: var(--primary12);
+    border-radius: var(--ds-radius-none);
+    background-color: var(--role-ground);
+  }
+
+  .aside {
+    min-inline-size: 0;
+    padding-block-start: var(--size-px-5);
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  /*
+   * Info cells: a module on its own container, `hero-cells` [D163].
+   * Baseline: flex-wrap at the 120 px content minimum; rules between cells,
+   * the outer ones clipped.
+   */
+  .cells {
+    container: hero-cells / inline-size;
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  .cell {
+    box-sizing: border-box;
+    display: grid;
+    gap: var(--size-px-1);
+    flex: 1 1 var(--size-px-11);
+    min-inline-size: 0;
+    margin-block-start: calc(-1 * var(--border-size-1));
+    margin-inline-start: calc(-1 * var(--border-size-1));
+    padding: var(--size-px-3);
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+    border-inline-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  .cellLabel,
+  .cellValue {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  /* The exit seam: the next band's ground, holding what crosses the edge. */
+  .seam {
+    position: relative;
+  }
+
+  .seamSpan,
+  .seamCaption {
+    display: none;
+  }
+
+  .photoSpacer {
+    padding-block-start: calc(100% / 3);
+  }
+
+  .seamCaption {
+    margin: var(--size-px-2) 0 0;
+    text-align: end;
+  }
+
+  /*
+   * Entry cards [D185]: below --lg-n-above they stack under the hero, in the
+   * next band's flow. Each is a Card kind="entry" (§12.2) filling its item.
+   */
+  .entries {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--size-px-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .entryItem {
+    display: flex;
+    min-inline-size: 0;
+  }
+
+  .entry {
+    flex: 1 1 auto;
+  }
+
+  /* The rail's trail: from --lg-n-above, where the 40 px margin holds it clear of type. */
+  .trail {
+    display: none;
+    position: absolute;
+    inset-block-start: calc(-1 * var(--size-px-3));
+    inset-inline-end: calc((var(--size-px-9) - var(--ds-space-40)) / 2);
+    z-index: var(--layer-1);
+    overflow: visible;
+    color: var(--role-accent);
+    fill: none;
+    stroke: currentColor;
+    pointer-events: none;
+  }
+
+  .trailMarker {
+    fill: none;
+    stroke-width: var(--ds-stroke-1-5);
+    stroke-dasharray: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Below 360 px the action pair stacks, each hugging its label, primary first [D106]. */
+  @media (--xs-n-below) {
+    .actions {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  /* From --md-n-above the rail label is rotated in the bottom end corner, flush with the viewport edge. */
+  @media (--md-n-above) {
+    .rail {
+      position: absolute;
+      inset-inline-end: 0;
+      inset-block-end: var(--size-px-3);
+      z-index: var(--layer-1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--size-px-2);
+      inline-size: var(--size-px-9);
+      margin: 0;
+    }
+
+    .railArrow {
+      display: none;
+    }
+
+    .compass {
+      display: flex;
+    }
+  }
+
+  @media (--lg-n-above) {
+    .base {
+      padding-block: var(--size-px-10) var(--size-px-11);
+    }
+
+    .layout {
+      row-gap: var(--ds-space-40);
+    }
+
+    .lede {
+      margin-block-start: var(--ds-space-40);
+    }
+
+    .frame {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      padding: var(--size-px-7);
+    }
+
+    .aside {
+      padding-block-start: 0;
+      padding-inline-start: var(--size-px-7);
+      border-block-start: 0;
+      border-inline-start: var(--border-size-1) solid var(--role-rule);
+    }
+
+    .entries {
+      position: relative;
+      z-index: var(--layer-1);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      column-gap: var(--ds-space-margin);
+      margin-block-start: calc(-1 * var(--ds-space-40));
+    }
+
+    .trail {
+      display: block;
+    }
+  }
+
+  /* Info cells, viewport fallback: 1 column at --xs-n-below, one row at --lg-n-above… */
+  @media (--xs-n-below) {
+    .cell {
+      flex-basis: 100%;
+    }
+  }
+
+  @media (--lg-n-above) {
+    .cell {
+      flex: 1 1 0;
+    }
+  }
+
+  /* …then the cell row's own width: 1 below 360, 2-up from 360, 4-up from 480. */
+  @container hero-cells (width < 360px) {
+    .cell {
+      flex: 1 1 100%;
+    }
+  }
+
+  @container hero-cells (width >= 360px) {
+    .cell {
+      flex: 1 1 34%;
+    }
+  }
+
+  @container hero-cells (width >= 480px) {
+    .cell {
+      flex: 1 1 0;
+    }
+  }
+}
+
+@layer variants {
+  /*
+   * An illustrated field hero renders the rail twice: the inline copy in the
+   * field below --md-n-above, the rotated corner copy on the band from it,
+   * so the corner label takes the band's inks, not the field's.
+   */
+  .railCorner {
+    display: none;
+  }
+
+  @media (--md-n-above) {
+    .railInline {
+      display: none;
+    }
+
+    .railCorner {
+      display: flex;
+    }
+  }
+
+  /* The rotated rail label (a §9.3 nav Link): type-kicker, reading bottom to top. */
+  @media (--md-n-above) {
+    .rail .railLabel {
+      writing-mode: vertical-rl;
+      rotate: 180deg;
+      font-family: var(--ds-font-display);
+      font-variation-settings: var(--ds-font-display-settings);
+      font-size: var(--ds-font-size-kicker);
+      font-weight: var(--font-weight-7);
+      line-height: var(--font-lineheight-0);
+    }
+  }
+
+  /* The explore rail's base form: the inline link at --font-weight-6. */
+  .railLabel {
+    font-weight: var(--font-weight-6);
+  }
+
+  /* A as the media hero: with its photo figure the text centres (Audubon). */
+  .mediaHero .content {
+    text-align: center;
+  }
+
+  .mediaHero .title,
+  .mediaHero .lede {
+    margin-inline: auto;
+  }
+
+  .mediaHero .actions {
+    justify-content: center;
+  }
+
+  /* B: centred at base, the drawing sitting on the headline (halo to cap tops). */
+  .illustrated .layout {
+    justify-items: center;
+    row-gap: 0;
+    text-align: center;
+  }
+
+  .illustrated .title,
+  .illustrated .lede {
+    margin-inline: auto;
+  }
+
+  .illustrated .actions {
+    justify-content: center;
+  }
+
+  /* The campaign field sits in the container; Ground draws its edge and radius. */
+  .field {
+    padding: var(--size-px-5);
+  }
+
+  /* D: title → rule → mono subtitle → actions. */
+  .technical .title {
+    max-inline-size: none;
+    padding-block-end: var(--size-px-3);
+    border-block-end: var(--border-size-1) solid var(--role-rule);
+  }
+
+  .technical .lede {
+    margin-block-start: var(--size-px-3);
+  }
+
+  /* The photo's media button sits in a night face at the corner; the face paints nothing. */
+  .iconButton {
+    position: absolute;
+    inset-block-end: var(--ds-space-12);
+    inset-inline-end: var(--ds-space-12);
+    display: flex;
+    background: none;
+  }
+
+  /* The opaque plate: a face over the photo's lower edge, --role-edge at --border-size-1 [D179]. */
+  .plate {
+    position: relative;
+    margin-block: calc(-1 * var(--size-px-7)) 0;
+    margin-inline: var(--size-px-5);
+    padding: var(--size-px-5);
+    border: var(--border-size-1) solid var(--role-edge);
+    border-radius: var(--ds-radius-conditional-20);
+  }
+
+  /* The exit seam's own rules: no pull through a padding it does not have. */
+  .seam .seamRule,
+  .seam .seamEdge {
+    margin: 0;
+  }
+
+  .seam .seamEdgeOver {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+  }
+
+  /* Below --lg-n-above the entry cards open the next band with its section space. */
+  .seamEntries {
+    padding-block-start: var(--ds-space-section);
+  }
+
+  /* The night hero ending on a hill or fringe keeps ≥ --size-px-10 of empty ground above it. */
+  .edged {
+    padding-block-end: var(--size-px-10);
+  }
+
+  @media (--lg-n-above) {
+    .edged {
+      padding-block-end: var(--size-px-11);
+    }
+
+    /* Landing pages may take type-display-xl. */
+    .landing .title {
+      font-size: var(--ds-font-size-display-xl);
+      line-height: var(--ds-leading-display);
+    }
+
+    /* A: the reading span, columns 3–10, centred. */
+    .editorial .content,
+    .editorial .media {
+      justify-self: center;
+      inline-size: var(--hero-span);
+    }
+
+    /* B: text in 7 columns, the drawing L in 5. */
+    .illustrated .layout {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--ds-space-margin);
+      align-items: center;
+      justify-items: start;
+      text-align: start;
+    }
+
+    .illustrated .content {
+      grid-row: 1;
+      grid-column: 1 / span 7;
+    }
+
+    .illustrated .drawing {
+      grid-row: 1;
+      grid-column: 8 / span 5;
+      justify-self: center;
+      inline-size: var(--ds-size-art-l);
+    }
+
+    .illustrated .title,
+    .illustrated .lede {
+      margin-inline: 0;
+    }
+
+    .illustrated .actions {
+      justify-content: flex-start;
+    }
+
+    .field {
+      padding: var(--size-px-7);
+    }
+
+    /* C: text in 5 columns beside the photo in 7, top-aligned, to the container edge. */
+    .split .layout {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--ds-space-margin);
+    }
+
+    .split .content {
+      grid-column: 1 / span 5;
+    }
+
+    .split .media {
+      grid-column: 6 / -1;
+    }
+
+    /*
+     * C, stacked [D185]: the text band, then the photo, both in the reading
+     * span; the photo crosses the edge at its middle (its lower third of the
+     * span's width, half its 3:2 height, overhangs), the hill behind it.
+     * The caption moves under it on the next band; the figure keeps it for
+     * assistive technology.
+     */
+    .stacked {
+      padding-block-end: 0;
+    }
+
+    .stacked .layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .stacked .content,
+    .stacked .media {
+      grid-column: 1;
+      justify-self: center;
+      inline-size: var(--hero-span);
+    }
+
+    .stacked .media {
+      margin-block-end: calc(-1 * var(--hero-span) / 3);
+    }
+
+    .stacked .caption {
+      position: absolute;
+      inline-size: var(--border-size-1);
+      block-size: var(--border-size-1);
+      margin: calc(-1 * var(--border-size-1));
+      padding: 0;
+      border: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .seamStacked .seamSpan {
+      display: block;
+      inline-size: var(--hero-span);
+      margin-inline: auto;
+    }
+
+    .seamStacked .seamCaption {
+      display: block;
+    }
+
+    /* The entry cards cross the edge by --ds-space-40; the band below gives the clearance. */
+    .seamEntries {
+      padding-block-start: 0;
+    }
+  }
+
+  .transactional .actions {
+    min-block-size: var(--ds-size-control-xl);
+  }
+}
+
+@layer print {
+  @media print {
+    /* The masthead title: h1 at 22 pt, lede at 12 pt (the print remap); a rule closes it. */
+    .base {
+      padding-block: 0 var(--ds-space-section);
+    }
+
+    .landing .title {
+      font-size: var(--ds-font-size-display);
+    }
+
+    .layout,
+    .illustrated .layout,
+    .split .layout {
+      display: block;
+      text-align: start;
+    }
+
+    .content,
+    .media,
+    .mediaHero .content,
+    .editorial .content,
+    .editorial .media,
+    .stacked .content,
+    .stacked .media {
+      inline-size: auto;
+    }
+
+    /* The photo prints as a figure below the text: grayscale, framed at 0.75 pt, ≤ 60 mm. */
+    .media {
+      margin: var(--size-px-5) 0 0;
+      break-inside: avoid;
+    }
+
+    .stacked .media {
+      margin-block-end: 0;
+    }
+
+    .media:has(img[alt='']) {
+      display: none;
+    }
+
+    .photo {
+      inline-size: fit-content;
+      max-inline-size: 100%;
+      aspect-ratio: auto;
+      border: var(--border-size-1) solid var(--primary12);
+      border-radius: var(--ds-radius-8);
+      filter: grayscale(1);
+    }
+
+    .photo > img,
+    .photo > picture,
+    .photo > video {
+      inline-size: auto;
+      max-inline-size: 100%;
+      block-size: auto;
+      max-block-size: var(--ds-print-hero-max);
+      object-fit: contain;
+    }
+
+    .stacked .caption {
+      position: static;
+      inline-size: auto;
+      block-size: auto;
+      margin: var(--size-px-2) 0 0;
+      overflow: visible;
+      clip-path: none;
+      white-space: normal;
+    }
+
+    .caption {
+      text-align: start;
+    }
+
+    /* The rail prints inline; the compass, trail and media button drop. */
+    .rail {
+      position: static;
+      display: block;
+      inline-size: auto;
+      margin-block-start: var(--size-px-3);
+    }
+
+    .rail .railLabel {
+      writing-mode: horizontal-tb;
+      rotate: none;
+    }
+
+    /* A field hero prints its inline copy only. */
+    .rail.railInline {
+      display: block;
+    }
+
+    .rail.railCorner {
+      display: none;
+    }
+
+    .compass,
+    .trail,
+    .iconButton,
+    .railArrow,
+    .seamSpan,
+    .seamCaption {
+      display: none;
+    }
+
+    /* Entry cards stack below the hero, whole, their edge a 1.5 pt frame. */
+    .seam,
+    .seamEntries {
+      padding: 0;
+    }
+
+    .entries {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      margin: var(--size-px-5) 0 0;
+    }
+
+    .entryItem {
+      break-inside: avoid;
+    }
+  }
+}

@@ -1,0 +1,26 @@
+.stack {
+  display: grid;
+  gap: var(--ds-space-12);
+  min-inline-size: 0;
+}
+
+.name {
+  margin: 0;
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-caption);
+  font-weight: var(--font-weight-6);
+}
+
+/* A resizable frame: drag its corner to narrow the pager's container. The
+   pager's own --ds-space-40 top margin is part of the demo. */
+.frame {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 280px;
+  max-inline-size: 100%;
+  padding: 0 var(--size-px-2) var(--size-px-2);
+  border: var(--border-size-1) solid var(--role-hairline);
+  border-radius: var(--ds-radius-8);
+  overflow: auto;
+  resize: horizontal;
+}

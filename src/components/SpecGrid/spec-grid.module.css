@@ -1,0 +1,142 @@
+/*
+ * Spec grid (§8.3; §12.7 At a Glance). CVA functions `specGrid` and
+ * `specGridCell`. Color roles (§12.7): rule --role-hairline (dotted
+ * --role-rule on an estimated cell), label and icon --role-muted, value
+ * --primary12. The hairline is allowed because type and space carry the
+ * structure [D83]. Dots are true circles: an SVG mask cuts a 1 px solid
+ * border into round dots [D36, D68], so they print as foreground.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.label {
+  composes: typeLabel typeMuted from '../../utils/type.module.css';
+}
+
+.value {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base {
+    container: spec-grid / inline-size;
+    /* Size containment leaves no intrinsic width: fill the box, never collapse as a flex or shrink-to-fit item. */
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  /*
+   * Baseline: auto-fit tracks at the 160 px (--size-px-12) minimum column,
+   * capped at 4 (a track is never narrower than a quarter of the row).
+   * Gutter = the page margin [D42]; last line → next rule --ds-space-12.
+   */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(max(var(--size-px-12), (100% - 3 * var(--ds-space-margin)) / 4), 1fr)
+    );
+    column-gap: var(--ds-space-margin);
+    row-gap: var(--ds-space-12);
+    margin: 0;
+  }
+
+  /* The cell's top border is its rule, at column width; rule → label --size-px-3. */
+  .cell {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+    padding-block-start: var(--size-px-3);
+    border-block-start: var(--border-size-1) solid var(--role-hairline);
+  }
+
+  /* Line 1: the icon, --size-px-1, the label; its line equals a value line, so label → value = the value pitch. */
+  .label {
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-1);
+    margin: 0;
+    line-height: calc(var(--ds-font-size-body-ui) * var(--font-lineheight-3));
+  }
+
+  .icon {
+    flex: none;
+    color: var(--role-muted);
+  }
+
+  /* Lines 2+: flush with the column edge, under the icon. */
+  .value {
+    margin: 0;
+    color: var(--primary12);
+    font-variant-numeric: var(--ds-numerals-data);
+    overflow-wrap: break-word;
+  }
+
+  /* Stack guard, viewport fallback (§1.11.11 rule 5). */
+  @media (--xs-n-below) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* Container thresholds on spec-grid (§8.3, the owner). */
+  @container spec-grid (width < 360px) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @container spec-grid (360px <= width < 768px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @container spec-grid (768px <= width < 1024px) {
+    .grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @container spec-grid (width >= 1024px) {
+    .grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+}
+
+@layer variants {
+  /* Estimated: a line-dotted-fine top rule in --role-rule instead of the hairline. */
+  .estimated {
+    padding-block-start: calc(var(--size-px-3) + var(--border-size-1));
+    border-block-start-width: 0;
+  }
+
+  .estimated::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    block-size: 0;
+    border-block-end: var(--ds-dot-fine) solid var(--role-rule);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 1'%3E%3Ccircle cx='1.5' cy='0.5' r='0.5'/%3E%3C/svg%3E");
+    mask-size: var(--ds-dot-fine-pitch) var(--ds-dot-fine);
+    mask-repeat: round no-repeat;
+    mask-origin: border-box;
+  }
+}
+
+@layer print {
+  @media print {
+    /* 2-up in the printed column; rules and dots print black at 0.75 pt; cells never split. */
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cell {
+      break-inside: avoid;
+    }
+  }
+}

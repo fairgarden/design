@@ -1,0 +1,13 @@
+.page {
+  display: grid;
+  inline-size: 100%;
+}
+
+.band {
+  padding-block: var(--ds-space-section);
+}
+
+.container {
+  inline-size: min(100% - 2 * var(--ds-space-margin), var(--ds-container-content));
+  margin-inline: auto;
+}

@@ -1,0 +1,24 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-7);
+  inline-size: 100%;
+}
+
+.note {
+  margin: 0;
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-caption);
+  color: var(--role-muted);
+}
+
+.drawing {
+  fill: var(--role-halo);
+  stroke: currentColor;
+  stroke-width: var(--ds-stroke-4);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.drawing > * {
+  vector-effect: non-scaling-stroke;
+}

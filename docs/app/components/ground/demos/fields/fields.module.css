@@ -1,0 +1,20 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(144px, 1fr));
+  gap: var(--size-px-3);
+  inline-size: 100%;
+}
+
+/* Ground's field class draws the --primary12 edge and radius; this sets the layout. */
+.field {
+  display: grid;
+  gap: var(--ds-space-12);
+  padding: var(--size-px-3);
+}
+
+.name {
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-font-size-kicker);
+  font-weight: var(--font-weight-7);
+  color: var(--role-heading);
+}

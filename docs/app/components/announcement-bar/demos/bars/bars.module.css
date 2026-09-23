@@ -1,0 +1,23 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-5);
+  inline-size: 100%;
+}
+
+.status {
+  margin: 0;
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-caption);
+  color: var(--role-muted);
+}
+
+.reset {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--primary12);
+  font: inherit;
+  text-decoration-line: underline;
+  text-decoration-color: var(--role-accent);
+  cursor: pointer;
+}

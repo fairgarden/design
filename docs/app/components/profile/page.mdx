@@ -1,0 +1,84 @@
+# Profile
+
+People and organizations: bylines, author blocks, bio rows and team grids, with Avatar portraits.
+
+```tsx
+import {
+  Profile,
+  ProfileBio,
+  ProfileName,
+  ProfilePortrait,
+} from '@fairgarden-private/design/components/Profile'
+```
+
+Names set in the serif and roles in caps sans. Use real portraits or initials, never generic silhouettes, and never overlay a name on a photo. `ProfileNameLink` links the whole profile (or team member) through a title Link, and the item draws the focus ring; social links in `ProfileLinks` stay separate tab stops. Former members say so in words, never by dimming. Species use the card and testimonials use Quote.
+
+## Byline, author block and bio row
+
+import { DemoProfileKinds } from './demos/kinds'
+
+<DemoProfileKinds.Title />
+
+`kind` is required and sets the portrait's Avatar size: 32 px in a byline (with "By Name" and the date joined by "·"), 40 px in an author block, 64 px in a bio row, stepping to 128 px from 768 px of container. The bio row keeps the portrait beside the text, even on phones, and stacks below 360 px of container. Avatars keep their own ring and initials face on every ground.
+
+<DemoProfileKinds />
+
+[See Demo](./demos/kinds/)
+
+## Team
+
+import { DemoProfileTeamDemo } from './demos/team'
+
+<DemoProfileTeamDemo.Title />
+
+`ProfileTeam` lays out `ProfileMember`s with square `ProfileTeamPhoto`s in a hairline frame: 1-up below 360 px of container, 2-up from 360, 4-up from 768 and up to 5 from 1024. On saturated grounds use only an author block or a single bio row. Team grids print 3-up, photos in grayscale.
+
+<DemoProfileTeamDemo />
+
+[See Demo](./demos/team/)
+
+## API Reference
+
+import { TypesProfile, TypesProfileAdditional } from './types'
+
+### Profile
+
+<TypesProfile.Profile />
+
+### ProfilePortrait and ProfileTeamPhoto
+
+<TypesProfile.ProfilePortrait />
+
+<TypesProfile.ProfileTeamPhoto />
+
+### ProfileName and ProfileNameLink
+
+<TypesProfile.ProfileName />
+
+<TypesProfile.ProfileNameLink />
+
+### ProfileDetails, ProfileRole, ProfileBio, ProfileLinks and ProfileDate
+
+<TypesProfile.ProfileDetails />
+
+<TypesProfile.ProfileRole />
+
+<TypesProfile.ProfileBio />
+
+<TypesProfile.ProfileLinks />
+
+<TypesProfile.ProfileDate />
+
+### ProfileTeam and ProfileMember
+
+<TypesProfile.ProfileTeam />
+
+<TypesProfile.ProfileMember />
+
+### Additional types
+
+<TypesProfileAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §12.15 (profile and team) and §10.12 (avatar).

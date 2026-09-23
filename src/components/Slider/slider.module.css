@@ -1,0 +1,371 @@
+/*
+ * Slider (§10.10). CVA function `slider`. The root `base` lays out the
+ * label and value row above a full-width control, and the tick scale under
+ * it when `stepped`. Parts: base, label, value, control, track, indicator,
+ * thumb, chip (a nested overlay-face Ground shown while dragging), ticks,
+ * tick (tickMajor, tickStart, tickEnd, tickMid), tickLabel, and edge /
+ * edgeLine, the SVG that draws the disabled `line-dotted-fine` track and
+ * thumb edges as true dots [D36, D68].
+ *
+ * Colors are role variables only. Local custom properties carry dimensions:
+ *   --slider-thumb-edge      thumb edge width (2 → 3 px while dragging)
+ *   --slider-edge-radius     radius the disabled dotted edge follows
+ *   --slider-tick-position   a tick's offset along the track (set inline)
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.label {
+  composes: typeFieldLabel from '../../utils/type.module.css';
+}
+
+.value {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.chip {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.ticks {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.edgeLine {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+@layer base {
+  .base {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'label value'
+      'control control';
+    align-items: baseline;
+    column-gap: var(--ds-space-12);
+    min-inline-size: 0;
+    color: var(--primary12);
+  }
+
+  .label {
+    grid-area: label;
+    color: var(--primary12);
+  }
+
+  /* The value always shows in text: type-data at --font-weight-6, the label row's right end. */
+  .value {
+    grid-area: value;
+    justify-self: end;
+    color: var(--primary12);
+  }
+
+  .base .value {
+    --type-weight: var(--font-weight-6);
+  }
+
+  /* The control is the --ds-size-hit tall press target; the track sits centered in it. */
+  .control {
+    grid-area: control;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    block-size: var(--ds-size-hit);
+    touch-action: none;
+    user-select: none;
+  }
+
+  /* The track: --size-px-2 tall, --radius-round, a --border-size-1 --role-rule edge, no fill. */
+  .track {
+    --slider-edge-radius: calc(var(--size-px-2) / 2);
+
+    position: relative;
+    box-sizing: border-box;
+    inline-size: 100%;
+    block-size: var(--size-px-2);
+    border: var(--border-size-1) solid var(--role-rule);
+    border-radius: var(--radius-round);
+    background: none;
+  }
+
+  /* The indicator: a --primary12 ink shape over the track's full height. */
+  .indicator {
+    margin-block-start: calc(var(--border-size-1) * -1);
+    border-radius: var(--radius-round);
+    background-color: var(--primary12);
+  }
+
+  /* The thumb: --size-px-4 × --size-px-6, --radius-1, a --role-halo face and a --border-size-2 --primary12 edge. */
+  .thumb {
+    --slider-thumb-edge: var(--border-size-2);
+    --slider-edge-radius: var(--radius-1);
+
+    box-sizing: border-box;
+    inline-size: var(--size-px-4);
+    block-size: var(--size-px-6);
+    border: var(--slider-thumb-edge) solid var(--primary12);
+    border-radius: var(--radius-1);
+    background-color: var(--role-halo);
+  }
+
+  /* Every thumb reaches --ds-size-hit; the hit area extends invisibly [D43]. */
+  .thumb::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: var(--ds-size-hit);
+    block-size: var(--ds-size-hit);
+    translate: -50% -50%;
+  }
+
+  /* The drag chip: nested overlay face, --border-size-2 --primary12 edge, --size-px-2 above the thumb. */
+  .thumb .chip {
+    display: none;
+    position: absolute;
+    inset-block-end: calc(100% + var(--size-px-2));
+    inset-inline-start: 50%;
+    translate: -50% 0;
+    padding-block: var(--size-px-1);
+    padding-inline: var(--size-px-2);
+    border: var(--border-size-2) solid var(--primary12);
+    border-radius: var(--radius-1);
+    background-color: var(--primary1);
+    color: var(--primary12);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  /* Disabled edge host: covers the border box once the solid edge is removed. */
+  .edge {
+    display: none;
+    position: absolute;
+    inset-block-start: calc(var(--ds-dot-fine) / 2);
+    inset-inline-start: calc(var(--ds-dot-fine) / 2);
+    inline-size: calc(100% - var(--ds-dot-fine));
+    block-size: calc(100% - var(--ds-dot-fine));
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .edgeLine {
+    fill: none;
+    stroke: var(--role-disabled-edge);
+    rx: calc(var(--slider-edge-radius) - var(--ds-dot-fine) / 2);
+  }
+
+  /*
+   * The tick scale, --size-px-2 below the track. Each tick is a zero-width
+   * box at its value, so its line and label center on it in either
+   * direction; the end ticks anchor their labels inward.
+   */
+  .ticks {
+    grid-area: ticks;
+    position: relative;
+    min-block-size: calc(var(--ds-space-12) + var(--size-px-1) + 1lh);
+    margin-block-start: calc(var(--size-px-2) - (var(--ds-size-hit) - var(--size-px-2)) / 2);
+    margin-inline: var(--border-size-1);
+  }
+
+  .tick {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: var(--slider-tick-position);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    inline-size: 0;
+  }
+
+  /* Minor ticks are half the --ds-space-12 major tick (2:1); both --border-size-1 in --primary12. */
+  .tick::before {
+    content: '';
+    display: block;
+    inline-size: 0;
+    block-size: var(--ds-size-tick-minor);
+    border-inline-start: var(--border-size-1) solid var(--primary12);
+  }
+
+  .tickMajor::before {
+    block-size: var(--ds-space-12);
+  }
+
+  .tickStart {
+    align-items: flex-start;
+  }
+
+  .tickEnd {
+    align-items: flex-end;
+  }
+
+  .tickLabel {
+    display: none;
+    margin-block-start: var(--size-px-1);
+    color: var(--primary12);
+    white-space: nowrap;
+  }
+
+  /* Tick labels thin to the ends and midpoint at base; only the ends below 360 px; all from 768 px. */
+  .tickStart .tickLabel,
+  .tickEnd .tickLabel,
+  .tickMid .tickLabel {
+    display: block;
+  }
+
+  @media (--xs-n-below) {
+    .tickMid .tickLabel {
+      display: none;
+    }
+  }
+
+  @media (--md-n-above) {
+    .tick .tickLabel {
+      display: block;
+    }
+  }
+
+  @media (--forcedColors) {
+    .edgeLine {
+      stroke: currentColor;
+    }
+
+    .indicator {
+      forced-color-adjust: none;
+      background-color: CanvasText;
+    }
+  }
+
+  /* Hover and drag transitions [D181]: --ds-duration-quick, --ease-out-3. */
+  @media (--motionOK) {
+    .thumb {
+      transition-property: border-color, background-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer variants {
+  .stepped {
+    grid-template-areas:
+      'label value'
+      'control control'
+      'ticks ticks';
+  }
+}
+
+@layer states {
+  /* Vertical: the track runs along the block axis; the thumb turns crosswise. */
+  .control[data-orientation='vertical'] {
+    flex-direction: column;
+    justify-content: center;
+    inline-size: var(--ds-size-hit);
+    block-size: 100%;
+    min-block-size: var(--size-px-13);
+  }
+
+  .track[data-orientation='vertical'] {
+    inline-size: var(--size-px-2);
+    block-size: 100%;
+  }
+
+  .indicator[data-orientation='vertical'] {
+    margin-block-start: 0;
+    margin-inline-start: calc(var(--border-size-1) * -1);
+  }
+
+  .thumb[data-orientation='vertical'] {
+    inline-size: var(--size-px-6);
+    block-size: var(--size-px-4);
+  }
+
+  /*
+   * Hover (not disabled): the thumb face takes the outline hover, a
+   * --primary3 fill where soft fills apply and its rest --role-halo where
+   * they drop (--role-soft-hover-face, never the ground color), edge
+   * unchanged (§10.10; derived, flagged) [D181]. Dragging: the edge steps
+   * to --ds-stroke-3, an active state, and the face returns to rest.
+   */
+  .thumb:not([data-disabled]):hover {
+    background-color: var(--role-soft-hover-face);
+  }
+
+  .thumb[data-dragging]:not([data-disabled]) {
+    --slider-thumb-edge: var(--ds-stroke-3);
+
+    background-color: var(--role-halo);
+  }
+
+  /* Forced colors flatten the face, so a hover adds a --border-size-2 outline [D181]. */
+  @media (--forcedColors) {
+    .thumb:not([data-disabled], [data-dragging]):hover {
+      outline: var(--border-size-2) solid currentColor;
+      outline-offset: var(--border-size-2);
+    }
+  }
+
+  .thumb[data-dragging] .chip {
+    display: block;
+  }
+
+  /* Focus: the ring sits on the thumb when its range input has keyboard focus [D45]. */
+  .thumb:has(:focus-visible) {
+    outline: var(--ds-focus-width) solid var(--primary12);
+    outline-offset: var(--ds-focus-offset);
+  }
+
+  /*
+   * Disabled: dotted track and thumb edges in --role-rule (--primary12 on
+   * one-ink grounds [D85]), no indicator, muted ticks; the value stays.
+   * Never dimmed [D16].
+   */
+  .track[data-disabled],
+  .thumb[data-disabled] {
+    border-style: none;
+  }
+
+  .track[data-disabled] > .edge,
+  .thumb[data-disabled] > .edge {
+    display: block;
+  }
+
+  .indicator[data-disabled] {
+    display: none;
+  }
+
+  .base[data-disabled] .label {
+    color: var(--role-muted);
+  }
+
+  .base[data-disabled] .tick::before {
+    border-inline-start-color: var(--role-muted);
+  }
+
+  .base[data-disabled] .tickLabel {
+    color: var(--role-muted);
+  }
+}
+
+@layer print {
+  @media print {
+    /* The control is hidden; the slider prints as "Label: value unit" (§10.10). */
+    .control,
+    .ticks {
+      display: none;
+    }
+
+    .base {
+      grid-template-columns: auto minmax(0, 1fr);
+      column-gap: var(--size-px-1);
+    }
+
+    .label::after {
+      content: ':';
+    }
+
+    .value {
+      justify-self: start;
+    }
+  }
+}

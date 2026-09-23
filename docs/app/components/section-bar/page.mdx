@@ -1,0 +1,57 @@
+# Section Bar
+
+The page's one sticky bar on deep content: where you are, and a jump to any section. It swaps with the header and the two never stack.
+
+```tsx
+import { SectionBar } from '@fairgarden-private/design/components/SectionBar'
+```
+
+A Base UI Toolbar in a `nav` named "In this section", on the page ground of the band it covers, with a hairline bottom rule and no shadow. It stays one line, at least 44 px tall. Pass `items` (the ancestors, root first), `current` (the page) and `sections` (each section's element `id` and label, in order). The bar follows the section in view by itself; pass `activeSection` to control it.
+
+**Docking.** Pass `onDockChange` and feed its value back into `docked`. The bar docks when a sentinel at its in-flow position leaves the top of the viewport. On upward scroll the page shell brings the header back in its place, and on downward scroll the bar returns. Give the page's sections a `scroll-margin-top` of the bar's height so a jump lands clear of it.
+
+## Section bar
+
+import { DemoSectionBarSection } from './demos/section'
+
+<DemoSectionBarSection.Title />
+
+Below 768 px the disclosure glyph opens the staircase breadcrumb, the caps title follows the section in view and "Jump to" opens the list. From 768 px the inline breadcrumb (the Breadcrumb's staircase kind, its crumbs part of the toolbar) takes their place: it collapses the middle into a "…" menu past four levels (six from 1024 px), truncates long crumbs and sets the current crumb in bold as the title. The Jump label names the section in view, announced politely once per change. The Jump panel is a 320 px list of links: Tab moves through them and Escape closes it. Following one closes the panel and moves focus to that section's heading. `capped` adds the green top rule.
+
+<DemoSectionBarSection />
+
+[See Demo](./demos/section/)
+
+## Tab strip
+
+import { DemoSectionBarTabs } from './demos/tabs'
+
+<DemoSectionBarTabs.Title />
+
+With `kind="tabs"` and 6 or fewer sections, from 1024 px equal cells of at least 160 px replace the breadcrumb and Jump to. The cell in view carries `aria-current="location"`, a 3 px bar and bold weight. A click scrolls to the section and writes its hash. `toTop` adds the square "Back to top" cell at the start, part of the docked bar, so nothing floats; it moves focus to the skip link's target. With more than 6 sections the bar stays a section bar.
+
+<DemoSectionBarTabs />
+
+[See Demo](./demos/tabs/)
+
+## Guide bar
+
+import { DemoSectionBarGuide } from './demos/guide'
+
+<DemoSectionBarGuide.Title />
+
+`kind="guide"` takes an optional `search` at the start (an Autocomplete, capped at 240 px, from 768 px), centres the breadcrumb, and ends on an optional `listen` jump. That is a standalone link with a count badge, and it moves focus to the recordings heading.
+
+<DemoSectionBarGuide />
+
+[See Demo](./demos/guide/)
+
+## API Reference
+
+import { TypesSectionBar } from './types'
+
+<TypesSectionBar />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §11.7 (sticky section bar) and D183, D184 (sticky thresholds; the desktop bar, tab strip and guide bar).

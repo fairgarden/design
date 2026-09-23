@@ -1,0 +1,429 @@
+/*
+ * Number Field (§10.4). CVA function `numberField`. Parts: `base` (the
+ * root), `group` (the field box), `decrement`, `input`, `increment`,
+ * `affix` (prefix or suffix unit), `scrub` (the scrub area on the label);
+ * `valueText` / `valueAmount` / `valueReadout` and `unitText` / `unitCaption`
+ * carry the type role per kind (a composed type role cannot be switched from
+ * a descendant selector); `edge` / `edgeLine` and `cellEdge` / `cellEdgeLine`
+ * draw the dotted disabled edges as true dots [D36, D68]. Colors are role
+ * variables only; local custom properties carry dimensions only.
+ *
+ * The stepper is confirmed [D174]: square −/+ cells butted to the input,
+ * divided by --border-size-1 rules, one --radius-1 outer radius [D41].
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.valueText {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.valueAmount {
+  composes: typeItemhead from '../../utils/type.module.css';
+}
+
+.valueReadout {
+  composes: typeReadout from '../../utils/type.module.css';
+}
+
+.unitText {
+  composes: typeBodyUi typeMuted from '../../utils/type.module.css';
+}
+
+.unitCaption {
+  composes: typeCaption typeMuted from '../../utils/type.module.css';
+}
+
+.edgeLine,
+.cellEdgeLine {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+@layer base {
+  .base {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-inline-size: 0;
+    color: var(--primary12);
+  }
+
+  /* The scrub area wraps the label; scrubbing is for fine pointers (§10.4). */
+  .scrub {
+    display: inline-flex;
+    align-self: start;
+  }
+
+  /*
+   * The group is the §10.1 field box: --size-px-8 tall, --radius-1 outside
+   * and 0 at the seams, --border-size-1 --role-rule; at least --size-px-12
+   * wide at every width.
+   */
+  .group {
+    /* Local dimensions. */
+    --number-field-edge: var(--border-size-1);
+    --number-field-radius: var(--radius-1);
+
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: var(--size-px-12);
+    block-size: var(--size-px-8);
+    border: var(--number-field-edge) solid var(--role-rule);
+    border-radius: var(--number-field-radius);
+    overflow: clip;
+    background: none;
+    color: var(--primary12);
+  }
+
+  /* The value: type-body-ui with data numerals, centered, so it never jitters while stepping. */
+  .input {
+    flex: 1 1 auto;
+    inline-size: 100%;
+    min-inline-size: 0;
+    margin: 0;
+    padding-block: 0;
+    padding-inline: var(--ds-space-12);
+    border: 0;
+    border-radius: 0;
+    background: none;
+    color: inherit;
+    font-variant-numeric: var(--ds-numerals-data);
+    text-align: center;
+    appearance: none;
+  }
+
+  .input::placeholder {
+    color: var(--role-muted);
+  }
+
+  /* Units in --role-muted, joined to the value by a no-break space [D32]. */
+  .affix {
+    flex: none;
+    align-self: center;
+    white-space: nowrap;
+  }
+
+  /* With a unit, the value ends at the unit, so "12 kg" reads as one run. */
+  .group:has(.affix) .input {
+    padding-inline: 0;
+    text-align: end;
+  }
+
+  .input + .affix {
+    padding-inline-end: var(--ds-space-12);
+  }
+
+  .affix:has(+ .input) {
+    padding-inline-start: var(--ds-space-12);
+  }
+
+  /* Step cells: --size-px-8 squares joined to the input; glyphs remove / add, inline tier [D166]. */
+  .decrement,
+  .increment {
+    position: relative;
+    flex: none;
+    display: grid;
+    place-items: center;
+    inline-size: var(--size-px-8);
+    margin: 0;
+    padding: 0;
+    border: 0 solid var(--role-rule);
+    border-radius: 0;
+    background: none;
+    color: var(--primary12);
+    appearance: none;
+  }
+
+  /* Disabled edge hosts, shown only while disabled. */
+  .edge {
+    display: none;
+    position: absolute;
+    inset-block-start: calc(var(--ds-dot-fine) / 2);
+    inset-inline-start: calc(var(--ds-dot-fine) / 2);
+    inline-size: calc(100% - var(--ds-dot-fine));
+    block-size: calc(100% - var(--ds-dot-fine));
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .edgeLine {
+    fill: none;
+    stroke: var(--role-disabled-edge);
+    rx: calc(var(--number-field-radius) - var(--ds-dot-fine) / 2);
+  }
+
+  /* A step cell's dotted divider (or, on the readout, its dotted circle). */
+  .cellEdge {
+    display: none;
+    position: absolute;
+    inset-block: 0;
+    inline-size: var(--ds-dot-fine);
+    block-size: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  /* The divider sits where the cell's solid rule was: its last pixel column. */
+  .decrement .cellEdge {
+    inset-inline-end: 0;
+  }
+
+  .increment .cellEdge {
+    inset-inline-start: 0;
+  }
+
+  .cellEdgeLine {
+    fill: none;
+    stroke: var(--role-disabled-edge);
+  }
+
+  @media (--forcedColors) {
+    .edgeLine,
+    .cellEdgeLine {
+      stroke: currentColor;
+    }
+  }
+
+  @media (--motionOK) {
+    .group,
+    .decrement,
+    .increment {
+      transition-property: border-color, background-color, color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+
+  /* From --lg-n-above the group hugs its content and never stretches (§10.4). */
+  @media (--lg-n-above) {
+    .group {
+      inline-size: fit-content;
+    }
+
+    .input {
+      inline-size: auto;
+      min-inline-size: 6ch;
+      field-sizing: content;
+    }
+  }
+}
+
+@layer variants {
+  /* Stepper (default): the cells are divided from the input by --border-size-1 rules. */
+  .stepper .decrement {
+    border-inline-end-width: var(--border-size-1);
+  }
+
+  .stepper .increment {
+    border-inline-start-width: var(--border-size-1);
+  }
+
+  /* Amount: no steppers; the value in type-itemhead with lining tabular figures, from the start. */
+  .amount .input {
+    text-align: start;
+  }
+
+  /*
+   * Readout: in-flow circular −/+ buttons around a large mono value with a
+   * unit caption, for dashboards. No field box.
+   */
+  .readout .group {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      'decrement value increment'
+      'decrement unit increment';
+    align-items: center;
+    column-gap: var(--size-px-3);
+    block-size: auto;
+    min-inline-size: 0;
+    border: 0;
+    border-radius: 0;
+    overflow: visible;
+  }
+
+  .readout .input {
+    grid-area: value;
+    inline-size: 100%;
+    padding: 0;
+    text-align: center;
+    field-sizing: fixed;
+  }
+
+  .readout .affix {
+    grid-area: unit;
+    justify-self: center;
+    padding: 0;
+  }
+
+  .readout .decrement,
+  .readout .increment {
+    --number-field-cell-edge: var(--border-size-2);
+
+    inline-size: var(--ds-size-control-md);
+    block-size: var(--ds-size-control-md);
+    border: var(--number-field-cell-edge) solid var(--primary12);
+    border-radius: var(--radius-round);
+  }
+
+  .readout .decrement {
+    grid-area: decrement;
+  }
+
+  .readout .increment {
+    grid-area: increment;
+  }
+
+  /* Every readout target reaches --ds-size-hit [D43]. */
+  .readout .decrement::after,
+  .readout .increment::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: var(--ds-size-hit);
+    block-size: var(--ds-size-hit);
+    translate: -50% -50%;
+  }
+
+  .readout .cellEdge {
+    inset: calc(var(--ds-dot-fine) / 2);
+    inline-size: calc(100% - var(--ds-dot-fine));
+    block-size: calc(100% - var(--ds-dot-fine));
+  }
+
+  /* Stack guard: below --xs-n-below the readout buttons stack under the value [D73]. */
+  @media (--xs-n-below) {
+    .readout .group {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        'value value'
+        'unit unit'
+        'decrement increment';
+      row-gap: var(--size-px-2);
+      justify-items: center;
+    }
+  }
+
+  /*
+   * Plate: the group's face is the nested white scope's --primary1 (§10.1).
+   * The group is also a Ground face, whose own classes share the base
+   * layer, so its display and edge are restated here.
+   */
+  .plate .group {
+    display: flex;
+    border: var(--number-field-edge) solid var(--role-rule);
+    background-color: var(--primary1);
+  }
+}
+
+@layer states {
+  /* Hover (not disabled): the 1 px edge steps to --primary12 at the same weight [D140]. */
+  .group:hover:not([data-disabled], [data-readonly], [data-invalid]) {
+    border-color: var(--primary12);
+  }
+
+  /*
+   * Step cells and readout buttons: the glyph swaps to the next tier's
+   * weight on hover and press (Icon weight="interactive", hosted by the
+   * cell; §10.1 icon states). The readout edge never changes [D181].
+   */
+
+  /* Focus: the ring on any focus of the input, drawn outside the group [D90]. */
+  .group[data-focused] {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  .input:focus-visible {
+    outline: none;
+  }
+
+  /* The readout has no box: the ring surrounds the value. */
+  .readout .group[data-focused] {
+    outline: none;
+  }
+
+  .readout .input:focus {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  /* Held step cell: the inverse pair [D84]. */
+  .decrement:active:not([data-disabled]),
+  .increment:active:not([data-disabled]) {
+    background-color: var(--primary12);
+    color: var(--role-inverse);
+  }
+
+  /* Error: the --border-size-2 edge in --role-status (the danger scale) [D141, D155]. */
+  .group[data-invalid] {
+    --number-field-edge: var(--border-size-2);
+
+    border-color: var(--role-status);
+  }
+
+  /* Disabled: dotted edges, --role-muted inks, no face; never dimmed [D16, D85]. */
+  .group[data-disabled] {
+    --number-field-edge: 0px;
+
+    padding: var(--border-size-1);
+    border-style: none;
+    background: none;
+    color: var(--role-muted);
+  }
+
+  .group[data-disabled] .edge {
+    display: block;
+  }
+
+  /* A step cell at its minimum or maximum (or in a disabled field): dotted edge, --role-muted glyph. */
+  .decrement[data-disabled],
+  .increment[data-disabled] {
+    border-style: none;
+    color: var(--role-muted);
+  }
+
+  .decrement[data-disabled] {
+    padding-inline-end: var(--border-size-1);
+  }
+
+  .increment[data-disabled] {
+    padding-inline-start: var(--border-size-1);
+  }
+
+  .decrement[data-disabled] .cellEdge,
+  .increment[data-disabled] .cellEdge {
+    display: block;
+  }
+
+  /* Read-only: the box is removed, a --border-size-1 bottom rule remains; steppers leave. */
+  .group[data-readonly] {
+    border-width: 0 0 var(--border-size-1);
+    border-radius: var(--ds-radius-none);
+    background: none;
+  }
+
+  .group[data-readonly] .decrement,
+  .group[data-readonly] .increment {
+    display: none;
+  }
+}
+
+@layer print {
+  @media print {
+    /* The value and its unit print in the frame; step cells are interaction only. */
+    .decrement,
+    .increment {
+      display: none;
+    }
+
+    .input::placeholder {
+      font-size: 0;
+    }
+  }
+}

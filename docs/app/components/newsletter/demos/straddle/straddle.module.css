@@ -1,0 +1,37 @@
+.frame {
+  display: grid;
+  gap: var(--size-px-3);
+  inline-size: 100%;
+}
+
+.toggle {
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-caption);
+  color: var(--primary12);
+}
+
+.upper {
+  padding: var(--size-px-10) var(--ds-space-margin);
+}
+
+.prose {
+  max-inline-size: var(--ds-measure-reading);
+  margin: 0 auto;
+  font-family: var(--ds-font-text);
+  font-size: var(--ds-font-size-body);
+}
+
+.lower {
+  padding: var(--ds-space-56) var(--ds-space-margin) var(--ds-space-40);
+}
+
+.container {
+  max-inline-size: var(--ds-container-content);
+  margin-inline: auto;
+}
+
+.after {
+  margin: 0;
+  font-family: var(--ds-font-ui);
+  font-size: var(--ds-font-size-body-ui);
+}

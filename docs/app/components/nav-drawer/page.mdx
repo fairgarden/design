@@ -1,0 +1,52 @@
+# Nav Drawer
+
+Primary navigation below `--ds-nav-inline-n-above`: a menu Button that opens a modal Dialog sheet in the header's own scope. It is the single owner of the mobile drawer; put it in the Navigation Bar's `drawer` slot, which removes it from the inline threshold.
+
+```tsx
+import {
+  NavDrawer,
+  NavDrawerGroup,
+  NavDrawerLink,
+  NavDrawerFooter,
+} from '@fairgarden-private/design/components/NavDrawer'
+```
+
+The menu Button shows the `menu` icon and "Menu", which swap to × and "Close" while the drawer is open. Below 360 px the label drops to the icon, and it stays the accessible name. The sheet is full screen below `--md-n-above`. From there it is a 480 px side sheet docked to the end edge, with a `--ds-stroke-3` inner edge, and the page beside it is left unpainted and inert. No backdrop or tint is painted. The sheet re-declares the header's preset, so a page-ground header gives a page-ground sheet and a `night` header a `night` one, never a `white` overlay.
+
+## The drawer
+
+import { DemoNavDrawerBasic } from './demos/drawer'
+
+<DemoNavDrawerBasic.Title />
+
+The sheet repeats the header's bar, with the close control where the menu Button was. Each `NavDrawerGroup` is an independent Collapsible, so several may be open. Its row is set in the display serif and carries LTA's expand/collapse glyph: arrows point out in `--role-muted` when collapsed and in, in `--primary12`, when expanded. The glyph swaps and never rotates. Child links sit on a hairline indent guide. A `NavDrawerLink` at the top level is a direct link styled as a row. The group holding the current page opens by default, and the current link takes the `--ds-stroke-3` start-edge bar and weight 700. The list scrolls in a Scroll Area between the fixed bar and the `NavDrawerFooter`, which holds the action pill, the utility links and the locale Select. Pass `sections` (the shared navigation data from `@fairgarden-private/design/utils/navigation`) to build the rows from the object that also feeds the Navigation Menu and the footer sitemap: each section with links becomes a group, opening with its landing page, and a section with only an `href` a direct link. Focus moves to the first row, stays trapped, and returns to the menu Button on close. If the window widens past the inline threshold while the drawer is open, it closes and focus moves to the matching bar item.
+
+<DemoNavDrawerBasic />
+
+[See Demo](./demos/drawer/)
+
+## API Reference
+
+import { TypesNavDrawer, TypesNavDrawerAdditional } from './types'
+
+### NavDrawer
+
+<TypesNavDrawer.NavDrawer />
+
+### NavDrawerGroup and NavDrawerLink
+
+<TypesNavDrawer.NavDrawerGroup />
+
+<TypesNavDrawer.NavDrawerLink />
+
+### NavDrawerFooter
+
+<TypesNavDrawer.NavDrawerFooter />
+
+### Additional types
+
+<TypesNavDrawerAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §11.6 (mobile navigation drawer) [D97, D183], with the Dialog of §10.14 and the disclosure glyph of §10.13 [D109].

@@ -1,0 +1,31 @@
+declare const styles: {
+  readonly "article": string;
+  readonly "base": string;
+  readonly "count": string;
+  readonly "date": string;
+  readonly "dek": string;
+  readonly "details": string;
+  readonly "disclosure": string;
+  readonly "event": string;
+  readonly "eventHeading": string;
+  readonly "footer": string;
+  readonly "glyph": string;
+  readonly "header": string;
+  readonly "key": string;
+  readonly "list": string;
+  readonly "meta": string;
+  readonly "metaCaps": string;
+  readonly "rank": string;
+  readonly "ranked": string;
+  readonly "related": string;
+  readonly "row": string;
+  readonly "rule": string;
+  readonly "thumb": string;
+  readonly "title": string;
+  readonly "titleLink": string;
+  readonly "titleUi": string;
+  readonly "trigger": string;
+  readonly "triggerLabel": string;
+};
+export = styles;
+

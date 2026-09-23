@@ -1,0 +1,388 @@
+/*
+ * Checkbox (§10.7). CVA function `checkbox`. The root `base` is the row, a
+ * <label> wrapping Checkbox.Root (`box`), so the whole row is the hit
+ * target. The row shows the box's state by reading its Base UI attributes
+ * through :has(), as the option card does (§12.1); it writes no state of its
+ * own. Parts: base, box, indicator (`mark` holding the ✓ `check` and the
+ * indeterminate `bar`), label, description, thumb, title, value, leader
+ * (`leaderLine`), and `edge` / `edgeLine`, the SVG that draws the disabled
+ * `line-dotted-fine` edge as true dots [D36, D68].
+ *
+ * Colors are role variables only. Local custom properties carry dimensions:
+ *   --checkbox-edge         box edge width (2 → 3 px checked)
+ *   --checkbox-card-edge    option card edge width (1 → 2 px checked)
+ *   --checkbox-edge-radius  radius the disabled dotted edge follows
+ * Label case is authored, never set here, except the card's caps title.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.base {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.title {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.description {
+  composes: typeCaption typeMuted from '../../utils/type.module.css';
+}
+
+.edgeLine {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+.leaderLine {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+@layer base {
+  .base {
+    position: relative; /* holds Base UI's hidden input */
+    display: grid;
+    align-items: start;
+    align-content: center;
+    box-sizing: border-box;
+    min-block-size: var(--ds-size-hit);
+    min-inline-size: 0;
+    color: var(--primary12);
+  }
+
+  /* The box: --size-px-4, --radius-1, a --border-size-2 --primary12 edge; aligned to the first line. */
+  .box {
+    --checkbox-edge: var(--border-size-2);
+    --checkbox-edge-radius: var(--radius-1);
+
+    grid-area: box;
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    inline-size: var(--size-px-4);
+    block-size: var(--size-px-4);
+    margin-block: calc((1lh - var(--size-px-4)) / 2) 0;
+    margin-inline: 0 var(--ds-space-12);
+    border: var(--checkbox-edge) solid var(--primary12);
+    border-radius: var(--radius-1);
+    background: none;
+  }
+
+  /* The mark covers the box's border box, so its 20-unit grid is 1:1 with px. */
+  .indicator {
+    position: absolute;
+    inset: calc(var(--checkbox-edge) * -1);
+    display: block;
+    color: var(--role-select-mark);
+  }
+
+  /* ✓ or bar at --border-size-2 with round caps, in the mark's ink; never a knockout. */
+  .mark {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: var(--border-size-2);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* The bare-text hover underline's color, weight and offset (§10.1) [D181]. */
+  .label {
+    grid-area: label;
+    color: var(--primary12);
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  .description {
+    grid-area: description;
+    margin-block-start: var(--size-px-1);
+  }
+
+  .title {
+    grid-area: title;
+    color: var(--primary12);
+  }
+
+  .value {
+    grid-area: value;
+    color: var(--primary12);
+    font-variant-numeric: var(--ds-numerals-data);
+  }
+
+  .thumb {
+    grid-area: thumb;
+    display: block;
+    inline-size: var(--ds-size-thumb);
+    aspect-ratio: var(--ratio-square);
+    margin-inline-end: var(--ds-space-12);
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  .thumb > * {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /* The ledger leader: line-dotted-fine in --role-rule, sitting near the baseline. */
+  .leader {
+    grid-area: leader;
+    display: block;
+    inline-size: 100%;
+    block-size: var(--size-px-5);
+    block-size: 1lh;
+    overflow: visible;
+  }
+
+  .leaderLine {
+    stroke: var(--role-rule);
+  }
+
+  /* Disabled edge host: covers the border box once the solid edge is removed. */
+  .edge {
+    display: none;
+    position: absolute;
+    inset-block-start: calc(var(--ds-dot-fine) / 2);
+    inset-inline-start: calc(var(--ds-dot-fine) / 2);
+    inline-size: calc(100% - var(--ds-dot-fine));
+    block-size: calc(100% - var(--ds-dot-fine));
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .edgeLine {
+    fill: none;
+    stroke: var(--role-disabled-edge);
+    rx: calc(var(--checkbox-edge-radius) - var(--ds-dot-fine) / 2);
+  }
+
+  @media (--forcedColors) {
+    .edgeLine,
+    .leaderLine {
+      stroke: currentColor;
+    }
+  }
+
+  /* Hover transitions [D181]: --ds-duration-quick, --ease-out-3. */
+  @media (--motionOK) {
+    .box,
+    .base,
+    .label {
+      transition-property: border-color, background-color, text-decoration-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer variants {
+  /* Standard: box, then label and description; --ds-space-12 gap. */
+  .standard {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      'box label'
+      '. description';
+  }
+
+  /*
+   * The option card (§10.7 owns it; §12.2 cites it): a bordered row with a
+   * --border-size-1 --role-rule edge, --ds-radius-8 and --size-px-3
+   * padding. The padding absorbs the edge step, so checking never moves
+   * the content.
+   */
+  .card {
+    --checkbox-card-edge: var(--border-size-1);
+    --checkbox-edge-radius: var(--ds-radius-8);
+
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      'box thumb title value'
+      'box thumb description description';
+    align-items: center;
+    padding: calc(var(--size-px-3) + var(--border-size-1) - var(--checkbox-card-edge));
+    border: var(--checkbox-card-edge) solid var(--role-rule);
+    border-radius: var(--ds-radius-8);
+  }
+
+  .card .box {
+    margin-block: 0;
+  }
+
+  .card .value {
+    justify-self: end;
+    margin-inline-start: var(--ds-space-12);
+    text-align: end;
+  }
+
+  /* Below 360 px the value drops under the title: viewport fallback, then the group container (§5.10.2). */
+  @media (--xs-n-below) {
+    .card {
+      grid-template-columns: auto auto minmax(0, 1fr);
+      grid-template-areas:
+        'box thumb title'
+        'box thumb value'
+        'box thumb description';
+    }
+
+    .card .value {
+      justify-self: start;
+      margin-inline-start: 0;
+      text-align: start;
+    }
+  }
+
+  @container checkbox-group (width < 360px) {
+    .card {
+      grid-template-columns: auto auto minmax(0, 1fr);
+      grid-template-areas:
+        'box thumb title'
+        'box thumb value'
+        'box thumb description';
+    }
+
+    .card .value {
+      justify-self: start;
+      margin-inline-start: 0;
+      text-align: start;
+    }
+  }
+
+  /* Ledger: label, dotted leader, optional value, then the box (Inciardi Prints). */
+  .ledger {
+    grid-template-columns: auto minmax(var(--size-px-5), 1fr) auto auto;
+    grid-template-areas:
+      'label leader value box'
+      'description description description .';
+  }
+
+  .ledger .box {
+    margin-inline: 0;
+  }
+
+  .ledger .leader {
+    margin-inline: var(--size-px-2);
+  }
+
+  .ledger .value {
+    margin-inline-end: var(--size-px-2);
+  }
+}
+
+@layer states {
+  /* Checked and indeterminate: --role-select fill, the mark, a --ds-stroke-3 --role-select-edge (§10.1). */
+  .box[data-checked],
+  .box[data-indeterminate] {
+    --checkbox-edge: var(--ds-stroke-3);
+
+    border-color: var(--role-select-edge);
+    background-color: var(--role-select);
+  }
+
+  .indicator[data-indeterminate] .check {
+    display: none;
+  }
+
+  .indicator:not([data-indeterminate]) .bar {
+    display: none;
+  }
+
+  /* The checked option card: --border-size-2 --role-select-edge (the one checked-card value). */
+  .card:has(.box[data-checked], .box[data-indeterminate]) {
+    --checkbox-card-edge: var(--border-size-2);
+
+    border-color: var(--role-select-edge);
+  }
+
+  /*
+   * Hover (not disabled, not read-only) [D181]. The box edge never changes,
+   * so hover cannot read as checked. An unchecked box takes the outline
+   * hover, a --primary3 fill (--role-soft-hover: none where soft fills
+   * drop); a checked or indeterminate box moves its fill to
+   * --role-select-hover, mark and edge unchanged. The label takes the
+   * bare-text underline.
+   */
+  .base:not(:has([data-disabled], [data-readonly])):hover .box[data-unchecked] {
+    background-color: var(--role-soft-hover);
+  }
+
+  .base:not(:has([data-disabled], [data-readonly])):hover .box:is([data-checked], [data-indeterminate]) {
+    background-color: var(--role-select-hover);
+  }
+
+  .base:not(:has([data-disabled], [data-readonly])):hover .label {
+    text-decoration-line: underline;
+  }
+
+  /* The unchecked card edge steps --role-rule → --primary12 at the same weight [D140]. */
+  .card:not(:has([data-disabled], [data-readonly], [data-checked], [data-indeterminate])):hover {
+    border-color: var(--primary12);
+  }
+
+  /* Focus: 2 px --primary12 ring at a 2 px offset outside the box, keyboard only [D45]. */
+  .box:focus-visible {
+    outline: var(--ds-focus-width) solid var(--primary12);
+    outline-offset: var(--ds-focus-offset);
+  }
+
+  /*
+   * Disabled: the solid edge gives way to the dotted edge in --role-rule
+   * (--primary12 on one-ink grounds [D85]); the fill drops and the mark
+   * turns --role-muted. Never dimmed [D16].
+   */
+  .box[data-disabled] {
+    --checkbox-edge: 0px;
+
+    border-style: none;
+    background: none;
+  }
+
+  .box[data-disabled] .indicator {
+    color: var(--role-muted);
+  }
+
+  .box[data-disabled] > .edge {
+    display: block;
+  }
+
+  .base:has(.box[data-disabled]) .label,
+  .base:has(.box[data-disabled]) .title,
+  .base:has(.box[data-disabled]) .value {
+    color: var(--role-muted);
+  }
+
+  .card:has(.box[data-disabled]) {
+    --checkbox-card-edge: 0px;
+
+    border-style: none;
+  }
+
+  .card:has(.box[data-disabled]) > .edge {
+    display: block;
+  }
+}
+
+@layer print {
+  @media print {
+    /* A 0.75 pt square; checked keeps its --ds-stroke-3 step and a black mark (§10.7). */
+    .box {
+      --checkbox-edge: var(--border-size-1);
+    }
+
+    .box[data-checked],
+    .box[data-indeterminate] {
+      --checkbox-edge: var(--ds-stroke-3);
+    }
+
+    /* Disabled controls do not print (§10.1). */
+    .base:has(.box[data-disabled]) {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,22 @@
+.stack {
+  display: grid;
+  inline-size: 100%;
+}
+
+.band {
+  padding: var(--size-px-7) var(--size-px-5);
+}
+
+.display {
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-font-size-h2);
+  font-weight: var(--font-weight-7);
+  line-height: var(--ds-leading-display);
+}
+
+.body {
+  margin: 0;
+  font-family: var(--ds-font-text);
+  font-size: var(--ds-font-size-body);
+}

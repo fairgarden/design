@@ -1,0 +1,17 @@
+.stack {
+  display: grid;
+  gap: var(--ds-space-40);
+  inline-size: 100%;
+}
+
+/* The mount's mark: a 48 px --border-size-2 monoline in currentColor, well inside the 136 px disc. */
+.mark {
+  display: block;
+  inline-size: var(--size-px-8);
+  block-size: var(--size-px-8);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--border-size-2);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

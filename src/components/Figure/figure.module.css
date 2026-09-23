@@ -1,0 +1,162 @@
+/*
+ * Figure (§8.5). CVA function `figure`. Color roles: caption, label and
+ * credit --role-muted; technical frames --role-rule; the plate, a nested
+ * white face Ground: its ground, its --role-edge frame (--primary10 on a
+ * page ground, --primary12 as an island) [D179] and pattern-dotgrid-fine in
+ * its --role-hairline (the plate modifier). No secondary part. Colors are
+ * role variables only.
+ *
+ * Layout: the `figure` is an inline-size container on a 12-track grid;
+ * media and caption span it, and the side caption takes the last three
+ * tracks from 768 px of it, after the media in source and visual order.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.label {
+  composes: typeData typeMuted from '../../utils/type.module.css';
+}
+
+.text {
+  composes: typeCaption typeMuted from '../../utils/type.module.css';
+}
+
+.credit {
+  composes: typeSmall typeMuted from '../../utils/type.module.css';
+}
+
+.plateMedia {
+  composes: patternDotgridFine patternPlate from '../../utils/pattern.module.css';
+}
+
+@layer base {
+  .base {
+    container-type: inline-size;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--ds-space-margin);
+    row-gap: var(--size-px-2);
+    margin: 0;
+    min-inline-size: 0;
+  }
+
+  .media,
+  .caption {
+    grid-column: 1 / -1;
+    min-inline-size: 0;
+  }
+
+  .media {
+    margin: 0;
+  }
+
+  .media > img,
+  .media > svg,
+  .media > picture,
+  .media > video,
+  .media > canvas {
+    display: block;
+    max-inline-size: 100%;
+    block-size: auto;
+  }
+
+  /* The caption says what to notice; one run of label, text and credit. */
+  .caption {
+    margin: 0;
+    color: var(--role-muted);
+  }
+}
+
+@layer variants {
+  /* Editorial photo: --ds-radius-8 (square when it runs full-bleed); caption right-flush below. */
+  .photo .media {
+    border-radius: var(--ds-radius-conditional-8);
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  .photo .media > img,
+  .photo .media > picture,
+  .photo .media > video {
+    inline-size: 100%;
+    object-fit: cover;
+  }
+
+  .photo .caption {
+    text-align: end;
+  }
+
+  /* Technical figure and plate: square, never bleeding, native width; caption left, label on its own line. */
+  .technical .media,
+  .plate .media {
+    border-radius: var(--ds-radius-none);
+  }
+
+  .technical .caption,
+  .plate .caption {
+    text-align: start;
+  }
+
+  .technical .label,
+  .plate .label {
+    display: block;
+  }
+
+  .framed .media {
+    border: var(--border-size-1) solid var(--role-rule);
+  }
+
+  /*
+   * Specimen plate: the nested white face (its Ground paints the fill) with
+   * a --border-size-1 frame in the face's --role-edge over the fine dot grid
+   * in --role-hairline; the face is its frame's fill [D12, D179].
+   */
+  .plate .plateMedia {
+    padding: var(--size-px-3);
+    border: var(--border-size-1) solid var(--role-edge);
+  }
+
+  /* Side caption, from 768 px of the figure: the adjacent column, top-aligned, beside the media. */
+  @container (width >= 768px) {
+    .sideCaption .media {
+      grid-column: 1 / span 9;
+    }
+
+    .sideCaption .caption {
+      grid-column: 10 / -1;
+      align-self: start;
+      text-align: start;
+    }
+
+    .sideCaption .label {
+      display: block;
+    }
+  }
+}
+
+@layer print {
+  @media print {
+    /* Figure and caption stay together (§8.5). */
+    .base {
+      break-inside: avoid;
+    }
+
+    /* Content photos: grayscale in a 0.75 pt frame, no taller than --ds-print-figure-max [D81]. */
+    .photo .media {
+      border: var(--border-size-1) solid var(--role-rule);
+      border-radius: var(--ds-radius-none);
+    }
+
+    .photo .media > img {
+      inline-size: auto;
+      max-block-size: var(--ds-print-figure-max);
+      filter: grayscale(1);
+    }
+
+    /* Decorative photos (empty alt) are left out. */
+    .media:has(> img[alt='']) {
+      display: none;
+    }
+  }
+}

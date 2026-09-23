@@ -1,0 +1,180 @@
+/*
+ * Avatar (§10.12). Parts: `base` (the circular frame and its ring), `image`
+ * (photo or seal), `fallback` (the initials face, a nested face scope),
+ * `status` (the status disc, also a face scope) and `statusGlyph`. Colors are role
+ * variables only; local custom properties carry dimensions only:
+ *   --avatar-size        the frame's diameter
+ *   --avatar-ring        the ring weight (it never changes on hover)
+ *   --avatar-initials    the initials' size (≈ 40% of the diameter, rem)
+ */
+
+@layer base {
+  .base {
+    position: relative;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    inline-size: var(--avatar-size);
+    block-size: var(--avatar-size);
+    border: var(--avatar-ring) solid var(--role-rule);
+    border-radius: var(--radius-round);
+    color: var(--primary12);
+    vertical-align: middle;
+    user-select: none;
+  }
+
+  .image {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    border-radius: var(--radius-round);
+    object-fit: cover;
+  }
+
+  /*
+   * The initials face: --primary1 named directly with --primary12 letters
+   * [D144]; `.base .fallback` outranks the composed Ground's own paint.
+   * Caps in the UI sans at weight 700, never below the 12 px floor.
+   */
+  .base .fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    inline-size: 100%;
+    block-size: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-round);
+    background-color: var(--primary1);
+    color: var(--primary12);
+    font-family: var(--ds-font-ui);
+    font-size: var(--avatar-initials);
+    font-weight: var(--font-weight-7);
+    line-height: var(--ds-leading-display);
+    letter-spacing: 0;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* The status disc: a face named --primary1, a --border-size-1 --role-rule edge, at the frame bottom end. */
+  .base .status {
+    position: absolute;
+    inset-block-end: calc(-1 * var(--avatar-ring));
+    inset-inline-end: calc(-1 * var(--avatar-ring));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    inline-size: var(--size-px-4);
+    block-size: var(--size-px-4);
+    border: var(--border-size-1) solid var(--role-rule);
+    border-radius: var(--radius-round);
+    background-color: var(--primary1);
+  }
+
+  /* The §1.5.4 glyph at --size-px-3: shape and mark --role-status, knockouts the disc's face. */
+  .statusGlyph {
+    display: block;
+    inline-size: var(--size-px-3);
+    block-size: var(--size-px-3);
+    overflow: visible;
+    color: var(--role-status);
+    fill: var(--primary1);
+    stroke: var(--primary1);
+    stroke-width: var(--ds-stroke-1-5);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Hover transition [D181]: --ds-duration-quick, --ease-out-3. */
+  @media (--motionOK) {
+    .base {
+      transition-property: border-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+
+  @media (--forcedColors) {
+    .statusGlyph {
+      forced-color-adjust: none;
+      color: CanvasText;
+      fill: Canvas;
+      stroke: Canvas;
+    }
+  }
+}
+
+@layer variants {
+  /* Sizes (§1.5.12): 24 / 32 / 40 px take a --border-size-1 --role-rule ring… */
+  .xs {
+    --avatar-size: var(--size-px-5);
+    --avatar-ring: var(--border-size-1);
+    --avatar-initials: var(--font-size-0);
+  }
+
+  .sm {
+    --avatar-size: var(--size-px-7);
+    --avatar-ring: var(--border-size-1);
+    --avatar-initials: var(--font-size-0);
+  }
+
+  .md {
+    --avatar-size: var(--ds-size-control-md);
+    --avatar-ring: var(--border-size-1);
+    --avatar-initials: var(--font-size-1);
+  }
+
+  /* …64 / 128 px a --border-size-2 --primary12 ring (Brad Frost). */
+  .lg {
+    --avatar-size: var(--size-px-9);
+    --avatar-ring: var(--border-size-2);
+    --avatar-initials: var(--font-size-4);
+
+    border-color: var(--primary12);
+  }
+
+  .xl {
+    --avatar-size: var(--ds-size-avatar-xl);
+    --avatar-ring: var(--border-size-2);
+    --avatar-initials: var(--ds-font-size-display);
+
+    border-color: var(--primary12);
+  }
+}
+
+@layer states {
+  /*
+   * As a link or menu trigger (not disabled): up to 40 px the --role-rule
+   * ring steps to --primary12 at the same weight (D140's step, applied by
+   * analogy; derived, flagged); from 64 px the ring is already --primary12
+   * and does not change [D181]. An adjacent name link takes its own
+   * --role-link-hover.
+   */
+  :is(a, button):not(:disabled, [data-disabled]):hover > .base,
+  .base:is(a, button):not(:disabled, [data-disabled]):hover {
+    border-color: var(--primary12);
+  }
+
+  /* Focus: the ring outside the frame, keyboard only [D45]. */
+  :is(a, button):focus-visible > .base,
+  .base:is(a, button):focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Grayscale photos inside a 0.75 pt ring; initials print black on white. */
+    .base {
+      border-width: var(--border-size-1);
+    }
+
+    .image {
+      filter: grayscale(1);
+    }
+  }
+}

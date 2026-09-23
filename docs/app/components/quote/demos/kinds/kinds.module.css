@@ -1,0 +1,6 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-9);
+  inline-size: 100%;
+  max-inline-size: var(--ds-container-content);
+}

@@ -1,0 +1,30 @@
+declare const styles: {
+  readonly "actions": string;
+  readonly "base": string;
+  readonly "content": string;
+  readonly "cornerMark": string;
+  readonly "decor": string;
+  readonly "decorSunburst": string;
+  readonly "deep": string;
+  readonly "endEnd": string;
+  readonly "endStart": string;
+  readonly "field": string;
+  readonly "frame": string;
+  readonly "frameLine": string;
+  readonly "framed": string;
+  readonly "headline": string;
+  readonly "kicker": string;
+  readonly "layout": string;
+  readonly "mission": string;
+  readonly "mount": string;
+  readonly "patterned": string;
+  readonly "saturated": string;
+  readonly "startEnd": string;
+  readonly "startStart": string;
+  readonly "sunburst": string;
+  readonly "support": string;
+  readonly "text": string;
+  readonly "trail": string;
+};
+export = styles;
+

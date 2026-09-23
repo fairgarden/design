@@ -1,0 +1,45 @@
+# Spec Grid
+
+The signature spec list: a boxless grid of cells, each topped by a hairline at column width, with a caps label over its value. Use it for an item's measurable attributes: a species' size and range, a product's dimensions.
+
+```tsx
+import { SpecGrid, SpecGridItem } from '@fairgarden-private/design/components/SpecGrid'
+```
+
+Each `SpecGridItem` has an optional decorative `icon` and a muted caps label on its first line, with the value below it, flush under the icon. Units sit after a no-break space with the metric figure first: "28–34 cm (11–13 in)". The gutter equals the page margin, and there is no rule after the last row. The sheet carries no ornament.
+
+## At a glance
+
+import { DemoSpecGridGlance } from './demos/glance'
+
+<DemoSpecGridGlance.Title />
+
+The grid reflows on its own width, not the viewport's: 1 column below 360 px, 2 from 360, 3 from 768 and 4 from 1024. Without container queries it packs 160 px columns, capped at 4. `estimated` swaps the hairline for a dotted rule and adds "≈" before the value.
+
+<DemoSpecGridGlance />
+
+[See Demo](./demos/glance/)
+
+## In print
+
+The grid prints 2-up. Its rules and dots print black at 0.75 pt, and cells never split across pages.
+
+## API Reference
+
+import { TypesSpecGrid, TypesSpecGridAdditional } from './types'
+
+### SpecGrid
+
+<TypesSpecGrid.SpecGrid />
+
+### SpecGridItem
+
+<TypesSpecGrid.SpecGridItem />
+
+### Additional types
+
+<TypesSpecGridAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §8.3 (key-value and spec lists) and §12.7 (spec sheet).

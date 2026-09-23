@@ -1,0 +1,272 @@
+/*
+ * Profile & Team (§12.15). The root `base` is the inline-size container
+ * `profile`; the team list and the bio row query it. Parts: base (the
+ * byline, author block or bio row itself), portrait (an Avatar, styled by
+ * §10.12), teamPhoto, details, name (`nameUi` in a byline), nameLink (a
+ * title Link), role, bio, links, date, teamList, member. Colors are role
+ * variables only; local custom properties carry dimensions only:
+ *   --profile-gap   the team gutter (= --ds-space-margin) [D42]
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.name {
+  composes: typeItemhead from '../../utils/type.module.css';
+}
+
+.nameUi {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.role {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.bio {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.date {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base {
+    --profile-gap: var(--ds-space-margin);
+
+    position: relative; /* a stretched name link covers the whole profile */
+    container: profile / inline-size;
+    /* Size containment leaves no intrinsic width: fill the box, never collapse as a flex or shrink-to-fit item. */
+    inline-size: 100%;
+    min-inline-size: 0;
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .name,
+  .nameUi,
+  .role,
+  .bio {
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .date {
+    color: var(--primary12);
+    white-space: nowrap;
+  }
+
+  /* Social and contact links sit above a stretched name link, as their own tab stops. */
+  .links {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--size-px-2) var(--ds-space-12);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ds-space-12);
+    min-inline-size: 0;
+  }
+
+  /* Team photo: square at the cell's width, the species-card frame (§12.2). */
+  .teamPhoto {
+    display: block;
+    box-sizing: border-box;
+    inline-size: 100%;
+    aspect-ratio: var(--ratio-square);
+    object-fit: cover;
+    border: var(--border-size-1) solid var(--role-hairline);
+    border-radius: var(--ds-radius-8);
+  }
+
+  /* Team baseline (§1.11.11): auto-fit at the 152 px compact minimum, capped at 5. */
+  .teamList {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(min(100%, max(152px, calc((100% - 4 * var(--profile-gap)) / 5))), 1fr)
+    );
+    gap: var(--size-px-7) var(--profile-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .member {
+    position: relative; /* the stretched name link's positioned ancestor */
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-px-2);
+    min-inline-size: 0;
+  }
+
+  .member .teamPhoto {
+    margin-block-end: var(--size-px-1);
+  }
+
+  @media (--xs-n-below) {
+    .teamList {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* Container (§5.10.2): 1-up below 360 px, 2-up from 360, 4-up from 768, up to 5 from 1024. */
+  @container profile (width < 360px) {
+    .teamList {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @container profile (360px <= width < 768px) {
+    .teamList {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @container profile (768px <= width < 1024px) {
+    .teamList {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @container profile (width >= 1024px) {
+    .teamList {
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(calc((100% - 4 * var(--profile-gap)) / 5), 1fr)
+      );
+    }
+  }
+}
+
+@layer variants {
+  /* Team: the root hosts the grid; each member is its own link anchor. */
+  .team {
+    display: block;
+  }
+
+  /* Byline (LTA): inline, portrait · "By Name" · date, one line where it fits. */
+  .kindByline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--size-px-2);
+  }
+
+  .nameUi {
+    font-weight: var(--font-weight-6);
+  }
+
+  .kindByline .date::before {
+    content: '\00B7';
+    content: '\00B7' / '';
+    margin-inline-end: var(--size-px-2);
+  }
+
+  /* Author block (LTA): portrait → 24 → serif name → 24 → description, stacked. */
+  .author {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--size-px-5);
+  }
+
+  /*
+   * Bio row (Brad Frost): portrait at the start, text beside it, even on
+   * phones; the pair wraps to a stack when the text column would drop under
+   * its minimum, and always below 360 px of container.
+   */
+  .kindBio {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--size-px-5);
+  }
+
+  .kindBio .details {
+    flex: 1 1 var(--size-px-12);
+  }
+
+  /* The bio portrait steps from 64 px to the 128 px xl diameter (fixed steps, never fluid). */
+  @media (--md-n-above) {
+    .kindBio .portrait {
+      --avatar-size: var(--ds-size-avatar-xl);
+      --avatar-initials: var(--ds-font-size-display);
+    }
+  }
+
+  @container profile (width < 360px) {
+    .kindBio .details {
+      flex-basis: 100%;
+    }
+  }
+
+  @container profile (width < 768px) {
+    .kindBio .portrait {
+      --avatar-size: var(--size-px-9);
+      --avatar-initials: var(--font-size-4);
+    }
+  }
+
+  @container profile (width >= 768px) {
+    .kindBio .portrait {
+      --avatar-size: var(--ds-size-avatar-xl);
+      --avatar-initials: var(--ds-font-size-display);
+    }
+  }
+}
+
+@layer states {
+  /* A linked profile's ring sits around the item, keyboard only [D45]; it replaces the link's own. */
+  .base .nameLink:focus-visible {
+    outline: none;
+  }
+
+  .member:has(.nameLink:focus-visible),
+  .author:has(.nameLink:focus-visible),
+  .kindBio:has(.nameLink:focus-visible),
+  .kindByline:has(.nameLink:focus-visible) {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Team grids print 3-up; portraits at most 20 mm; photos grayscale in their frame; bios in full. */
+    .base {
+      --profile-gap: var(--size-px-5);
+    }
+
+    .author,
+    .kindBio,
+    .kindByline {
+      break-inside: avoid;
+    }
+
+    .teamList {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .member {
+      break-inside: avoid;
+    }
+
+    .teamPhoto {
+      max-block-size: var(--ds-print-figure-max);
+      filter: grayscale(1);
+    }
+
+    .kindBio .portrait {
+      --avatar-size: var(--size-px-9);
+      --avatar-initials: var(--font-size-4);
+    }
+  }
+}

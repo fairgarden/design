@@ -1,0 +1,69 @@
+/*
+ * Icon (§6.10, §1.5.12) [D166]. One Material Symbols Rounded instance per
+ * icon and weight, filled in currentColor, so it takes its part's ink role,
+ * follows the mode with no selector and prints black (12 / 15 / 27 pt = the
+ * px sizes at 0.75 pt per px, so no print rule is needed). The icon carries
+ * no color, mode or grade of its own, and never scales between tiers.
+ *
+ * Weight (§10.1 icon states). Each tier draws its calibrated rest weight;
+ * the emphasis instance is the next stroke tier's weight at the same size
+ * and optical size, never a larger glyph. An icon with
+ * weight="interactive" carries both paths and swaps to emphasis while its
+ * host is hovered or pressed. The host opts in by composing `iconHost` in a
+ * top-level rule (Lightning CSS rejects nested composes):
+ *   .base { composes: iconHost from '../Icon/icon.module.css'; }
+ * or, from JS, by adding the exported `iconHost` class. Disabled and busy
+ * hosts keep the rest weight; focus rings the host, never the glyph.
+ */
+@layer base {
+  .base {
+    display: inline-block;
+    flex: none;
+    inline-size: var(--icon-size);
+    block-size: var(--icon-size);
+    fill: currentColor;
+    vertical-align: middle;
+  }
+
+  /* An interactive icon's emphasis path waits for its host. */
+  .emphasis {
+    display: none;
+  }
+}
+
+@layer variants {
+  /* Tiers (§6.10): inline 16, tag 20, block 36. */
+  .inline {
+    --icon-size: var(--size-px-3);
+  }
+
+  .tag {
+    --icon-size: var(--size-px-4);
+  }
+
+  .block {
+    --icon-size: var(--ds-size-icon-block);
+  }
+
+  /* Directional glyphs mirror in right-to-left layouts (§6.10, §1.3.6). */
+  .directional:dir(rtl) {
+    scale: -1 1;
+  }
+}
+
+@layer states {
+  /*
+   * Hover (not disabled, not busy) and press (:active, or data-pressed where
+   * Base UI sets it): the emphasis instance replaces the rest one. The press
+   * colors (the inverse pair) belong to the host [D84].
+   */
+  .iconHost:not([data-disabled], :disabled, [aria-busy='true']):is(:hover, :active, [data-pressed])
+    .rest {
+    display: none;
+  }
+
+  .iconHost:not([data-disabled], :disabled, [aria-busy='true']):is(:hover, :active, [data-pressed])
+    .emphasis {
+    display: inline;
+  }
+}

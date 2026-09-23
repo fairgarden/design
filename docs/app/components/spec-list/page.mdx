@@ -1,0 +1,45 @@
+# Spec List
+
+A key-value list with dotted leaders: the label, a leader of true round dots, then the value right-aligned in tabular figures. Use it for prices, dimensions and printable forms.
+
+```tsx
+import { SpecList, SpecListItem } from '@fairgarden-private/design/components/SpecList'
+```
+
+The leader stops 8 px short of each text and sits on the label's last baseline, so a long label wraps cleanly. A long value wraps too and stays right-aligned. The dots are an SVG mask over a 1 px rule, never a dotted border.
+
+## Leaders
+
+import { DemoSpecListLeaders } from './demos/leaders'
+
+<DemoSpecListLeaders.Title />
+
+Below 320 px of the list's own width, the leader drops and each label stacks over its value. On a saturated ground, keep a list to six pairs.
+
+<DemoSpecListLeaders />
+
+[See Demo](./demos/leaders/)
+
+## In print
+
+Leaders print as 0.75 pt dots on a 2.25 pt pitch, and a label never splits from its value.
+
+## API Reference
+
+import { TypesSpecList, TypesSpecListAdditional } from './types'
+
+### SpecList
+
+<TypesSpecList.SpecList />
+
+### SpecListItem
+
+<TypesSpecList.SpecListItem />
+
+### Additional types
+
+<TypesSpecListAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §8.3 (key-value and spec lists) and §12.7 (spec sheet).

@@ -1,0 +1,114 @@
+/*
+ * Field (§10.2, §10.1). CVA function `field`; the error part has its own
+ * function `fieldError`, because it carries the computed danger scale.
+ * Parts: `base` (the stack), `label`, `optional`, `description`, `error`,
+ * `errorGlyph`. The control's box is its own module (§10.1: modules do not
+ * compose each other's classes). Colors are role variables only; label case
+ * is authored, never set here [D160].
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.label {
+  composes: typeFieldLabel from '../../utils/type.module.css';
+}
+
+/* Helper text is muted text: one weight lighter in dark scopes, floored at 400 [D170]. */
+.description {
+  composes: typeCaption typeMuted from '../../utils/type.module.css';
+}
+
+.error {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+@layer base {
+  /* The stack: label → box --size-px-2, box → description and error --size-px-1 (§10.1). */
+  .base {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-inline-size: 0;
+    color: var(--primary12);
+  }
+
+  .label {
+    align-self: start;
+    margin-block-end: var(--size-px-2);
+    color: var(--primary12);
+  }
+
+  /* "(optional)" sits in the label and takes its ink (§10.1). */
+  .optional {
+    color: inherit;
+  }
+
+  .description {
+    margin: 0;
+    margin-block-start: var(--size-px-1);
+  }
+
+  /* The message: type-caption at --font-weight-6 in --primary12, led by the danger glyph. */
+  .error {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--size-px-2);
+    margin-block-start: var(--size-px-1);
+    color: var(--primary12);
+  }
+
+  /*
+   * The danger glyph (◆ with its inner ×, §1.5.4) [D58] at --size-px-3:
+   * shape in --role-status (currentColor), the × knocked out in
+   * --role-status-fill. One line box tall so it sits on the first line.
+   */
+  .errorGlyph {
+    flex: none;
+    display: block;
+    inline-size: var(--size-px-3);
+    block-size: 1lh;
+    overflow: visible;
+    color: var(--role-status);
+    fill: var(--role-status-fill);
+    stroke: var(--role-status-fill);
+    stroke-width: var(--ds-stroke-1-5);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @media (--forcedColors) {
+    .errorGlyph {
+      forced-color-adjust: none;
+      color: CanvasText;
+      fill: Canvas;
+      stroke: Canvas;
+    }
+  }
+}
+
+@layer variants {
+  /*
+   * The message weight, --font-weight-6 (§10.1). It overrides the composed
+   * type-caption, which sits in `base`, so it is written one layer up.
+   */
+  .error {
+    font-weight: var(--font-weight-6);
+  }
+}
+
+@layer states {
+  /* Disabled: the label and "(optional)" take --role-muted; never dimmed [D16]. */
+  .label[data-disabled] {
+    color: var(--role-muted);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Labels, values and messages print; the global remap turns their inks black. */
+    .base {
+      break-inside: avoid;
+    }
+  }
+}

@@ -1,0 +1,2 @@
+/* Cascade layer order (§1.11.3). Loaded first; layer names are global. */
+@layer reset, tokens, theme, roles, base, variants, compounds, scales, states, print;

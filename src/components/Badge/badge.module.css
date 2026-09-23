@@ -1,0 +1,134 @@
+/*
+ * Badge (§10.11). Parts: `base` (the pill: edge, radius, height; alone it
+ * is the outline badge), `glyph` (the §1.5.4 status glyph, status only),
+ * `label` (caps), `count` (the numeral). Static: no states. Colors are role
+ * variables only; local custom properties carry dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. Badges keep caps [D160]. */
+.label {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.count {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.base {
+  composes: lineSolid from '../../utils/line.module.css';
+}
+
+@layer base {
+  /* The outline badge: --size-px-5 tall, --ds-space-12 padding, a --ds-stroke-1-5 --primary12 edge, no fill. */
+  .base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--size-px-1);
+    box-sizing: border-box;
+    block-size: var(--size-px-5);
+    max-inline-size: 100%;
+    padding-block: 0;
+    padding-inline: var(--ds-space-12);
+    border-width: var(--ds-stroke-1-5);
+    border-color: var(--primary12);
+    border-radius: var(--radius-round);
+    color: var(--primary12);
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  .label,
+  .count {
+    color: inherit;
+  }
+
+  /*
+   * The status glyph at the inline tier: shape and inner mark in
+   * --role-status (currentColor), knockouts and the outline disc in
+   * --role-status-fill.
+   */
+  .glyph {
+    flex: none;
+    display: block;
+    inline-size: var(--size-px-3);
+    block-size: var(--size-px-3);
+    overflow: visible;
+    color: var(--role-status);
+    fill: var(--role-status-fill);
+    stroke: var(--role-status-fill);
+    stroke-width: var(--ds-stroke-1-5);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @media (--forcedColors) {
+    .glyph {
+      forced-color-adjust: none;
+      color: CanvasText;
+      fill: Canvas;
+      stroke: Canvas;
+    }
+  }
+}
+
+@layer variants {
+  /*
+   * The pill badge: --role-pill, the secondary's step-9 fill with its edge
+   * (step 11 where the fill is below 3:1) and the contrast-ink label
+   * [D12, D118]; on saturated fields it resolves to the ink pill [D14].
+   */
+  .solid {
+    border-color: var(--role-pill-edge);
+    background-color: var(--role-pill);
+    color: var(--role-pill-label);
+  }
+
+  /*
+   * The static fill (§10.11, §1.4.7): the secondary's --secondary4 fill, a
+   * --secondary11 edge and a --primary12 label. A solid pill on a scale
+   * with no step-9 text ink in a light scope takes it too.
+   */
+  .staticFill {
+    border-color: var(--secondary11);
+    background-color: var(--secondary4);
+    color: var(--primary12);
+  }
+
+  /* The sticker: a nested face scope named --primary1, ring and bold caps --primary12 [D144]. */
+  .sticker {
+    display: inline-flex;
+    border-block: var(--ds-stroke-1-5) solid var(--primary12);
+    border-inline: var(--ds-stroke-1-5) solid var(--primary12);
+    background-color: var(--primary1);
+    color: var(--primary12);
+  }
+
+  .sticker .label {
+    font-weight: var(--font-weight-7);
+  }
+
+  /*
+   * The status badge (§1.5.4) [D141]: --role-status-fill (the status scale's
+   * step 4 on light base grounds, the ground elsewhere, which reads as the
+   * outline form), a --role-status edge and glyph, the word in
+   * --role-status-text.
+   */
+  .info,
+  .success,
+  .warning,
+  .danger {
+    padding-inline: var(--size-px-2) var(--ds-space-12);
+    border-color: var(--role-status);
+    background-color: var(--role-status-fill);
+    color: var(--role-status-text);
+  }
+
+  /* The count: a numeral in an outline pill at least --size-px-4 wide. */
+  .numeric {
+    min-inline-size: var(--size-px-4);
+    padding-inline: var(--size-px-2);
+  }
+}

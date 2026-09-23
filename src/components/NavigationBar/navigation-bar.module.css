@@ -1,0 +1,413 @@
+/*
+ * Navigation Bar (§11.5) with the brand strip and utility bar (§11.3).
+ * CVA function `navigationBar` in NavigationBar.tsx; the root (`base`) is
+ * the header's `kind="band"` Ground, which paints --role-ground and draws
+ * its --role-seam [D178, D179].
+ *
+ * Parts: base, frame (what docks), skipLink, strip, utility (utilityInner,
+ * slot, utilityNav, utilityList, utilityItem, utilityLink, utilityLabel,
+ * locale), bar, inner (the content container), logo, logoMark,
+ * brandDrawing, nav, tools, iconButtons, action, menuSlot.
+ *
+ * Page frame: it responds to the viewport custom media only, with the
+ * inline threshold --ds-nav-inline-n-above a build-time constant [D183].
+ * Colors are role variables only; local custom properties carry dimensions
+ * only: --navigation-bar-logo-size, --navigation-bar-flow-size (the
+ * in-flow height held while docked, written by the sticky observer).
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.skipLink {
+  composes: typeButtonSm from '../../utils/type.module.css';
+}
+
+.slot {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.utilityLink {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base {
+    position: relative;
+  }
+
+  /* The opaque frame: never transparent over media (§1.3.5). */
+  .frame {
+    position: relative;
+    background-color: var(--role-ground);
+    color: var(--primary12);
+  }
+
+  /* Skip link: first in focus order, the ink pill at the bar's top start on focus. */
+  .skipLink {
+    position: absolute;
+    inset-block-start: var(--size-px-2);
+    inset-inline-start: var(--ds-space-margin);
+    z-index: var(--layer-3);
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    min-block-size: var(--ds-size-hit);
+    padding-inline: var(--size-px-5);
+    border: var(--border-size-2) solid var(--primary12);
+    border-radius: var(--radius-round);
+    background-color: var(--primary12);
+    color: var(--role-inverse);
+    text-decoration-line: none;
+    white-space: nowrap;
+  }
+
+  /* The brand strip: the first bar's --ds-stroke-3 top line in --secondary9 (green, passed explicitly). */
+  .strip {
+    block-size: 0;
+    border-block-start: var(--ds-stroke-3) solid var(--secondary9);
+  }
+
+  /* ── Utility bar (§11.3) ───────────────────────────────────────────── */
+
+  .utility {
+    display: none;
+    border-block-end: var(--border-size-1) solid var(--role-hairline);
+  }
+
+  .utilityInner {
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-5);
+    box-sizing: border-box;
+    inline-size: min(calc(100% - 2 * var(--ds-space-margin)), var(--ds-container-content));
+    block-size: var(--ds-size-bar-utility);
+    margin-inline: auto;
+  }
+
+  .slot {
+    color: var(--primary12);
+    white-space: nowrap;
+  }
+
+  .utilityNav {
+    margin-inline-start: auto;
+  }
+
+  .utilityList {
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .utilityItem {
+    display: flex;
+  }
+
+  /* Text links only: a 24 px target at a 24 px pitch (§1.5.12), no rest underline [D80]. */
+  .utilityLink {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: var(--size-px-5);
+    min-inline-size: var(--size-px-5);
+    color: var(--primary12);
+    text-decoration-line: none;
+    white-space: nowrap;
+  }
+
+  /* The current bar: a border, so it survives forced colors. */
+  .utilityLink::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    border-block-end: 0 solid var(--primary12);
+    pointer-events: none;
+  }
+
+  .utilityLabel {
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  .locale {
+    color: var(--primary12);
+  }
+
+  /* ── The bar ───────────────────────────────────────────────────────── */
+
+  /* 56 px at base, 64 px from --lg-n-above, over a full-bleed --border-size-1 --role-rule. */
+  .bar {
+    box-sizing: content-box;
+    block-size: var(--ds-size-control-xl);
+    border-block-end: var(--border-size-1) solid var(--role-rule);
+  }
+
+  /* Capped at --ds-container-content; the panels align to this box. */
+  .inner {
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-5);
+    box-sizing: border-box;
+    inline-size: min(calc(100% - 2 * var(--ds-space-margin)), var(--ds-container-content));
+    block-size: 100%;
+    margin-inline: auto;
+  }
+
+  .logo {
+    --navigation-bar-logo-size: var(--size-px-6);
+
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: var(--size-px-2);
+    min-block-size: var(--ds-size-hit);
+    color: var(--primary12);
+    text-decoration-line: none;
+  }
+
+  .logoMark {
+    display: inline-flex;
+    align-items: center;
+    block-size: var(--navigation-bar-logo-size);
+  }
+
+  .logoMark > * {
+    display: block;
+    inline-size: auto;
+    block-size: 100%;
+  }
+
+  /* A fine-line drawing in the logo's ink (--ds-stroke-0-75). */
+  .brandDrawing {
+    display: inline-flex;
+    block-size: var(--navigation-bar-logo-size);
+    color: var(--primary12);
+    stroke: currentColor;
+    stroke-width: var(--ds-stroke-0-75);
+    fill: none;
+  }
+
+  .brandDrawing > * {
+    display: block;
+    inline-size: auto;
+    block-size: 100%;
+  }
+
+  /* The Navigation Menu: removed below the inline threshold, where the drawer runs. */
+  .nav {
+    display: none;
+    align-self: stretch;
+    min-inline-size: 0;
+  }
+
+  .tools {
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-3);
+    margin-inline-start: auto;
+  }
+
+  /* Utility icon Buttons, --size-px-1 apart. */
+  .iconButtons {
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-1);
+  }
+
+  .action,
+  .menuSlot {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Stack guard: below 360 px the action moves into the drawer [D73]. */
+  @media (--xs-n-below) {
+    .action {
+      display: none;
+    }
+  }
+
+  @media (--lg-n-above) {
+    .bar {
+      block-size: var(--size-px-9);
+    }
+
+    .logo {
+      --navigation-bar-logo-size: var(--ds-size-icon-block);
+    }
+  }
+
+  /* Inline from the threshold: utility row and menu shown, the menu Button removed [D183]. */
+  @media (--ds-nav-inline-n-above) {
+    .utility {
+      display: block;
+    }
+
+    .nav {
+      display: flex;
+    }
+
+    .menuSlot {
+      display: none;
+    }
+  }
+}
+
+@layer variants {
+  /* Ruled cells: vertical --border-size-1 --role-rule rules between items. */
+  .ruled {
+    --navigation-menu-item-rule: var(--border-size-1);
+    --navigation-menu-item-gap: 0px;
+    --navigation-menu-item-padding: var(--size-px-3);
+  }
+
+  /* Stacked masthead: a wordmark row over the caps nav row, ruled above and below. */
+  @media (--ds-nav-inline-n-above) {
+    .masthead .bar {
+      block-size: auto;
+      border-block-start: var(--border-size-2) solid var(--role-rule);
+    }
+
+    .masthead .inner {
+      flex-wrap: wrap;
+      row-gap: 0;
+    }
+
+    .masthead .logo {
+      flex: 1 0 100%;
+      justify-content: center;
+      block-size: var(--ds-size-control-xl);
+      border-block-end: var(--border-size-1) solid var(--role-rule);
+    }
+
+    .masthead .nav {
+      block-size: var(--size-px-8);
+    }
+  }
+
+  /* Compact (the docked header): utility row and brand drawing dropped, one row, same height. */
+  .compact .utility,
+  .compact .brandDrawing {
+    display: none;
+  }
+
+  @media (--ds-nav-inline-n-above) {
+    .compact .bar {
+      block-size: var(--size-px-9);
+      border-block-start-width: 0;
+    }
+
+    .compact .inner {
+      flex-wrap: nowrap;
+    }
+
+    .compact .logo {
+      flex: none;
+      justify-content: flex-start;
+      block-size: auto;
+      border-block-end-width: 0;
+    }
+
+    .compact .nav {
+      block-size: auto;
+    }
+  }
+}
+
+@layer states {
+  /* Docked: the frame holds the top edge on --layer-2; the root keeps the in-flow height. */
+  .base[data-docked] {
+    min-block-size: var(--navigation-bar-flow-size, 0px);
+  }
+
+  .base[data-docked] .frame {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: var(--layer-2);
+    clip-path: inset(0);
+  }
+
+  /* The swap: a --ds-duration-quick clip cut from the top edge, instant under --motionNotOK [D183]. */
+  @media (--motionOK) {
+    .base[data-docked] .frame {
+      transition-property: clip-path;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+
+    @starting-style {
+      .base[data-docked] .frame {
+        clip-path: inset(0 0 100% 0);
+      }
+    }
+  }
+
+  /* The skip link stays out of sight until focused. */
+  .skipLink:not(:focus) {
+    inline-size: 1px;
+    block-size: 1px;
+    min-block-size: 0;
+    padding: 0;
+    border-width: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .skipLink:focus-visible,
+  .logo:focus-visible,
+  .utilityLink:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  /* Utility link hover [D181]: the bare-text underline, --role-accent at --border-size-2. */
+  .utilityLink:hover .utilityLabel {
+    text-decoration-line: underline;
+  }
+
+  /* Current (aria-current="page"): the --ds-stroke-3 bar under the label [D15]. */
+  .utilityLink[aria-current='page']::after {
+    border-block-end-width: var(--ds-stroke-3);
+  }
+}
+
+@layer print {
+  @media print {
+    /*
+     * The header prints as the §7.8 masthead's logo only: un-stuck, no
+     * seam and no rule (the masthead's closing rule follows the title).
+     * The Ground's seam reads --border-size-1, zeroed here on the root.
+     */
+    .base {
+      --border-size-1: 0px;
+
+      min-block-size: 0;
+    }
+
+    .frame {
+      position: static;
+      clip-path: none;
+    }
+
+    .skipLink,
+    .strip,
+    .utility,
+    .nav,
+    .tools {
+      display: none;
+    }
+
+    .bar {
+      block-size: auto;
+      border-block-end-width: 0;
+    }
+  }
+}

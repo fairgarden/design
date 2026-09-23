@@ -1,0 +1,194 @@
+/*
+ * Popover (§10.15). CVA function `popover` in Popover.tsx.
+ * Parts: positioner (the layer), base (the popup), arrow (the tail's box)
+ * and tail (its drawing), title, term (the title in the definition kind),
+ * description, source, close.
+ *
+ * The anchored overlay surface (§10.1): the `white` scope's --primary1 face,
+ * a --border-size-2 --primary12 frame in both modes, never --role-rule
+ * [D92, D156], --ds-radius-8, --size-px-2 from the trigger. No shadow, no
+ * backdrop. Motion is instant or a clip reveal from the trigger side, never
+ * a fade [D91]. Colors are role variables only; local custom properties
+ * carry dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.base {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.title {
+  composes: typeSubhead from '../../utils/type.module.css';
+}
+
+.term {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.description {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.source {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+@layer base {
+  .positioner {
+    z-index: var(--layer-3);
+  }
+
+  /*
+   * Base: anchored, the viewport less its margins wide. The clip bleeds past
+   * the frame by the tail's depth, so the tail shows at rest and leads the
+   * reveal.
+   */
+  .base {
+    --popover-tail-inline: var(--ds-space-12);
+    --popover-tail-block: calc(var(--ds-space-12) / 2 + var(--border-size-2));
+    --popover-bleed: calc(-1 * var(--popover-tail-block));
+    --popover-clip-from: inset(var(--popover-bleed));
+
+    position: relative;
+    box-sizing: border-box;
+    inline-size: calc(100vw - 2 * var(--ds-space-margin));
+    border: var(--border-size-2) solid var(--primary12);
+    border-radius: var(--ds-radius-8);
+    background-color: var(--primary1);
+    color: var(--primary12);
+    clip-path: inset(var(--popover-bleed));
+  }
+
+  /* Content width, 240–360 px, when it fits. */
+  @media (--md-n-above) {
+    .base {
+      inline-size: max-content;
+      min-inline-size: min(var(--size-px-13), calc(100vw - 2 * var(--ds-space-margin)));
+      max-inline-size: min(var(--ds-size-overlay-max), calc(100vw - 2 * var(--ds-space-margin)));
+    }
+  }
+
+  .title,
+  .term,
+  .description {
+    color: var(--primary12);
+  }
+
+  .source {
+    color: var(--role-muted);
+  }
+
+  /* The tail's box: 12 × 8, of which the last 2 px overlap the frame. */
+  .arrow {
+    display: flex;
+    inline-size: var(--popover-tail-inline);
+    block-size: var(--popover-tail-block);
+  }
+
+  .tail {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    overflow: visible;
+    fill: var(--primary1);
+    stroke: var(--primary12);
+    stroke-width: var(--border-size-2);
+  }
+
+  @media (--motionOK) {
+    .base {
+      transition-property: clip-path;
+      transition-duration: var(--ds-duration-disclosure);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer variants {
+  /*
+   * The close X (an icon-only Button) floats to the top end, so the title
+   * wraps beside its hit area. In this layer, above the Button's base
+   * margin reset, so the placement never depends on load order.
+   */
+  .close {
+    float: inline-end;
+    margin-block-start: calc(-1 * var(--size-px-2));
+    margin-inline: var(--size-px-2) calc(-1 * var(--size-px-2));
+  }
+
+  /* Panel: overlay surface with --size-px-3 padding. */
+  .panel {
+    padding: var(--size-px-3);
+  }
+
+  /* Definition: term, definition and source, stacked at tight gaps. */
+  .definition {
+    display: grid;
+    row-gap: var(--size-px-2);
+    padding: var(--size-px-3);
+  }
+}
+
+@layer states {
+  /* The reveal starts at the trigger edge (data-side names where the panel sits). */
+  .base[data-side='bottom'] {
+    --popover-clip-from: inset(var(--popover-bleed) var(--popover-bleed) 100% var(--popover-bleed));
+  }
+
+  .base[data-side='top'] {
+    --popover-clip-from: inset(100% var(--popover-bleed) var(--popover-bleed) var(--popover-bleed));
+  }
+
+  .base[data-side='left'],
+  .base[data-side='inline-start'] {
+    --popover-clip-from: inset(var(--popover-bleed) var(--popover-bleed) var(--popover-bleed) 100%);
+  }
+
+  .base[data-side='right'],
+  .base[data-side='inline-end'] {
+    --popover-clip-from: inset(var(--popover-bleed) 100% var(--popover-bleed) var(--popover-bleed));
+  }
+
+  .base[data-starting-style],
+  .base[data-ending-style] {
+    clip-path: var(--popover-clip-from);
+  }
+
+  .base[data-instant] {
+    transition: none;
+  }
+
+  /* The tail sits on the edge facing the trigger and points at it. */
+  .arrow[data-side='bottom'] {
+    inset-block-start: calc(-1 * var(--popover-tail-block));
+  }
+
+  .arrow[data-side='top'] {
+    inset-block-end: calc(-1 * var(--popover-tail-block));
+    rotate: 180deg;
+  }
+
+  .arrow[data-side='left'],
+  .arrow[data-side='inline-start'] {
+    inset-inline-end: calc(-1 * (var(--popover-tail-inline) + var(--popover-tail-block)) / 2);
+    rotate: 90deg;
+  }
+
+  .arrow[data-side='right'],
+  .arrow[data-side='inline-end'] {
+    inset-inline-start: calc(-1 * (var(--popover-tail-inline) + var(--popover-tail-block)) / 2);
+    rotate: -90deg;
+  }
+}
+
+@layer print {
+  @media print {
+    /* Hidden; a definition's text prints as a footnote to its term (§8). */
+    .positioner,
+    .base {
+      display: none;
+    }
+  }
+}

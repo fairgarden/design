@@ -1,0 +1,11 @@
+/* A stand-in for the Navigation Bar: the menu's own nav carries the bottom rule the panels meet. */
+.frame {
+  display: flex;
+  inline-size: 100%;
+  overflow-x: auto;
+}
+
+.bar {
+  block-size: var(--size-px-9);
+  border-block-end: var(--border-size-1) solid var(--role-rule);
+}

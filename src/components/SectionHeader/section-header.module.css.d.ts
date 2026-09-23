@@ -1,0 +1,31 @@
+declare const styles: {
+  readonly "action": string;
+  readonly "anchored": string;
+  readonly "art": string;
+  readonly "band": string;
+  readonly "base": string;
+  readonly "editorial": string;
+  readonly "eyebrow": string;
+  readonly "eyebrowRule": string;
+  readonly "heading": string;
+  readonly "kicker": string;
+  readonly "kickerRow": string;
+  readonly "lede": string;
+  readonly "marker": string;
+  readonly "module": string;
+  readonly "number": string;
+  readonly "numberRow": string;
+  readonly "printUrl": string;
+  readonly "scene": string;
+  readonly "seeAll": string;
+  readonly "seeAllArrow": string;
+  readonly "seeAllLabel": string;
+  readonly "technical": string;
+  readonly "topic": string;
+  readonly "topicTag": string;
+  readonly "trail": string;
+  readonly "trailPath": string;
+  readonly "trailed": string;
+};
+export = styles;
+

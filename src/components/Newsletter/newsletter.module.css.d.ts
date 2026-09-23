@@ -1,0 +1,37 @@
+declare const styles: {
+  readonly "band": string;
+  readonly "bandHeading": string;
+  readonly "base": string;
+  readonly "card": string;
+  readonly "consent": string;
+  readonly "content": string;
+  readonly "emailField": string;
+  readonly "fields": string;
+  readonly "form": string;
+  readonly "formArea": string;
+  readonly "grained": string;
+  readonly "grainedCard": string;
+  readonly "heading": string;
+  readonly "icon": string;
+  readonly "inline": string;
+  readonly "intro": string;
+  readonly "layout": string;
+  readonly "legal": string;
+  readonly "pitch": string;
+  readonly "postcodeField": string;
+  readonly "printLine": string;
+  readonly "printUrl": string;
+  readonly "reading": string;
+  readonly "ruled": string;
+  readonly "status": string;
+  readonly "statusGlyph": string;
+  readonly "statusText": string;
+  readonly "statusTitle": string;
+  readonly "straddle": string;
+  readonly "submit": string;
+  readonly "success": string;
+  readonly "visuallyHidden": string;
+  readonly "warning": string;
+};
+export = styles;
+

@@ -1,0 +1,85 @@
+# Navigation Menu
+
+The desktop site navigation on Base UI's Navigation Menu: caps bar items whose triggers open `dropdown`, `overview` or `index` panels under the bar. Inside a Navigation Bar it runs from `--ds-nav-inline-n-above` (1024 px by default); below it the drawer takes over.
+
+```tsx
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuTrigger,
+  NavigationMenuContent,
+  NavigationMenuLink,
+} from '@fairgarden-private/design/components/NavigationMenu'
+```
+
+Triggers are buttons. They open on click, Enter, Space or ArrowDown, and on mouse hover intent: 150 ms (`--ds-delay-nav-open`) to open and 300 ms (`--ds-delay-nav-close`) to close after the pointer leaves, both fed to Base UI from the one `NAV_DELAY_MS` constant. Once a panel is open, the next trigger switches instantly, and the safe pointer path keeps a diagonal move into a panel from switching it. Focus alone never opens a panel. Opening from the keyboard moves focus to the panel's first link, and Escape closes it and returns focus to the trigger. Only the open trigger reads `aria-expanded="true"`, and closed panels are unmounted.
+
+Pass `currentPath`, or let the Navigation Bar pass it. A link whose path equals it is current (`aria-current="page"`: the `--ds-stroke-3` bar and weight 700 in the bar, a weight and underline in a panel). A bar item whose `section` (for a trigger) or `href` is a path prefix of it is the parent of current (`aria-current="true"`, a `--border-size-2` bar). Hover is an accent underline under the label, and open is the `--ds-stroke-3` bar flush with the rule, so hover, open and current never look alike.
+
+**From the navigation data.** `NavigationMenuSections` builds the items from the shared navigation data (`SitemapSection`s from `@fairgarden-private/design/utils/navigation`), the same object that feeds the drawer's `sections` and the footer's `sitemap`, so the footer mirrors the panels (see the Footer's navigation demo). A section with a `description`, a `promo` or third-tier links opens an overview panel, `panel: 'index'` an index panel, and a flat section a dropdown that starts with its landing page; a section with only an `href` is a plain bar link.
+
+## Overview panels
+
+import { DemoNavigationMenuOverview } from './demos/overview'
+
+<DemoNavigationMenuOverview.Title />
+
+`kind="overview"` (LTA) is full-bleed under the bar, with its content on the 12-column grid of `--ds-container-content`. `featured` takes the section's landing page, a serif link with a › and a one-line description, then a hairline tier rule. The children are caps link groups, 2-up in columns 1–8 beside the optional `promo` card (one Tab stop), or up to 4-up without it. `search` adds one Search field; the panel stays open while it has focus. A plain `NavigationMenuContent` is the `dropdown` list of 3–8 links. A panel taller than the viewport scrolls in a Scroll Area.
+
+<DemoNavigationMenuOverview />
+
+[See Demo](./demos/overview/)
+
+## Index panels
+
+import { DemoNavigationMenuIndex } from './demos/index-panel'
+
+<DemoNavigationMenuIndex.Title />
+
+`kind="index"` (Audubon) is a nested vertical menu: `NavigationMenuCategory` rows (a `--size-px-13` column at a 44 px pitch) beside the selected category's link pane, with a `featuredBar` across both. One category is always selected: the one holding the current page, else the first. It is marked by a `--ds-stroke-3` start-edge bar and weight 700. Categories switch on click, Enter or mouse rest. The panel attaches at its trigger's start edge, end-aligns inside the content container, and takes square top and `--ds-radius-8` bottom corners.
+
+<DemoNavigationMenuIndex />
+
+[See Demo](./demos/index-panel/)
+
+## API Reference
+
+import { TypesNavigationMenu, TypesNavigationMenuAdditional } from './types'
+
+### NavigationMenu and NavigationMenuItem
+
+<TypesNavigationMenu.NavigationMenu />
+
+<TypesNavigationMenu.NavigationMenuItem />
+
+### NavigationMenuTrigger and NavigationMenuLink
+
+<TypesNavigationMenu.NavigationMenuTrigger />
+
+<TypesNavigationMenu.NavigationMenuLink />
+
+### NavigationMenuContent
+
+<TypesNavigationMenu.NavigationMenuContent />
+
+### Overview parts: NavigationMenuFeatured, NavigationMenuGroup and NavigationMenuPromo
+
+<TypesNavigationMenu.NavigationMenuFeatured />
+
+<TypesNavigationMenu.NavigationMenuGroup />
+
+<TypesNavigationMenu.NavigationMenuPromo />
+
+### Index parts: NavigationMenuCategory and NavigationMenuFeaturedBar
+
+<TypesNavigationMenu.NavigationMenuCategory />
+
+<TypesNavigationMenu.NavigationMenuFeaturedBar />
+
+### Additional types
+
+<TypesNavigationMenuAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §9.6 (navigation menu) [D181, D182], with the overlay panels of §9.1 and the fit budget of §11.5 [D183].

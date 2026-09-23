@@ -1,0 +1,17 @@
+.page {
+  inline-size: 100%;
+}
+
+.content {
+  padding: var(--size-px-5) var(--ds-space-margin);
+  font-family: var(--ds-font-ui);
+  color: var(--role-muted);
+}
+
+/* The stand-in wordmark's type. */
+.wordmark text {
+  font-family: var(--ds-font-display);
+  font-size: 26px;
+  font-weight: var(--font-weight-7);
+  fill: currentColor;
+}
