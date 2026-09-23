@@ -5,7 +5,7 @@
     "./src/utils/fonts.ts"
   ],
   "name": "@fairgarden/design",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0-alpha.1",
   "description": "FairGarden Design System",
   "repository": {
     "type": "git",
