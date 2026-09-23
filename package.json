@@ -4,7 +4,7 @@
     "./utils/fonts.js",
     "./src/utils/fonts.ts"
   ],
-  "name": "@fairgarden-private/design",
+  "name": "@fairgarden/design",
   "version": "0.1.0-alpha.0",
   "description": "FairGarden Design System",
   "repository": {
