@@ -172,9 +172,10 @@ type SectionBarKindProps =
       /**
        * `section` (default): glyph, caps title and Jump to at base; from
        * `--md-n-above` the inline breadcrumb and the live Jump label.
-       * `guide`: an optional start `search`, the centred breadcrumb and an
-       * end `listen` jump. `tabs`: from `--lg-n-above`, with 6 or fewer
-       * sections, the tab strip replaces Jump to.
+       * `guide`: an optional start `search`, the centred breadcrumb, and
+       * Jump to with an optional `listen` jump at the end. `tabs`: from
+       * `--lg-n-above`, with 6 or fewer sections, the tab strip replaces
+       * Jump to.
        */
       kind?: 'section'
       search?: never
@@ -252,6 +253,12 @@ function useSectionInView(
         const element = document.getElementById(id)
         if (element != null && element.getBoundingClientRect().top <= line) current = id
       }
+      // Scrolled to the end: the last section is in view even when its top
+      // cannot reach the bar (a short closing section).
+      const root = document.documentElement
+      if (window.scrollY > 0 && window.innerHeight + window.scrollY >= root.scrollHeight - 1) {
+        current = list[list.length - 1]
+      }
       setActive(current)
     }
     const schedule = () => {
@@ -288,7 +295,8 @@ function useSectionInView(
  * - `kind="tabs"`: from `--lg-n-above`, with 6 or fewer sections, equal
  *   cells of at least `--size-px-12` replace Jump to, with scrollspy
  *   (`aria-current="location"`) and an optional `toTop` cell at the start.
- * - `kind="guide"`: an optional start `search` and an end `listen` jump.
+ * - `kind="guide"`: an optional start `search`, the centred breadcrumb, and
+ *   Jump to with an optional `listen` jump at the end.
  *
  * Docking: pass `onDockChange` and feed `docked`; bring the header back in
  * its place on upward scroll. Hidden in print; the path prints in the
@@ -379,6 +387,8 @@ export function SectionBar(props: SectionBarProps) {
 
   const hasStair = items.length > 0
   const pastel = isPastelPreset(preset)
+  // The guide bar ends on Jump to and the tools, so its breadcrumb centres on the bar.
+  const guide = resolvedKind === 'guide'
 
   // The §9.8 Breadcrumb's one line (from --md-n-above); the bar reveals the
   // staircase in its own Collapsible below. Its links join the toolbar.
@@ -487,7 +497,7 @@ export function SectionBar(props: SectionBarProps) {
     ) : null
 
   const listenLink =
-    resolvedKind === 'guide' && listen != null ? (
+    guide && listen != null ? (
       <BaseToolbar.Link
         href={listen.href}
         render={
@@ -522,14 +532,15 @@ export function SectionBar(props: SectionBarProps) {
         ) : null}
         <span className={styles.title}>{activeLabel ?? current}</span>
       </div>
-      {resolvedKind === 'guide' && search != null ? (
+      {guide && search != null ? (
         <div className={styles.search}>{search}</div>
       ) : null}
       {crumbs}
       {tabList}
-      {jump}
-      {listenLink != null || tools != null || share != null ? (
+      {guide ? null : jump}
+      {(guide && jump != null) || listenLink != null || tools != null || share != null ? (
         <div className={styles.end}>
+          {guide ? jump : null}
           {listenLink}
           {tools != null ? (
             <div className={cx(styles.tools, hasStair && styles.toolsMovable)}>{tools}</div>

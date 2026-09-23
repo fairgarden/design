@@ -47,7 +47,7 @@
     --slate11: #b0b4ba;
     --slate12: #edeef0;
     --slate-contrast: #fff;
-    --slate-hover: var(--slate10);
+    --slate-hover: var(--slate8);
 
     @media (color-gamut: p3) {
       --slate1: color(display-p3 0.067 0.067 0.074);
@@ -80,7 +80,7 @@
       --slate11: #b0b4ba;
       --slate12: #edeef0;
       --slate-contrast: #fff;
-      --slate-hover: var(--slate10);
+      --slate-hover: var(--slate8);
 
       @media (color-gamut: p3) {
         --slate1: color(display-p3 0.067 0.067 0.074);

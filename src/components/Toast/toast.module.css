@@ -192,6 +192,15 @@
   .title {
     --type-weight: var(--font-weight-6);
   }
+
+  /*
+   * A destructive action cell ("Discard Notes"): the label in
+   * --role-danger-text (--red11 on the white face: 5.11:1 light, 8.92:1
+   * dark) [D192].
+   */
+  .actionDestructive {
+    color: var(--role-danger-text);
+  }
 }
 
 @layer states {
@@ -229,6 +238,13 @@
     color: var(--role-link-hover);
     text-decoration-line: var(--ds-link-hover-line);
     text-decoration-color: var(--role-accent);
+  }
+
+  /* Destructive hover: the label keeps the danger ink and takes the underline in it [D192]. */
+  .actionDestructive:not([data-disabled], [aria-busy='true']):hover {
+    color: var(--role-danger-text);
+    text-decoration-line: underline;
+    text-decoration-color: currentColor;
   }
 
   @media (--forcedColors) {

@@ -31,7 +31,9 @@ import styles from './header.module.css'
 /**
  * The full header on a page in What We Do › Our Programs: skip link, brand
  * strip, utility row, logo, the inline menu from 1024 px, search, the one
- * action, and the drawer below 1024 px (narrow the window to see it).
+ * action, and the drawer below 1024 px. The docs show it in a frame that is
+ * its own viewport, so the bar answers to the frame's width; open the full
+ * page to see the inline menu at the window's width.
  */
 export function NavigationBarHeader() {
   return (

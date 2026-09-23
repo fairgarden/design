@@ -464,8 +464,12 @@
       border-block-start: var(--border-size-2) solid var(--primary12);
     }
 
+    /* Visually hidden at 1 px, so the header row never widens the page. */
     .stack .headerRule {
       position: absolute;
+      inline-size: var(--border-size-1);
+      block-size: var(--border-size-1);
+      margin: calc(-1 * var(--border-size-1));
       overflow: hidden;
       clip-path: inset(50%);
       white-space: nowrap;
@@ -566,8 +570,12 @@
         border-block-start: var(--border-size-2) solid var(--primary12);
       }
 
+      /* Visually hidden at 1 px, so the header row never widens the page. */
       .stack .headerRule {
         position: absolute;
+        inline-size: var(--border-size-1);
+        block-size: var(--border-size-1);
+        margin: calc(-1 * var(--border-size-1));
         overflow: hidden;
         clip-path: inset(50%);
         white-space: nowrap;

@@ -47,7 +47,7 @@
     --violet11: #baa7ff;
     --violet12: #e2ddfe;
     --violet-contrast: #fff;
-    --violet-hover: var(--violet10);
+    --violet-hover: var(--violet8);
 
     @media (color-gamut: p3) {
       --violet1: color(display-p3 0.077 0.071 0.118);
@@ -80,7 +80,7 @@
       --violet11: #baa7ff;
       --violet12: #e2ddfe;
       --violet-contrast: #fff;
-      --violet-hover: var(--violet10);
+      --violet-hover: var(--violet8);
 
       @media (color-gamut: p3) {
         --violet1: color(display-p3 0.077 0.071 0.118);

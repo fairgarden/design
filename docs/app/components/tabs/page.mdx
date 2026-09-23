@@ -31,7 +31,7 @@ import { DemoTabsColor } from './demos/color'
 
 <DemoTabsColor.Title />
 
-`primary` recolors labels, bar and baseline. `secondary` drives only the filled segmented cell; keep it equal to the brand strip's scale so strip and cell join.
+`primary` recolors labels, bar and baseline. `secondary` drives only the filled segmented cell; keep it equal to the brand strip's scale so strip and cell join. The cell's label takes the secondary's own contrast ink where it carries text on step 9 (indigo's step 1 here, 5.12:1), and `--primary12` otherwise (green, blue, orange), so every label reaches 4.5:1. Crimson, gold, pink, red, ruby and tomato carry no words on step 9, so don't fill a cell with them.
 
 <DemoTabsColor />
 

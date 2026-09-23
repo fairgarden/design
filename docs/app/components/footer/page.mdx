@@ -40,7 +40,7 @@ import { DemoFooterNavigation } from './demos/navigation'
 
 The footer mirrors the mega panels because both read the same data: a `Sitemap` (`SitemapSection`s from `@fairgarden-private/design/utils/navigation`). The Navigation Menu builds its bar from it with `NavigationMenuSections`, the drawer with its `sections` prop, and the footer with `sitemap`. Each section is a bar item, a drawer group and a footer group headed by its label. A link with its own `links` is a third tier that only the panels show: a caps group in an `overview` panel, a category in an `index` panel. `description` and `promo` fill the overview panel and `featured` the index panel's featured bar. The menu and drawer mark current pages by path; the footer has no path, so it reads `current` from the data.
 
-<DemoFooterNavigation />
+<DemoFooterNavigation frame />
 
 [See Demo](./demos/navigation/)
 

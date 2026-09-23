@@ -10,7 +10,11 @@ const sections = [
   { id: 'bar-how', label: 'How land trusts begin' },
 ]
 
-/** The section bar over three sections; it docks inside this frame as you scroll. */
+/**
+ * The section bar over three sections. The docs show the page in a frame
+ * that scrolls on its own: scroll inside it and the bar docks and follows
+ * the section in view.
+ */
 export function SectionBarSection() {
   const [docked, setDocked] = React.useState(false)
 

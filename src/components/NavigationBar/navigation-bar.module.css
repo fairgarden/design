@@ -227,8 +227,14 @@
     align-items: center;
   }
 
-  /* Stack guard: below 360 px the action moves into the drawer [D73]. */
-  @media (--xs-n-below) {
+  /*
+   * The base fit: logo, search, action and the "Menu" trigger need about
+   * 400 px, more than 360–479 px leaves, so below --sm-n-below (480 px) the
+   * action moves to the top of the drawer footer, extending the 360 px stack
+   * guard [D73] (derived; flagged for user review, §1.8). The "Menu" label
+   * still drops only below 360 px.
+   */
+  @media (--sm-n-below) {
     .action {
       display: none;
     }

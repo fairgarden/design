@@ -377,7 +377,7 @@ export type NavDrawerFooterProps = Omit<React.ComponentProps<'div'>, 'children'>
 
 /**
  * The drawer's fixed footer zone, under a --border-size-2 --role-rule: the
- * primary pill first (where the header's action goes below 360 px), then
+ * primary pill first (where the header's action goes below 480 px), then
  * the utility links at a --ds-size-hit pitch, then the locale Select. Put
  * it in the drawer's `footer`.
  */

@@ -7,7 +7,8 @@
 //   `--{scale}-contrast` and the per-scale hover step `--{scale}-hover`
 //   [D181], wrapped in the selectors of each mode strategy
 // - src/utils/scales.module.css: primary<Scale> / secondary<Scale> /
-//   action<Scale> classes in `@layer scales`
+//   action<Scale> classes in `@layer scales`; each secondary class also
+//   publishes `--secondary-light-mark` (§1.4.7, §9.5)
 // - src/utils/scales.ts: the typed CVA variant maps and scale types
 import { fileURLToPath } from 'url'
 import path from 'path'
@@ -130,9 +131,21 @@ const hoverStep10Light = new Set(['purple', 'indigo', 'iris', 'violet', 'plum'])
  * The lighter neighbour is the highest step below 9 that is lighter than
  * step 9: step 8 for most scales, amber 6 and yellow 5 (and lime, mint and
  * sky 5), whose steps 6–8 are darker than their bright step 9.
+ *
+ * In a dark scope, where step 10 would drop the scale's contrast ink below
+ * 4.5:1 (the white-ink scales: gray, indigo, iris, mauve, olive, plum,
+ * purple, sage, sand, slate, violet at 4.05–4.40), the hover takes the
+ * other neighbour, step 8 (5.29–6.29), as the light step-10 rule does
+ * (derived; flagged for user review, §1.8).
  */
 function hoverStep(name, mode) {
-  if (mode === 'dark' || hoverStep10Light.has(name)) return 10
+  if (mode === 'dark') {
+    const steps = scales[name].dark
+    const ink = contrastInk(name, 'dark').value
+    const inkHex = ink === '#fff' ? '#ffffff' : ink.includes(`${name}1)`) ? steps[0] : steps[11]
+    return contrast(inkHex, steps[9]) >= 4.5 ? 10 : 8
+  }
+  if (hoverStep10Light.has(name)) return 10
   const steps = scales[name].light
   const l9 = luminance(steps[8])
   for (let i = 7; i >= 0; i--) {
@@ -221,6 +234,20 @@ for (const [suffix, strategy] of variants) {
 
 const pascal = (s) => s[0].toUpperCase() + s.slice(1)
 
+/*
+ * The light-scope mark on a secondary step 9 (§1.4.7): the scale's own
+ * contrast ink where it carries text there (≥ 4.5:1: amber, gray, indigo,
+ * iris, lime, mauve, mint, olive, plum, purple, sage, sand, sky, slate,
+ * violet, yellow); otherwise `initial`, so the light role maps fall back to
+ * the primary's step 12 (P12*, the text ink for blue, bronze, brown, cyan,
+ * grass, green, jade, orange and teal; the glyph ink for the six "none"
+ * scales, which carry no words on step 9). Every secondary class declares
+ * it, so an override never inherits its scope's value.
+ */
+function lightMark(name) {
+  return contrastInk(name, 'light').ratio >= 4.5 ? 'var(--secondary-contrast)' : 'initial'
+}
+
 function scaleClass(slot, name) {
   const lines = []
   for (let i = 1; i <= 12; i++) {
@@ -228,6 +255,7 @@ function scaleClass(slot, name) {
   }
   lines.push(`    --${slot}-contrast: var(--${name}-contrast);`)
   lines.push(`    --${slot}-hover: var(--${name}-hover);`)
+  if (slot === 'secondary') lines.push(`    --secondary-light-mark: ${lightMark(name)};`)
   return `  .${slot}${pascal(name)} {\n${lines.join('\n')}\n  }`
 }
 
@@ -237,6 +265,9 @@ const moduleCss = `${HEADER}/*
  * No mode logic: the Radix variables resolve to whatever mode is in effect.
  * action<Scale> publishes a scope's action scale: Ground, and the overlay
  * roots that declare their own scope, so a popup never inherits the root's.
+ * --secondary-light-mark: the light-scope mark on step 9, the scale's own
+ * contrast ink where it carries text, else \`initial\` so the role maps fall
+ * back to --primary12 (§1.4.7).
  */
 @layer scales {
 ${['primary', 'secondary', 'action']

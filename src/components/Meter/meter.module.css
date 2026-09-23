@@ -308,17 +308,22 @@
     column-gap: var(--size-px-2);
   }
 
-  /* Viewport fallback: label | track | value in one row from --md-n-above… */
+  /*
+   * Viewport fallback: label | track | value in one row from --md-n-above…
+   * The columns are fixed shares (1 : 2 : 1), not sized by each readout, so
+   * the tracks of stacked rows start and end on one line; the value column
+   * never drops below its unbreakable text.
+   */
   @media (--md-n-above) {
     .bar,
     .steps {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(min-content, 1fr);
       grid-template-areas: 'label track readout';
     }
 
     /* The ordinal scale takes the track column, its labels under it. */
     .ordinal {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(min-content, 1fr);
       grid-template-areas:
         'label track readout'
         '. stops .';
@@ -347,12 +352,12 @@
   @container meter-panel (width >= 768px) {
     .bar,
     .steps {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(min-content, 1fr);
       grid-template-areas: 'label track readout';
     }
 
     .ordinal {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(min-content, 1fr);
       grid-template-areas:
         'label track readout'
         '. stops .';

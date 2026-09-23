@@ -32,10 +32,23 @@ function ToastButtons() {
     })
   }
 
+  // A destructive action cell: "Discard Notes" is drawn in the danger ink.
+  const showError = () => {
+    const id = toasts.add({
+      status: 'danger',
+      title: 'Couldn’t sync your notes',
+      description: 'Check your connection; your notes are kept on this device.',
+      actions: [
+        { children: 'Try Again', onClick: () => toasts.close(id) },
+        { children: 'Discard Notes', destructive: true, onClick: () => toasts.close(id) },
+      ],
+    })
+  }
+
   return (
     <div className={styles.stack}>
       <div className={styles.row}>
-        <Button variant="solid" onClick={removeItems} disabled={items === 0}>
+        <Button variant="solid" destructive onClick={removeItems} disabled={items === 0}>
           Remove Items
         </Button>
         <Button onClick={() => toasts.add({ title: 'Draft saved', description: 'Saved 2 minutes ago.' })}>
@@ -55,13 +68,7 @@ function ToastButtons() {
         >
           Show Warning
         </Button>
-        <Button
-          onClick={() =>
-            toasts.add({ status: 'danger', title: 'Couldn’t sync your notes', description: 'Check your connection; your notes are kept on this device.' })
-          }
-        >
-          Show Error
-        </Button>
+        <Button onClick={showError}>Show Error</Button>
       </div>
       <p className={styles.status} aria-live="polite">
         {`Trip list: ${items} items. Neutral, info and success toasts close after 6 s, paused on hover, focus or a hidden tab; warning, error and action toasts stay.`}

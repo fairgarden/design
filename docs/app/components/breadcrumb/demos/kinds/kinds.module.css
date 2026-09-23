@@ -1,6 +1,9 @@
+/* Full width: the inline breadcrumb is an inline-size container, so it
+   cannot size the demo; the frame takes the preview's width instead. */
 .stack {
   display: grid;
   gap: var(--ds-space-12);
+  inline-size: 100%;
   min-inline-size: 0;
 }
 
@@ -11,15 +14,17 @@
   font-weight: var(--font-weight-6);
 }
 
-/* A resizable frame: drag its corner to narrow the breadcrumb's container. */
+/* A resizable frame: drag its corner to narrow the breadcrumb's container
+   and watch the crumbs collapse (they never scroll). `resize` needs a
+   clipping overflow; the padding keeps the crumbs' focus rings inside. */
 .frame {
   box-sizing: border-box;
   inline-size: 100%;
   min-inline-size: 280px;
   max-inline-size: 100%;
-  padding-inline: var(--size-px-2);
+  padding: var(--size-px-1) var(--size-px-2);
   border: var(--border-size-1) solid var(--role-hairline);
   border-radius: var(--ds-radius-8);
-  overflow: auto;
+  overflow: hidden;
   resize: horizontal;
 }

@@ -19,6 +19,7 @@ import styles from './button.module.css'
  * Button classes (§9.2, §1.11.10). `primary` and `secondary` are never
  * defaulted [D133]: the `solid` class falls back to the scope's action scale
  * for `secondary`, and an explicit `secondary` wins from the scales layer.
+ * `destructive` swaps in the danger roles per variant (compounds) [D192].
  */
 export const button = cva(styles.base, {
   variants: {
@@ -43,6 +44,9 @@ export const button = cva(styles.base, {
       start: styles.buttedStart,
       end: styles.buttedEnd,
     },
+    destructive: {
+      true: styles.destructive,
+    },
     primary: primaryScaleVariants,
     secondary: secondaryScaleVariants,
   },
@@ -50,12 +54,16 @@ export const button = cva(styles.base, {
     { iconOnly: true, onMedia: true, class: styles.iconOnlyOnMedia },
     { iconOnly: true, butted: 'start', class: styles.iconOnlyButtedStart },
     { iconOnly: true, butted: 'end', class: styles.iconOnlyButtedEnd },
+    { variant: 'solid', destructive: true, class: styles.solidDestructive },
+    { variant: 'outline', destructive: true, class: styles.outlineDestructive },
+    { variant: 'text', destructive: true, class: styles.textDestructive },
   ],
   defaultVariants: {
     variant: 'outline',
     size: 'md',
     iconOnly: false,
     onMedia: false,
+    destructive: false,
   },
 })
 
@@ -78,6 +86,14 @@ type ButtonCommonProps = Omit<BaseButton.Props, 'children'> & {
      * edge, as in the butted submit. Default: none.
      */
     butted?: ButtonVariants['butted']
+    /**
+     * Marks a destructive action (delete, remove, discard, clear): the
+     * danger (red) roles replace the action and primary inks in every
+     * variant [D192]. `solid` takes the danger fill, label and edge;
+     * `outline` the danger edge and label; `text` the danger label and
+     * glyph. Focus and pressed are unchanged. Default `false`.
+     */
+    destructive?: ButtonVariants['destructive']
     /**
      * Primary Radix scale, from the primary roster: the outline edge, labels
      * and focus ring. Never defaulted; omitted, it inherits the scope [D133].
@@ -151,6 +167,7 @@ export function Button(props: ButtonProps) {
     iconOnly,
     onMedia,
     butted,
+    destructive,
     primary,
     secondary,
     icon,
@@ -218,6 +235,7 @@ export function Button(props: ButtonProps) {
     iconOnly,
     onMedia,
     butted,
+    destructive,
     primary,
     secondary,
   }

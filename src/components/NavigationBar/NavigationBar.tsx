@@ -132,7 +132,7 @@ export type NavigationBarProps = Omit<React.ComponentProps<'header'>, 'children'
   children?: React.ReactNode
   /** Icon Buttons, e.g. `<Search kind="trigger" … />`, `--size-px-1` apart. */
   search?: React.ReactNode
-  /** The one primary action: a `solid` Button at `size="sm"`. Moves into the drawer below 360 px. */
+  /** The one primary action: a `solid` Button at `size="sm"`. Below 480 px it moves to the drawer footer, so repeat it there. */
   action?: React.ReactNode
   /** The `NavDrawer` (menu Button and sheet), shown below --ds-nav-inline-n-above. */
   drawer?: React.ReactNode

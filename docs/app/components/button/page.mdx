@@ -44,6 +44,18 @@ The same two buttons on three grounds. On forest the action stays amber; on leaf
 
 [See Demo](./demos/grounds/)
 
+## Destructive actions
+
+import { DemoButtonDestructive } from './demos/destructive'
+
+<DemoButtonDestructive.Title />
+
+Any action that destroys (delete, remove, discard, clear) takes `destructive`, and every variant turns red. `solid` takes the danger fill: `--red11` with a `--red1` label in light scopes (light steps 9 and 10 can't carry text), `--red9` with `--red1` in dark ones; its hover moves to `--red12` in light and `--red10` in dark. `outline` takes the danger edge and label, and `text` the danger label and glyph. On the fields the edge is `--red12`; on leaf, clay and royal, where red text falls below 4.5:1, the label keeps the field's ink and the red stays in the edge and glyph. Focus and pressed are unchanged.
+
+<DemoButtonDestructive />
+
+[See Demo](./demos/destructive/)
+
 ## API Reference
 
 import { TypesButton } from './types'
@@ -52,4 +64,4 @@ import { TypesButton } from './types'
 
 [See Types](./types.md)
 
-Specification: `DESIGN-SYSTEM.md` §9.2 (button) and §1.11.10 (the reference Button).
+Specification: `DESIGN-SYSTEM.md` §9.2 (button), §1.11.10 (the reference Button) and D192 (destructive actions).

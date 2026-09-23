@@ -22,14 +22,17 @@ export { menu, type MenuPopupProps } from './popup'
  * - Module: menu.module.css (shared by Context Menu and Menubar popups);
  *   CVA functions `menu` (the popup) and `menuItem` (an item).
  * - Axes: `primary`, `secondary` → scales module classes, passed to the
- *   popup; `menuItem`: `destructive` → `destructive` (the danger glyph),
- *   `secondary` → the item's own scale.
+ *   popup; `menuItem`: `destructive` → `destructive` (the danger glyph,
+ *   the danger label and the danger highlight [D192]), `secondary` → the
+ *   item's own scale.
  * - Compound variants: none. Defaults: `menuItem` `destructive: false`;
  *   color axes: none.
  * - Color fallback: the popup takes the `white` preset's defaults; a
  *   destructive item's secondary falls back to the danger scale [D129].
  * - States: item data-highlighted → --primary4 plus the --ds-stroke-3
- *   start-edge bar in --primary12 [D145]; data-checked on checkbox and
+ *   start-edge bar in --primary12 [D145] (a destructive item: the
+ *   --role-danger fill, its label and bar --role-danger-label [D192]);
+ *   data-checked on checkbox and
  *   radio items → leading ✓ or ● in --primary12, label --font-weight-6, no
  *   fill and no bar [D145]; data-disabled → --role-muted, no highlight;
  *   submenu trigger data-popup-open → stays highlighted; popup
@@ -111,9 +114,11 @@ export type MenuItemProps = BaseMenu.Item.Props & {
   /** A trailing keyboard shortcut, in `type-data` --role-muted, end-aligned. */
   shortcut?: React.ReactNode
   /**
-   * Shows the danger glyph (◆ with its inner ×) in the leading slot; the
-   * label, which names the verb and object ("Delete Note"), stays
-   * --primary12, so color is never the only cue. Default `false`.
+   * A destructive action (delete, remove, clear): the danger glyph (◆ with
+   * its inner ×) in the leading slot, the label in --role-danger-text, and
+   * a highlight in the danger fill with --role-danger-label [D192]. The
+   * label still names the verb and object ("Delete note"), so color is
+   * never the only cue. Default `false`.
    */
   destructive?: MenuItemVariants['destructive']
   /** The item's secondary scale. Omitted, a destructive item takes the danger scale [D129]. */
@@ -124,8 +129,8 @@ export type MenuItemProps = BaseMenu.Item.Props & {
  * An action row (Base UI Menu.Item): --ds-size-hit tall at every
  * breakpoint, a --size-px-5 leading slot, the label in `type-body-ui`
  * sentence case, and an optional trailing shortcut. Highlight (pointer or
- * keyboard) is the --primary4 fill plus the start-edge bar; activation
- * closes the menu.
+ * keyboard) is the --primary4 fill plus the start-edge bar (the danger fill
+ * on a destructive item [D192]); activation closes the menu.
  */
 export function MenuItem(props: MenuItemProps) {
   const { icon, shortcut, destructive, secondary, className, children, ...rest } = props

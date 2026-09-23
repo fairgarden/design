@@ -9,7 +9,8 @@
  * --border-size-2 --primary12 edge in both modes, never --role-rule
  * [D92, D156], --ds-radius-8, --size-px-1 padding, no shadow or backdrop.
  * The list highlight is --primary4 plus a --ds-stroke-3 start-edge bar in
- * --primary12; a checked option is a leading ✓ or ● and --font-weight-6,
+ * --primary12 (a destructive item: the danger fill, its label and bar
+ * --role-danger-label [D192]); a checked option is a leading ✓ or ● and --font-weight-6,
  * with no fill and no bar [D145]. Motion is instant or a clip reveal from
  * the trigger side, never a fade [D91]. Colors are role variables only;
  * local custom properties carry dimensions only.
@@ -166,9 +167,17 @@
 }
 
 @layer variants {
-  /* Destructive: the danger glyph in --secondary11 of the item's danger scale [D129]; the label stays --primary12. */
+  /*
+   * Destructive: the danger glyph in --secondary11 of the item's danger
+   * scale [D129] and the label in --role-danger-text (--red11 on the white
+   * face: 5.11:1 light, 8.92:1 dark) [D192].
+   */
   .destructive .itemIcon {
     color: var(--secondary11);
+  }
+
+  .destructive .itemLabel {
+    color: var(--role-danger-text);
   }
 }
 
@@ -212,6 +221,30 @@
     display: block;
   }
 
+  /*
+   * A destructive item's highlight: the danger fill with --role-danger-label
+   * (5.11:1 light, 4.75:1 dark) for the label, the glyph and the bar; the
+   * glyph's knockout takes the fill [D192].
+   */
+  .destructive[data-highlighted] {
+    background-color: var(--role-danger);
+    color: var(--role-danger-label);
+  }
+
+  .destructive[data-highlighted]::before {
+    border-inline-start-color: var(--role-danger-label);
+  }
+
+  .destructive[data-highlighted] .itemIcon,
+  .destructive[data-highlighted] .itemLabel {
+    color: var(--role-danger-label);
+  }
+
+  .destructive[data-highlighted] .dangerGlyph {
+    fill: var(--role-danger);
+    stroke: var(--role-danger);
+  }
+
   /* Checked: the leading glyph and --font-weight-6; no fill, no bar. */
   .item[data-checked] .itemLabel {
     font-weight: var(--font-weight-6);
@@ -228,8 +261,23 @@
   }
 
   .item[data-disabled] .itemIcon,
+  .item[data-disabled] .itemLabel,
   .item[data-disabled] .checkGlyph {
     color: var(--role-muted);
+  }
+
+  .item[data-disabled] .dangerGlyph {
+    fill: var(--primary1);
+    stroke: var(--primary1);
+  }
+
+  /* Forced colors: the knockout stays the system Canvas, as at rest. */
+  @media (--forcedColors) {
+    .destructive[data-highlighted] .dangerGlyph,
+    .item[data-disabled] .dangerGlyph {
+      fill: Canvas;
+      stroke: Canvas;
+    }
   }
 }
 

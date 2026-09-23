@@ -47,7 +47,7 @@
     --sand11: #b5b3ad;
     --sand12: #eeeeec;
     --sand-contrast: #fff;
-    --sand-hover: var(--sand10);
+    --sand-hover: var(--sand8);
 
     @media (color-gamut: p3) {
       --sand1: color(display-p3 0.067 0.067 0.063);

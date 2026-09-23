@@ -346,13 +346,23 @@
 }
 
 @layer variants {
-  /* Multiple: the box wraps chips and grows. */
-  .multiple {
-    flex-wrap: wrap;
+  /*
+   * Multiple: the box grows as its chips wrap. The chips row (chips plus
+   * the input) takes the width the clear and chevron cells leave, so those
+   * stay in the box at the end edge; the input keeps room for its
+   * placeholder and wraps to its own line before it would truncate. The
+   * row carries the block padding, so an empty box is --size-px-8 tall,
+   * as a single one is.
+   */
+  .multiple .chips {
+    flex: 1 1 0;
+    align-self: stretch;
     padding-block: calc((var(--size-px-8) - var(--size-px-7)) / 2 - var(--combobox-edge));
   }
 
   .multiple .input {
+    flex: 1 1 var(--size-px-11);
+    min-inline-size: min(100%, var(--size-px-11));
     min-block-size: var(--size-px-7);
   }
 

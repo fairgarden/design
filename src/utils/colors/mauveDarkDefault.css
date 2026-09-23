@@ -15,7 +15,7 @@
     --mauve11: #b5b2bc;
     --mauve12: #eeeef0;
     --mauve-contrast: #fff;
-    --mauve-hover: var(--mauve10);
+    --mauve-hover: var(--mauve8);
 
     @media (color-gamut: p3) {
       --mauve1: color(display-p3 0.07 0.067 0.074);

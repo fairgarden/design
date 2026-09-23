@@ -23,7 +23,16 @@
  * whose rest face is --role-halo (the slider thumb): --primary3 where soft
  * fills apply, --role-halo (no change) where they drop, so the face never
  * turns the ground color [D181]. --secondary-hover is the per-scale lighter
- * neighbour (step 10 in a dark scope) that the scales module publishes.
+ * neighbour (step 10 in a dark scope; step 8 where 10 would drop a white
+ * label below 4.5:1) that the scales module publishes.
+ *
+ * Selection mark, light page grounds (§1.4.7): the secondary's own
+ * contrast ink where it carries text on step 9 (--secondary-light-mark,
+ * which each secondary scales class publishes: --yellow12 8.68 on pollen,
+ * --purple1 5.07 on heather, --indigo1 5.12 for an indigo override), else
+ * --primary12 (P12*: green, blue, orange; red's is glyph-only). So an
+ * overridden secondary never leaves --primary12 on a fill it fails, e.g.
+ * --olive12 on --indigo9 at 3.13:1 (§9.5).
  *
  * Text-bearing selection: --role-select-text / -label / -edge / -hover, for
  * a selected state that carries words (option pill, filter chip with a
@@ -31,6 +40,19 @@
  * inverse pair on light rose, where --mauve12 on --red9 is 4.16:1 (glyph
  * only); glyph-only marks (✓, ●, thumbs) keep --role-select there
  * [decided by orchestrator; flagged for user review, §1.8].
+ *
+ * Danger [D192]: destructive actions are red. --danger1…12 is the §1.5.4
+ * danger status scale (red), published on every scope so it resolves in
+ * that scope's mode. --role-danger / -label / -edge / -hover are the
+ * destructive solid Button's fill, label, edge and hover fill (the Menu's
+ * destructive highlight takes the fill and label); --role-danger-text is
+ * the danger ink on the ground (outline and text Button labels, Menu and
+ * Toast labels). Light scopes: fill --danger11 with --danger1 (5.11:1;
+ * light 9 and 10 carry no text), hover --danger12 (the lighter 10 drops
+ * the label to 4.28:1, so it takes the darker neighbour, as D181's step-10
+ * rule does). Dark scopes: fill --danger9 with --danger1 (4.75), hover
+ * --danger10 (5.57). Where red text fails (leaf, clay, royal) the label
+ * falls back to --primary12 and the red stays in the edge and glyph.
  *
  * Charts [D125]: --role-series-odd is the odd series slots' ink,
  * --secondary11 on light base grounds (and a `white` plate) and --primary12
@@ -125,6 +147,30 @@
     --role-select-text-hover: var(--role-select-hover);
     /* Charts: one ink off the light base grounds (§8.7) [D125]. */
     --role-series-odd: var(--primary12);
+    /*
+     * Danger [D192]: the danger scale (red, §1.5.4), then the light map
+     * (the light page grounds and light islands): fill --danger11 with
+     * --danger1 (5.11:1), edge = fill (4.54–5.11:1 on the eight grounds),
+     * hover --danger12 (label 12.19), text --danger11 (4.54–5.11; 4.57 on
+     * the outline's --primary3 hover fill).
+     */
+    --danger1: var(--red1);
+    --danger2: var(--red2);
+    --danger3: var(--red3);
+    --danger4: var(--red4);
+    --danger5: var(--red5);
+    --danger6: var(--red6);
+    --danger7: var(--red7);
+    --danger8: var(--red8);
+    --danger9: var(--red9);
+    --danger10: var(--red10);
+    --danger11: var(--red11);
+    --danger12: var(--red12);
+    --role-danger: var(--danger11);
+    --role-danger-label: var(--danger1);
+    --role-danger-edge: var(--danger11);
+    --role-danger-hover: var(--danger12);
+    --role-danger-text: var(--danger11);
     /* Switches (tokens.css): shaped edges only on the night band in light mode [D179]. */
     --ds-edge-shaped: none;
     --ds-link-hover-line: none;
@@ -166,6 +212,12 @@
   /* Dark fixed scopes: a pill fill that reaches 3:1 is its own edge. */
   [data-scheme='dark'] {
     --role-pill-edge: var(--secondary9);
+    /* Danger, dark map [D192]: fill --danger9 with --danger1 (4.75), hover --danger10 (5.57); night: edge 4.50, text 8.36. */
+    --role-danger: var(--danger9);
+    --role-danger-label: var(--danger1);
+    --role-danger-edge: var(--danger9);
+    --role-danger-hover: var(--danger10);
+    --role-danger-text: var(--danger11);
   }
 
   [data-tone='solid-light'],
@@ -386,6 +438,38 @@
   }
 
   /*
+   * Danger on the fields [D192]. The fill stays the mode's red (--danger11
+   * light, --danger9 dark), which sits near the field's own lightness, so
+   * the edge steps out: --danger11 on forest (4.00) and brick (3.76),
+   * --danger12 on royal (4.47), leaf (3.94), amber (7.28), clay (4.19) and
+   * pink (5.35). Danger text is --danger12 where it reaches 4.5:1 (forest
+   * 6.16, brick 5.80, amber, pink); on leaf (3.94), clay (4.19) and royal
+   * (4.47) it is the field's one ink, --primary12, and the red stays in the
+   * edge and the glyph (≥ 3:1).
+   */
+  [data-ground='forest'],
+  [data-ground='royal'],
+  [data-ground='brick'],
+  [data-ground='leaf'],
+  [data-ground='amber'],
+  [data-ground='clay'],
+  [data-ground='pink'] {
+    --role-danger-edge: var(--danger12);
+    --role-danger-text: var(--danger12);
+  }
+
+  [data-ground='forest'],
+  [data-ground='brick'] {
+    --role-danger-edge: var(--danger11);
+  }
+
+  [data-ground='royal'],
+  [data-ground='leaf'],
+  [data-ground='clay'] {
+    --role-danger-text: var(--primary12);
+  }
+
+  /*
    * The night band in dark mode [D179]: its seam turns visible as its
    * --primary12 (12.7–16.2:1 against the eight dark page grounds), and its
    * shaped edge drops for that straight rule.
@@ -486,6 +570,31 @@
     --role-pill: var(--primary12);
     --role-pill-label: var(--role-inverse);
     --role-pill-edge: var(--primary12);
+  }
+
+  /*
+   * Danger on the page grounds, dark mode [D192]: fill --danger9 with
+   * --danger1 (4.75), edge = fill (3.77–4.80 against the eight dark
+   * grounds), hover --danger10 (5.57), text --danger11 (6.99–8.92).
+   */
+  :root[data-theme='dark'],
+  [data-theme='dark'] [data-ground][data-scheme='page'] {
+    --role-danger: var(--danger9);
+    --role-danger-label: var(--danger1);
+    --role-danger-edge: var(--danger9);
+    --role-danger-hover: var(--danger10);
+    --role-danger-text: var(--danger11);
+  }
+
+  @media only screen and (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']),
+    :root:not([data-theme='light']) [data-ground][data-scheme='page'] {
+      --role-danger: var(--danger9);
+      --role-danger-label: var(--danger1);
+      --role-danger-edge: var(--danger9);
+      --role-danger-hover: var(--danger10);
+      --role-danger-text: var(--danger11);
+    }
   }
 
   @media only screen and (prefers-color-scheme: dark) {
@@ -592,7 +701,7 @@
     --role-tint: var(--primary5);
     --role-accent: var(--secondary11);
     --role-select: var(--secondary9);
-    --role-select-mark: var(--primary12);
+    --role-select-mark: var(--secondary-light-mark, var(--primary12));
     --role-select-edge: var(--secondary11);
     --role-action: var(--secondary9);
     --role-action-label: var(--secondary-contrast);
@@ -631,7 +740,7 @@
     --role-tint: var(--primary5);
     --role-accent: var(--secondary11);
     --role-select: var(--secondary9);
-    --role-select-mark: var(--primary12);
+    --role-select-mark: var(--secondary-light-mark, var(--primary12));
     --role-select-edge: var(--secondary11);
     --role-action: var(--secondary9);
     --role-action-label: var(--secondary-contrast);
@@ -643,14 +752,6 @@
     --role-pill-label: var(--secondary-contrast);
     --role-pill-edge: var(--secondary11);
     --ds-link-hover-line: none;
-  }
-
-  [data-ground='pollen'],
-  :root [data-theme='light'] [data-ground='pollen'][data-scheme='page'],
-  [data-ground='heather'],
-  :root [data-theme='light'] [data-ground='heather'][data-scheme='page'] {
-    /* Selection mark: the scale's own contrast ink (--yellow12 8.68, --purple1 5.07). */
-    --role-select-mark: var(--secondary-contrast);
   }
 
   [data-ground='rose'],
@@ -675,6 +776,15 @@
     --role-select-text-label: var(--role-inverse);
     --role-select-text-edge: var(--primary12);
     --role-select-text-hover: var(--primary11);
+  }
+
+  /* Danger under a light preview wrapper: the light map again [D192]. */
+  :root [data-theme='light'] [data-ground][data-scheme='page'] {
+    --role-danger: var(--danger11);
+    --role-danger-label: var(--danger1);
+    --role-danger-edge: var(--danger11);
+    --role-danger-hover: var(--danger12);
+    --role-danger-text: var(--danger11);
   }
 
   /*

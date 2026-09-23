@@ -18,7 +18,7 @@ import { DemoSectionBarSection } from './demos/section'
 
 Below 768 px the disclosure glyph opens the staircase breadcrumb, the caps title follows the section in view and "Jump to" opens the list. From 768 px the inline breadcrumb (the Breadcrumb's staircase kind, its crumbs part of the toolbar) takes their place: it collapses the middle into a "…" menu past four levels (six from 1024 px), truncates long crumbs and sets the current crumb in bold as the title. The Jump label names the section in view, announced politely once per change. The Jump panel is a 320 px list of links: Tab moves through them and Escape closes it. Following one closes the panel and moves focus to that section's heading. `capped` adds the green top rule.
 
-<DemoSectionBarSection />
+<DemoSectionBarSection frame="scroll" />
 
 [See Demo](./demos/section/)
 
@@ -28,9 +28,9 @@ import { DemoSectionBarTabs } from './demos/tabs'
 
 <DemoSectionBarTabs.Title />
 
-With `kind="tabs"` and 6 or fewer sections, from 1024 px equal cells of at least 160 px replace the breadcrumb and Jump to. The cell in view carries `aria-current="location"`, a 3 px bar and bold weight. A click scrolls to the section and writes its hash. `toTop` adds the square "Back to top" cell at the start, part of the docked bar, so nothing floats; it moves focus to the skip link's target. With more than 6 sections the bar stays a section bar.
+With `kind="tabs"` and 6 or fewer sections, from 1024 px equal cells of at least 160 px replace the breadcrumb and Jump to. The cell in view carries `aria-current="location"`, a 3 px bar and bold weight. A click scrolls to the section and writes its hash. `toTop` adds the square "Back to top" cell at the start, part of the docked bar, so nothing floats; it moves focus to the skip link's target. With more than 6 sections the bar stays a section bar. The bar follows the viewport, not its container, so these demos run in a frame that is its own viewport: the strip shows once the frame is 1024 px wide, and "Full page" opens it at the window's width.
 
-<DemoSectionBarTabs />
+<DemoSectionBarTabs frame="scroll" />
 
 [See Demo](./demos/tabs/)
 
@@ -40,9 +40,9 @@ import { DemoSectionBarGuide } from './demos/guide'
 
 <DemoSectionBarGuide.Title />
 
-`kind="guide"` takes an optional `search` at the start (an Autocomplete, capped at 240 px, from 768 px), centres the breadcrumb, and ends on an optional `listen` jump. That is a standalone link with a count badge, and it moves focus to the recordings heading.
+`kind="guide"` takes an optional `search` at the start (an Autocomplete, capped at 240 px, from 768 px), centres the breadcrumb, and ends on Jump to and an optional `listen` jump. That is a standalone link with a count badge, and it moves focus to the recordings heading.
 
-<DemoSectionBarGuide />
+<DemoSectionBarGuide frame="scroll" />
 
 [See Demo](./demos/guide/)
 

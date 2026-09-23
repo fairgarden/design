@@ -127,7 +127,7 @@
     --gray11: #b4b4b4;
     --gray12: #eeeeee;
     --gray-contrast: #fff;
-    --gray-hover: var(--gray10);
+    --gray-hover: var(--gray8);
     --green1: #0e1512;
     --green2: #121b17;
     --green3: #132d21;
@@ -155,7 +155,7 @@
     --indigo11: #9eb1ff;
     --indigo12: #d6e1ff;
     --indigo-contrast: #fff;
-    --indigo-hover: var(--indigo10);
+    --indigo-hover: var(--indigo8);
     --iris1: #13131e;
     --iris2: #171625;
     --iris3: #202248;
@@ -169,7 +169,7 @@
     --iris11: #b1a9ff;
     --iris12: #e0dffe;
     --iris-contrast: #fff;
-    --iris-hover: var(--iris10);
+    --iris-hover: var(--iris8);
     --jade1: #0d1512;
     --jade2: #121c18;
     --jade3: #0f2e22;
@@ -211,7 +211,7 @@
     --mauve11: #b5b2bc;
     --mauve12: #eeeef0;
     --mauve-contrast: #fff;
-    --mauve-hover: var(--mauve10);
+    --mauve-hover: var(--mauve8);
     --mint1: #0e1515;
     --mint2: #0f1b1b;
     --mint3: #092c2b;
@@ -239,7 +239,7 @@
     --olive11: #afb5ad;
     --olive12: #eceeec;
     --olive-contrast: #fff;
-    --olive-hover: var(--olive10);
+    --olive-hover: var(--olive8);
     --orange1: #17120e;
     --orange2: #1e160f;
     --orange3: #331e0b;
@@ -281,7 +281,7 @@
     --plum11: #e796f3;
     --plum12: #f4d4f4;
     --plum-contrast: #fff;
-    --plum-hover: var(--plum10);
+    --plum-hover: var(--plum8);
     --purple1: #18111b;
     --purple2: #1e1523;
     --purple3: #301c3b;
@@ -295,7 +295,7 @@
     --purple11: #d19dff;
     --purple12: #ecd9fa;
     --purple-contrast: #fff;
-    --purple-hover: var(--purple10);
+    --purple-hover: var(--purple8);
     --red1: #191111;
     --red2: #201314;
     --red3: #3b1219;
@@ -337,7 +337,7 @@
     --sage11: #adb5b2;
     --sage12: #eceeed;
     --sage-contrast: #fff;
-    --sage-hover: var(--sage10);
+    --sage-hover: var(--sage8);
     --sand1: #111110;
     --sand2: #191918;
     --sand3: #222221;
@@ -351,7 +351,7 @@
     --sand11: #b5b3ad;
     --sand12: #eeeeec;
     --sand-contrast: #fff;
-    --sand-hover: var(--sand10);
+    --sand-hover: var(--sand8);
     --sky1: #0d141f;
     --sky2: #111a27;
     --sky3: #112840;
@@ -379,7 +379,7 @@
     --slate11: #b0b4ba;
     --slate12: #edeef0;
     --slate-contrast: #fff;
-    --slate-hover: var(--slate10);
+    --slate-hover: var(--slate8);
     --teal1: #0d1514;
     --teal2: #111c1b;
     --teal3: #0d2d2a;
@@ -421,7 +421,7 @@
     --violet11: #baa7ff;
     --violet12: #e2ddfe;
     --violet-contrast: #fff;
-    --violet-hover: var(--violet10);
+    --violet-hover: var(--violet8);
     --yellow1: #14120b;
     --yellow2: #1b180f;
     --yellow3: #2d2305;

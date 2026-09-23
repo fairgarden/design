@@ -47,7 +47,7 @@
     --sage11: #adb5b2;
     --sage12: #eceeed;
     --sage-contrast: #fff;
-    --sage-hover: var(--sage10);
+    --sage-hover: var(--sage8);
 
     @media (color-gamut: p3) {
       --sage1: color(display-p3 0.064 0.07 0.067);

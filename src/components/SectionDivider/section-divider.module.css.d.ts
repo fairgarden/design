@@ -1,6 +1,7 @@
 declare const styles: {
   readonly "base": string;
   readonly "dot": string;
+  readonly "dotLine": string;
   readonly "dots": string;
   readonly "fallback": string;
   readonly "fringe": string;

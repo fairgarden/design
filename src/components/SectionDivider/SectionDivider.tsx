@@ -137,7 +137,7 @@ function DotRun() {
   return (
     <span className={styles.run}>
       <svg className={styles.dots} aria-hidden="true" focusable="false">
-        <line x1="0" y1="50%" x2="100%" y2="50%" />
+        <line className={styles.dotLine} x1="0" y1="50%" x2="100%" y2="50%" />
       </svg>
     </span>
   )

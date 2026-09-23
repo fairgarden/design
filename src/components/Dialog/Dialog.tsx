@@ -31,7 +31,8 @@ import styles from './dialog.module.css'
  *   panel's scope. `dialogBackdrop`: `covered` → `covered`.
  * - Compound variants: none. Defaults: `wide: false`; color axes: none.
  * - Color fallback: the panel takes the `white` preset's defaults; explicit
- *   props apply inside it. Actions are §9.2 Buttons.
+ *   props apply inside it. Actions are §9.2 Buttons; a destructive one
+ *   takes `destructive` [D192].
  * - States: Popup data-starting-style / data-ending-style → the clip reveal,
  *   instant under --motionNotOK [D91]; data-nested-dialog-open → the lower
  *   dialog stays visible, framed and inert, never dimmed; body
@@ -357,8 +358,10 @@ export type DialogActionsProps = useRender.ComponentProps<'div'>
 
 /**
  * The action bar: a `solid` Button first, then its outline twin, each
- * hugging its label. Stacked and docked at the bottom of the sheet below
- * --md-n-above; one row from it [D106].
+ * hugging its label. A destructive action (Delete, Remove, Discard) takes
+ * Button `destructive`, drawn in the danger (red) roles [D192]. Stacked
+ * and docked at the bottom of the sheet below --md-n-above; one row from
+ * it [D106].
  */
 export function DialogActions(props: DialogActionsProps) {
   const { render, ref, className, ...rest } = props

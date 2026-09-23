@@ -49,7 +49,13 @@ type toast = toast;
 An action cell's button props: its label (`children`, title case), `onClick`, `aria-busy` …
 
 ```typescript
-type ToastAction = Omit<React.ComponentPropsWithoutRef<'button'>, 'className' | 'style'>;
+type ToastAction = {
+  /**
+   * A destructive action ("Discard Notes"): the label takes the danger ink,
+   * --role-danger-text [D192]. Default `false`.
+   */
+  destructive?: boolean;
+};
 ```
 
 ### ToastData
@@ -99,6 +105,7 @@ type ToastOptions = {
    * Action cells: full-height `type-button` text cells with title-case
    * labels ("Undo", "View Order"). A toast with actions persists. While an
    * action runs, update it with `aria-busy` and an "-ing…" label ("Undoing…").
+   * A destructive action sets `destructive`, which draws its label red [D192].
    */
   actions?: ToastAction[];
   /**

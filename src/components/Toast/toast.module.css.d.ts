@@ -1,5 +1,6 @@
 declare const styles: {
   readonly "action": string;
+  readonly "actionDestructive": string;
   readonly "actions": string;
   readonly "base": string;
   readonly "close": string;

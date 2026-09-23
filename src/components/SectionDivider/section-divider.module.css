@@ -1,9 +1,9 @@
 /*
  * Section Divider & Shaped Edge (§11.2) [D172, D179, D189]. CVA function
  * `sectionDivider` in SectionDivider.tsx. Parts: base, rule (the Separator),
- * ornament (the pause; with run, dots, segment, dot and star), shape (the
- * hill's host; its ::before is the curve), fringe (the tick row, composing
- * ornament-fringe), fallback (the print and forced-colors rule). Colors
+ * ornament (the pause; with run, dots, dotLine, segment, dot and star),
+ * shape (the hill's host; its ::before is the curve), fringe (the tick row,
+ * composing ornament-fringe), fallback (the print and forced-colors rule). Colors
  * follow the §11.2 Color roles table through role variables only; local
  * custom properties carry dimensions only.
  *
@@ -23,7 +23,9 @@
   composes: lineSolid from '../../utils/line.module.css';
 }
 
-.dots {
+/* On the run's <line>, never its <svg> box: the class's border fallback
+   would draw a dotted frame around the box (§4.8.3 dots are SVG). */
+.dotLine {
   composes: lineDotted from '../../utils/line.module.css';
 }
 
@@ -76,6 +78,9 @@
     inline-size: calc(round(down, 100% - var(--ds-dot), var(--ds-dot-pitch)) + var(--ds-dot));
     block-size: var(--ds-dot);
     overflow: visible;
+  }
+
+  .dotLine {
     fill: none;
     stroke: currentColor;
     stroke-dashoffset: calc(var(--ds-dot) / -2);

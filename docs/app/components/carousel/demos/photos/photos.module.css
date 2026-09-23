@@ -1,0 +1,6 @@
+/* The carousel is an inline-size container, so it cannot size to its
+   content: the demo gives it the full width of the preview. */
+.frame {
+  inline-size: 100%;
+  min-inline-size: 0;
+}

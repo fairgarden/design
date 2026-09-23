@@ -5,6 +5,9 @@
  * No mode logic: the Radix variables resolve to whatever mode is in effect.
  * action<Scale> publishes a scope's action scale: Ground, and the overlay
  * roots that declare their own scope, so a popup never inherits the root's.
+ * --secondary-light-mark: the light-scope mark on step 9, the scale's own
+ * contrast ink where it carries text, else `initial` so the role maps fall
+ * back to --primary12 (§1.4.7).
  */
 @layer scales {
   .primaryAmber {
@@ -549,6 +552,7 @@
     --secondary12: var(--amber12);
     --secondary-contrast: var(--amber-contrast);
     --secondary-hover: var(--amber-hover);
+    --secondary-light-mark: var(--secondary-contrast);
   }
 
   .secondaryBlue {
@@ -566,6 +570,7 @@
     --secondary12: var(--blue12);
     --secondary-contrast: var(--blue-contrast);
     --secondary-hover: var(--blue-hover);
+    --secondary-light-mark: initial;
   }
 
   .secondaryBronze {
@@ -583,6 +588,7 @@
     --secondary12: var(--bronze12);
     --secondary-contrast: var(--bronze-contrast);
     --secondary-hover: var(--bronze-hover);
+    --secondary-light-mark: initial;
   }
 
   .secondaryBrown {
@@ -600,6 +606,7 @@
     --secondary12: var(--brown12);
     --secondary-contrast: var(--brown-contrast);
     --secondary-hover: var(--brown-hover);
+    --secondary-light-mark: initial;
   }
 
   .secondaryCrimson {
@@ -617,6 +624,7 @@
     --secondary12: var(--crimson12);
     --secondary-contrast: var(--crimson-contrast);
     --secondary-hover: var(--crimson-hover);
+    --secondary-light-mark: initial;
   }
 
   .secondaryCyan {
@@ -634,6 +642,7 @@
     --secondary12: var(--cyan12);
     --secondary-contrast: var(--cyan-contrast);
     --secondary-hover: var(--cyan-hover);
+    --secondary-light-mark: initial;
   }
 
   .secondaryGold {
@@ -651,6 +660,7 @@
     --secondary12: var(--gold12);
     --secondary-contrast: var(--gold-contrast);
     --secondary-hover: var(--gold-hover);
+    --secondary-light-mark: initial;
   }
 
   .secondaryGrass {
@@ -668,6 +678,7 @@
     --secondary12: var(--grass12);
     --secondary-contrast: var(--grass-contrast);
     --secondary-hover: var(--grass-hover);
+    --secondary-light-mark: initial;
   }
 
   .secondaryGray {
@@ -685,6 +696,7 @@
     --secondary12: var(--gray12);
     --secondary-contrast: var(--gray-contrast);
     --secondary-hover: var(--gray-hover);
+    --secondary-light-mark: var(--secondary-contrast);
   }
 
   .secondaryGreen {
@@ -702,6 +714,7 @@
     --secondary12: var(--green12);
     --secondary-contrast: var(--green-contrast);
     --secondary-hover: var(--green-hover);
+    --secondary-light-mark: initial;
   }
 
   .secondaryIndigo {
@@ -719,6 +732,7 @@
     --secondary12: var(--indigo12);
     --secondary-contrast: var(--indigo-contrast);
     --secondary-hover: var(--indigo-hover);
+    --secondary-light-mark: var(--secondary-contrast);
   }
 
   .secondaryIris {
@@ -736,6 +750,7 @@
     --secondary12: var(--iris12);
     --secondary-contrast: var(--iris-contrast);
     --secondary-hover: var(--iris-hover);
+    --secondary-light-mark: var(--secondary-contrast);
   }
 
   .secondaryJade {
@@ -753,6 +768,7 @@
     --secondary12: var(--jade12);
     --secondary-contrast: var(--jade-contrast);
     --secondary-hover: var(--jade-hover);
+    --secondary-light-mark: initial;
   }
 
   .secondaryLime {
@@ -770,6 +786,7 @@
     --secondary12: var(--lime12);
     --secondary-contrast: var(--lime-contrast);
     --secondary-hover: var(--lime-hover);
+    --secondary-light-mark: var(--secondary-contrast);
   }
 
   .secondaryMauve {
@@ -787,6 +804,7 @@
     --secondary12: var(--mauve12);
     --secondary-contrast: var(--mauve-contrast);
     --secondary-hover: var(--mauve-hover);
+    --secondary-light-mark: var(--secondary-contrast);
   }
 
   .secondaryMint {
@@ -804,6 +822,7 @@
     --secondary12: var(--mint12);
     --secondary-contrast: var(--mint-contrast);
     --secondary-hover: var(--mint-hover);
+    --secondary-light-mark: var(--secondary-contrast);
   }
 
   .secondaryOlive {
@@ -821,6 +840,7 @@
     --secondary12: var(--olive12);
     --secondary-contrast: var(--olive-contrast);
     --secondary-hover: var(--olive-hover);
+    --secondary-light-mark: var(--secondary-contrast);
   }
 
   .secondaryOrange {
@@ -838,6 +858,7 @@
     --secondary12: var(--orange12);
     --secondary-contrast: var(--orange-contrast);
     --secondary-hover: var(--orange-hover);
+    --secondary-light-mark: initial;
   }
 
   .secondaryPink {
@@ -855,6 +876,7 @@
     --secondary12: var(--pink12);
     --secondary-contrast: var(--pink-contrast);
     --secondary-hover: var(--pink-hover);
+    --secondary-light-mark: initial;
   }
 
   .secondaryPlum {
@@ -872,6 +894,7 @@
     --secondary12: var(--plum12);
     --secondary-contrast: var(--plum-contrast);
     --secondary-hover: var(--plum-hover);
+    --secondary-light-mark: var(--secondary-contrast);
   }
 
   .secondaryPurple {
@@ -889,6 +912,7 @@
     --secondary12: var(--purple12);
     --secondary-contrast: var(--purple-contrast);
     --secondary-hover: var(--purple-hover);
+    --secondary-light-mark: var(--secondary-contrast);
   }
 
   .secondaryRed {
@@ -906,6 +930,7 @@
     --secondary12: var(--red12);
     --secondary-contrast: var(--red-contrast);
     --secondary-hover: var(--red-hover);
+    --secondary-light-mark: initial;
   }
 
   .secondaryRuby {
@@ -923,6 +948,7 @@
     --secondary12: var(--ruby12);
     --secondary-contrast: var(--ruby-contrast);
     --secondary-hover: var(--ruby-hover);
+    --secondary-light-mark: initial;
   }
 
   .secondarySage {
@@ -940,6 +966,7 @@
     --secondary12: var(--sage12);
     --secondary-contrast: var(--sage-contrast);
     --secondary-hover: var(--sage-hover);
+    --secondary-light-mark: var(--secondary-contrast);
   }
 
   .secondarySand {
@@ -957,6 +984,7 @@
     --secondary12: var(--sand12);
     --secondary-contrast: var(--sand-contrast);
     --secondary-hover: var(--sand-hover);
+    --secondary-light-mark: var(--secondary-contrast);
   }
 
   .secondarySky {
@@ -974,6 +1002,7 @@
     --secondary12: var(--sky12);
     --secondary-contrast: var(--sky-contrast);
     --secondary-hover: var(--sky-hover);
+    --secondary-light-mark: var(--secondary-contrast);
   }
 
   .secondarySlate {
@@ -991,6 +1020,7 @@
     --secondary12: var(--slate12);
     --secondary-contrast: var(--slate-contrast);
     --secondary-hover: var(--slate-hover);
+    --secondary-light-mark: var(--secondary-contrast);
   }
 
   .secondaryTeal {
@@ -1008,6 +1038,7 @@
     --secondary12: var(--teal12);
     --secondary-contrast: var(--teal-contrast);
     --secondary-hover: var(--teal-hover);
+    --secondary-light-mark: initial;
   }
 
   .secondaryTomato {
@@ -1025,6 +1056,7 @@
     --secondary12: var(--tomato12);
     --secondary-contrast: var(--tomato-contrast);
     --secondary-hover: var(--tomato-hover);
+    --secondary-light-mark: initial;
   }
 
   .secondaryViolet {
@@ -1042,6 +1074,7 @@
     --secondary12: var(--violet12);
     --secondary-contrast: var(--violet-contrast);
     --secondary-hover: var(--violet-hover);
+    --secondary-light-mark: var(--secondary-contrast);
   }
 
   .secondaryYellow {
@@ -1059,6 +1092,7 @@
     --secondary12: var(--yellow12);
     --secondary-contrast: var(--yellow-contrast);
     --secondary-hover: var(--yellow-hover);
+    --secondary-light-mark: var(--secondary-contrast);
   }
 
   .actionAmber {

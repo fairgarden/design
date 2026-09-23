@@ -14,6 +14,7 @@ import {
 } from '@fairgarden-private/design/components/AlertDialog'
 import styles from './statuses.module.css'
 
+/** Two destructive confirms, danger and warning: each trigger and confirm is a `destructive` Button, so both are red. */
 export function AlertDialogStatuses() {
   const [deleteOpen, setDeleteOpen] = React.useState(false)
   const [discardOpen, setDiscardOpen] = React.useState(false)
@@ -39,7 +40,9 @@ export function AlertDialogStatuses() {
             if (!deleting) setDeleteOpen(open)
           }}
         >
-          <AlertDialogTrigger variant="outline">Delete Photos</AlertDialogTrigger>
+          <AlertDialogTrigger variant="outline" destructive>
+            Delete Photos
+          </AlertDialogTrigger>
           <AlertDialogPopup status="danger">
             <AlertDialogBody>
               <AlertDialogTitle>Delete 3 photos?</AlertDialogTitle>
@@ -48,7 +51,7 @@ export function AlertDialogStatuses() {
               </AlertDialogDescription>
             </AlertDialogBody>
             <AlertDialogActions>
-              <Button variant="solid" aria-busy={deleting} onClick={deletePhotos}>
+              <Button variant="solid" destructive aria-busy={deleting} onClick={deletePhotos}>
                 {deleting ? 'Deleting…' : 'Delete 3 Photos'}
               </Button>
               <AlertDialogCancel disabled={deleting}>Keep Photos</AlertDialogCancel>
@@ -57,7 +60,9 @@ export function AlertDialogStatuses() {
         </AlertDialog>
 
         <AlertDialog open={discardOpen} onOpenChange={setDiscardOpen}>
-          <AlertDialogTrigger variant="outline">Discard Changes</AlertDialogTrigger>
+          <AlertDialogTrigger variant="outline" destructive>
+            Discard Changes
+          </AlertDialogTrigger>
           <AlertDialogPopup status="warning">
             <AlertDialogBody>
               <AlertDialogTitle>Discard your edits to Ridge Loop?</AlertDialogTitle>
@@ -68,6 +73,7 @@ export function AlertDialogStatuses() {
             <AlertDialogActions>
               <Button
                 variant="solid"
+                destructive
                 onClick={() => {
                   setDiscardOpen(false)
                   setLog('Discarded the edits to Ridge Loop.')

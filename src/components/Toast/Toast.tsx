@@ -41,7 +41,9 @@ import styles from './toast.module.css'
  *   data-type is not styled. Action :hover → label --role-link-hover, as
  *   the §9.2 `text` Button (underlined where that is --primary12) [D181],
  *   :focus-visible → ring inside the cell, :active → the inverse pair,
- *   aria-busy → "Undoing…" at rest width. Close is an icon-only Button.
+ *   aria-busy → "Undoing…" at rest width; a `destructive` action's label
+ *   is --role-danger-text, underlined on hover [D192]. Close is an
+ *   icon-only Button.
  * - Parts: viewport (the docked bar's host), base (a toast, the bar), glyph,
  *   message, title, description, queue, actions, action, close.
  * - Scope: the viewport renders in its Base UI Portal and declares a nested
@@ -62,7 +64,13 @@ export type ToastStatus = Status
 const TOAST_DURATION = 6000
 
 /** An action cell's button props: its label (`children`, title case), `onClick`, `aria-busy` … */
-export type ToastAction = Omit<React.ComponentPropsWithoutRef<'button'>, 'className' | 'style'>
+export type ToastAction = Omit<React.ComponentPropsWithoutRef<'button'>, 'className' | 'style'> & {
+  /**
+   * A destructive action ("Discard Notes"): the label takes the danger ink,
+   * --role-danger-text [D192]. Default `false`.
+   */
+  destructive?: boolean
+}
 
 /** What the system keeps on each toast's `data`. */
 export interface ToastData {
@@ -87,6 +95,7 @@ export interface ToastOptions {
    * Action cells: full-height `type-button` text cells with title-case
    * labels ("Undo", "View Order"). A toast with actions persists. While an
    * action runs, update it with `aria-busy` and an "-ing…" label ("Undoing…").
+   * A destructive action sets `destructive`, which draws its label red [D192].
    */
   actions?: ToastAction[]
   /**
@@ -308,7 +317,7 @@ function ToastItem(props: { toast: BaseToastObject; position: number; total: num
 
 /** An action cell: holds its rest width while busy and ignores presses then [D84]. */
 function ToastActionCell(props: ToastAction) {
-  const { onClick, disabled, ...rest } = props
+  const { onClick, disabled, destructive, ...rest } = props
   const busy = rest['aria-busy'] === true || rest['aria-busy'] === 'true'
   const element = React.useRef<HTMLButtonElement | null>(null)
   const restWidth = React.useRef<number | null>(null)
@@ -333,7 +342,7 @@ function ToastActionCell(props: ToastAction) {
       {...rest}
       ref={element}
       disabled={disabled}
-      className={styles.action}
+      className={cx(styles.action, destructive ? styles.actionDestructive : undefined)}
       onClick={busy ? undefined : onClick}
     />
   )

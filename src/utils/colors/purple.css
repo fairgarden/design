@@ -47,7 +47,7 @@
     --purple11: #d19dff;
     --purple12: #ecd9fa;
     --purple-contrast: #fff;
-    --purple-hover: var(--purple10);
+    --purple-hover: var(--purple8);
 
     @media (color-gamut: p3) {
       --purple1: color(display-p3 0.09 0.068 0.103);
@@ -80,7 +80,7 @@
       --purple11: #d19dff;
       --purple12: #ecd9fa;
       --purple-contrast: #fff;
-      --purple-hover: var(--purple10);
+      --purple-hover: var(--purple8);
 
       @media (color-gamut: p3) {
         --purple1: color(display-p3 0.09 0.068 0.103);

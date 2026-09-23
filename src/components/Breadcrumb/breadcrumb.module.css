@@ -104,8 +104,12 @@
     min-inline-size: 0;
   }
 
+  /* --ds-size-hit tall in the flow (§9.8 States: the ring is hit-tall on the
+     parent link), like the nav crumbs, so no hit area hangs outside the nav
+     and a clipping host never scrolls. */
   .parentLink {
     max-inline-size: 100%;
+    min-block-size: var(--ds-size-hit);
   }
 
   /* The cap is the container width less the glyph and the Button's gap; the

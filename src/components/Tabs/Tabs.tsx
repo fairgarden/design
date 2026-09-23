@@ -90,7 +90,10 @@ type TabsVariantProps =
        * The current cell takes the `--role-select` fill, a `--role-select-edge`
        * edge and a `--role-select-mark` label. Pass it on the light presets
        * only (paper, white); deep and saturated grounds mark the current cell
-       * by the bar and weight alone. Default `false`.
+       * by the bar and weight alone. The label follows the secondary: its own
+       * contrast ink where that carries text on step 9, else `--primary12`
+       * (§1.4.7). Don't pass it with a crimson, gold, pink, red, ruby or tomato
+       * secondary, whose step 9 carries no words. Default `false`.
        */
       filled?: boolean
     }
@@ -104,8 +107,10 @@ export type TabsProps = Omit<BaseTabs.Root.Props, 'orientation'> &
      */
     primary?: TabsVariants['primary']
     /**
-     * Secondary Radix scale: only the segmented current cell under `filled`.
-     * Keep it equal to the brand strip's scale so strip and cell join.
+     * Secondary Radix scale: only the segmented current cell under `filled`,
+     * whose label takes the scale's own contrast ink where it carries text
+     * (indigo's `--indigo1`), else `--primary12`. Keep it equal to the brand
+     * strip's scale so strip and cell join.
      */
     secondary?: TabsVariants['secondary']
   }

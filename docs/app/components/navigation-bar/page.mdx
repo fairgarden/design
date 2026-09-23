@@ -18,9 +18,9 @@ import { DemoNavigationBarHeader } from './demos/header'
 
 <DemoNavigationBarHeader.Title />
 
-From `--ds-nav-inline-n-above` (1024 px by default, a build-time custom media) the inline menu and the 36 px utility row show. Below it they are replaced by the drawer's menu Button, and the utility links move to the drawer footer. Items never wrap. At the threshold the logo, items, search, action and gaps must fit the content container (944 px at 1024 px). Overflow goes to the utility row, then to a final "More" item with a `dropdown` panel, never a hamburger. A site over budget sets the custom media to 1440 px. Below 360 px the action moves into the drawer.
+From `--ds-nav-inline-n-above` (1024 px by default, a build-time custom media) the inline menu and the 36 px utility row show. Below it they are replaced by the drawer's menu Button, and the utility links move to the drawer footer. Items never wrap. At the threshold the logo, items, search, action and gaps must fit the content container (944 px at 1024 px). Overflow goes to the utility row, then to a final "More" item with a `dropdown` panel, never a hamburger. A site over budget sets the custom media to 1440 px. Below 480 px the bar keeps the logo, the search trigger and the menu Button, and the action moves to the top of the drawer footer; below 360 px the "Menu" label drops to the icon.
 
-<DemoNavigationBarHeader />
+<DemoNavigationBarHeader frame />
 
 [See Demo](./demos/header/)
 

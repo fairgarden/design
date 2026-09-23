@@ -15,7 +15,7 @@
     --olive11: #afb5ad;
     --olive12: #eceeec;
     --olive-contrast: #fff;
-    --olive-hover: var(--olive10);
+    --olive-hover: var(--olive8);
 
     @media (color-gamut: p3) {
       --olive1: color(display-p3 0.067 0.07 0.063);

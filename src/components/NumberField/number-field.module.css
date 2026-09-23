@@ -107,9 +107,18 @@
     white-space: nowrap;
   }
 
-  /* With a unit, the value ends at the unit, so "12 kg" reads as one run. */
-  .group:has(.affix) .input {
-    padding-inline: 0;
+  /*
+   * With a unit, the value meets the unit, so "12 kg" and "$ 50" read as
+   * one run: only the side that meets the unit loses its padding; the side
+   * facing the box edge or a step cell keeps the --ds-space-12 inset (§10.1).
+   */
+  .affix + .input {
+    padding-inline-start: 0;
+    text-align: start;
+  }
+
+  .input:has(+ .affix) {
+    padding-inline-end: 0;
     text-align: end;
   }
 
@@ -222,8 +231,12 @@
     border-inline-start-width: var(--border-size-1);
   }
 
-  /* Amount: no steppers; the value in type-itemhead with lining tabular figures, from the start. */
-  .amount .input {
+  /*
+   * Amount: no steppers; the value in type-itemhead with lining tabular
+   * figures, from the start (after the box's --ds-space-12 inset), or
+   * against its suffix.
+   */
+  .amount .input:not(:has(+ .affix)) {
     text-align: start;
   }
 

@@ -230,6 +230,31 @@
     border-radius: var(--radius-1);
   }
 
+  /*
+   * Destructive [D192]: the danger roles replace the action and primary
+   * inks. Solid: the danger fill, label and edge; outline: the danger edge
+   * and text; text: the danger text with its glyph in the danger edge ink
+   * (≥ 3:1, and the one red cue where the label falls back to --primary12).
+   */
+  .solidDestructive {
+    border-color: var(--role-danger-edge);
+    background-color: var(--role-danger);
+    color: var(--role-danger-label);
+  }
+
+  .outlineDestructive {
+    border-color: var(--role-danger-edge);
+    color: var(--role-danger-text);
+  }
+
+  .textDestructive {
+    color: var(--role-danger-text);
+  }
+
+  .textDestructive .icon {
+    color: var(--role-danger-edge);
+  }
+
   /* Icon-only butted: keeps the §10.3 cell instead of the circle. */
   .iconOnlyButtedStart,
   .iconOnlyButtedEnd {
@@ -272,6 +297,25 @@
     color: var(--role-link-hover);
     text-decoration-line: var(--ds-link-hover-line);
     text-decoration-color: var(--role-accent);
+  }
+
+  /*
+   * Destructive hover [D192]: the solid fill moves to --role-danger-hover
+   * (light --danger12: the lighter 10 would drop the label to 4.28:1;
+   * dark --danger10); the text label keeps the danger ink and takes the
+   * underline; every destructive underline is drawn in the label's ink.
+   */
+  .solidDestructive:not([data-disabled], [aria-busy='true']):hover {
+    background-color: var(--role-danger-hover);
+  }
+
+  .textDestructive:not([data-disabled], [aria-busy='true']):hover .label {
+    color: var(--role-danger-text);
+    text-decoration-line: underline;
+  }
+
+  .destructive:not([data-disabled], [aria-busy='true']):hover .label {
+    text-decoration-color: currentColor;
   }
 
   /*

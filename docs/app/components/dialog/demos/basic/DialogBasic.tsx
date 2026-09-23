@@ -3,6 +3,16 @@
 import * as React from 'react'
 import { Button } from '@fairgarden-private/design/components/Button'
 import {
+  AlertDialog,
+  AlertDialogActions,
+  AlertDialogBody,
+  AlertDialogCancel,
+  AlertDialogDescription,
+  AlertDialogPopup,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@fairgarden-private/design/components/AlertDialog'
+import {
   Dialog,
   DialogActions,
   DialogBody,
@@ -16,18 +26,28 @@ import {
 } from '@fairgarden-private/design/components/Dialog'
 import styles from './basic.module.css'
 
+/**
+ * A rename task. Its destructive action, Delete Trail, is a `destructive`
+ * text Button that opens an alert over the dialog, whose confirm is red too.
+ */
 export function DialogBasic() {
   const [name, setName] = React.useState('Ridge Loop')
   const [draft, setDraft] = React.useState(name)
+  const [open, setOpen] = React.useState(false)
+  const [deleted, setDeleted] = React.useState(false)
 
   return (
     <div className={styles.stack}>
       <Dialog
-        onOpenChange={(open) => {
-          if (open) setDraft(name)
+        open={open}
+        onOpenChange={(next) => {
+          if (next) setDraft(name)
+          setOpen(next)
         }}
       >
-        <DialogTrigger variant="outline">Rename Trail</DialogTrigger>
+        <DialogTrigger variant="outline" disabled={deleted}>
+          Rename Trail
+        </DialogTrigger>
         <DialogPopup>
           <DialogTopBar>
             <DialogEyebrow>Trail 12</DialogEyebrow>
@@ -56,11 +76,42 @@ export function DialogBasic() {
               }
             />
             <DialogClose render={<Button variant="outline">Cancel</Button>} />
+            <AlertDialog>
+              <AlertDialogTrigger variant="text" destructive>
+                Delete Trail
+              </AlertDialogTrigger>
+              <AlertDialogPopup status="danger">
+                <AlertDialogBody>
+                  <AlertDialogTitle>Delete {name}?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    It leaves the map and the printed guide for everyone.
+                  </AlertDialogDescription>
+                </AlertDialogBody>
+                <AlertDialogActions>
+                  <Button
+                    variant="solid"
+                    destructive
+                    onClick={() => {
+                      setDeleted(true)
+                      setOpen(false)
+                    }}
+                  >
+                    Delete Trail
+                  </Button>
+                  <AlertDialogCancel>Keep Trail</AlertDialogCancel>
+                </AlertDialogActions>
+              </AlertDialogPopup>
+            </AlertDialog>
           </DialogActions>
         </DialogPopup>
       </Dialog>
+      {deleted ? (
+        <Button variant="text" onClick={() => setDeleted(false)}>
+          Restore Trail
+        </Button>
+      ) : null}
       <p className={styles.status} aria-live="polite">
-        Current name: {name}
+        {deleted ? `Deleted ${name}.` : `Current name: ${name}`}
       </p>
     </div>
   )

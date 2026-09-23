@@ -37,6 +37,9 @@ import styles from './alert-dialog.module.css'
  *   color axes: none.
  * - Color fallback: the panel takes the `white` preset's defaults; the
  *   glyph's secondary is the status scale (warning amber, danger red) [D129].
+ *   A confirm that destroys (every danger alert's, and any Delete, Remove
+ *   or Discard) is a `solid` Button with `destructive`: the danger fill
+ *   [D192].
  * - States: as Dialog. Focus opens on the least destructive action
  *   (AlertDialogCancel); Esc means Cancel; outside presses never dismiss.
  * - Parts: base (the panel, with the Dialog's base), glyph.
@@ -87,7 +90,8 @@ export type AlertDialogPopupProps = Omit<DialogPopupProps, 'wide'> & {
   /**
    * Required (no default): `warning` draws ▲ with !, `danger` ◆ with ×, at
    * the block tier above the title [D58]. The glyph and the words carry the
-   * seriousness, never a red fill.
+   * seriousness; a destructive confirm adds the red fill (Button
+   * `destructive`) [D192].
    */
   status: AlertDialogStatus
   /** The glyph's accessible name; defaults to the English status word. */
@@ -173,7 +177,9 @@ export type AlertDialogActionsProps = DialogActionsProps
 
 /**
  * The action bar: the confirming `solid` Button first ("Delete 3 Photos",
- * "Deleting…" while busy), then `AlertDialogCancel`. Stacked below
+ * "Deleting…" while busy), then `AlertDialogCancel`. A confirm that
+ * destroys (every `danger` alert's, and any Delete, Remove or Discard)
+ * takes `destructive`, the danger fill [D192]. Stacked below
  * --md-n-above, one row from it.
  */
 export function AlertDialogActions(props: AlertDialogActionsProps) {

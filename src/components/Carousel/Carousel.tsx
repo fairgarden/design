@@ -122,8 +122,9 @@ interface CarouselCommonProps extends Omit<React.ComponentPropsWithRef<'section'
 interface CarouselCardsProps extends CarouselCommonProps {
   /**
    * `cards`: §12.2 cards, 2 portrait + peek (1 + peek below 360 px of
-   * container). `photos`: captioned figures at ≈ 88%, and from 1024 px a
-   * fixed 480 px strip whose slides keep their photos' own ratios.
+   * container). `photos`: captioned figures at ≈ 88%, each photo at most
+   * 480 px tall, and from 1024 px a fixed 480 px strip whose slides keep
+   * their photos' own ratios.
    */
   kind: 'cards'
   /**

@@ -11,7 +11,7 @@ const birds = [
   { value: 'Veery', secondaryName: 'Catharus fuscescens' },
 ]
 
-/** The guide bar: search at the start, the centred breadcrumb, the Listen jump at the end. */
+/** The guide bar: search at the start, the centred breadcrumb, Jump to and the Listen jump at the end. */
 export function SectionBarGuide() {
   const [docked, setDocked] = React.useState(false)
 

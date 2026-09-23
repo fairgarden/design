@@ -61,7 +61,7 @@ export function FormStates() {
         </Field>
       </FormRow>
       <FormActions>
-        <Button type="reset" size="lg">
+        <Button type="reset" size="lg" destructive>
           Clear
         </Button>
         <Button type="submit" variant="solid" size="lg" aria-busy={busy || undefined}>

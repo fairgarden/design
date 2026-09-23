@@ -47,7 +47,7 @@
     --plum11: #e796f3;
     --plum12: #f4d4f4;
     --plum-contrast: #fff;
-    --plum-hover: var(--plum10);
+    --plum-hover: var(--plum8);
 
     @media (color-gamut: p3) {
       --plum1: color(display-p3 0.09 0.068 0.092);

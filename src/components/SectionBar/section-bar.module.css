@@ -62,9 +62,12 @@
     min-block-size: var(--ds-size-hit);
   }
 
+  /* A 1 px line the bar overlaps: a zero-height target at the viewport's
+     top edge can read as outside it and never report leaving. */
   .sentinel {
     display: block;
-    block-size: 0;
+    block-size: var(--border-size-1);
+    margin-block-end: calc(-1 * var(--border-size-1));
   }
 
   /* The optional top rule: --border-size-2 in the brand green, like the strip. */
@@ -428,7 +431,14 @@
     display: none;
   }
 
-  /* Guide (from --md-n-above): search at the start, the breadcrumb centred, the tools at the end. */
+  /* Guide at base: the end group lets Jump to and listen join the row, so
+     Jump to keeps its 30% of the bar beside the title. */
+  .guide .end {
+    display: contents;
+  }
+
+  /* Guide (from --md-n-above): search at the start, the breadcrumb centred
+     between equal start and end groups, Jump to and the tools at the end. */
   @media (--md-n-above) {
     .guide .search {
       display: flex;
@@ -448,11 +458,18 @@
     }
 
     .guide .end {
+      display: flex;
       flex: 1 1 0;
+      align-self: stretch;
       justify-content: flex-end;
     }
 
+    /* Full height, so its indicator stays flush with the bottom rule; up to
+       --size-px-13 of the end group (at most 30% of the bar, since the group
+       is under half of it past the centred breadcrumb). */
     .guide .jumpTrigger {
+      align-self: stretch;
+      max-inline-size: none;
       margin-inline-start: 0;
     }
   }

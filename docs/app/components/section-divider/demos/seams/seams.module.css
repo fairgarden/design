@@ -3,15 +3,17 @@
   inline-size: 100%;
 }
 
-/* A §11.1 band: --ds-space-section block padding, the container inside. */
+/* A §11.1 band: --ds-space-section block padding, the reading column inside. */
 .band {
   padding-block: var(--ds-space-section);
 }
 
-.container {
+/* The band's reading column: the page margin, then at most one measure,
+   so a pause centres on the text it breaks. */
+.column {
   display: grid;
   gap: var(--size-px-3);
-  inline-size: min(100% - 2 * var(--ds-space-margin), var(--ds-container-content));
+  inline-size: min(100% - 2 * var(--ds-space-margin), var(--ds-measure-reading));
   margin-inline: auto;
 }
 

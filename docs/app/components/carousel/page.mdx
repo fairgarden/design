@@ -26,7 +26,7 @@ import { DemoCarouselPhotos } from './demos/photos'
 
 <DemoCarouselPhotos.Title />
 
-`kind="photos"` holds `CarouselPhoto`s: a photo figure whose caption stays visible, right-flush. Below 1024 px of container each slide is about 88% of the track. From 1024 px the carousel becomes a fixed strip: a 480 px track height, each slide as wide as its photo at that height (from `ratio`), so nothing is cropped, with 12 px gaps.
+`kind="photos"` holds `CarouselPhoto`s: a photo figure whose caption stays visible, right-flush. Below 1024 px of container each slide is about 88% of the track, and its photo stops at 480 px tall: a portrait photo narrows to its own ratio at that height, uncropped, with its caption under it. From 1024 px the carousel becomes a fixed strip: a 480 px track height, each slide as wide as its photo at that height (from `ratio`), so nothing is cropped, with 12 px gaps.
 
 <DemoCarouselPhotos />
 

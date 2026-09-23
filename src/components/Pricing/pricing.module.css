@@ -257,6 +257,12 @@
     font-weight: var(--font-weight-6);
   }
 
+  /* Prices are numbers (§8.2): right-aligned, and each column header aligns like its data. */
+  .matrix td,
+  .matrix thead th + th {
+    text-align: end;
+  }
+
   /* Row rules in --role-rule; the header row closes with one too. */
   .matrix thead tr,
   .matrix tbody tr {
@@ -379,6 +385,7 @@
     .matrix th,
     .matrix td {
       padding-block: var(--size-px-1);
+      text-align: start;
     }
 
     .cellLabel {
@@ -409,6 +416,7 @@
     .matrix th,
     .matrix td {
       padding-block: var(--size-px-1);
+      text-align: start;
     }
 
     .cellLabel {

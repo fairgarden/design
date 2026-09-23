@@ -213,10 +213,11 @@ A Base UI Button in three builds: the solid action, its outline twin and the tex
   - Variants and sizes
   - Primary and secondary
   - On grounds
+  - Destructive actions
   - API Reference
 - Exports:
   - Button
-    - Props: butted, children, icon, iconOnly, iconPosition, onMedia, onPress, primary, secondary, size, variant
+    - Props: butted, children, destructive, icon, iconOnly, iconPosition, onMedia, onPress, primary, secondary, size, variant
   - PressCallback
     - Parameters: event
 - Types: ButtonProps, button
@@ -391,7 +392,7 @@ Actions on the current object, sort orders and view options, in an anchored list
   - MenuSubmenuTrigger
     - Props: icon
   - MenuTrigger
-    - Props: butted, children, handle, icon, iconOnly, iconPosition, onMedia, onPress, payload, primary, secondary, size, variant
+    - Props: butted, children, destructive, handle, icon, iconOnly, iconPosition, onMedia, onPress, payload, primary, secondary, size, variant
 - Types: MenuCheckboxItemProps, MenuGroupLabelProps, MenuGroupProps, MenuItemProps, MenuPopupProps, MenuProps, MenuRadioGroupProps, MenuRadioItemProps, MenuSeparatorProps, MenuSubmenuProps, MenuSubmenuTriggerProps, MenuTriggerProps, menu, menuItem
 
 </details>
@@ -547,7 +548,7 @@ A compact row of tools acting on one object or region: a list's count and action
   - ToolbarBottomRule
     - Props: variant
   - ToolbarButton
-    - Props: butted, children, icon, iconOnly, iconPosition, lowPriority, onMedia, onPress, primary, secondary, size, variant
+    - Props: butted, children, destructive, icon, iconOnly, iconPosition, lowPriority, onMedia, onPress, primary, secondary, size, variant
   - ToolbarCount
   - ToolbarGroup
   - ToolbarItem
@@ -1087,7 +1088,7 @@ A modal panel for a focused sub-task: a titled top bar, a scrolling body and an 
   - DialogTitle
   - DialogTopBar
   - DialogTrigger
-    - Props: butted, children, handle, icon, iconOnly, iconPosition, onMedia, onPress, payload, primary, secondary, size, variant
+    - Props: butted, children, destructive, handle, icon, iconOnly, iconPosition, onMedia, onPress, payload, primary, secondary, size, variant
 - Types: DialogActionsProps, DialogBodyProps, DialogCloseProps, DialogDescriptionProps, DialogEyebrowProps, DialogPopupProps, DialogProps, DialogTitleProps, DialogTopBarProps, DialogTriggerProps, dialog, dialogBackdrop
 
 </details>
@@ -1115,13 +1116,13 @@ Confirms a destructive or irreversible action: a status glyph, a question, one c
   - AlertDialogActions
   - AlertDialogBody
   - AlertDialogCancel
-    - Props: butted, children, icon, iconOnly, iconPosition, onMedia, onPress, primary, secondary, size, variant
+    - Props: butted, children, destructive, icon, iconOnly, iconPosition, onMedia, onPress, primary, secondary, size, variant
   - AlertDialogDescription
   - AlertDialogPopup
     - Props: container, cover, keepMounted, primary, secondary, status, statusLabel
   - AlertDialogTitle
   - AlertDialogTrigger
-    - Props: butted, children, handle, icon, iconOnly, iconPosition, onMedia, onPress, payload, primary, secondary, size, variant
+    - Props: butted, children, destructive, handle, icon, iconOnly, iconPosition, onMedia, onPress, payload, primary, secondary, size, variant
 - Types: AlertDialogActionsProps, AlertDialogBodyProps, AlertDialogCancelProps, AlertDialogDescriptionProps, AlertDialogPopupProps, AlertDialogProps, AlertDialogStatus, AlertDialogTitleProps, AlertDialogTriggerProps, alertDialog
 
 </details>
@@ -1155,7 +1156,7 @@ Non-modal content anchored to a trigger: a small details panel, a definition, or
   - PopoverSource
   - PopoverTitle
   - PopoverTrigger
-    - Props: butted, children, handle, icon, iconOnly, iconPosition, onMedia, onPress, payload, primary, secondary, size, variant
+    - Props: butted, children, destructive, handle, icon, iconOnly, iconPosition, onMedia, onPress, payload, primary, secondary, size, variant
 - Types: PopoverArrowProps, PopoverCloseProps, PopoverDescriptionProps, PopoverKind, PopoverPopupProps, PopoverProps, PopoverSourceProps, PopoverTitleProps, PopoverTriggerProps, popover
 
 </details>

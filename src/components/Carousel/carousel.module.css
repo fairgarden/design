@@ -173,6 +173,27 @@
     }
   }
 
+  /*
+   * A slide's figure runs its photo and caption across its full width and
+   * never takes the side caption, so the Figure's 12-track gutters go:
+   * eleven of them would floor a portrait slide at 11 × --ds-space-margin
+   * and push its photo past the slide into the next.
+   */
+  .photo {
+    column-gap: 0;
+  }
+
+  /*
+   * The photo's height cap: the slide keeps its ≈ 88% [D186], and its
+   * figure (photo and right-flush caption) is at most as wide as the photo
+   * at --size-px-15, so a portrait photo stops at 480 px tall, uncropped, at
+   * the slide's start (derived; flagged for user review, §1.8). From 1024 px
+   * the strip's slide is exactly that wide, so the figure fills it.
+   */
+  .photos .photo {
+    inline-size: min(100%, var(--size-px-15) * var(--carousel-ratio, 1.5));
+  }
+
   /* At either end that button is omitted and its space kept; the count states the position (§9.9). */
   .atStart .prev,
   .atEnd .next {

@@ -47,7 +47,7 @@
     --gray11: #b4b4b4;
     --gray12: #eeeeee;
     --gray-contrast: #fff;
-    --gray-hover: var(--gray10);
+    --gray-hover: var(--gray8);
 
     @media (color-gamut: p3) {
       --gray1: color(display-p3 0.067 0.067 0.067);
@@ -80,7 +80,7 @@
       --gray11: #b4b4b4;
       --gray12: #eeeeee;
       --gray-contrast: #fff;
-      --gray-hover: var(--gray10);
+      --gray-hover: var(--gray8);
 
       @media (color-gamut: p3) {
         --gray1: color(display-p3 0.067 0.067 0.067);

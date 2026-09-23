@@ -1,4 +1,5 @@
 import { Carousel, CarouselPhoto } from '@fairgarden-private/design/components/Carousel'
+import styles from './photos.module.css'
 
 function stand(width: number, height: number, sky: string, land: string) {
   return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${width} ${height}'%3E%3Crect width='${width}' height='${height}' fill='%23${sky}'/%3E%3Cpath d='M0 ${height * 0.7}L${width * 0.3} ${height * 0.45}L${width * 0.55} ${height * 0.62}L${width} ${height * 0.4}V${height}H0z' fill='%23${land}'/%3E%3C/svg%3E`
@@ -38,22 +39,24 @@ const photos = [
 /** Eight photos: ≈ 88% single slides, and from 1024 px of container a 480 px strip at each photo's own ratio. */
 export function CarouselPhotos() {
   return (
-    <Carousel kind="photos" label="Wood Thrush photos" printUrl="example.org/wood-thrush/photos">
-      {photos.map((photo, index) => (
-        <CarouselPhoto
-          key={photo.caption}
-          src={stand(
-            Math.round(photo.ratio * 120),
-            120,
-            index % 2 ? 'b7c4a8' : 'c9c1a6',
-            index % 2 ? '627a55' : '7a6d4a',
-          )}
-          alt={photo.caption}
-          ratio={photo.ratio}
-          caption={photo.caption}
-          credit={photo.credit}
-        />
-      ))}
-    </Carousel>
+    <div className={styles.frame}>
+      <Carousel kind="photos" label="Wood Thrush photos" printUrl="example.org/wood-thrush/photos">
+        {photos.map((photo, index) => (
+          <CarouselPhoto
+            key={photo.caption}
+            src={stand(
+              Math.round(photo.ratio * 120),
+              120,
+              index % 2 ? 'b7c4a8' : 'c9c1a6',
+              index % 2 ? '627a55' : '7a6d4a',
+            )}
+            alt={photo.caption}
+            ratio={photo.ratio}
+            caption={photo.caption}
+            credit={photo.credit}
+          />
+        ))}
+      </Carousel>
+    </div>
   )
 }
