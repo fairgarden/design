@@ -52,6 +52,7 @@ Density is set per module, never by breakpoint: a Ground's `density` (`compact`,
 ## Sizing, breakpoints and motion
 
 - **Controls:** `--size-px-7` (32 px, small), `--ds-size-control-md` (40 px, default), `--size-px-8` (48 px, large), `--ds-size-control-xl` (56 px); every target is at least `--ds-size-hit` (44 px).
+- **Logo:** `--ds-size-logo`, the logo mark in a lockup beside the wordmark: `--ds-size-control-md` (40 px), `--size-px-8` (48 px) from `--lg-n-above`, and `--size-px-7` (32 px) below `--xs-n-below`, so it fills the header bar's control height.
 - **Custom media** drive the page frame: `--sm-n-above` (480 px), `--md-n-above` (768 px), `--lg-n-above` (1024 px), `--xl-n-above` (1440 px), plus `--ds-nav-inline-n-above` (1024 px by default), where the inline Navigation Bar replaces the drawer. Modules reflow on container queries as a progressive enhancement.
 - **Motion:** `--ds-duration-quick` (120 ms) for state changes and hover, `--ds-duration-disclosure` (200 ms) for reveals, `--ease-out-3`; everything is instant under reduced motion. `--ds-delay-tooltip` (500 ms) and `--ds-delay-nav-open` / `--ds-delay-nav-close` (150 / 300 ms) have number mirrors in `utils/tokens.ts` for Base UI.
 

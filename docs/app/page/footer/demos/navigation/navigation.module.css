@@ -1,0 +1,16 @@
+.page {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.content {
+  padding: var(--size-px-7) var(--ds-space-margin);
+  font-family: var(--ds-font-ui);
+  color: var(--role-muted);
+}
+
+/* The footer's home link around the lockup, in the band's ink. */
+.footerLogo {
+  color: var(--primary12);
+  text-decoration-line: none;
+}

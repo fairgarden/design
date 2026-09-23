@@ -20,7 +20,7 @@ not what is published — the version here is always the next one.
    identifier. A prerelease gets no maintenance branch; there is no released
    line behind it yet.
 
-Every push to main publishes `@fairgarden-private/design@canary`. A canary is not a release and
+Every push to main publishes `@fairgarden/design@canary`. A canary is not a release and
 carries no promise; it is there so main can be tried without a checkout.
 
 <!-- /fg:releasing -->
@@ -40,47 +40,49 @@ carries no promise; it is there so main can be tried without a checkout.
 ## Usage
 
 ```bash
-pnpm add @fairgarden-private/design @base-ui/react
+pnpm add @fairgarden/design @base-ui/react
 # only for Map:
 pnpm add maplibre-gl pmtiles @protomaps/basemaps
 ```
 
 ```tsx
 // app shell, once
-import '@fairgarden-private/design/utils/global.css'
-import '@fairgarden-private/design/utils/fonts'
-import { ClientProvider } from '@fairgarden-private/design/utils/ClientProvider'
+import '@fairgarden/design/utils/global.css'
+import '@fairgarden/design/utils/fonts'
+import { ClientProvider } from '@fairgarden/design/utils/ClientProvider'
 
 // anywhere
-import { Button } from '@fairgarden-private/design/components/Button'
+import { Button } from '@fairgarden/design/actions/button'
 
 <ClientProvider locale="en-US">
   <Button variant="solid">Sign Up</Button>
 </ClientProvider>
 ```
 
-Each component is imported from its own path, `@fairgarden-private/design/components/<Name>`.
+Each component is imported from its own path, `@fairgarden/design/<category>/<name>`: the category folder, then the component's name in kebab case (`@fairgarden/design/forms/number-field` exports `NumberField`). The shared utilities stay at `@fairgarden/design/utils/<name>` and the generated icon paths at `@fairgarden/design/icons/paths`.
 
 ## Components
 
-**Foundations:** Ground, Icon, Separator, Sticker, and the shared utilities: patterns (`utils/pattern.module.css`), type roles (`utils/type.module.css`), lines, ornaments and the navigation data type (`utils/navigation`).
+| Category | Components (import path `@fairgarden/design/<category>/…`) |
+| --- | --- |
+| `foundations` | Ground (`ground`), Icon (`icon`), Separator (`separator`), Sticker (`sticker`) |
+| `actions` | Button (`button`), Link (`link`), Toggle (`toggle`), Toggle Group (`toggle-group`), Chip (`chip`) |
+| `navigation` | Navigation Menu (`navigation-menu`), Navigation Bar (`navigation-bar`), Nav Drawer (`nav-drawer`), Breadcrumb (`breadcrumb`), Pagination (`pagination`), Tabs (`tabs`), Toolbar (`toolbar`) |
+| `forms` | Field (`field`), Fieldset (`fieldset`), Form (`form`), Input (`input`), Number Field (`number-field`), Select (`select`), Combobox (`combobox`), Autocomplete (`autocomplete`), Search (`search`), Checkbox (`checkbox`), Checkbox Group (`checkbox-group`), Radio (`radio`), Radio Group (`radio-group`), Switch (`switch`), Slider (`slider`) |
+| `feedback` | Alert (`alert`), Badge (`badge`), Tag (`tag`), Avatar (`avatar`), Progress (`progress`), Meter (`meter`), Toast (`toast`) |
+| `overlays` | Dialog (`dialog`), Alert Dialog (`alert-dialog`), Popover (`popover`), Preview Card (`preview-card`), Menu (`menu`), Context Menu (`context-menu`), Menubar (`menubar`), Tooltip (`tooltip`) |
+| `disclosure` | Accordion (`accordion`), Collapsible (`collapsible`), FAQ (`faq`) |
+| `page` | Hero (`hero`), Footer (`footer`), Section Bar (`section-bar`), Section Divider (`section-divider`), Section Header (`section-header`), CTA Block (`cta-block`), Newsletter (`newsletter`), Marquee (`marquee`), Announcement Bar (`announcement-bar`) |
+| `content` | Card (`card`), Card Grid (`card-grid`), Feature Grid (`feature-grid`), Carousel (`carousel`), Quote (`quote`), Index Rows (`index-rows`), Profile (`profile`), Pricing (`pricing`), Timeline (`timeline`), Empty State (`empty-state`) |
+| `data` | Table (`table`), Scroll Area (`scroll-area`), Spec Grid (`spec-grid`), Spec List (`spec-list`), Spec Sheet (`spec-sheet`), Figure (`figure`), Stat (`stat`), Chart (`chart`), Map (`map`) |
 
-**Actions and navigation:** Button, Link, Toggle and Toggle Group, Tabs, Navigation Menu, Menu, Context Menu, Menubar, Breadcrumb, Pagination, Search, Toolbar.
-
-**Forms:** Form, Field, Fieldset, Input, Number Field, Select, Combobox, Autocomplete, Checkbox and Checkbox Group, Radio and Radio Group, Switch, Slider.
-
-**Status and overlays:** Alert, Badge, Tag, Chip, Avatar, Accordion, Collapsible, Dialog, Alert Dialog, Popover, Preview Card, Tooltip, Toast, Progress, Meter, Scroll Area.
-
-**Page frame:** Navigation Bar, Nav Drawer, Section Bar, Announcement Bar, Section Header, Section Divider, Hero, CTA Block, Newsletter, Marquee, Footer.
-
-**Content modules:** Card, Card Grid, Carousel, FAQ, Feature Grid, Spec Sheet, Quote, Pricing, Stat, Index Rows, Timeline, Profile, Empty State.
-
-**Data:** Table, Spec List, Spec Grid, Figure, Chart, Map.
+**Utilities** (`@fairgarden/design/utils/…`): the global stylesheet (`global.css`), the fonts (`fonts`), `ClientProvider`, the pattern tiles (`pattern.module.css`), the type roles (`type.module.css`), the line styles (`line.module.css`), ornaments (`Ornament`) and the navigation data type (`navigation`).
 
 ## Development
 
-- `pnpm --filter @fairgarden-private/design build`: generates the color and icon files, the CSS Module typings, then compiles with `tsc` and PostCSS into `components/`, `utils/` and `icons/`.
-- `pnpm --filter @fairgarden-private/design lint`
-- Documentation site in `docs/` (`@fairgarden-private/design-docs`, port 3032): `pnpm --filter @fairgarden-private/design-docs dev`. It compiles `src/` directly through tsconfig paths. After changing a component's props or adding a page, run `pnpm validate` in `docs/` to regenerate the `types.md` files and the page indexes.
+- `pnpm --filter @fairgarden/design build`: generates the color and icon files, the CSS Module typings, then compiles `src/` with `tsc` and PostCSS into one folder per category (`foundations/`, `actions/` … `data/`), `utils/` and `icons/` at the package root.
+- `pnpm --filter @fairgarden/design lint`
+- Source layout: `src/<category>/<name>/` holds `<Name>.tsx`, `<name>.module.css` (with its generated `.d.ts`) and `index.ts`; the shared utilities are in `src/utils/` and the generated icons in `src/icons/`.
+- Documentation site in `docs/` (`@fairgarden/design-docs`, port 3032): `pnpm --filter @fairgarden/design-docs dev`. It compiles `src/` directly through tsconfig paths, with one section per category (`docs/app/<category>/<name>/`). After changing a component's props or adding a page, run `pnpm validate` in `docs/` to regenerate the `types.md` files and the section indexes.
 
 Install dependencies from the monorepo root only. The full specification lives outside this repository (`DESIGN-SYSTEM.md`).

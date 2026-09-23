@@ -1,16 +1,17 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import '@fairgarden-private/design/utils/global.css'
-import '@fairgarden-private/design/utils/fonts'
-import { ClientProvider } from '@fairgarden-private/design/utils/ClientProvider'
-import { Ground } from '@fairgarden-private/design/components/Ground'
+import '@fairgarden/design/utils/global.css'
+import '@fairgarden/design/utils/fonts'
+import { ClientProvider } from '@fairgarden/design/utils/ClientProvider'
+import { Ground } from '@fairgarden/design/foundations/ground'
+import { Lockup } from '@/components/Logo'
 import { Navigation } from '@/components/Navigation'
 import { Search } from '@/components/Search'
 import styles from '@/components/chrome.module.css'
 import { sitemap } from './sitemap'
 
 export const metadata: Metadata = {
-  title: '@fairgarden-private/design',
+  title: '@fairgarden/design',
   description: 'The FairGarden design system: React components built on Base UI.',
 }
 
@@ -26,7 +27,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <Ground preset="paper" kind="band" render={<div className={styles.page} />}>
             <header className={styles.header}>
               <Link href="/" className={styles.brand}>
-                FairGarden Design
+                <Lockup />
               </Link>
               <Search />
             </header>

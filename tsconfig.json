@@ -31,8 +31,8 @@
     "synchronousWatchDirectory": true,
     // Finally, two additional settings for reducing the amount of possible
     // files to track  work from these directories
-    "excludeDirectories": ["**/node_modules", "components", "utils", "icons"]
+    "excludeDirectories": ["**/node_modules", "foundations", "actions", "navigation", "forms", "feedback", "overlays", "disclosure", "page", "content", "data", "utils", "icons"]
   },
   "include": ["src"],
-  "exclude": ["node_modules", "components", "utils", "icons"]
+  "exclude": ["node_modules", "foundations", "actions", "navigation", "forms", "feedback", "overlays", "disclosure", "page", "content", "data", "utils", "icons"]
 }

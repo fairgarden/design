@@ -1,7 +1,7 @@
 /*
  * The design system's global entry point. Import once in the app shell:
- *   import '@fairgarden-private/design/utils/global.css'
- *   import '@fairgarden-private/design/utils/fonts'
+ *   import '@fairgarden/design/utils/global.css'
+ *   import '@fairgarden/design/utils/fonts'
  * Mode strategy: follow-OS (colors.css + theme.css + roles.css).
  */
 @import './layers.css';

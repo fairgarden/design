@@ -1,0 +1,96 @@
+# Table
+
+A three-rule data table in a Scroll Area: a heavy frame above and below, a header rule, hairline rows and no verticals, stripes or tints.
+
+```tsx
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFoot,
+  TableHead,
+  TableHeaderCell,
+  TableRow,
+} from '@fairgarden/design/data/table'
+```
+
+Column headers are caps labels with their units ("Length (km)"); row headers are `TableHeaderCell`s in the body. Numbers are right-aligned lining tabular figures with fixed decimals per column. Text cells wrap and are never truncated, and an empty cell shows "—", defined in the notes. The caption block ("Table 1", a title and a scope note) sits above the table, and the notes block sits below it.
+
+## Records, sorting and totals
+
+import { DemoTableRecords } from './demos/records'
+
+<DemoTableRecords.Title />
+
+`strategy="stack"` is the default for records: below 768 px of the table's width, each row becomes a block, with its row header over a dotted leader list of header → value. A header with `sort` and `onSort` becomes a sort button that keeps the caps, shows ▲ or ▼ after the label and carries `aria-sort`. `TableFoot` opens with the double hairline total rule.
+
+<DemoTableRecords />
+
+[See Demo](./demos/records/)
+
+## The five-row cadence
+
+import { DemoTableCadence } from './demos/cadence'
+
+<DemoTableCadence.Title />
+
+A body of more than 10 rows swaps the hairlines for dotted rules, with a solid rule after every fifth row, so the eye tracks in fives and the rhythm prints in black. `selected` (or a checked row Checkbox, or the row that is a link's `:target`) draws the 3 px row bar. `inactive` mutes a row, so pair it with a word. `strategy="fit"` keeps a table of up to four short columns as a table at every width.
+
+<DemoTableCadence />
+
+[See Demo](./demos/cadence/)
+
+## A matrix with a pinned column
+
+import { DemoTableMatrix } from './demos/matrix'
+
+<DemoTableMatrix.Title />
+
+`grid` draws the full matrix grid in the rule color, for matrices only: marks in cells, centered headers and a legend in the notes. `strategy="scroll"` pins the first column; once columns scroll under it, it takes the 2 px overflow edge, and `scrollCue` shows only while the table overflows. `strategy="prioritize"` hides cells marked `optional` behind a "Show All n Columns" button; they always print. `density="compact"` tightens the padding and uses stronger row rules. Without the prop, a table follows the density of the Ground around it, so `density="compact"` on a Ground compacts every table inside.
+
+<DemoTableMatrix />
+
+[See Demo](./demos/matrix/)
+
+## In print
+
+The table always prints in full, never stacked. The header row repeats on every page, rows never split, and the total prints once. Sort glyphs, row checkboxes and row bars are hidden, and every rule prints black at 0.75 pt.
+
+## API Reference
+
+import { TypesTable, TypesTableAdditional } from './types'
+
+### Table
+
+<TypesTable.Table />
+
+### TableCaption
+
+<TypesTable.TableCaption />
+
+### TableHead, TableBody and TableFoot
+
+<TypesTable.TableHead />
+
+<TypesTable.TableBody />
+
+<TypesTable.TableFoot />
+
+### TableRow
+
+<TypesTable.TableRow />
+
+### TableHeaderCell and TableCell
+
+<TypesTable.TableHeaderCell />
+
+<TypesTable.TableCell />
+
+### Additional types
+
+<TypesTableAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §8.2 (tables), §5.10.2 (reflow) and §10.19 (the scroll edge).

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Link from 'next/link'
-import { Link as DesignLink } from '@fairgarden-private/design/components/Link'
+import { Link as DesignLink } from '@fairgarden/design/actions/link'
 import styles from './prose.module.css'
 
 type Props<T extends keyof React.JSX.IntrinsicElements> = React.ComponentProps<T>

@@ -1,0 +1,55 @@
+# Number Field
+
+Quantities, amounts and measurements where stepping helps: Base UI's NumberField, inside a `Field`. Codes that only look like numbers, such as postcodes and phone numbers, are Input; approximate values across a range use Slider.
+
+```tsx
+import { NumberField } from '@fairgarden/design/forms/number-field'
+```
+
+The value uses tabular figures, so it never jitters while stepping. Show units on screen and in print: `suffix` follows the value with a no-break space, in the muted ink. At the minimum or maximum the matching step cell is disabled; out-of-range errors read "Enter 1–12", with an en dash.
+
+## Kinds and states
+
+import { DemoNumberFieldStates } from './demos/states'
+
+<DemoNumberFieldStates.Title />
+
+`stepper` (default) joins square − and + cells to the input, divided by rules, with one `--radius-1` outer radius; holding a cell takes the inverse pair. `amount` drops the steppers and sets the value in the display serif. `readout` puts circular − / + buttons around a large mono value, for dashboards. `label` with `scrub` makes the label a scrub area for fine pointers. Steppers suit ranges of up to about 20 steps.
+
+<DemoNumberFieldStates />
+
+[See Demo](./demos/states/)
+
+## Primary and secondary
+
+import { DemoNumberFieldColor } from './demos/color'
+
+<DemoNumberFieldColor.Title />
+
+`primary` sets the group edge, dividers, glyphs and value. `secondary` is unused at rest and becomes the danger scale while the Field is invalid.
+
+<DemoNumberFieldColor />
+
+[See Demo](./demos/color/)
+
+## On grounds
+
+import { DemoNumberFieldGrounds } from './demos/grounds'
+
+<DemoNumberFieldGrounds.Title />
+
+On forest the same roles resolve to the dark scale: light glyphs, the deep rule, and a light held cell.
+
+<DemoNumberFieldGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesNumberField } from './types'
+
+<TypesNumberField />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §10.4 (number field), with the stepper confirmed in D174.

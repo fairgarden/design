@@ -147,6 +147,8 @@
     --ds-size-control-xl: 56px;
     --ds-size-hit: 44px;
     --ds-size-icon-block: 36px;
+    /* The logo mark in a lockup, a prominent mark sized to the header bar: 40 px, 48 px from --lg-n-above, 32 px below --xs-n-below (§1.5.12). */
+    --ds-size-logo: var(--ds-size-control-md);
     --ds-size-bar-utility: 36px;
     --ds-size-art-s: 152px;
     --ds-size-art-l: 312px;
@@ -222,8 +224,15 @@
     }
   }
 
+  @media (--xs-n-below) {
+    :root {
+      --ds-size-logo: var(--size-px-7);
+    }
+  }
+
   @media (--lg-n-above) {
     :root {
+      --ds-size-logo: var(--size-px-8);
       --ds-space-margin: var(--ds-space-40);
       --ds-space-section: var(--size-px-10);
       --ds-ruled-pitch: 29px;

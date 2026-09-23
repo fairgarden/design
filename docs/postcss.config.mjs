@@ -29,7 +29,7 @@ const config = {
     '@csstools/postcss-global-data': {
       files: [
         require.resolve('open-props/media.min.css'),
-        require.resolve('@fairgarden-private/design/src/utils/media.css'),
+        require.resolve('@fairgarden/design/src/utils/media.css'),
       ],
     },
     'postcss-custom-media': {},

@@ -10,7 +10,7 @@ Every component takes a `primary` and a `secondary` Radix scale, and colors its 
 Neither prop has a default. An omitted prop adds no class, so the value resolves in order:
 
 1. the prop;
-2. the nearest [Ground](../../components/ground/page.mdx) scope's defaults, inherited as custom properties;
+2. the nearest [Ground](../../foundations/ground/page.mdx) scope's defaults, inherited as custom properties;
 3. the system defaults: primary `olive`, secondary `green`, action `amber`.
 
 **Primary drives almost everything:** text, muted text, rules, hairlines, control edges, the focus ring, faces and soft fills. **Secondary drives accents only:** section heads on light grounds, link underlines and meaningful icons, selection, the action fill, and static category fills such as status.
@@ -58,9 +58,9 @@ Roles name a job, not a step, and resolve per ground and mode.
 
 Hover follows the Land Trust Alliance model [D181]: it changes a fill or an ink, never an edge, a transform or a shadow. It runs for `--ds-duration-quick` with `--ease-out-3`, is instant under reduced motion, and never applies to a disabled control.
 
-- **Contained buttons lighten.** A solid [Button](../../components/button/page.mdx)'s fill moves to `--role-action-hover`, and a contained selection fill to `--role-select-hover`. Label and edge stay, with no underline.
+- **Contained buttons lighten.** A solid [Button](../../actions/button/page.mdx)'s fill moves to `--role-action-hover`, and a contained selection fill to `--role-select-hover`. Label and edge stay, with no underline.
 - **Outline buttons tint** to `--role-soft-hover`; where soft fills drop, the label underlines instead.
-- **Chevron links change color.** A `standalone` [Link](../../components/link/page.mdx) and a `text` Button take `--role-link-hover`, and the glyph swaps to its next weight.
+- **Chevron links change color.** A `standalone` [Link](../../actions/link/page.mdx) and a `text` Button take `--role-link-hover`, and the glyph swaps to its next weight.
 - **Body links** (`inline`) keep their underline, take `--role-link-hover` and thicken the underline to `--border-size-2`.
 - **Bare text underlines.** A `nav` Link (bar and utility items, page numbers, toolbar links) and a tab take a `--border-size-2` `--role-accent` underline.
 - **List links change color only.** `kind="nav" list` (navigation panels, footers, drawers), `muted` breadcrumb ancestors and card `title` links take `--role-link-hover`.
@@ -79,7 +79,7 @@ Text is always `--primary12`, and the focus ring is a 2 px `--primary12` line. E
 
 ## The 16 ground presets
 
-v1 has 16 presets: eight page grounds, the `night` band and seven fields [D180]. [Ground](../../components/ground/page.mdx)'s `kind` decides where each may go: `band` (default, full-bleed) takes a page ground or `night`; `field` (inset, with a radius and its own `--primary12` edge) takes a field; `face` (a card face, plate or panel) takes a page ground, and `night` only for the `onMedia` Button.
+v1 has 16 presets: eight page grounds, the `night` band and seven fields [D180]. [Ground](../../foundations/ground/page.mdx)'s `kind` decides where each may go: `band` (default, full-bleed) takes a page ground or `night`; `field` (inset, with a radius and its own `--primary12` edge) takes a field; `face` (a card face, plate or panel) takes a page ground, and `night` only for the `onMedia` Button.
 
 | Preset | Family | Ground | Primary × secondary; action | Mode |
 | --- | --- | --- | --- | --- |

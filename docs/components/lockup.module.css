@@ -1,0 +1,39 @@
+/*
+ * The lockup: the logo on the left, a prominent mark rather than an inline
+ * glyph, and the "FairGarden Design" wordmark after it, centered on the
+ * logo. The logo is --ds-size-logo tall (40 px, 48 px from --lg-n-above,
+ * 32 px below --xs-n-below), which fills the header bar's control height
+ * inside its 56 and 64 px. The lockup keeps its own height wherever it sits,
+ * so a smaller logo slot (the Navigation Bar's, the drawer's) centers it
+ * rather than shrinking it. The wordmark takes the scope's ink from its
+ * parent; the logo keeps its own art.
+ */
+.lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-12);
+  block-size: auto;
+  white-space: nowrap;
+}
+
+/*
+ * The logo is drawn for a light ground: ink shapes inside a white cut line.
+ * In a dark scope (dark mode, the night band) the ink sinks into the ground
+ * and only the hairline cut line reads, so the chrome adapts, never the art:
+ * there the mark sits on a round plate of the scope's light ink, the disc the
+ * drawing was cut for. light-dark() follows the color-scheme that the global
+ * mode blocks set per scope, as the role variables do, so a light scope (and
+ * print, which is always light) paints only its own ground behind the mark.
+ */
+.mark {
+  flex: none;
+  block-size: var(--ds-size-logo);
+  inline-size: auto;
+  aspect-ratio: 1;
+  border-radius: var(--radius-round);
+  background-color: light-dark(var(--role-ground), var(--primary12));
+}
+
+.wordmark {
+  composes: typeKicker from '../../src/utils/type.module.css';
+}

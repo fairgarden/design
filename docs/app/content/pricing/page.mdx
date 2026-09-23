@@ -1,0 +1,109 @@
+# Pricing
+
+Honest, comparable prices: inline prices, sales, menu figures, plan tiers and wholesale matrices.
+
+```tsx
+import {
+  Pricing,
+  PricingAmount,
+  PricingCurrency,
+  PricingPeriod,
+  PricingPrice,
+} from '@fairgarden/design/content/pricing'
+```
+
+Every price is a `data` element with a machine-readable `value`. Show the unit and period next to every price, put fees on the price line, and never mark a sale with red alone: the strike and the word "Save" carry it. Dense module: rules and edges only, no ornament.
+
+## Inline, sale and menu prices
+
+import { DemoPricingPrices } from './demos/prices'
+
+<DemoPricingPrices.Title />
+
+`kind` is required. `inline` sits in running text (pass `render={<span />}`) with the figure bold. `sale` strikes the original price in the muted ink, with a hidden "Was" for assistive technology, then the current price (`label="Now"`) and the saving as a word. `menu` sets a mono figure, with optional superscript cents, for a leader row. Author the spaces between parts in your locale's order; `PricingPeriod` adds the thin space itself.
+
+<DemoPricingPrices />
+
+[See Demo](./demos/prices/)
+
+## Tiers and matrix
+
+import { DemoPricingTiers } from './demos/tiers'
+
+<DemoPricingTiers.Title />
+
+`tiers` holds a `PricingTierList` of two to four `PricingTier`s, each a faced card that opens a light face on every ground. `recommended` draws a 3 px frame and a "Recommended" badge across the top edge; author that tier first, because tiers stack below 1024 px of container and visual order follows source order. From 1024 px they sit side by side. When the plans feed a form, wrap the list in a `RadioGroup` and put each `Radio` in its `PricingChoice`: a checked Radio steps the edge to 3 px, and a disabled one gives a dotted edge and muted text (say "Unavailable" too). `matrix` is a table with row rules and a double-hair total rule; each `PricingCell` repeats its column name when rows become blocks below 360 px of container. Close either with `PricingAsOf`.
+
+<DemoPricingTiers />
+
+[See Demo](./demos/tiers/)
+
+## Grounds and print
+
+Light grounds are the home for tiers; inside a field, tier faces become light islands. Each tier's rest edge is its face's own edge color, so it stays visible on every ground. Saturated grounds hold a single price only. In print the recommended frame keeps 2.25 pt and other edges 0.75 pt, the badge prints as a word above its tier, and actions print their short URLs.
+
+## API Reference
+
+import { TypesPricing, TypesPricingAdditional } from './types'
+
+### Pricing
+
+<TypesPricing.Pricing />
+
+### PricingPrice and its parts
+
+<TypesPricing.PricingPrice />
+
+<TypesPricing.PricingQualifier />
+
+<TypesPricing.PricingCurrency />
+
+<TypesPricing.PricingAmount />
+
+<TypesPricing.PricingCents />
+
+<TypesPricing.PricingPeriod />
+
+### PricingStruck and PricingSave
+
+<TypesPricing.PricingStruck />
+
+<TypesPricing.PricingSave />
+
+### PricingTierList and PricingTier
+
+<TypesPricing.PricingTierList />
+
+<TypesPricing.PricingTier />
+
+### Tier parts
+
+<TypesPricing.PricingTierName />
+
+<TypesPricing.PricingSummary />
+
+<TypesPricing.PricingFeatures />
+
+<TypesPricing.PricingFeature />
+
+<TypesPricing.PricingChoice />
+
+<TypesPricing.PricingAction />
+
+### PricingMatrix and PricingCell
+
+<TypesPricing.PricingMatrix />
+
+<TypesPricing.PricingCell />
+
+### PricingAsOf
+
+<TypesPricing.PricingAsOf />
+
+### Additional types
+
+<TypesPricingAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §12.9 (pricing, v1 per D169) and §5.10.2 (module reflow).

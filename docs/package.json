@@ -1,8 +1,8 @@
 {
-  "name": "@fairgarden-private/design-docs",
+  "name": "@fairgarden/design-docs",
   "version": "0.1.0-alpha.0",
   "private": true,
-  "description": "Documentation site for @fairgarden-private/design",
+  "description": "Documentation site for @fairgarden/design",
   "license": "UNLICENSED",
   "scripts": {
     "dev": "next dev -p 3032",
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
-    "@fairgarden-private/design": "workspace:*",
+    "@fairgarden/design": "workspace:*",
     "@fairgarden/docs": "^0.13.3",
     "@protomaps/basemaps": "^5.7.2",
     "maplibre-gl": "^6.11.1",

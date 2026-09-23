@@ -1,0 +1,51 @@
+# Context Menu
+
+A shortcut menu on power-user app surfaces (table rows, editors, canvases), opened by right-click, Shift+F10 or the Menu key.
+
+```tsx
+import {
+  ContextMenu,
+  ContextMenuItem,
+  ContextMenuPopup,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from '@fairgarden/design/overlays/context-menu'
+```
+
+The popup is the Menu's build: a portaled `white` scope that follows the page mode, a `--border-size-2` `--primary12` edge, 44 px rows and the highlight with its start-edge bar. It anchors to the pointer, or to the focused object when opened from the keyboard. The trigger area has no visual part of its own. Its items are the Menu's parts, re-exported as `ContextMenuItem`, `ContextMenuCheckboxItem`, `ContextMenuRadioItem`, `ContextMenuSubmenu` and so on. It is hidden in print.
+
+Every item must also exist in a visible "…" Menu on the same row or selection: the context menu is a shortcut, never the only route. Keep it off editorial and marketing pages.
+
+## Rows with a context menu
+
+import { DemoContextMenuBasic } from './demos/basic'
+
+<DemoContextMenuBasic.Title />
+
+Each row carries the same actions in its "…" Menu, which is also the route on touch screens.
+
+<DemoContextMenuBasic />
+
+[See Demo](./demos/basic/)
+
+## API Reference
+
+import { TypesContextMenu, TypesContextMenuAdditional } from './types'
+
+### ContextMenu and ContextMenuTrigger
+
+<TypesContextMenu.ContextMenu />
+
+<TypesContextMenu.ContextMenuTrigger />
+
+### ContextMenuPopup
+
+<TypesContextMenu.ContextMenuPopup />
+
+### Additional types
+
+<TypesContextMenuAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §9.7 (menu, and its Context Menu sub-spec).

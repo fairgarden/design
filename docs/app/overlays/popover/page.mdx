@@ -1,0 +1,68 @@
+# Popover
+
+Non-modal content anchored to a trigger: a small details panel, a definition, or the touch stand-in for a tooltip.
+
+```tsx
+import {
+  Popover,
+  PopoverArrow,
+  PopoverClose,
+  PopoverDescription,
+  PopoverPopup,
+  PopoverSource,
+  PopoverTitle,
+  PopoverTrigger,
+} from '@fairgarden/design/overlays/popover'
+```
+
+The panel renders in a portal as a `white` scope that follows the page mode, whatever the trigger's ground. Its `--border-size-2` `--primary12` frame carries the boundary in both modes, with `--ds-radius-8` and no shadow. It sits 8 px from the trigger, aligned to its start edge, and flips before it would clip. It is 240 to 360 px wide from 768 px, and the viewport less its margins below. It opens on press, never on hover, instantly or with a clip reveal from the trigger side; Esc or an outside press closes it. Popovers are hidden in print.
+
+Keep essential instructions out of a popover. A filter panel with more than two controls, or anything that needs confirmation, belongs in a Dialog.
+
+## Panel and definition
+
+import { DemoPopoverKinds } from './demos/kinds'
+
+<DemoPopoverKinds.Title />
+
+`kind="panel"` (the default) is a padded panel with a title in `type-subhead`; put `PopoverClose` first so the title wraps beside it. `kind="definition"` sets the term in tracked caps, the definition in `type-body-ui` and an optional `PopoverSource` caption. `PopoverArrow` adds the tail, whose edge continues the frame.
+
+<DemoPopoverKinds />
+
+[See Demo](./demos/kinds/)
+
+## API Reference
+
+import { TypesPopover, TypesPopoverAdditional } from './types'
+
+### Popover and PopoverTrigger
+
+<TypesPopover.Popover />
+
+<TypesPopover.PopoverTrigger />
+
+### PopoverPopup and PopoverArrow
+
+<TypesPopover.PopoverPopup />
+
+<TypesPopover.PopoverArrow />
+
+### PopoverTitle, PopoverDescription and PopoverSource
+
+<TypesPopover.PopoverTitle />
+
+<TypesPopover.PopoverDescription />
+
+<TypesPopover.PopoverSource />
+
+### PopoverClose
+
+<TypesPopover.PopoverClose />
+
+### Additional types
+
+<TypesPopoverAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §10.15 (popover) and §10.1 (the overlay surface).

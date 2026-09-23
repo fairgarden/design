@@ -1,0 +1,10 @@
+import { createMultipleTypes } from '@/functions/createTypes';
+import { Meter, MeterPanel } from '@fairgarden/design/feedback/meter';
+
+const { types, AdditionalTypes } = createMultipleTypes(import.meta.url, {
+  Meter,
+  MeterPanel,
+});
+
+export const TypesMeter = types;
+export const TypesMeterAdditional = AdditionalTypes;

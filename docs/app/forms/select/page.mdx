@@ -1,0 +1,69 @@
+# Select
+
+One choice from a known list of about 5–15 options: Base UI's Select, inside a `Field`. For 2–4 options that should stay visible use Radio or Toggle Group; for long or searchable lists use Combobox.
+
+```tsx
+import { Select } from '@fairgarden/design/forms/select'
+```
+
+Pass `items` (options, or titled groups) and a `placeholder` that ends in "…". Label the trigger with `<FieldLabel nativeLabel={false}>`, which focuses it without opening the popup. The popup opens `--size-px-2` below the trigger, never on hover and never as a sheet; at most 8 items show before it scrolls. For custom rows, pass `SelectItem`, `SelectGroup` and `SelectSeparator` as children.
+
+## Variants and states
+
+import { DemoSelectStates } from './demos/states'
+
+<DemoSelectStates.Title />
+
+The boxed trigger is the field box; `variant="underline"` sets the trigger over a `--border-size-2` `--role-accent` underline that hugs its content. Highlighted items take the `--primary4` soft fill and a `--ds-stroke-3` start bar; the chosen item a leading ✓ and `--font-weight-6`; a disabled item stays muted and is never highlighted. An option with a `swatch` draws the product's color before its name.
+
+<DemoSelectStates />
+
+[See Demo](./demos/states/)
+
+## Primary and secondary
+
+import { DemoSelectColor } from './demos/color'
+
+<DemoSelectColor.Title />
+
+`primary` sets the trigger's edge, value and chevron; `secondary` the underline. While invalid, the danger scale turns the boxed edge and the underline to the error ink. The popup never inherits the trigger's scales.
+
+<DemoSelectColor />
+
+[See Demo](./demos/color/)
+
+## On grounds
+
+import { DemoSelectGrounds } from './demos/grounds'
+
+<DemoSelectGrounds.Title />
+
+The trigger follows its ground; the popup renders in a portal as the `white` scope, framed by `--border-size-2` `--primary12` in both modes.
+
+<DemoSelectGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesSelect, TypesSelectAdditional } from './types'
+
+### Select
+
+<TypesSelect.Select />
+
+### SelectItem, SelectGroup and SelectSeparator
+
+<TypesSelect.SelectItem />
+
+<TypesSelect.SelectGroup />
+
+<TypesSelect.SelectSeparator />
+
+### Additional types
+
+<TypesSelectAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §10.5 (select) and §10.1 (the overlay surface).

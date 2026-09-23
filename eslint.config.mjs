@@ -4,7 +4,24 @@ import tsPlugin from '@typescript-eslint/eslint-plugin'
 /** @type {import('eslint').Linter.Config[]} */
 const config = [
   // docs/ is its own workspace package and lints itself
-  { ignores: ['node_modules/**', 'components/**', 'utils/**', 'icons/**', 'docs/**'] },
+  {
+    ignores: [
+      'node_modules/**',
+      'foundations/**',
+      'actions/**',
+      'navigation/**',
+      'forms/**',
+      'feedback/**',
+      'overlays/**',
+      'disclosure/**',
+      'page/**',
+      'content/**',
+      'data/**',
+      'utils/**',
+      'icons/**',
+      'docs/**',
+    ],
+  },
   {
     files: ['src/**/*.ts', 'src/**/*.tsx'],
     languageOptions: {

@@ -1,0 +1,67 @@
+# Button
+
+A Base UI Button in three builds: the solid action, its outline twin and the text button.
+
+```tsx
+import { Button } from '@fairgarden/design/actions/button'
+```
+
+Labels are a verb and an object, authored in title case. Handle presses with `onClick`; `onPress` is a deprecated alias kept for existing callers. A navigating action renders an anchor through `render` (with `nativeButton={false}`), keeping link semantics.
+
+## Variants and sizes
+
+import { DemoButtonVariants } from './demos/variants'
+
+<DemoButtonVariants.Title />
+
+`outline` is the default; `solid` is the page's primary action; `text` carries a trailing glyph. Sizes run `sm` (32 px, hit area extended to 44), `md` (40 px, default), `lg` (48 px) and `xl` (56 px, the page's single transactional action). `icon` adds one functional glyph; `iconOnly` hides the label, which stays the accessible name. A disabled button draws a dotted edge.
+
+<DemoButtonVariants />
+
+[See Demo](./demos/variants/)
+
+## Primary and secondary
+
+import { DemoButtonColor } from './demos/color'
+
+<DemoButtonColor.Title />
+
+The solid fill is the scope's action scale until `secondary` overrides it. Outline edges, labels and the focus ring are primary roles, so `primary` recolors them.
+
+<DemoButtonColor />
+
+[See Demo](./demos/color/)
+
+## On grounds
+
+import { DemoButtonGrounds } from './demos/grounds'
+
+<DemoButtonGrounds.Title />
+
+The same two buttons on three grounds. On forest the action stays amber; on leaf, a solid ground with one ink, it becomes the ink pill.
+
+<DemoButtonGrounds />
+
+[See Demo](./demos/grounds/)
+
+## Destructive actions
+
+import { DemoButtonDestructive } from './demos/destructive'
+
+<DemoButtonDestructive.Title />
+
+Any action that destroys (delete, remove, discard, clear) takes `destructive`, and every variant turns red. `solid` takes the danger fill: `--red11` with a `--red1` label in light scopes (light steps 9 and 10 can't carry text), `--red9` with `--red1` in dark ones; its hover moves to `--red12` in light and `--red10` in dark. `outline` takes the danger edge and label, and `text` the danger label and glyph. On the fields the edge is `--red12`; on leaf, clay and royal, where red text falls below 4.5:1, the label keeps the field's ink and the red stays in the edge and glyph. Focus and pressed are unchanged.
+
+<DemoButtonDestructive />
+
+[See Demo](./demos/destructive/)
+
+## API Reference
+
+import { TypesButton } from './types'
+
+<TypesButton />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §9.2 (button), §1.11.10 (the reference Button) and D192 (destructive actions).

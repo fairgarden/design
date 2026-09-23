@@ -1,5 +1,14 @@
 node_modules
-/components
+/foundations
+/actions
+/navigation
+/forms
+/feedback
+/overlays
+/disclosure
+/page
+/content
+/data
 /utils
 /icons
 

@@ -1,0 +1,35 @@
+# CTA Block
+
+The page's one closing invitation before the footer: "Keep exploring", "Find a land trust near you". A labelled section with a kicker, a centered serif headline, an optional support line, the action pill with its leading arrow and an optional outline twin. The saturated and deep kinds are a CTA field, an inset Ground of `kind="field"`, never a full-bleed band.
+
+```tsx
+import { CTABlock } from '@fairgarden/design/page/cta-block'
+```
+
+`action` and `secondaryAction` take a title-case label and an `href` (or `onClick`); the block builds the 48 px solid pill and its outline twin. Never use it for a form (use Newsletter), a repeated mid-page promo or a floating bar.
+
+## Kinds
+
+import { DemoCTABlockKinds } from './demos/kinds'
+
+<DemoCTABlockKinds.Title />
+
+`sunburst` (default) and `mission` sit on their band's page ground, with the headline in `--primary12` because only that ink sits on a pattern. The `sunburst` kind draws its own ornament: the dashed trail before the kicker, in the accent, and the dotted sunburst in the tint, rising from 40 px below the block and clipped at that line. Pass `trail` or `decor` to replace them with your own art, or `null` to leave them out. `mission` sets its `mount` mark on the blob mount: a hand-cut disc in the secondary's step 9 (green by default) over a larger, turned under-disc in step 7, with the mark in the disc's contrast ink; its speckle belongs on the band's Ground (`patternSpeckle`), so it runs full-bleed. The kicker starts about 15% of the column in while the headline centers. `deep` is a `forest` (or `royal`) field; `saturated` a campaign field (`amber` by default, `leaf`, `clay`, `royal` or `brick`) with one ink and the ink pill. Fields take a 20 px radius and their one-ink edge, and keep a gutter of page ground from other fields and the band's padding from the night footer. `framed` draws the crop-mark box for technical pages. From 768 px of its own width, the deep and framed kinds split headline 7, actions 5.
+
+<DemoCTABlockKinds />
+
+[See Demo](./demos/kinds/)
+
+## In print
+
+The sunburst and the blob's discs drop and the block reads completely without them; the trail prints black at 0.75 pt, the blob's mark prints black, and the actions print "Label (URL)". A CTA field prints its edge as a black frame, the page-ground kinds print between rules, and the framed kind's dashed frame and corner marks print as they are.
+
+## API Reference
+
+import { TypesCTABlock } from './types'
+
+<TypesCTABlock />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §11.10 (CTA banner; the CTA field per D177 and D180) and §4.5.5 (crop marks).

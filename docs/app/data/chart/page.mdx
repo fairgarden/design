@@ -1,0 +1,99 @@
+# Chart
+
+A chart figure built with Recharts: bars, columns, lines and stacked areas in the chart's two scales plus patterns, with direct labels, a restyled tooltip and a data table.
+
+```tsx
+import { Chart } from '@fairgarden/design/data/chart'
+```
+
+Every fill, stroke and label is passed to Recharts as a role variable (`var(--secondary11)`, `var(--primary12)`, `var(--role-rule)`), so the chart follows the mode with no script and prints black through the remap. Series are told apart by the `pattern-series` slots, on screen as in print: slot 1 solid, then hatch 45°, dot screen, hatch 0°, crossed hatch, and slot 6 outlined ("Other"). Odd slots take `--secondary11`, even slots `--primary12`, and every shape has a `--border-size-1` `--primary12` edge. Each chart defines its patterns in its own SVG defs, with ids unique to the instance. Fills are opaque, with no gradients, shadows or fading. Recharts' accessibility layer is on: focus the chart and use the arrow keys to move the tooltip across the categories.
+
+## Horizontal bars
+
+import { DemoChartBars } from './demos/bars'
+
+<DemoChartBars.Title />
+
+`kind="bar"` (default) is the form preferred on mobile: labels on the left, 16 px bars from a shared zero line, and each value at its bar's end in `type-data`. Two or more grouped series need the custom legend, which shows 16 px swatches of the fills actually drawn. The caption is the chart's title and says what to notice; the source line follows it.
+
+<DemoChartBars />
+
+[See Demo](./demos/bars/)
+
+## Columns
+
+import { DemoChartColumns } from './demos/columns'
+
+<DemoChartColumns.Title />
+
+`kind="column"` draws horizontal bars until its container is 1024 px wide, then columns; print always uses bars, because the printed column is narrower. The switch is a container rule on the chart's wrapper, not a width check in script. Gridlines are relations, so they are `line-dotted-fine` in `--role-rule`; the zero line stays solid.
+
+<DemoChartColumns />
+
+[See Demo](./demos/columns/)
+
+## Lines
+
+import { DemoChartLines } from './demos/lines'
+
+<DemoChartLines.Title />
+
+Lines are `--border-size-2`, each in its slot's ink, and are told apart by point markers (● ○ ■ □ ▲), never by dashes, because dashes mean a path. Each line ends in a direct label with the series name and its last value. The cursor is a vertical `line-dotted-fine` in `--primary12`.
+
+<DemoChartLines />
+
+[See Demo](./demos/lines/)
+
+## Stacked areas
+
+import { DemoChartAreas } from './demos/areas'
+
+<DemoChartAreas.Title />
+
+With more than one series, `kind="area"` always stacks, because two patterns never overlap. Each band is a slot fill edged in `--primary12` and named inside itself at the last point, on a `--role-halo` knockout. The remainder takes slot 6.
+
+<DemoChartAreas />
+
+[See Demo](./demos/areas/)
+
+## Sequential steps
+
+import { DemoChartSteps } from './demos/steps'
+
+<DemoChartSteps.Title />
+
+`steps` encodes a 1–5 rating on a single-series bar or column chart. On screen each bar takes its step's fill (`--secondary4`, `6`, `8`, `11`, `12`); in print, and wherever the chart is one ink, it shows that step's pattern instead: empty, dot screens at 6 and 4 px, the heavy dot screen, then crossed hatch. Each bar carries both layers, and the print block hides the flat fill. The legend is a framed stepped bar with end labels.
+
+<DemoChartSteps />
+
+[See Demo](./demos/steps/)
+
+## Single highlight and one ink
+
+import { DemoChartHighlight } from './demos/highlight'
+
+<DemoChartHighlight.Title />
+
+`highlight` gives one series slot 1 and outlines the rest, the preferred form for one against the rest. The ground picks the inks: on a light base ground (`paper`, `white`) or a nested `white` plate the odd slots take `--secondary11` and step bars their flat fills; anywhere else, the pastels included, every slot turns `--primary12` and step bars show their patterns, while the patterns keep the series apart. `oneInk` forces one ink on a light base ground too.
+
+<DemoChartHighlight />
+
+[See Demo](./demos/highlight/)
+
+## Data table, motion and print
+
+Every chart ends with a "Show Data Table" Collapsible holding a §8.2 table with the same series names and units; the tooltip never shows a value the table lacks. Animation is off unless the reader's motion preference allows it, and then bars grow and lines draw by length, never by opacity. On screen the chart fills its container's width; in print it is drawn at a fixed 174 mm (`--ds-print-live-width`) with animation off, and a chart whose values lived only in the tooltip (lines, areas, charts without labels) prints its data table too.
+
+## API Reference
+
+import { TypesChart, TypesChartAdditional } from './types'
+
+<TypesChart.Chart />
+
+### Additional types
+
+<TypesChartAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §8.7 (charts), §1.5.16 (data encodings) and §8.2 (the data table); decisions D125 and D167.

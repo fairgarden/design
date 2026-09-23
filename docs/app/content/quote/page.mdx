@@ -1,0 +1,77 @@
+# Quote
+
+Testimonials, pull quotes, blockquotes and epigraphs, composed as a `figure` with a `blockquote` and a `figcaption`.
+
+```tsx
+import {
+  Quote,
+  QuoteAttribution,
+  QuoteName,
+  QuoteRole,
+  QuoteText,
+} from '@fairgarden/design/content/quote'
+```
+
+Quotes set in `type-quote`, the display italic, and attributions in caps sans: the name over the role, never joined by a pipe. Every part is the scope's one ink. Use curly quotes, keep testimonials to 40 words, and never fabricate or anonymize an attribution. A quote is never a heading, and quotes never go in a carousel.
+
+## Kinds
+
+import { DemoQuoteKinds } from './demos/kinds'
+
+<DemoQuoteKinds.Title />
+
+`kind` is required. `band` centers a testimonial that sits alone on its ground. `framed` draws a 2 px outline with a heavy open-quote glyph and takes an optional 40 px `QuotePortrait`. `pull` closes with a short rule and has no attribution; add `duplicate` when it repeats the article's text, which renders an `aside` hidden from assistive technology and drops it from print. `block` indents a quoted passage behind a 3 px rule; a linked `QuoteSource` holds a `Link`. `epigraph` is one or two lines of display bold italic with no marks.
+
+<DemoQuoteKinds />
+
+[See Demo](./demos/kinds/)
+
+## On paper, forest and clay
+
+import { DemoQuoteGrounds } from './demos/grounds'
+
+<DemoQuoteGrounds.Title />
+
+Inside a deep field such as forest the frame and text turn light on their own. Saturated fields such as clay hold the band only, in their one ink.
+
+<DemoQuoteGrounds />
+
+[See Demo](./demos/grounds/)
+
+## Placement and print
+
+The hanging pull quote and 2-up framed testimonials are page-grid placements from 1024 px of viewport, set by the page template; the component has no container. In print the frame prints at 1.5 pt and the portrait in grayscale.
+
+## API Reference
+
+import { TypesQuote, TypesQuoteAdditional } from './types'
+
+### Quote
+
+<TypesQuote.Quote />
+
+### QuoteText
+
+<TypesQuote.QuoteText />
+
+### QuoteAttribution, QuoteName and QuoteRole
+
+<TypesQuote.QuoteAttribution />
+
+<TypesQuote.QuoteName />
+
+<TypesQuote.QuoteRole />
+
+### QuotePortrait and QuoteSource
+
+<TypesQuote.QuotePortrait />
+
+<TypesQuote.QuoteSource />
+
+### Additional types
+
+<TypesQuoteAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §12.8 (testimonial and quote).

@@ -1,0 +1,13 @@
+.stack {
+  display: grid;
+  /* One track the width of the preview; an auto track grows to the footers' min-content. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ds-space-40);
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+/* The lockup in the band's ink. */
+.logo {
+  color: var(--primary12);
+}

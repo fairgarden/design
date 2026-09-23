@@ -1,0 +1,87 @@
+# FAQ
+
+The FAQ module: 4–15 independent questions and answers in a ruled Base UI Accordion, under a chapter-stack header.
+
+```tsx
+import {
+  FAQ,
+  FAQContact,
+  FAQHeader,
+  FAQIntro,
+  FAQItem,
+  FAQList,
+  FAQTitle,
+} from '@fairgarden/design/disclosure/faq'
+```
+
+Questions are `h3` item heads in the display serif; answers are text serif within the reading measure. The first rule is the strong top under the header, and every item closes with a rule. Each question trails the LTA disclosure glyph, which points inward when its answer is open. Several answers may be open at once, and every answer prints expanded. Don't use an FAQ for essential content or for steps, and never open items on hover.
+
+## Ruled and barred
+
+import { DemoFAQVariants } from './demos/variants'
+
+<DemoFAQVariants.Title />
+
+`kind="ruled"` is the default. `barred` adds a `--ds-stroke-3` bar at the start of each open item's row, a bolder line and never a fill. `kind="keyed"` leads each row with a block subject icon (`FAQItem icon`) and indents the answers; `kind="split"` puts the header in the left third of the page grid from 1024 px.
+
+<DemoFAQVariants />
+
+[See Demo](./demos/variants/)
+
+## Primary and secondary
+
+import { DemoFAQColor } from './demos/color'
+
+<DemoFAQColor.Title />
+
+`primary` recolors rules, questions, glyph and answers. `secondary` drives only the accent underlines: links inside answers and on the contact line, and a question's hover underline.
+
+<DemoFAQColor />
+
+[See Demo](./demos/color/)
+
+## On grounds
+
+import { DemoFAQGrounds } from './demos/grounds'
+
+<DemoFAQGrounds.Title />
+
+On saturated grounds keep an FAQ to five items with answers of 40 words or fewer.
+
+<DemoFAQGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesFAQ, TypesFAQAdditional } from './types'
+
+### FAQ
+
+<TypesFAQ.FAQ />
+
+### FAQHeader, FAQTitle and FAQIntro
+
+<TypesFAQ.FAQHeader />
+
+<TypesFAQ.FAQTitle />
+
+<TypesFAQ.FAQIntro />
+
+### FAQList and FAQItem
+
+<TypesFAQ.FAQList />
+
+<TypesFAQ.FAQItem />
+
+### FAQContact
+
+<TypesFAQ.FAQContact />
+
+### Additional types
+
+<TypesFAQAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §12.5 (FAQ) and §10.13 (accordion).

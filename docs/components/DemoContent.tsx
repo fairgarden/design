@@ -25,9 +25,9 @@ const STAGE_MESSAGE = 'fairgarden-demo-stage'
 /** The frame's request for that message, when it mounts after the stage did. */
 const STAGE_REQUEST = 'fairgarden-demo-stage-request'
 
-/** The demo's own route (`/components/<name>/demos/<demo>`), read from its `index.ts` URL. */
+/** The demo's own route (`/<section>/<name>/demos/<demo>`), read from its `index.ts` URL. */
 function demoRoute(url: string | undefined) {
-  return url?.match(/\/app(\/(?:components|overview)\/.+?)\/index\.[cm]?[jt]sx?$/)?.[1]
+  return url?.match(/\/app(\/[^/]+\/.+?\/demos\/[^/]+)\/index\.[cm]?[jt]sx?$/)?.[1]
 }
 
 const subscribeNever = () => () => {}

@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { Ground } from '@fairgarden-private/design/components/Ground'
+import { Ground } from '@fairgarden/design/foundations/ground'
 import type {
   FieldPreset,
   GroundPreset,
-} from '@fairgarden-private/design/components/Ground'
+} from '@fairgarden/design/foundations/ground'
 
 /*
  * Demo helper: renders a preset sample in the kind that preset belongs to

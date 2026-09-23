@@ -1,0 +1,35 @@
+# Marquee
+
+A thin, loud scene divider of brand phrases or short social proof, once per page. It is static only: it never scrolls, clips or animates, so it has no motion control and renders the same under every motion preference.
+
+```tsx
+import { Marquee } from '@fairgarden/design/page/marquee'
+```
+
+Place it full width in its band; it sets its own content container. `phrases` are set once in `type-marquee` caps, separated by solid dots, at least 48 px tall and never clipped: up to two lines at base, one from 768 px. Never put facts a reader needs in it.
+
+## Field, page ground and ticker
+
+import { DemoMarqueeGrounds } from './demos/grounds'
+
+<DemoMarqueeGrounds.Title />
+
+By default the phrases sit in a full-container `forest` field, with its radius and its one-ink edge; `field` also takes `leaf` or `amber` within their rations, and `fielded={false}` runs the phrases on the page ground. A field keeps at least a gutter of page ground from any other field and never touches the night footer. `drawing` hangs an illustration from the field's bottom edge, a quarter of it tucked under the field (312 px, 152 px below 768 px). `kind="ticker"` carries serif sentences on the page ground between two full-bleed rules.
+
+<DemoMarqueeGrounds />
+
+[See Demo](./demos/grounds/)
+
+## In print
+
+The phrases print once, centered, in black between two 1.5 pt rules; the field's fill and frame drop. A hanging drawing prints whole, in the flow.
+
+## API Reference
+
+import { TypesMarquee } from './types'
+
+<TypesMarquee />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §11.12 (marquee band; static only per D169, a field or the page ground per D180).

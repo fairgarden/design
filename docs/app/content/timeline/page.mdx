@@ -1,0 +1,95 @@
+# Timeline
+
+Ordered milestones on a dashed spine, a dated agenda of sessions, or a date-block schedule.
+
+```tsx
+import {
+  Timeline,
+  TimelineEntry,
+  TimelineList,
+  TimelineText,
+  TimelineTitle,
+} from '@fairgarden/design/content/timeline'
+```
+
+The spine is always dashed: dashes mean path. Markers are semantic and decorative at once, so every state they show is also in words: a circle starts, an X marks a waypoint (past or planned, told apart by the date key), a triangle ends, and the solid dot means "now", defined by its dated label or a `TimelineCaption`. Entries never alternate sides. Use Index Rows for unordered or unrelated events.
+
+## Trail and date block
+
+import { DemoTimelineTrail } from './demos/trail'
+
+<DemoTimelineTrail.Title />
+
+`trail` is the default. The first entry draws the origin, the last the terminal, and the others waypoints; `stage="current"` draws the "now" dot and sets `aria-current="step"`. `ongoing` keeps the last entry a waypoint and puts the terminal past it. Pass `marker` to override a shape. Dates sit above titles below 768 px of container, in a key column left of the spine from 768, and at 3 / gutter / 7 from 1024. `date-block` sets a `TimelineDateStack` (month, day, weekday) in a fixed key column with no spine. A `TimelineTitleLink` links a whole entry.
+
+<DemoTimelineTrail />
+
+[See Demo](./demos/trail/)
+
+## Agenda
+
+import { DemoTimelineAgenda } from './demos/agenda'
+
+<DemoTimelineAgenda.Title />
+
+`agenda` groups sessions under `TimelineDay`s: a date head in the heading ink, a scope caption that states the time zone once, then sessions led by the » marker in the accent. `TimelineSessionTitle` joins its `meta` with the serif's pipe and a no-break space, so a pipe never starts a line. Say "Happening now" or "Past" in `TimelineMeta`.
+
+<DemoTimelineAgenda />
+
+[See Demo](./demos/agenda/)
+
+## Grounds and print
+
+Light grounds are the default home; on deep grounds the spine takes the ground's accent. On saturated grounds keep to six entries, all in the one ink. In print the spine is 0.75 pt with 3 / 2.5 pt dashes, every marker is kept, entries never split, and "Today" should read "As of".
+
+## API Reference
+
+import { TypesTimeline, TypesTimelineAdditional } from './types'
+
+### Timeline and TimelineList
+
+<TypesTimeline.Timeline />
+
+<TypesTimeline.TimelineList />
+
+### TimelineEntry
+
+<TypesTimeline.TimelineEntry />
+
+### TimelineTitle, TimelineTitleLink, TimelineText and TimelineCaption
+
+<TypesTimeline.TimelineTitle />
+
+<TypesTimeline.TimelineTitleLink />
+
+<TypesTimeline.TimelineText />
+
+<TypesTimeline.TimelineCaption />
+
+### TimelineDateStack
+
+<TypesTimeline.TimelineDateStack />
+
+### Agenda parts
+
+<TypesTimeline.TimelineDay />
+
+<TypesTimeline.TimelineDateHead />
+
+<TypesTimeline.TimelineScope />
+
+<TypesTimeline.TimelineSession />
+
+<TypesTimeline.TimelineSessionTitle />
+
+<TypesTimeline.TimelineMeta />
+
+<TypesTimeline.TimelineDescription />
+
+### Additional types
+
+<TypesTimelineAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §12.14 (timeline and agenda), §8.11 (the timeline method) and §5.10.2 (module reflow).

@@ -26,16 +26,43 @@
       "@/*": [
         "./*"
       ],
-      "@fairgarden-private/design/components/*": [
-        "../src/components/*"
+      "@fairgarden/design/foundations/*": [
+        "../src/foundations/*"
       ],
-      "@fairgarden-private/design/utils/*": [
+      "@fairgarden/design/actions/*": [
+        "../src/actions/*"
+      ],
+      "@fairgarden/design/navigation/*": [
+        "../src/navigation/*"
+      ],
+      "@fairgarden/design/forms/*": [
+        "../src/forms/*"
+      ],
+      "@fairgarden/design/feedback/*": [
+        "../src/feedback/*"
+      ],
+      "@fairgarden/design/overlays/*": [
+        "../src/overlays/*"
+      ],
+      "@fairgarden/design/disclosure/*": [
+        "../src/disclosure/*"
+      ],
+      "@fairgarden/design/page/*": [
+        "../src/page/*"
+      ],
+      "@fairgarden/design/content/*": [
+        "../src/content/*"
+      ],
+      "@fairgarden/design/data/*": [
+        "../src/data/*"
+      ],
+      "@fairgarden/design/utils/*": [
         "../src/utils/*"
       ],
-      "@fairgarden-private/design/icons/*": [
+      "@fairgarden/design/icons/*": [
         "../src/icons/*"
       ],
-      "@fairgarden-private/design/*": [
+      "@fairgarden/design/*": [
         "../src/*"
       ]
     }
@@ -49,9 +76,7 @@
     ".next-fix2/types/**/*.ts",
     ".next-fix2/dev/types/**/*.ts",
     ".next-fix3/types/**/*.ts",
-    ".next-fix3/dev/types/**/*.ts",
-    ".next-final/types/**/*.ts",
-    ".next-final/dev/types/**/*.ts"
+    ".next-fix3/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

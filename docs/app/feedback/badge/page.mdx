@@ -1,0 +1,65 @@
+# Badge
+
+A short static label, a state or a count, in a 24 px pill with caps. Never a button, and never more than three words.
+
+```tsx
+import { Badge } from '@fairgarden/design/feedback/badge'
+```
+
+Badges keep caps: author the label in sentence case and `type-label` sets the caps. Every fill has an edge, so a badge keeps its shape in print, where fills drop and edges and words print black. Use one badge per item, two at most.
+
+## Outline, pill, static fill, sticker, status and count
+
+import { DemoBadgeVariants } from './demos/variants'
+
+<DemoBadgeVariants.Title />
+
+With no `variant` the badge is the outline form. `variant="solid"` is the pill: a step-9 fill with its edge and a contrast-ink label. `variant="static"` is the static fill: a step-4 fill of the secondary with its step-11 edge and a `--primary12` label, which a solid pill on pink, red, crimson, gold, ruby or tomato takes too. `variant="sticker"` is a nested light face with a ring and bold caps, the same on every ground; use one per module. `status` draws the status glyph plus the word on the status fill. `numeric` sets a count in the data face.
+
+<DemoBadgeVariants />
+
+[See Demo](./demos/variants/)
+
+## Primary and secondary
+
+import { DemoBadgeColor } from './demos/color'
+
+<DemoBadgeColor.Title />
+
+`secondary` is the pill's accent or taxonomy scale; on crimson, gold, pink, red, ruby and tomato, which carry no text on step 9, the pill takes the static fill instead. `status` sets `secondary` to its status scale (info indigo, success green, warning amber, danger red) unless you pass one. `primary` inks the outline, sticker and count.
+
+<DemoBadgeColor />
+
+[See Demo](./demos/color/)
+
+## On grounds
+
+import { DemoBadgeGrounds } from './demos/grounds'
+
+<DemoBadgeGrounds.Title />
+
+Saturated grounds take no accent fills: use the outline badge there.
+
+<DemoBadgeGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesBadge, TypesBadgeAdditional } from './types'
+
+### Badge
+
+<TypesBadge.Badge />
+
+### StatusGlyph
+
+<TypesBadge.StatusGlyph />
+
+### Additional types
+
+<TypesBadgeAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §10.11 (badge, tag and chip) and §1.5.4 (status).

@@ -1,0 +1,78 @@
+# Toggle
+
+A Base UI Toggle for immediate, reversible changes to how content is shown, and the Toggle Group that joins toggles into a segmented control or a set of filter chips.
+
+```tsx
+import { Toggle } from '@fairgarden/design/actions/toggle'
+import { ToggleGroup } from '@fairgarden/design/actions/toggle-group'
+```
+
+Use toggles for view modes, units, formatting, play and pause, and filters. Values a form submits use Radio or Checkbox Group, and panels use Tabs. Labels are authored in title case. Selection is always a 3 px inside edge, a glyph and weight 700; any fill is extra.
+
+## Toggles and states
+
+import { DemoToggleStates } from './demos/states'
+
+<DemoToggleStates.Title />
+
+The text toggle looks like an outline Button; pressed, it takes the inverse pair and a leading ✓. Hover takes a soft `--primary3` fill (on the pastels, forest and the solid fields, where soft fills drop, the label takes the accent underline instead); a pressed toggle's fill lightens to `--primary11` on hover, and pressing shows the inverse pair for a moment. The icon toggle's glyph takes its heavier weight on hover. The icon toggle is a circle whose icon swaps when pressed (`icon` → `pressedIcon`, ▷ ↔ ‖), never only a filled twin of the same glyph; its label is the visually hidden accessible name. `sm` is 32 px with its hit area extended to 44. Disabled draws a dotted edge; a selected item is never disabled.
+
+<DemoToggleStates />
+
+[See Demo](./demos/states/)
+
+## Segmented control and filter chips
+
+import { DemoToggleGroups } from './demos/groups'
+
+<DemoToggleGroups.Title />
+
+`variant="segmented"` joins 2–4 cells in one 2 px outline with `--role-rule` dividers, hidden beside the pressed cell; cells are equal at base and hug their labels from 768 px. More than four options belong in a Select. `variant="chip"` makes filter chips that wrap and never scroll: a quiet 1.5 px `--role-rule` edge at rest that turns `--primary12` at the same weight on hover, with the soft fill where it applies, and `--role-select` when pressed (`--role-select-hover` on hover). A single-choice group marks the pressed item with ●, a `multiple` group with ✓. `label` renders a visible group label, which may echo the value ("Size: M").
+
+<DemoToggleGroups />
+
+[See Demo](./demos/groups/)
+
+## Primary and secondary
+
+import { DemoToggleColor } from './demos/color'
+
+<DemoToggleColor.Title />
+
+Toggles and segments draw every part from `primary`. `secondary` drives only the selected filter chip's fill, mark and edge. Neither is defaulted.
+
+<DemoToggleColor />
+
+[See Demo](./demos/color/)
+
+## On grounds
+
+import { DemoToggleGrounds } from './demos/grounds'
+
+<DemoToggleGrounds.Title />
+
+Toggles and segments select by the inverse pair on every ground. Selected chips are green on paper and the inverse pair on forest and the saturated grounds. Toggles don't print; print the result as a caption ("View: Week").
+
+<DemoToggleGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesToggle, TypesToggleAdditional } from './types'
+
+### Toggle
+
+<TypesToggle.Toggle />
+
+### ToggleGroup
+
+<TypesToggle.ToggleGroup />
+
+### Additional types
+
+<TypesToggleAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §9.4 (toggle and toggle group, filter chips and segments).

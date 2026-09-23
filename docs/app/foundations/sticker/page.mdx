@@ -1,0 +1,53 @@
+# Sticker
+
+Hand art with a die-cut halo: an 8 px face around the drawing's silhouette that lifts it off any ground without a shadow, a tint or a blur.
+
+```tsx
+import { Sticker, StickerDetail } from '@fairgarden/design/foundations/sticker'
+```
+
+Pass the asset's `viewBox`, its halo path and its line art. The halo is a path drawn into the asset, 8 px outside every part and merged into one silhouette with rounded bridges; never build it with a stroke, an outline or a blur. The Sticker fills the halo with the face color and strokes the art in the heading ink, at the silhouette weight; wrap interior lines in `StickerDetail` for the lighter weight, and give ink-spot parts `fill="currentColor"`. Use one sticker per scene, never on a photograph, and keep text out of the art. It is decorative, so it is hidden from assistive technology.
+
+## Sizes and the bare variant
+
+import { DemoStickerSizes } from './demos/sizes'
+
+<DemoStickerSizes.Title />
+
+Stickers come in two native sizes: S, 152 px, and L, 312 px, each with its own stroke pair. They never scale with the viewport; swap the size instead. `bare` drops the halo and draws the art in the surrounding ground's heading ink, with open counters. Never set a bare drawing on a pattern.
+
+<DemoStickerSizes />
+
+[See Demo](./demos/sizes/)
+
+## On paper, rose, forest and leaf
+
+import { DemoStickerGrounds } from './demos/grounds'
+
+<DemoStickerGrounds.Title />
+
+A sticker is its own `white` scope, so the same asset looks the same on every ground. On a page ground it follows the page's light or dark mode; inside a field or the night band it stays light in both modes. In print the halo drops out and the line prints black.
+
+<DemoStickerGrounds />
+
+[See Demo](./demos/grounds/)
+
+## API Reference
+
+import { TypesSticker, TypesStickerAdditional } from './types'
+
+### Sticker
+
+<TypesSticker.Sticker />
+
+### StickerDetail
+
+<TypesSticker.StickerDetail />
+
+### Additional types
+
+<TypesStickerAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §6.5 (the sticker halo), §6.12 (drawings on grounds) and §6.14 (responsive art).

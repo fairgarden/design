@@ -1,0 +1,16 @@
+.frame {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+/* The home link around the lockup, in the band's ink. */
+.logo {
+  color: var(--primary12);
+  text-decoration-line: none;
+}
+
+.mark {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--ds-stroke-1-5);
+}

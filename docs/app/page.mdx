@@ -10,12 +10,26 @@ The system is calm and a little playful. It uses warm paper grounds, one deep na
 - [Color contract](./overview/color/page.mdx): the `primary` and `secondary` props, role variables, the hover model and the 16 ground presets (8 page grounds, the `night` band and 7 fields)
 - [Tokens](./overview/tokens/page.mdx): Open Props plus the `--ds-` extensions, and the units policy
 - [Typography](./overview/typography/page.mdx): four families, one job each, and the type roles
-- [Components](./components/page.mdx): every component, grouped from foundations through actions and navigation, forms, status and overlays, the page frame and content modules to data, with live demos and API tables
+
+## Components
+
+Each component is imported from its category's path, `@fairgarden/design/<category>/<name>` (for example `@fairgarden/design/forms/input`), and documented with live demos and an API table.
+
+- [Foundations](./foundations/page.mdx): Ground, Icon, Separator, Sticker and the pattern tiles
+- [Actions](./actions/page.mdx): Button, Link, Toggle and Toggle Group, Chip
+- [Navigation](./navigation/page.mdx): Navigation Menu, Navigation Bar, Nav Drawer, Breadcrumb, Pagination, Tabs, Toolbar
+- [Forms](./forms/page.mdx): Field, Fieldset, Form, Input, Number Field, Select, Combobox, Autocomplete, Search, Checkbox and Checkbox Group, Radio and Radio Group, Switch, Slider
+- [Feedback](./feedback/page.mdx): Alert, Badge, Tag, Avatar, Progress, Meter, Toast
+- [Overlays](./overlays/page.mdx): Dialog, Alert Dialog, Popover, Preview Card, Menu, Context Menu, Menubar, Tooltip
+- [Disclosure](./disclosure/page.mdx): Accordion, Collapsible, FAQ
+- [Page](./page/page.mdx): Hero, Footer, Section Bar, Section Divider, Section Header, CTA Block, Newsletter, Marquee, Announcement Bar
+- [Content](./content/page.mdx): Card, Card Grid, Feature Grid, Carousel, Quote, Index Rows, Profile, Pricing, Timeline, Empty State
+- [Data](./data/page.mdx): Table, Scroll Area, Spec Grid, Spec List, Spec Sheet, Figure, Stat, Chart, Map
 
 ## Install
 
 ```bash
-pnpm add @fairgarden-private/design @base-ui/react
+pnpm add @fairgarden/design @base-ui/react
 # only for Map:
 pnpm add maplibre-gl pmtiles @protomaps/basemaps
 ```

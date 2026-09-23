@@ -1,0 +1,55 @@
+# Section Divider
+
+The seam between two bands, or a pause inside one: the straight cut, the seam rules, and the page's one shaped edge, the hill or the hatched fringe.
+
+```tsx
+import { SectionDivider } from '@fairgarden/design/page/section-divider'
+```
+
+Render a band seam (`seam`, `page-seam`, `hill`, `fringe`) as the **first child of the lower band's** `<Ground kind="band">`, whose block padding is `--ds-space-section`. The divider takes that band's colors and sits on its top edge. `chrome` and `pause` sit in the flow where you place them. The default, `straight`, renders nothing: the change of ground is the cut.
+
+## Seams and pauses
+
+import { DemoSectionDividerSeams } from './demos/seams'
+
+<DemoSectionDividerSeams.Title />
+
+Two different page grounds meet across the `page-seam` hairline, in the lower band's hairline color, in light and dark mode alike. Leave it out when the lower band opens with an eyebrow rule. Two bands on the same ground take the `seam` rule. A `pause` breaks one long band once, with a dotted run, or with the rule–dot–rule or dot-and-star ornament in the accent color. It never sits at a boundary.
+
+<DemoSectionDividerSeams />
+
+[See Demo](./demos/seams/)
+
+## The hill
+
+import { DemoSectionDividerHill } from './demos/hill'
+
+<DemoSectionDividerHill.Title />
+
+The hill sits only on the night media hero's lower seam, where tone separates the two grounds. The page ground below rises into the night band as one asymmetric curve, cresting at two thirds of the width. It stands 4.6% of the width high, clamped between 12 and 64 px, and no rule runs under it. The height joins the lower band's top padding. On a dark page, in print and in forced colors it drops for the straight seam. Use it for editorial and reference pages, once per page.
+
+<DemoSectionDividerHill />
+
+[See Demo](./demos/hill/)
+
+## The hatched fringe
+
+import { DemoSectionDividerFringe } from './demos/fringe'
+
+<DemoSectionDividerFringe.Title />
+
+The fringe hangs short ticks from the night band's edge in light mode. It can sit on the footer's top edge, in the night band's ink, or under the media hero, in the page ground's ink. The ticks repeat at a fixed pitch and never stretch. Like the hill it drops on a dark page and in print, and the two share the page's one shaped edge.
+
+<DemoSectionDividerFringe />
+
+[See Demo](./demos/fringe/)
+
+## API Reference
+
+import { TypesSectionDivider } from './types'
+
+<TypesSectionDivider />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §11.2 (section divider and shaped edge), §4.9 (edge geometry) and D179, D189 (seams, the hill).

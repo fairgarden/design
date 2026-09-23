@@ -7,14 +7,14 @@ Add the package, import the global stylesheet and the fonts once, and wrap the a
 The package ships source components built on Base UI, which is a peer dependency alongside React.
 
 ```bash
-pnpm add @fairgarden-private/design @base-ui/react
+pnpm add @fairgarden/design @base-ui/react
 ```
 
-The rest comes with the package: the fonts (Fontsource), Recharts for [Chart](../../components/chart/page.mdx), and the Material Symbols Rounded icons, generated as per-icon SVG paths, so there is no icon font to load.
+The rest comes with the package: the fonts (Fontsource), Recharts for [Chart](../../data/chart/page.mdx), and the Material Symbols Rounded icons, generated as per-icon SVG paths, so there is no icon font to load.
 
 ## Maps
 
-[Map](../../components/map/page.mdx)'s vector base draws OpenStreetMap data from a Protomaps PMTiles archive with MapLibre GL JS. Its three libraries are optional peer dependencies: install them only in apps that pass `pmtiles` to a `Map`.
+[Map](../../data/map/page.mdx)'s vector base draws OpenStreetMap data from a Protomaps PMTiles archive with MapLibre GL JS. Its three libraries are optional peer dependencies: install them only in apps that pass `pmtiles` to a `Map`.
 
 ```bash
 pnpm add maplibre-gl pmtiles @protomaps/basemaps
@@ -27,8 +27,8 @@ They load with a dynamic import when a PMTiles map mounts, so pages without one 
 Import both once, in the app shell. Components import their own CSS Modules; only these two are manual.
 
 ```tsx filename=layout.tsx
-import '@fairgarden-private/design/utils/global.css'
-import '@fairgarden-private/design/utils/fonts'
+import '@fairgarden/design/utils/global.css'
+import '@fairgarden/design/utils/fonts'
 ```
 
 - **`global.css`** declares the cascade layer order, then the reset, the tokens, the 31 Radix scales with their light and dark values, the mode blocks, the role maps and the print remap.
@@ -39,7 +39,7 @@ import '@fairgarden-private/design/utils/fonts'
 `ClientProvider` gives the design system and Base UI the locale and its writing direction. Place it once, inside `<html lang>`. `useLocale()` reads it back.
 
 ```tsx filename=layout.tsx
-import { ClientProvider } from '@fairgarden-private/design/utils/ClientProvider'
+import { ClientProvider } from '@fairgarden/design/utils/ClientProvider'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -52,7 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-The page root is a `paper` band. Wrap regions in a [Ground](../../components/ground/page.mdx) to change it.
+The page root is a `paper` band. Wrap regions in a [Ground](../../foundations/ground/page.mdx) to change it.
 
 ## Light and dark mode
 

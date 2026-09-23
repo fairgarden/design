@@ -1,0 +1,446 @@
+/*
+ * Mobile Navigation Drawer (§11.6). CVA function `navigationDrawer` in
+ * NavDrawer.tsx. The sheet (`base`) is the Dialog Popup rendered as a
+ * `kind="band"` Ground of the header's preset, so it takes the header's
+ * ground and mode, never a `white` overlay scope [D97, D148].
+ *
+ * Parts: base, bar, logo, logoMark, close, closeLabel, scroll, nav, list,
+ * item, group, groupRow, rowLabel, glyph (the Collapsible module's D109
+ * glyph), panel, childList (the indent guide), childItem, childLink,
+ * directLink, linkLabel, footer, footerAction, footerList, footerLink,
+ * footerLocale, menuTrigger, menuIcon, menuLabel.
+ *
+ * No backdrop or tint [D24 → D121]: the full sheet hides the page; the side
+ * sheet leaves it unpainted and inert. Motion is a clip reveal, never a
+ * fade [D91]. Colors are role variables only; local custom properties carry
+ * dimensions only (--nav-drawer-clip-from, a clip shape).
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.menuTrigger {
+  composes: typeButtonSm from '../../utils/type.module.css';
+  composes: iconHost from '../../foundations/icon/icon.module.css';
+}
+
+.close {
+  composes: typeButtonSm from '../../utils/type.module.css';
+  composes: iconHost from '../../foundations/icon/icon.module.css';
+}
+
+.groupRow {
+  composes: typeItemhead from '../../utils/type.module.css';
+}
+
+.directLink {
+  composes: typeItemhead from '../../utils/type.module.css';
+}
+
+.childLink {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.footerLink {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+@layer base {
+  /* ── The menu Button (in the header) ──────────────────────────────── */
+
+  /* The `menu` icon at the header tier (tag, 20 px) plus "Menu", --size-px-2 apart. */
+  .menuTrigger,
+  .close {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-px-2);
+    box-sizing: border-box;
+    min-block-size: var(--ds-size-hit);
+    min-inline-size: var(--ds-size-hit);
+    margin: 0;
+    padding-block: 0;
+    padding-inline: var(--size-px-1);
+    border: 0;
+    border-radius: var(--radius-1);
+    background: none;
+    color: var(--primary12);
+    white-space: nowrap;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .menuIcon {
+    flex: none;
+  }
+
+  .menuLabel,
+  .closeLabel {
+    text-decoration-color: var(--role-accent);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  /* Stack guard: below 360 px the label may drop; it stays the accessible name [D73]. */
+  @media (--xs-n-below) {
+    .menuLabel {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+
+  /* ── The sheet's bar: it repeats the header ────────────────────────── */
+
+  .bar {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-3);
+    box-sizing: content-box;
+    block-size: var(--ds-size-control-xl);
+    padding-inline: var(--ds-space-margin);
+    border-block-end: var(--border-size-1) solid var(--role-rule);
+  }
+
+  .logo {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    min-block-size: var(--ds-size-hit);
+    color: var(--primary12);
+    text-decoration-line: none;
+  }
+
+  .logoMark {
+    display: inline-flex;
+    align-items: center;
+    block-size: var(--size-px-6);
+  }
+
+  .logoMark > * {
+    display: block;
+    inline-size: auto;
+    block-size: 100%;
+  }
+
+  /* The close control sits exactly where the menu Button was (Matic). */
+  .close {
+    margin-inline-start: auto;
+  }
+
+  /* ── The list ──────────────────────────────────────────────────────── */
+
+  .nav,
+  .group {
+    display: block;
+  }
+
+  .list,
+  .childList,
+  .footerList {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .item {
+    display: block;
+  }
+
+  /* Row rules between top-level rows, indented to the content column; none after the last. */
+  .item:not(:first-child)::before {
+    content: '';
+    display: block;
+    margin-inline: var(--ds-space-margin);
+    border-block-start: var(--border-size-1) solid var(--role-hairline);
+  }
+
+  /* Group rows and direct links: the display serif at a --ds-size-control-xl pitch [D60]. */
+  .groupRow,
+  .directLink {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-3);
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: var(--ds-size-control-xl);
+    margin: 0;
+    padding-block: 0;
+    padding-inline: var(--ds-space-margin);
+    border: 0;
+    background: none;
+    color: var(--primary12);
+    text-align: start;
+    text-decoration-line: none;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .groupRow {
+    justify-content: space-between;
+  }
+
+  /* The current bar at the row's start edge: a border, so it survives forced colors. */
+  .groupRow::before,
+  .directLink::before,
+  .childLink::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    border-inline-start: 0 solid var(--primary12);
+    pointer-events: none;
+  }
+
+  .rowLabel,
+  .linkLabel {
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  /* The D109 glyph, right-aligned at the header's icon tier (20 px at --ds-stroke-1-5). */
+  .glyph {
+    flex: none;
+  }
+
+  /* The clip reveal (§1.5.15) [D91]: the panel wipes open; never faded. */
+  .panel {
+    block-size: var(--collapsible-panel-height);
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  /* Child links sit on a --border-size-1 --role-hairline indent guide, --size-px-5 in. */
+  .childList {
+    margin-inline-start: calc(var(--ds-space-margin) + var(--size-px-5));
+    margin-inline-end: var(--ds-space-margin);
+    margin-block-end: var(--size-px-5);
+    border-inline-start: var(--border-size-1) solid var(--role-hairline);
+  }
+
+  .childItem {
+    display: block;
+  }
+
+  /* Family and weight carry the hierarchy, not size (type-body-ui at 400). */
+  .childLink {
+    position: relative;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    min-block-size: var(--ds-size-hit);
+    padding-inline: var(--size-px-3);
+    color: var(--primary12);
+    text-decoration-line: none;
+  }
+
+  /* The child's current bar lies over the indent guide. */
+  .childLink::before {
+    inset-inline-start: calc(-1 * var(--border-size-1));
+  }
+
+  /* ── The footer: fixed under the list ──────────────────────────────── */
+
+  .footer {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ds-space-12);
+    padding-block: var(--size-px-3);
+    padding-inline: var(--ds-space-margin);
+    border-block-start: var(--border-size-2) solid var(--role-rule);
+  }
+
+  .footerAction,
+  .footerLocale {
+    display: flex;
+  }
+
+  .footerList {
+    align-self: stretch;
+  }
+
+  .footerLink {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-block-size: var(--ds-size-hit);
+    color: var(--primary12);
+    text-decoration-line: none;
+  }
+
+  /* Hover transitions [D181]: color only, --ds-duration-quick. */
+  @media (--motionOK) {
+    .menuLabel,
+    .closeLabel,
+    .rowLabel,
+    .linkLabel {
+      transition-property: color, text-decoration-color;
+      transition-duration: var(--ds-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+
+    .panel {
+      transition-property: block-size;
+      transition-duration: var(--ds-duration-disclosure);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer variants {
+  /*
+   * The sheet. Written in the variants layer so it outranks the composed
+   * Ground's own base-layer display. Base: full screen, opaque, no border
+   * [D24 → D121], revealed from the top.
+   */
+  .base {
+    --nav-drawer-clip-from: inset(0 0 100% 0);
+
+    position: fixed;
+    inset: 0;
+    z-index: var(--layer-4);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    margin: 0;
+    clip-path: inset(0);
+  }
+
+  /* From --md-n-above: a --size-sm side sheet docked at the trigger's (end) edge, --ds-stroke-3 inner edge [D92]. */
+  @media (--md-n-above) {
+    .base {
+      --nav-drawer-clip-from: inset(0 0 0 100%);
+
+      inset-inline-start: auto;
+      inline-size: min(var(--size-sm), 100%);
+      border-inline-start: var(--ds-stroke-3) solid var(--primary12);
+    }
+
+    .base:dir(rtl) {
+      --nav-drawer-clip-from: inset(0 100% 0 0);
+    }
+  }
+
+  @media (--motionOK) {
+    .base {
+      transition-property: clip-path;
+      transition-duration: var(--ds-duration-disclosure);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer compounds {
+  /* The list scrolls between the fixed bar and footer; the Scroll Area's 50dvh cap gives way. */
+  .scroll {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    max-block-size: none;
+  }
+
+  /* Child and footer links fill their row: a block flex box, over Link's inline `nav` row. */
+  .childLink,
+  .footerLink {
+    display: flex;
+  }
+}
+
+@layer states {
+  /* The menu Button and close control: the `text` Button hover [D181]. */
+  .menuTrigger:hover .menuLabel,
+  .close:hover .closeLabel {
+    color: var(--role-link-hover);
+    text-decoration-line: var(--ds-link-hover-line);
+  }
+
+  /* Pressed: the inverse pair (§9.2). */
+  .menuTrigger:active,
+  .close:active {
+    background-color: var(--primary12);
+    color: var(--role-inverse);
+  }
+
+  /*
+   * Group rows and direct links: the bare-text underline, --role-accent at
+   * --border-size-2 [D181]. Child and footer links are Link list links,
+   * whose color-only hover Link owns.
+   */
+  .groupRow:hover .rowLabel,
+  .directLink:hover .linkLabel {
+    text-decoration-line: underline;
+  }
+
+  @media (--forcedColors) {
+    .menuTrigger:hover .menuLabel,
+    .close:hover .closeLabel {
+      text-decoration-line: underline;
+    }
+  }
+
+  .menuTrigger:focus-visible,
+  .close:focus-visible,
+  .logo:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  /* Rows: the ring inset inside the row (the list parent raises the list links' over Link's ring). */
+  .groupRow:focus-visible,
+  .directLink:focus-visible,
+  .childList .childLink:focus-visible,
+  .footerList .footerLink:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: calc(-1 * var(--border-size-2));
+  }
+
+  /* Current: the --ds-stroke-3 start-edge bar; links also take weight 700 [D15]. */
+  .groupRow[aria-current='true']::before,
+  .directLink[aria-current='page']::before,
+  .childLink[aria-current='page']::before {
+    border-inline-start-width: var(--ds-stroke-3);
+  }
+
+  .childLink[aria-current='page'],
+  .directLink[aria-current='page'],
+  .footerLink[aria-current='page'] {
+    font-weight: var(--font-weight-7);
+  }
+
+  /* The start-edge bar replaces Link's current underline; the list parent raises these over Link's rule. */
+  .childList .childLink[aria-current='page'],
+  .footerList .footerLink[aria-current='page'] {
+    text-decoration-line: none;
+  }
+
+  .panel[data-starting-style],
+  .panel[data-ending-style] {
+    block-size: 0;
+  }
+
+  /* The sheet's clip reveal: from the top (full sheet) or the docked edge (side sheet). */
+  .base[data-starting-style] {
+    clip-path: var(--nav-drawer-clip-from);
+  }
+
+  /* Focus parked on the sheet itself (opened by touch): the ring sits inside. */
+  .base:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: calc(-2 * var(--border-size-2));
+  }
+}
+
+@layer print {
+  @media print {
+    /* Hidden, even if it is open when the user prints (§11.6). */
+    .base,
+    .menuTrigger {
+      display: none;
+    }
+  }
+}

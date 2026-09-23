@@ -25,8 +25,11 @@
   }
 }
 
+/* The home link: the logo and wordmark lockup (Logo.tsx) in the heading ink. */
 .brand {
-  composes: typeKicker from '../../src/utils/type.module.css';
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--ds-size-hit);
   color: var(--role-heading);
   text-decoration: none;
 }
