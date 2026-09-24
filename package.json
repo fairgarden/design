@@ -12,7 +12,7 @@
     "url": "git+https://github.com/fairgarden/design.git"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "files": [
     "foundations",
