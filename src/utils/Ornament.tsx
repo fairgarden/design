@@ -9,8 +9,8 @@ import styles from './ornament.module.css'
 
 /*
  * The shared ornament parts (§1.5.16, §4.7, §6.6): the `marker-*` shapes,
- * the index and rank numerals, `ornament-trail`, the LTA dashed trail, and
- * `ornament-blob`, the LTA blob mount. Each draws its SVG geometry at the
+ * the index and rank numerals, `ornament-trail`, the dashed trail, and
+ * `ornament-blob`, the blob mount. Each draws its SVG geometry at the
  * token sizes (MARKER_PX mirrors them) and adds the ornament module's
  * classes, which set size, stroke and color. Markers, trails and mounts are
  * decorative (`aria-hidden`): whatever state they show is also in words.
@@ -276,7 +276,7 @@ export type OrnamentBlobProps = Omit<React.ComponentPropsWithRef<'span'>, 'child
 }
 
 /**
- * `ornament-blob` (§6.6, §1.5.16): the LTA blob mount, a flat hand-cut disc
+ * `ornament-blob` (§6.6, §1.5.16): the blob mount, a flat hand-cut disc
  * in `--secondary9` over a larger, turned under-disc in `--secondary7`,
  * holding a centred mark in `--secondary-contrast`. Once per page, at a
  * fixed 136 × 130 px. On `forest` and the solid fields the mount is omitted

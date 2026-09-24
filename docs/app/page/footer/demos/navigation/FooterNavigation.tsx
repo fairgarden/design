@@ -13,7 +13,7 @@ import styles from './navigation.module.css'
 /**
  * One navigation object feeds the header's menu (from 1024 px), the drawer
  * (below it; narrow the window) and the footer sitemap, so the footer
- * mirrors the mega panels [D187]. The page sits in What We Do › Our programs.
+ * mirrors the mega panels [D187]. The page sits in Programs › Garden programs.
  */
 export function FooterNavigation() {
   return (
@@ -21,7 +21,7 @@ export function FooterNavigation() {
       <NavigationBar
         logo={<Lockup />}
         logoLabel="FairGarden home"
-        currentPath="/what-we-do/our-programs"
+        currentPath="/programs/gardens"
         skipHref="#navigation-demo-content"
         action={
           <Button variant="solid" size="sm" nativeButton={false} render={<a href="/donate" />}>

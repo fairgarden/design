@@ -15,7 +15,7 @@ import styles from './faq.module.css'
 
 /*
  * FAQ (§12.5): 4–15 independent question-and-answer pairs that readers scan.
- * Built on the Base UI Accordion in the §10.13 Ruled form (LTA disclosure
+ * Built on the Base UI Accordion in the §10.13 Ruled form (disclosure
  * glyph) with the Strong top rule; motion follows §10.13.
  *
  * Implementation (CSS Modules + CVA)

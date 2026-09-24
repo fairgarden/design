@@ -354,7 +354,7 @@ export type TimelineDateStackProps = Omit<useRender.ComponentProps<'time'>, 'chi
   weekday?: React.ReactNode
 }
 
-/** The date-block key (Sofar Sounds): MONTH / day / WEEKDAY, stacked. Pass `dateTime`. */
+/** The date-block key: MONTH / day / WEEKDAY, stacked. Pass `dateTime`. */
 export function TimelineDateStack(props: TimelineDateStackProps) {
   const { render, ref, className, month, day, weekday, ...rest } = props
   return useRender({

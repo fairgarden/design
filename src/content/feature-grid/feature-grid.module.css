@@ -54,7 +54,7 @@
     list-style: none;
   }
 
-  /* Rhythm (LTA footer block): leader → 16 → heading → 32 → body; 56 to the next cell. */
+  /* Rhythm: leader → 16 → heading → 32 → body; 56 to the next cell. */
   .cell {
     position: relative; /* the stretched title link's positioned ancestor */
     display: flex;
@@ -175,13 +175,13 @@
 }
 
 @layer variants {
-  /* Icon (LTA footer blocks): block icon → heading → body, whitespace only. */
+  /* Icon: block icon → heading → body, whitespace only. */
   .kindIcon .cell {
     align-items: flex-start;
   }
 
   /*
-   * Numbered (Rocco): centered within --size-content-2 while stacked, cells
+   * Numbered: centered within --size-content-2 while stacked, cells
    * separated by --border-size-1 --role-rule inset rules (--ds-space-40 in
    * from each side), centered in the row gap. Once cells sit in a row the
    * separator turns into a vertical column rule in the gutter; it is dropped
@@ -274,13 +274,13 @@
     }
   }
 
-  /* Rule-topped (Audubon): a --role-hairline column rule opens each cell; rules break at the gutter. */
+  /* Rule-topped: a --role-hairline column rule opens each cell; rules break at the gutter. */
   .ruleTopped .cell {
     padding-block-start: var(--size-px-3);
     border-block-start: var(--border-size-1) solid var(--role-hairline);
   }
 
-  /* Framed (Spoak): 2 × 2 inside the faced frame; the frame sits in the outer scope. */
+  /* Framed: 2 × 2 inside the faced frame; the frame sits in the outer scope. */
   .framed .frame {
     border-radius: var(--ds-radius-8);
   }
@@ -303,7 +303,7 @@
     }
   }
 
-  /* Glossary (Prepositions Diagram Sheet): drawings with caps captions, no rules. */
+  /* Glossary: drawings with caps captions, no rules. */
   .glossary .caption + .body {
     margin-block-start: var(--ds-space-12);
   }

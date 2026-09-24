@@ -12,7 +12,7 @@ export function HeroIllustrated() {
         field="leaf"
         next="paper"
         title={<HeroLockup caps="Grown right" accent="here" />}
-        lede="Burgers from farms within a hundred miles, cooked on the corner since 2009."
+        lede="Vegetables from plots within a mile, sold at the corner stand since 2011."
         actions={
           <Button variant="solid" size="lg">
             Order Now
@@ -37,7 +37,7 @@ export function HeroIllustrated() {
             />
           </svg>
         }
-        rail={{ href: '#illustrated', label: 'Find a kitchen' }}
+        rail={{ href: '#illustrated', label: 'Find a stand' }}
       />
       <Ground kind="band" preset="paper" className={styles.band}>
         <div className={styles.container}>

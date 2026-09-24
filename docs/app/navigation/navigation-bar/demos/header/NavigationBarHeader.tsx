@@ -29,7 +29,7 @@ import { photo } from './photo'
 import styles from './header.module.css'
 
 /**
- * The full header on a page in What We Do › Our Programs: skip link, brand
+ * The full header on a page in Programs › Garden Programs: skip link, brand
  * strip, utility row, logo, the inline menu from 1024 px, search, the one
  * action, and the drawer below 1024 px. The docs show it in a frame that is
  * its own viewport, so the bar answers to the frame's width; open the full
@@ -41,7 +41,7 @@ export function NavigationBarHeader() {
       <NavigationBar
         logo={<Lockup />}
         logoLabel="FairGarden home"
-        currentPath="/what-we-do/our-programs"
+        currentPath="/programs/gardens"
         skipHref="#header-demo-content"
         utility={
           <NavigationBarUtility>
@@ -73,103 +73,101 @@ export function NavigationBarHeader() {
               </NavDrawerFooter>
             }
           >
-            <NavDrawerGroup label="Why Land Matters">
-              <NavDrawerLink href="/why-land-matters">Why land matters</NavDrawerLink>
-              <NavDrawerLink href="/why-land-matters/land-conservation">Land conservation</NavDrawerLink>
-              <NavDrawerLink href="/why-land-matters/priorities">Conservation priorities</NavDrawerLink>
+            <NavDrawerGroup label="Our Work">
+              <NavDrawerLink href="/our-work">Our work</NavDrawerLink>
+              <NavDrawerLink href="/our-work/stewardship">Stewardship</NavDrawerLink>
+              <NavDrawerLink href="/our-work/priorities">Priorities</NavDrawerLink>
             </NavDrawerGroup>
-            <NavDrawerGroup label="What We Do">
-              <NavDrawerLink href="/what-we-do">What we do</NavDrawerLink>
-              <NavDrawerLink href="/what-we-do/our-programs">Our programs</NavDrawerLink>
-              <NavDrawerLink href="/what-we-do/impact">Our collective impact</NavDrawerLink>
+            <NavDrawerGroup label="Programs">
+              <NavDrawerLink href="/programs">Programs</NavDrawerLink>
+              <NavDrawerLink href="/programs/gardens">Garden programs</NavDrawerLink>
+              <NavDrawerLink href="/programs/impact">Our impact</NavDrawerLink>
             </NavDrawerGroup>
-            <NavDrawerGroup label="Take Action">
-              <NavDrawerLink href="/take-action">Take action</NavDrawerLink>
-              <NavDrawerLink href="/take-action/get-involved">Get involved</NavDrawerLink>
-              <NavDrawerLink href="/take-action/give">Give</NavDrawerLink>
+            <NavDrawerGroup label="Get Involved">
+              <NavDrawerLink href="/get-involved">Get involved</NavDrawerLink>
+              <NavDrawerLink href="/get-involved/volunteer">Volunteer</NavDrawerLink>
+              <NavDrawerLink href="/get-involved/give">Give</NavDrawerLink>
             </NavDrawerGroup>
-            <NavDrawerLink href="/find-a-land-trust">Find a Land Trust</NavDrawerLink>
+            <NavDrawerLink href="/find-a-garden">Find a Garden</NavDrawerLink>
           </NavDrawer>
         }
       >
         <NavigationMenu>
           <NavigationMenuItem>
-            <NavigationMenuTrigger section="/why-land-matters">Why Land Matters</NavigationMenuTrigger>
+            <NavigationMenuTrigger section="/our-work">Our Work</NavigationMenuTrigger>
             <NavigationMenuContent
               kind="overview"
               featured={
                 <NavigationMenuFeatured
-                  href="/why-land-matters"
-                  description="How saving land safeguards our future."
+                  href="/our-work"
+                  description="Why shared gardens make stronger towns."
                 >
-                  Why Land Matters
+                  Our Work
                 </NavigationMenuFeatured>
               }
               promo={
                 <NavigationMenuPromo
-                  href="/why-land-matters/land-is-the-answer"
-                  title="Land Is the Answer"
-                  image={<img src={photo} alt="A ridge of protected forest above a river valley" />}
+                  href="/our-work/grown-close-to-home"
+                  title="Grown Close to Home"
+                  image={<img src={photo} alt="Raised beds on a hillside above a river valley" />}
                 >
-                  Protected land cleans our water, cools our towns and feeds our families.
+                  Shared plots cool our streets, feed our families and bring neighbors out.
                 </NavigationMenuPromo>
               }
             >
-              <NavigationMenuGroup heading="Land Conservation" href="/why-land-matters/land-conservation">
-                <NavigationMenuLink href="/why-land-matters/land-conservation/why-conserve">
-                  Why conserve land
-                </NavigationMenuLink>
-                <NavigationMenuLink href="/why-land-matters/land-conservation/easements">
-                  Conservation easements
+              <NavigationMenuGroup heading="Stewardship" href="/our-work/stewardship">
+                <NavigationMenuLink href="/our-work/stewardship/why-grow">Why grow together</NavigationMenuLink>
+                <NavigationMenuLink href="/our-work/stewardship/agreements">
+                  Garden land agreements
                 </NavigationMenuLink>
               </NavigationMenuGroup>
-              <NavigationMenuGroup heading="Conservation Priorities" href="/why-land-matters/priorities">
-                <NavigationMenuLink href="/why-land-matters/priorities/climate">Climate</NavigationMenuLink>
-                <NavigationMenuLink href="/why-land-matters/priorities/water">Clean water</NavigationMenuLink>
-                <NavigationMenuLink href="/why-land-matters/priorities/farms">Farms and food</NavigationMenuLink>
+              <NavigationMenuGroup heading="Priorities" href="/our-work/priorities">
+                <NavigationMenuLink href="/our-work/priorities/climate">Climate</NavigationMenuLink>
+                <NavigationMenuLink href="/our-work/priorities/water">Clean water</NavigationMenuLink>
+                <NavigationMenuLink href="/our-work/priorities/food">Local food</NavigationMenuLink>
               </NavigationMenuGroup>
             </NavigationMenuContent>
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuTrigger section="/what-we-do">What We Do</NavigationMenuTrigger>
+            <NavigationMenuTrigger section="/programs">Programs</NavigationMenuTrigger>
             <NavigationMenuContent
               kind="overview"
               featured={
                 <NavigationMenuFeatured
-                  href="/what-we-do"
-                  description="We help permanently protect the land that you need and love."
+                  href="/programs"
+                  description="We help neighbors start, tend and keep the gardens they love."
                 >
-                  What We Do
+                  Programs
                 </NavigationMenuFeatured>
               }
             >
-              <NavigationMenuGroup heading="Our Programs" href="/what-we-do/our-programs">
-                <NavigationMenuLink href="/what-we-do/our-programs/accreditation">Accreditation</NavigationMenuLink>
-                <NavigationMenuLink href="/what-we-do/our-programs/policy">Policy and advocacy</NavigationMenuLink>
+              <NavigationMenuGroup heading="Garden Programs" href="/programs/gardens">
+                <NavigationMenuLink href="/programs/gardens/plot-matching">Plot matching</NavigationMenuLink>
+                <NavigationMenuLink href="/programs/gardens/seed-library">Seed library</NavigationMenuLink>
               </NavigationMenuGroup>
-              <NavigationMenuGroup heading="Our Collective Impact" href="/what-we-do/impact">
-                <NavigationMenuLink href="/what-we-do/impact/census">National land trust census</NavigationMenuLink>
-                <NavigationMenuLink href="/what-we-do/impact/stories">Success stories</NavigationMenuLink>
+              <NavigationMenuGroup heading="Our Impact" href="/programs/impact">
+                <NavigationMenuLink href="/programs/impact/harvest">Annual harvest count</NavigationMenuLink>
+                <NavigationMenuLink href="/programs/impact/stories">Garden stories</NavigationMenuLink>
               </NavigationMenuGroup>
-              <NavigationMenuGroup heading="Training" href="/what-we-do/training">
-                <NavigationMenuLink href="/what-we-do/training/courses">Courses</NavigationMenuLink>
-                <NavigationMenuLink href="/what-we-do/training/rally">National conference</NavigationMenuLink>
+              <NavigationMenuGroup heading="Training" href="/programs/training">
+                <NavigationMenuLink href="/programs/training/courses">Courses</NavigationMenuLink>
+                <NavigationMenuLink href="/programs/training/gathering">Annual gathering</NavigationMenuLink>
               </NavigationMenuGroup>
             </NavigationMenuContent>
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuTrigger section="/take-action">Take Action</NavigationMenuTrigger>
+            <NavigationMenuTrigger section="/get-involved">Get Involved</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <NavigationMenuLink href="/take-action/get-involved">Get involved</NavigationMenuLink>
-              <NavigationMenuLink href="/take-action/conserve">Conserve your land</NavigationMenuLink>
-              <NavigationMenuLink href="/take-action/give">Give</NavigationMenuLink>
+              <NavigationMenuLink href="/get-involved/volunteer">Volunteer</NavigationMenuLink>
+              <NavigationMenuLink href="/get-involved/share-land">Share your land</NavigationMenuLink>
+              <NavigationMenuLink href="/get-involved/give">Give</NavigationMenuLink>
             </NavigationMenuContent>
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuLink href="/find-a-land-trust">Find a Land Trust</NavigationMenuLink>
+            <NavigationMenuLink href="/find-a-garden">Find a Garden</NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenu>
       </NavigationBar>

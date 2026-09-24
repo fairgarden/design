@@ -19,7 +19,7 @@ source.
 | delta          | `React.ReactNode` | -       | The change as words: "12% since 2023". Drawn after a ▲ or ▼, never color alone.                                                                                            |
 | deltaDirection | `'up' \| 'down'`  | -       | The direction of `delta`: `up` ▲ or `down` ▼.                                                                                                                              |
 | deltaLabel     | `string`          | -       | The glyph's accessible name. Default "Up" or "Down".                                                                                                                       |
-| qualifier      | `React.ReactNode` | -       | A qualifier ("per 1M docs") in `type-caption`; pass a `TooltipTrigger kind="term"` for a defined term.                                                                     |
+| qualifier      | `React.ReactNode` | -       | A qualifier ("per plot") in `type-caption`; pass a `TooltipTrigger kind="term"` for a defined term.                                                                        |
 | source         | `React.ReactNode` | -       | The source: a note reference (§8.12), in `type-small`.                                                                                                                     |
 | unit           | `React.ReactNode` | -       | The unit, set after a no-break space at roughly half the figure's size.                                                                                                    |
 | className      | `string`          | -       | -                                                                                                                                                                          |
@@ -151,7 +151,7 @@ type StatProps = {
   value: React.ReactNode;
   /** The unit, set after a no-break space at roughly half the figure's size. */
   unit?: React.ReactNode;
-  /** A qualifier ("per 1M docs") in `type-caption`; pass a `TooltipTrigger kind="term"` for a defined term. */
+  /** A qualifier ("per plot") in `type-caption`; pass a `TooltipTrigger kind="term"` for a defined term. */
   qualifier?: React.ReactNode;
   /** The change as words: "12% since 2023". Drawn after a ▲ or ▼, never color alone. */
   delta?: React.ReactNode;

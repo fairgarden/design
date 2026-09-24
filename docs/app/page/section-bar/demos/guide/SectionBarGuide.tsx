@@ -23,7 +23,7 @@ export function SectionBarGuide() {
         onDockChange={setDocked}
         search={<Search label="Search the guide" hideSubmit items={birds} />}
         items={[
-          { label: 'Bird guide', href: '#guide-overview' },
+          { label: 'Field guide', href: '#guide-overview' },
           { label: 'Thrushes', href: '#guide-overview' },
         ]}
         current="Wood Thrush"

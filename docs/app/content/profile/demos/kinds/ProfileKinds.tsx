@@ -33,9 +33,9 @@ export function ProfileKinds() {
         <ProfilePortrait>
           <AvatarFallback>HR</AvatarFallback>
         </ProfilePortrait>
-        <ProfileName>Hemlock Ravine Land Trust</ProfileName>
+        <ProfileName>Hemlock Ravine Commons</ProfileName>
         <ProfileBio>
-          A member-supported land trust caring for 1,200 acres of forest and meadow since 1987.
+          A member-supported commons caring for 40 acres of garden, orchard and meadow since 1987.
         </ProfileBio>
       </Profile>
 
@@ -48,7 +48,7 @@ export function ProfileKinds() {
           <ProfileName>Ana Díaz</ProfileName>
           <ProfileRole>Stewardship director</ProfileRole>
           <ProfileBio>
-            Ana leads the trail crews and the spring bird count. Before the trust she mapped
+            Ana leads the trail crews and the spring bird count. Before the commons she mapped
             wetlands for the state and still can’t pass a puddle without checking for eggs.
           </ProfileBio>
           <ProfileLinks>

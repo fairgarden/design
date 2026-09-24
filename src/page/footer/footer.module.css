@@ -79,7 +79,7 @@
     margin-block-end: calc(var(--size-px-10) - var(--size-px-7));
   }
 
-  /* Icon → heading --size-px-3; heading → body --size-px-7; body → action --size-px-7 (LTA). */
+  /* Icon → heading --size-px-3; heading → body --size-px-7; body → action --size-px-7. */
   .block {
     display: flex;
     flex-direction: column;

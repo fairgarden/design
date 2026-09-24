@@ -27,7 +27,7 @@ export function SpecSheetGlance() {
         <>
           Text adapted from{' '}
           <Link href="https://example.org/lives">
-            <cite>Lives of North American Birds</cite>
+            <cite>The Hedgerow Bird Almanac</cite>
           </Link>
           .
         </>

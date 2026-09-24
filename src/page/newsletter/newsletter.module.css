@@ -82,7 +82,7 @@
     min-inline-size: 0;
   }
 
-  /* Block-tier icon (36 px) in --role-accent, --size-px-3 above the heading (LTA). */
+  /* Block-tier icon (36 px) in --role-accent, --size-px-3 above the heading. */
   .icon {
     display: block;
     inline-size: var(--ds-size-icon-block);
@@ -411,7 +411,7 @@
   }
 
   /*
-   * Ruled row (Rocco): a serif prompt cell, the input cell and a square
+   * Ruled row: a serif prompt cell, the input cell and a square
    * submit cell, --border-size-1 --role-rule rules, square. Baseline: the
    * prompt stacks above the input and submit pair; three cells in one row
    * from 768 px of container (viewport fallback --lg-n-above).

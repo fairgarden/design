@@ -28,14 +28,14 @@ export function FooterGuide() {
           <>
             <FooterBlock
               icon="help"
-              heading="Talk to a Land Trust"
+              heading="Talk to a Garden Mentor"
               action={
                 <Button variant="outline" render={<a href="/find" />} nativeButton={false}>
                   Find One Near You
                 </Button>
               }
             >
-              <p>Local experts can walk your land with you and explain your options.</p>
+              <p>Local growers can walk your plot with you and explain your options.</p>
             </FooterBlock>
             <FooterBlock
               icon="download"
@@ -46,7 +46,7 @@ export function FooterGuide() {
                 </Button>
               }
             >
-              <p>A plain-language guide to easements, taxes and stewardship.</p>
+              <p>A plain-language guide to plots, soil and shared upkeep.</p>
             </FooterBlock>
             <FooterBlock
               icon="add"
@@ -57,21 +57,21 @@ export function FooterGuide() {
                 </Button>
               }
             >
-              <p>Every gift protects land that can never be made again.</p>
+              <p>Every gift keeps a neighborhood garden growing for good.</p>
             </FooterBlock>
           </>
         }
         sitemap={sitemap}
         address={
           <>
-            1250 H Street NW, Suite 600
+            88 Allotment Lane, Studio 2
             <br />
-            Washington, DC 20005
+            Maple Hollow, VT 05099
           </>
         }
         contact={[
           { value: 'info@example.org', href: 'mailto:info@example.org' },
-          { value: '202 555 0100', href: 'tel:+12025550100' },
+          { value: '802 555 0100', href: 'tel:+18025550100' },
         ]}
         social={[
           { label: 'Instagram', href: 'https://instagram.com/example', icon: <Mark /> },

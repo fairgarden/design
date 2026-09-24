@@ -119,7 +119,7 @@ export type HeroEntries =
 export interface HeroRail {
   /** Where the rail goes, usually an in-page anchor. */
   href: string
-  /** The label, e.g. "Explore the land". */
+  /** The label, e.g. "Explore the garden". */
   label: React.ReactNode
   /** An optional compass: an icon-only §9.2 Button that scrolls with the hero, never a fixed launcher. */
   compass?: React.ReactNode

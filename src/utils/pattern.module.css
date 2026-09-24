@@ -137,7 +137,7 @@
    * the host's bottom centre, radius --ds-sunburst-radius (290 px), clipped
    * by the host's edges. Lay the host out so that its bottom edge is the
    * origin: --ds-space-40 below the CTA's bottom edge, or the band's bottom
-   * edge, which then clips the lower half (LTA). Marks are --ds-sunburst-dot
+   * edge, which then clips the lower half. Marks are --ds-sunburst-dot
    * (2.5 px) round-capped dashes on shared radii --ds-sunburst-pitch
    * (6.5 px) apart, so arcs form across the rays, in five discrete zones
    * outward: dots, then 4, 6, 8 and 10 px dashes (no ramp [D21]); the

@@ -33,7 +33,7 @@ The agenda date head: `type-itemhead` in `--role-heading` (a group head). Render
 
 ### TimelineDateStack
 
-The date-block key (Sofar Sounds): MONTH / day / WEEKDAY, stacked. Pass `dateTime`.
+The date-block key: MONTH / day / WEEKDAY, stacked. Pass `dateTime`.
 
 **TimelineDateStack Props:**
 

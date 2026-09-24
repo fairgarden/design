@@ -37,7 +37,7 @@ export function NewsletterStraddle() {
             grained
             reading={reading}
             postcode
-            heading="Get the Latest Bird Conservation News"
+            heading="Get the Latest Garden Stewardship News"
             printUrl="example.org/newsletter"
             submitLabel="Sign Up"
             legal={

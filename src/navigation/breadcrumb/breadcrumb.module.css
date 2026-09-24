@@ -123,7 +123,7 @@
     white-space: nowrap;
   }
 
-  /* The staircase (LTA): toggle and truncated title on a --ds-size-hit bar. */
+  /* The staircase: toggle and truncated title on a --ds-size-hit bar. */
   .stair {
     display: block;
     min-inline-size: 0;
@@ -179,7 +179,7 @@
     overflow: clip;
   }
 
-  /* Level 1 sits under the title, past the toggle's hit area (LTA ≈41 px). */
+  /* Level 1 sits under the title, past the toggle's hit area (≈41 px). */
   .stairList {
     margin: 0;
     padding: 0;

@@ -15,10 +15,10 @@ export function HeroEditorial() {
         wayfinding={<p className={styles.eyebrow}>Annual report</p>}
         title={
           <>
-            Land for good, <em>for everyone</em>
+            Gardens for good, <em>for everyone</em>
           </>
         }
-        lede="Ten years of protected acres, open trails and neighbors who kept them."
+        lede="Ten years of shared plots, open gates and neighbors who kept them."
         actions={
           <>
             <Button variant="solid" size="lg">
@@ -34,7 +34,7 @@ export function HeroEditorial() {
         title="The prairie, one acre at a time"
         lede="A reference page's media hero: the photo figure under centred text."
         photo={<img src={photo} alt="Tallgrass prairie at dawn under a low sun" />}
-        caption="Nachusa Grasslands, Illinois. Photo: A. Rivera"
+        caption="Cedar Bend Prairie, Illinois. Photo: A. Rivera"
         entries={[
           {
             href: '#editorial',
@@ -45,13 +45,13 @@ export function HeroEditorial() {
           {
             href: '#editorial',
             category: 'Events',
-            title: 'Rally 2026',
+            title: 'Harvest Gathering 2026',
             image: <img src={square} alt="" />,
           },
           {
             href: '#editorial',
             category: 'Resources',
-            title: 'The learning center',
+            title: 'The garden handbook',
             image: <img src={square} alt="" />,
           },
         ]}

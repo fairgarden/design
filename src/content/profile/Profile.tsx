@@ -19,7 +19,7 @@ import styles from './profile.module.css'
 
 /*
  * Profile & Team (§12.15): people and organizations (authors, staff,
- * partner land trusts, speakers). Avatar (§10.12) holds byline, author and
+ * partner groups, speakers). Avatar (§10.12) holds byline, author and
  * bio portraits; team photos are plain `img` figures. Species use §12.2 and
  * testimonials §12.8.
  *

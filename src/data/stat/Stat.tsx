@@ -163,7 +163,7 @@ export interface StatProps {
   value: React.ReactNode
   /** The unit, set after a no-break space at roughly half the figure's size. */
   unit?: React.ReactNode
-  /** A qualifier ("per 1M docs") in `type-caption`; pass a `TooltipTrigger kind="term"` for a defined term. */
+  /** A qualifier ("per plot") in `type-caption`; pass a `TooltipTrigger kind="term"` for a defined term. */
   qualifier?: React.ReactNode
   /** The change as words: "12% since 2023". Drawn after a ▲ or ▼, never color alone. */
   delta?: React.ReactNode

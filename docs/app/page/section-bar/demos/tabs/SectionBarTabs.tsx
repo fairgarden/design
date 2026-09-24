@@ -6,9 +6,9 @@ import { SectionBar } from '@fairgarden/design/page/section-bar'
 import styles from './tabs.module.css'
 
 const sections = [
-  { id: 'tabs-alliance', label: 'Land Trust Alliance' },
+  { id: 'tabs-fairgarden', label: 'FairGarden' },
   { id: 'tabs-community', label: 'Community' },
-  { id: 'tabs-affiliates', label: 'Affiliates' },
+  { id: 'tabs-partners', label: 'Partners' },
 ]
 
 /**
@@ -29,7 +29,7 @@ export function SectionBarTabs() {
         docked={docked}
         onDockChange={setDocked}
         items={[{ label: 'Home', href: '#tabs-top' }]}
-        current="Connect"
+        current="Contact"
         sections={sections}
       />
       {sections.map((section) => (

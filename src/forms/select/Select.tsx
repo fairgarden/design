@@ -19,7 +19,7 @@ import styles from './select.module.css'
  * Implementation (CSS Modules + CVA)
  * - Module: select.module.css; CVA function `select`.
  * - Axes: `variant` → outline (boxed trigger), underline (trigger text over
- *   a --border-size-2 --role-accent underline, LTA); `plate` → plate;
+ *   a --border-size-2 --role-accent underline); `plate` → plate;
  *   `primary`, `secondary` → scales module classes.
  * - Compound variants: none. Excluded in the types: `plate` with underline.
  * - Defaults: variant outline, plate false; color axes none.

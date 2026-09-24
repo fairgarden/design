@@ -13,15 +13,15 @@ import {
 import styles from './index-panel.module.css'
 
 /**
- * Audubon-style index panels: a category list beside the selected
- * category's links, with a featured bar across both. The page is an owl
- * species page, so Explore Birds is the parent of current and Bird Guide
- * opens selected.
+ * Index panels: a category list beside the selected category's links,
+ * with a featured bar across both. The page is a plant profile, so
+ * Garden Guide is the parent of current and Plant Profiles opens
+ * selected.
  */
 export function NavigationMenuIndex() {
   return (
     <div className={styles.frame}>
-      <NavigationMenu currentPath="/explore/bird-guide/great-horned-owl" className={styles.bar}>
+      <NavigationMenu currentPath="/guide/plants/butternut-squash" className={styles.bar}>
         <NavigationMenuItem>
           <NavigationMenuTrigger section="/our-work">Our Work</NavigationMenuTrigger>
           <NavigationMenuContent
@@ -30,54 +30,54 @@ export function NavigationMenuIndex() {
               <NavigationMenuFeaturedBar href="/our-work">See All of Our Work</NavigationMenuFeaturedBar>
             }
           >
-            <NavigationMenuCategory label="Conservation">
-              <NavigationMenuLink href="/our-work/conservation/grasslands">Grasslands</NavigationMenuLink>
-              <NavigationMenuLink href="/our-work/conservation/coasts">Coasts and shorelines</NavigationMenuLink>
-              <NavigationMenuLink href="/our-work/conservation/forests">Working forests</NavigationMenuLink>
-              <NavigationMenuLink href="/our-work/conservation/water">Water in the West</NavigationMenuLink>
+            <NavigationMenuCategory label="Stewardship">
+              <NavigationMenuLink href="/our-work/stewardship/meadows">Meadows</NavigationMenuLink>
+              <NavigationMenuLink href="/our-work/stewardship/hedgerows">Orchards and hedgerows</NavigationMenuLink>
+              <NavigationMenuLink href="/our-work/stewardship/rain-gardens">Rain gardens</NavigationMenuLink>
+              <NavigationMenuLink href="/our-work/stewardship/soil">Soil and compost</NavigationMenuLink>
             </NavigationMenuCategory>
             <NavigationMenuCategory label="Climate">
-              <NavigationMenuLink href="/our-work/climate/report">Survival by degrees</NavigationMenuLink>
-              <NavigationMenuLink href="/our-work/climate/solutions">Natural climate solutions</NavigationMenuLink>
-              <NavigationMenuLink href="/our-work/climate/energy">Clean energy siting</NavigationMenuLink>
+              <NavigationMenuLink href="/our-work/climate/report">Cooler blocks report</NavigationMenuLink>
+              <NavigationMenuLink href="/our-work/climate/shade">Shade and tree canopy</NavigationMenuLink>
+              <NavigationMenuLink href="/our-work/climate/rain">Rain capture</NavigationMenuLink>
             </NavigationMenuCategory>
-            <NavigationMenuCategory label="Community Science">
-              <NavigationMenuLink href="/our-work/science/count">Winter bird count</NavigationMenuLink>
-              <NavigationMenuLink href="/our-work/science/watch">Climate watch</NavigationMenuLink>
+            <NavigationMenuCategory label="Garden Science">
+              <NavigationMenuLink href="/our-work/science/count">Pollinator count</NavigationMenuLink>
+              <NavigationMenuLink href="/our-work/science/soil">Soil testing</NavigationMenuLink>
               <NavigationMenuLink href="/our-work/science/data">Open data</NavigationMenuLink>
             </NavigationMenuCategory>
           </NavigationMenuContent>
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuTrigger section="/explore">Explore Birds</NavigationMenuTrigger>
+          <NavigationMenuTrigger section="/guide">Garden Guide</NavigationMenuTrigger>
           <NavigationMenuContent
             kind="index"
             featuredBar={
-              <NavigationMenuFeaturedBar href="/explore/near-you">
-                Search for Birds in Your Area
+              <NavigationMenuFeaturedBar href="/guide/for-your-plot">
+                Find Plants That Suit Your Plot
               </NavigationMenuFeaturedBar>
             }
           >
-            <NavigationMenuCategory label="Birds Near You">
-              <NavigationMenuLink href="/explore/near-you/map">Bird map</NavigationMenuLink>
-              <NavigationMenuLink href="/explore/near-you/walks">Guided walks</NavigationMenuLink>
-              <NavigationMenuLink href="/explore/near-you/centers">Nature centers</NavigationMenuLink>
+            <NavigationMenuCategory label="Visit">
+              <NavigationMenuLink href="/guide/visit/map">Garden map</NavigationMenuLink>
+              <NavigationMenuLink href="/guide/visit/walks">Guided walks</NavigationMenuLink>
+              <NavigationMenuLink href="/guide/visit/seed-libraries">Seed libraries</NavigationMenuLink>
             </NavigationMenuCategory>
-            <NavigationMenuCategory label="Bird Guide">
-              <NavigationMenuLink href="/explore/bird-guide/owls">Owls</NavigationMenuLink>
-              <NavigationMenuLink href="/explore/bird-guide/great-horned-owl">Great horned owl</NavigationMenuLink>
-              <NavigationMenuLink href="/explore/bird-guide/warblers">Warblers</NavigationMenuLink>
-              <NavigationMenuLink href="/explore/bird-guide/shorebirds">Shorebirds</NavigationMenuLink>
+            <NavigationMenuCategory label="Plant Profiles">
+              <NavigationMenuLink href="/guide/plants/squashes">Squashes</NavigationMenuLink>
+              <NavigationMenuLink href="/guide/plants/butternut-squash">Butternut squash</NavigationMenuLink>
+              <NavigationMenuLink href="/guide/plants/beans">Beans</NavigationMenuLink>
+              <NavigationMenuLink href="/guide/plants/leafy-greens">Leafy greens</NavigationMenuLink>
             </NavigationMenuCategory>
-            <NavigationMenuCategory label="Bird-Friendly Living">
-              <NavigationMenuLink href="/explore/living/plants">Native plants</NavigationMenuLink>
-              <NavigationMenuLink href="/explore/living/windows">Safer windows</NavigationMenuLink>
-              <NavigationMenuLink href="/explore/living/feeders">Feeders and baths</NavigationMenuLink>
+            <NavigationMenuCategory label="Grow at Home">
+              <NavigationMenuLink href="/guide/home/native-plants">Native plants</NavigationMenuLink>
+              <NavigationMenuLink href="/guide/home/containers">Container beds</NavigationMenuLink>
+              <NavigationMenuLink href="/guide/home/compost">Compost and mulch</NavigationMenuLink>
             </NavigationMenuCategory>
             <NavigationMenuCategory label="Photography">
-              <NavigationMenuLink href="/explore/photo/awards">Photo awards</NavigationMenuLink>
-              <NavigationMenuLink href="/explore/photo/ethics">Ethical bird photography</NavigationMenuLink>
+              <NavigationMenuLink href="/guide/photo/contest">Photo contest</NavigationMenuLink>
+              <NavigationMenuLink href="/guide/photo/tips">Garden photo tips</NavigationMenuLink>
             </NavigationMenuCategory>
           </NavigationMenuContent>
         </NavigationMenuItem>
@@ -86,7 +86,7 @@ export function NavigationMenuIndex() {
           <NavigationMenuTrigger section="/get-involved">Get Involved</NavigationMenuTrigger>
           <NavigationMenuContent>
             <NavigationMenuLink href="/get-involved/volunteer">Volunteer</NavigationMenuLink>
-            <NavigationMenuLink href="/get-involved/chapters">Find a chapter</NavigationMenuLink>
+            <NavigationMenuLink href="/get-involved/gardens">Find a garden</NavigationMenuLink>
             <NavigationMenuLink href="/get-involved/advocate">Advocate</NavigationMenuLink>
           </NavigationMenuContent>
         </NavigationMenuItem>

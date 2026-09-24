@@ -6,7 +6,7 @@
  * event column rule), title (`titleUi` for ranked and related), titleLink
  * (a title Link), count, meta (`metaCaps` for articles), dek, currentBar
  * (the rule's ::before), disclosure, eventHeading, trigger, triggerLabel,
- * glyph (the shared LTA glyph), details (the Collapsible Panel), footer.
+ * glyph (the shared disclosure glyph), details (the Collapsible Panel), footer.
  * Dense module: line semantics only. Colors are role variables only; local
  * custom properties carry dimensions only:
  *   --index-rows-pad   the row's vertical padding (--ds-space-12 ranked and
@@ -94,7 +94,7 @@
     padding-block: var(--index-rows-pad);
   }
 
-  /* The text column carries the row rule; rules never run under the key column (LTA). */
+  /* The text column carries the row rule; rules never run under the key column. */
   .rule {
     position: relative;
     display: grid;
@@ -138,7 +138,7 @@
     margin-block-start: var(--size-px-5);
   }
 
-  /* Event disclosure (§10.13): the title is the trigger, the LTA glyph trails it. */
+  /* Event disclosure (§10.13): the title is the trigger, the disclosure glyph trails it. */
   .disclosure {
     display: grid;
     gap: var(--size-px-1);
@@ -202,7 +202,7 @@
     font-weight: var(--font-weight-6);
   }
 
-  /* Ranked (LTA): a 2.5ch muted rank column, labels with counts, --ds-space-12 rows. */
+  /* Ranked: a 2.5ch muted rank column, labels with counts, --ds-space-12 rows. */
   .ranked {
     --index-rows-pad: var(--ds-space-12);
   }
@@ -216,7 +216,7 @@
     text-align: end;
   }
 
-  /* Related (Audubon): a --ds-size-thumb thumbnail --size-px-2 from the title. */
+  /* Related: a --ds-size-thumb thumbnail --size-px-2 from the title. */
   .related {
     --index-rows-pad: var(--ds-space-12);
     --index-rows-gap: var(--size-px-2);
@@ -234,7 +234,7 @@
     object-fit: cover;
   }
 
-  /* Event (Desaina): table-like, so --role-rule rules; the date sits above the title at base. */
+  /* Event: table-like, so --role-rule rules; the date sits above the title at base. */
   .event .rule {
     border-color: var(--role-rule);
   }
@@ -411,7 +411,7 @@
     outline-offset: var(--border-size-2);
   }
 
-  /* Expanded: the title moves from --role-muted to --primary12 and grows to type-h2 (Desaina). */
+  /* Expanded: the title moves from --role-muted to --primary12 and grows to type-h2. */
   .trigger[data-panel-open] {
     color: var(--primary12);
     font-size: var(--ds-font-size-h2);

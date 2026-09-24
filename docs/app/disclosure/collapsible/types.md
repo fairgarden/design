@@ -39,7 +39,7 @@ alone never is.
 
 ### DisclosureGlyph
 
-LTA's expand/collapse glyph \[D109]: two thin arrows pointing outward from
+The expand/collapse glyph \[D109]: two thin arrows pointing outward from
 a short center hairline when collapsed, inward when expanded (§6.10). It
 reads the state from the nearest Base UI trigger's `data-panel-open`, so
 place it inside an Accordion or Collapsible trigger. The direction swaps

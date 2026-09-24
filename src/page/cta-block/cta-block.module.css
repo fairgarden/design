@@ -67,7 +67,7 @@
     inline-size: 100%;
   }
 
-  /* The kicker starts ≈ 15% of the column in while the headline centers (LTA). */
+  /* The kicker starts ≈ 15% of the column in while the headline centers. */
   .kicker {
     display: flex;
     align-items: center;
@@ -246,7 +246,7 @@
 
   /*
    * Deep and framed: headline 7, actions 5 from 768 px of the content's
-   * container (Crab Fit's donate strip); viewport fallback --lg-n-above.
+   * container; viewport fallback --lg-n-above.
    */
   @media (--lg-n-above) {
     .deep .layout,
@@ -334,7 +334,7 @@
 @layer print {
   @media print {
     /*
-     * The ornament drops; the block reads completely without it (LTA). The
+     * The ornament drops; the block reads completely without it. The
      * trail prints black at 0.75 pt and the blob mount drops its discs (the
      * ornament module's print rules), its mark printing black (§6.6, §11.10).
      */

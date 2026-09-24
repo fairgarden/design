@@ -106,7 +106,7 @@ export interface BreadcrumbProps
   /**
    * `inline` (default): the in-page breadcrumb, a module that reflows on its
    * own width (parent link only, then one line). `staircase`: the section-bar
-   * breadcrumb, the LTA staircase below `--md-n-above` and one line from it,
+   * breadcrumb, the staircase below `--md-n-above` and one line from it,
    * the current crumb at `--font-weight-7` acting as the title [D184].
    * `parent`: always the single "‹ Parent" link.
    */
@@ -331,7 +331,7 @@ function ParentLink({
   )
 }
 
-/** The LTA staircase: the toggle and truncated title, then one indented row per level. */
+/** The staircase: the toggle and truncated title, then one indented row per level. */
 function Staircase({
   items,
   current,

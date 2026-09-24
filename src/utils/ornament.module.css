@@ -1,8 +1,8 @@
 /*
  * Ornaments and markers (§1.5.16; geometry §4.7; usage §8.4, §8.10, §8.11,
  * §12.11, §12.14, §12.16). Shared classes for inline, aria-hidden SVG: the
- * `marker-*` shapes, the index and rank numerals, `ornament-trail`, the LTA
- * dashed trail, and `ornament-blob`, the LTA blob mount (§6.6).
+ * `marker-*` shapes, the index and rank numerals, `ornament-trail`, the
+ * dashed trail, and `ornament-blob`, the blob mount (§6.6).
  * utils/Ornament.tsx draws the SVG geometry and adds these
  * classes; compose them into a module part in a top-level rule outside any
  * @layer (Lightning CSS rejects nested composes):

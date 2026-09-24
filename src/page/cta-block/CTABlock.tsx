@@ -12,7 +12,7 @@ import styles from './cta-block.module.css'
 
 /*
  * CTA Block (§11.10, the CTA banner): the page's one closing invitation
- * before the footer ("Keep exploring", "Find a land trust near you"). A
+ * before the footer ("Keep exploring", "Find a garden near you"). A
  * `section` labelled by its headline, holding the kicker or eyebrow, the
  * headline, an optional support line, the action Button (`solid`, with a
  * leading arrow) and an optional `outline` twin. The saturated and deep
@@ -74,7 +74,7 @@ type CTABlockVariants = VariantProps<typeof ctaBlock>
 
 /** An action: title-case label, authored [D160]; a destination prints as "Label (short URL)". */
 export interface CTAAction {
-  /** Verb plus object, title case: "Find a Land Trust". */
+  /** Verb plus object, title case: "Find a Garden". */
   label: string
   /** Where it goes; the Button renders an anchor. */
   href?: string
@@ -95,7 +95,7 @@ interface CTABlockCommonProps extends Omit<React.ComponentPropsWithRef<'section'
   headingLevel?: 2 | 3
   /**
    * The kicker (`type-kicker`, `--role-heading`), starting ≈ 15% of the
-   * column in while the headline centers (LTA).
+   * column in while the headline centers.
    */
   kicker?: React.ReactNode
   /**

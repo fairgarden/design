@@ -58,7 +58,7 @@ it in the drawer's `footer`.
 ### NavDrawerGroup
 
 One top-level group: an independent Collapsible whose trigger row shows
-LTA's expand/collapse glyph \[D109] (outward in --role-muted, inward in
+the expand/collapse glyph \[D109] (outward in --role-muted, inward in
 \--primary12 when open; it swaps, never rotates), over its child links on
 an indent guide. A group holding the current page opens by default and
 its row takes the start-edge bar (`aria-current="true"`).

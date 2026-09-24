@@ -152,7 +152,7 @@
     display: block;
   }
 
-  /* Byline (LTA): inline, portrait · "By Name" · date, one line where it fits. */
+  /* Byline: inline, portrait · "By Name" · date, one line where it fits. */
   .kindByline {
     display: flex;
     flex-wrap: wrap;
@@ -170,7 +170,7 @@
     margin-inline-end: var(--size-px-2);
   }
 
-  /* Author block (LTA): portrait → 24 → serif name → 24 → description, stacked. */
+  /* Author block: portrait → 24 → serif name → 24 → description, stacked. */
   .author {
     display: flex;
     flex-direction: column;
@@ -179,7 +179,7 @@
   }
 
   /*
-   * Bio row (Brad Frost): portrait at the start, text beside it, even on
+   * Bio row: portrait at the start, text beside it, even on
    * phones; the pair wraps to a stack when the text column would drop under
    * its minimum, and always below 360 px of container.
    */

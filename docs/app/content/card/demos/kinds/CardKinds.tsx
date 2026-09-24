@@ -56,7 +56,7 @@ export function CardKinds() {
         </CardMedia>
         <CardKicker>Entry · hero</CardKicker>
         <CardTitle render={<p />}>
-          <CardTitleLink href="#kinds">Find a land trust</CardTitleLink>
+          <CardTitleLink href="#kinds">Find a garden plot</CardTitleLink>
         </CardTitle>
       </Card>
     </div>
