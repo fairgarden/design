@@ -60,13 +60,13 @@
   /* The band: set by content, never 100vh; the rail is pinned to its corner. */
   .base {
     position: relative;
-    padding-block: var(--ds-space-40) var(--ds-space-56);
+    padding-block: var(--size-px-7-5) var(--size-px-8-5);
   }
 
   .container {
-    --hero-span: calc((100% - 11 * var(--ds-space-margin)) * 8 / 12 + 7 * var(--ds-space-margin));
+    --hero-span: calc((100% - 11 * var(--fgd-space-margin)) * 8 / 12 + 7 * var(--fgd-space-margin));
 
-    inline-size: min(100% - 2 * var(--ds-space-margin), var(--ds-container-content));
+    inline-size: min(100% - 2 * var(--fgd-space-margin), var(--fgd-container-content));
     margin-inline: auto;
   }
 
@@ -100,18 +100,18 @@
   }
 
   .lede {
-    max-inline-size: var(--ds-measure-reading);
+    max-inline-size: var(--fgd-measure-reading);
     margin: var(--size-px-7) 0 0;
     color: var(--primary12);
     text-box: trim-both cap alphabetic;
   }
 
-  /* Primary first, the outline twin beside it at equal height, a --ds-space-12 gap. */
+  /* Primary first, the outline twin beside it at equal height, a --size-px-2-5 gap. */
   .actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
     margin-block-start: var(--size-px-5);
   }
 
@@ -121,13 +121,13 @@
     z-index: var(--layer-1);
     min-inline-size: 0;
     margin-block: 0;
-    margin-inline: max(0px, calc(var(--size-px-5) - var(--ds-space-margin)));
+    margin-inline: max(0px, calc(var(--size-px-5) - var(--fgd-space-margin)));
   }
 
   .photo {
     position: relative;
-    aspect-ratio: var(--ds-ratio-photo);
-    border-radius: var(--ds-radius-conditional-8);
+    aspect-ratio: var(--ratio-photo);
+    border-radius: var(--radius-conditional-2-25);
     overflow: hidden;
     overflow: clip;
   }
@@ -149,7 +149,7 @@
 
   /* Sticker drawing: fixed art steps, never fluid [D78]. */
   .drawing {
-    inline-size: var(--ds-size-art-s);
+    inline-size: var(--fgd-size-art-s);
     min-inline-size: 0;
   }
 
@@ -180,7 +180,7 @@
     padding: var(--size-px-5);
     border-color: var(--primary12);
     outline-color: var(--primary12);
-    border-radius: var(--ds-radius-none);
+    border-radius: var(--radius-0);
     background-color: var(--role-ground);
   }
 
@@ -271,7 +271,7 @@
     display: none;
     position: absolute;
     inset-block-start: calc(-1 * var(--size-px-3));
-    inset-inline-end: calc((var(--size-px-9) - var(--ds-space-40)) / 2);
+    inset-inline-end: calc((var(--size-px-9) - var(--size-px-7-5)) / 2);
     z-index: var(--layer-1);
     overflow: visible;
     color: var(--role-accent);
@@ -282,7 +282,7 @@
 
   .trailMarker {
     fill: none;
-    stroke-width: var(--ds-stroke-1-5);
+    stroke-width: var(--border-size-1-5);
     stroke-dasharray: none;
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -326,11 +326,11 @@
     }
 
     .layout {
-      row-gap: var(--ds-space-40);
+      row-gap: var(--size-px-7-5);
     }
 
     .lede {
-      margin-block-start: var(--ds-space-40);
+      margin-block-start: var(--size-px-7-5);
     }
 
     .frame {
@@ -349,8 +349,8 @@
       position: relative;
       z-index: var(--layer-1);
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      column-gap: var(--ds-space-margin);
-      margin-block-start: calc(-1 * var(--ds-space-40));
+      column-gap: var(--fgd-space-margin);
+      margin-block-start: calc(-1 * var(--size-px-7-5));
     }
 
     .trail {
@@ -416,9 +416,9 @@
     .rail .railLabel {
       writing-mode: vertical-rl;
       rotate: 180deg;
-      font-family: var(--ds-font-display);
-      font-variation-settings: var(--ds-font-display-settings);
-      font-size: var(--ds-font-size-kicker);
+      font-family: var(--fgd-font-display);
+      font-variation-settings: var(--fgd-font-display-settings);
+      font-size: var(--fgd-font-size-kicker);
       font-weight: var(--font-weight-7);
       line-height: var(--font-lineheight-0);
     }
@@ -478,8 +478,8 @@
   /* The photo's media button sits in a night face at the corner; the face paints nothing. */
   .iconButton {
     position: absolute;
-    inset-block-end: var(--ds-space-12);
-    inset-inline-end: var(--ds-space-12);
+    inset-block-end: var(--size-px-2-5);
+    inset-inline-end: var(--size-px-2-5);
     display: flex;
     background: none;
   }
@@ -491,7 +491,7 @@
     margin-inline: var(--size-px-5);
     padding: var(--size-px-5);
     border: var(--border-size-1) solid var(--role-edge);
-    border-radius: var(--ds-radius-conditional-20);
+    border-radius: var(--radius-conditional-3-25);
   }
 
   /* The exit seam's own rules: no pull through a padding it does not have. */
@@ -508,7 +508,7 @@
 
   /* Below --lg-n-above the entry cards open the next band with its section space. */
   .seamEntries {
-    padding-block-start: var(--ds-space-section);
+    padding-block-start: var(--fgd-space-section);
   }
 
   /* The night hero ending on a hill or fringe keeps ≥ --size-px-10 of empty ground above it. */
@@ -523,8 +523,8 @@
 
     /* Landing pages may take type-display-xl. */
     .landing .title {
-      font-size: var(--ds-font-size-display-xl);
-      line-height: var(--ds-leading-display);
+      font-size: var(--fgd-font-size-display-xl);
+      line-height: var(--fgd-leading-display);
     }
 
     /* A: the reading span, columns 3–10, centred. */
@@ -537,7 +537,7 @@
     /* B: text in 7 columns, the drawing L in 5. */
     .illustrated .layout {
       grid-template-columns: repeat(12, minmax(0, 1fr));
-      column-gap: var(--ds-space-margin);
+      column-gap: var(--fgd-space-margin);
       align-items: center;
       justify-items: start;
       text-align: start;
@@ -552,7 +552,7 @@
       grid-row: 1;
       grid-column: 8 / span 5;
       justify-self: center;
-      inline-size: var(--ds-size-art-l);
+      inline-size: var(--fgd-size-art-l);
     }
 
     .illustrated .title,
@@ -571,7 +571,7 @@
     /* C: text in 5 columns beside the photo in 7, top-aligned, to the container edge. */
     .split .layout {
       grid-template-columns: repeat(12, minmax(0, 1fr));
-      column-gap: var(--ds-space-margin);
+      column-gap: var(--fgd-space-margin);
     }
 
     .split .content {
@@ -630,14 +630,14 @@
       display: block;
     }
 
-    /* The entry cards cross the edge by --ds-space-40; the band below gives the clearance. */
+    /* The entry cards cross the edge by --size-px-7-5; the band below gives the clearance. */
     .seamEntries {
       padding-block-start: 0;
     }
   }
 
   .transactional .actions {
-    min-block-size: var(--ds-size-control-xl);
+    min-block-size: var(--fgd-size-control-xl);
   }
 }
 
@@ -645,11 +645,11 @@
   @media print {
     /* The masthead title: h1 at 22 pt, lede at 12 pt (the print remap); a rule closes it. */
     .base {
-      padding-block: 0 var(--ds-space-section);
+      padding-block: 0 var(--fgd-space-section);
     }
 
     .landing .title {
-      font-size: var(--ds-font-size-display);
+      font-size: var(--fgd-font-size-display);
     }
 
     .layout,
@@ -688,7 +688,7 @@
       max-inline-size: 100%;
       aspect-ratio: auto;
       border: var(--border-size-1) solid var(--primary12);
-      border-radius: var(--ds-radius-8);
+      border-radius: var(--radius-2-25);
       filter: grayscale(1);
     }
 
@@ -698,7 +698,7 @@
       inline-size: auto;
       max-inline-size: 100%;
       block-size: auto;
-      max-block-size: var(--ds-print-hero-max);
+      max-block-size: var(--fgd-print-hero-max);
       object-fit: contain;
     }
 

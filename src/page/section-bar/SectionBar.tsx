@@ -53,14 +53,14 @@ import styles from './section-bar.module.css'
  *   tier's weight. :hover on `jumpTrigger` → the label takes
  *   --role-link-hover, the chevron the next tier's weight, the indicator
  *   keeps --border-size-2; `data-popup-open` → chevron up, indicator at
- *   --ds-stroke-3 [D181]. The inline crumbs are the §9.8 Breadcrumb's, which
+ *   --border-size-2-25 [D181]. The inline crumbs are the §9.8 Breadcrumb's, which
  *   owns their states. :hover on a Jump item → --role-link-hover;
  *   on a `tab` → the bare-text underline; on `listen` → the body-link hover
  *   (the Link's own). `aria-current="location"` on `jumpItem` → the
- *   --ds-stroke-3 start bar; on `tab` → the --ds-stroke-3 current bar plus
+ *   --border-size-2-25 start bar; on `tab` → the --border-size-2-25 current bar plus
  *   --font-weight-7 [D15, D184]. Panels and the popup: the clip reveal on
  *   data-starting-style / data-ending-style. `docked` → the docked position,
- *   a --ds-duration-quick cut. :focus-visible → the ring.
+ *   a --fgd-duration-quick cut. :focus-visible → the ring.
  * - Parts: base (the scoped `nav`: a toolbar role cannot sit on the
  *   landmark, and the sticky box is the band), topRule, toolbar (the Base UI
  *   Toolbar Root, data-orientation="horizontal"), lead, glyph (Collapsible
@@ -184,7 +184,7 @@ type SectionBarKindProps =
     }
   | {
       kind: 'guide'
-      /** A §9.10 Autocomplete (Search) at `--ds-size-control-md`, capped at `--size-px-13`, from `--md-n-above`. */
+      /** A §9.10 Autocomplete (Search) at `--fgd-size-control-md`, capped at `--size-px-13`, from `--md-n-above`. */
       search?: React.ReactNode
       /** The end `listen` jump [D184]. */
       listen?: SectionBarListen
@@ -281,7 +281,7 @@ function useSectionInView(
  * The page's sticky section bar: a Base UI Toolbar in a `nav` named "In
  * this section", on the covered band's page ground, with a
  * `--border-size-1` `--role-rule` bottom rule and no shadow; one line, at
- * least `--ds-size-hit` tall.
+ * least `--fgd-size-hit` tall.
  *
  * - Base: the disclosure glyph opens the staircase breadcrumb (capped at
  *   half the viewport), the caps title follows the section in view, and

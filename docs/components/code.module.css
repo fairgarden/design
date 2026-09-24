@@ -6,7 +6,7 @@
 .root {
   margin-block: var(--size-px-5);
   border: var(--border-size-1) solid var(--role-rule);
-  border-radius: var(--ds-radius-8);
+  border-radius: var(--radius-2-25);
   background-color: var(--primary1);
   overflow: hidden;
   /* Clip without a scroll container, so a sticky demo docks against the page. */
@@ -84,7 +84,7 @@
   display: flex;
   gap: var(--size-px-2);
   align-items: center;
-  min-block-size: var(--ds-size-hit);
+  min-block-size: var(--fgd-size-hit);
   padding-inline: var(--size-px-3);
   border-block-end: var(--border-size-1) solid var(--role-hairline);
   color: var(--role-muted);
@@ -94,32 +94,32 @@
   margin-inline-end: auto;
   text-transform: none;
   letter-spacing: 0;
-  font-family: var(--ds-font-mono);
+  font-family: var(--fgd-font-mono);
 }
 
 .tab {
   composes: typeLabel from '../../src/utils/type.module.css';
-  min-block-size: var(--ds-size-hit);
+  min-block-size: var(--fgd-size-hit);
   padding-inline: var(--size-px-2);
-  padding-block-end: var(--ds-stroke-3);
+  padding-block-end: var(--border-size-2-25);
   border: none;
   background: none;
   color: var(--role-muted);
   text-transform: none;
   letter-spacing: 0;
-  font-family: var(--ds-font-mono);
+  font-family: var(--fgd-font-mono);
   cursor: pointer;
 
   /* The current bar: a line change, not a color change alone [D84]. */
   &[aria-pressed='true'] {
     padding-block-end: 0;
-    border-block-end: var(--ds-stroke-3) solid var(--primary12);
+    border-block-end: var(--border-size-2-25) solid var(--primary12);
     color: var(--primary12);
   }
 
   &:focus-visible {
-    outline: var(--ds-focus-width) solid var(--primary12);
-    outline-offset: calc(var(--ds-focus-offset) * -1);
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: calc(var(--fgd-focus-offset) * -1);
   }
 }
 
@@ -144,8 +144,8 @@
   }
 
   &:focus-visible {
-    outline: var(--ds-focus-width) solid var(--primary12);
-    outline-offset: var(--ds-focus-offset);
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: var(--fgd-focus-offset);
   }
 }
 
@@ -154,12 +154,12 @@
   composes: typeButtonSm from '../../src/utils/type.module.css';
   display: inline-flex;
   align-items: center;
-  min-block-size: var(--ds-size-hit);
+  min-block-size: var(--fgd-size-hit);
   padding-inline: var(--size-px-2);
   color: var(--primary12);
   text-decoration-line: underline;
   text-decoration-color: var(--role-accent);
-  text-decoration-thickness: var(--ds-stroke-1-5);
+  text-decoration-thickness: var(--border-size-1-5);
   text-underline-offset: 0.15em;
 
   &:hover {
@@ -168,8 +168,8 @@
   }
 
   &:focus-visible {
-    outline: var(--ds-focus-width) solid var(--primary12);
-    outline-offset: calc(var(--ds-focus-offset) * -1);
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: calc(var(--fgd-focus-offset) * -1);
   }
 }
 
@@ -178,9 +178,9 @@
   padding-block: var(--size-px-3);
   overflow-x: auto;
   tab-size: 2;
-  font-family: var(--ds-font-mono);
-  font-size: var(--ds-font-size-caption);
-  line-height: var(--ds-leading-reading);
+  font-family: var(--fgd-font-mono);
+  font-size: var(--fgd-font-size-caption);
+  line-height: var(--fgd-leading-reading);
   color: var(--primary12);
 
   & :global(code) {
@@ -201,7 +201,7 @@
   & :global(.frame[data-lined] .line) {
     display: block;
     white-space: pre;
-    line-height: var(--ds-leading-reading);
+    line-height: var(--fgd-leading-reading);
   }
 
   & :global(.frame[data-frame-type='highlighted']),
@@ -223,9 +223,9 @@
   /* Long type names (React.ImgHTMLAttributes<HTMLImageElement>) break
      rather than run past a 390 px viewport. */
   overflow-wrap: anywhere;
-  font-family: var(--ds-font-mono);
-  font-size: var(--ds-font-size-caption);
-  line-height: var(--ds-leading-compact);
+  font-family: var(--fgd-font-mono);
+  font-size: var(--fgd-font-size-caption);
+  line-height: var(--fgd-leading-compact);
   color: var(--primary12);
 }
 

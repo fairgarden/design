@@ -12,11 +12,11 @@
   display: flex;
   gap: var(--size-px-2);
   align-items: center;
-  min-block-size: var(--ds-size-hit);
+  min-block-size: var(--fgd-size-hit);
 }
 
 .name {
-  font-family: var(--ds-font-mono);
-  font-size: var(--ds-font-size-caption);
+  font-family: var(--fgd-font-mono);
+  font-size: var(--fgd-font-size-caption);
   color: var(--role-muted);
 }

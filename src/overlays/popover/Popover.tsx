@@ -123,7 +123,7 @@ export type PopoverPopupProps = BasePopover.Popup.Props & {
 
 /**
  * The anchored panel, rendered in its Base UI Portal as a nested `white`
- * scope: --primary1 face, --border-size-2 --primary12 frame, --ds-radius-8,
+ * scope: --primary1 face, --border-size-2 --primary12 frame, --radius-2-25,
  * 240–360 px wide from --md-n-above and the viewport less its margins
  * below. It opens instantly or with a clip reveal from the trigger side.
  * Render `PopoverArrow` inside it for the tail.
@@ -182,7 +182,7 @@ export function PopoverPopup(props: PopoverPopupProps) {
 export type PopoverArrowProps = BasePopover.Arrow.Props
 
 /**
- * The tail: a --ds-space-12 × 6 px triangle filled with the face, its
+ * The tail: a --size-px-2-5 × 6 px triangle filled with the face, its
  * --border-size-2 --primary12 edge continuing the panel's frame.
  */
 export function PopoverArrow(props: PopoverArrowProps) {
@@ -253,7 +253,7 @@ export type PopoverCloseProps = BasePopover.Close.Props & {
 
 /**
  * The optional close X, top end: an icon-only Button with the inline-tier
- * `close` glyph and a --ds-size-hit target (§9.2). Pass `render` to close
+ * `close` glyph and a --fgd-size-hit target (§9.2). Pass `render` to close
  * from another control instead; `label` is then ignored.
  */
 export function PopoverClose(props: PopoverCloseProps) {

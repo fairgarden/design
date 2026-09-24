@@ -1,5 +1,5 @@
 .stack {
   display: grid;
-  gap: var(--ds-space-40);
+  gap: var(--size-px-7-5);
   inline-size: 100%;
 }

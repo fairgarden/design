@@ -100,7 +100,7 @@ export type MeterProps = Omit<BaseMeter.Root.Props, 'children' | 'value'> & {
    * CSS sets the caps). `min` becomes 0 and `max` the last index.
    */
   stops?: readonly React.ReactNode[]
-  /** A limit, drawn as a --ds-space-12 tick at --border-size-2 across the track (`bar`). */
+  /** A limit, drawn as a --size-px-2-5 tick at --border-size-2 across the track (`bar`). */
   threshold?: number
   /** The status beside the value; always with `statusText`. */
   status?: MeterStatus

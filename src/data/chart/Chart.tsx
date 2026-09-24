@@ -65,7 +65,7 @@ export type { SeriesSlot, SequentialStep }
  *   sequential steps, `primary` the even slots, slot 6, every edge, axis and
  *   label.
  * - Inks by ground, with no prop: odd slots take --role-series-odd and the
- *   sequential cells follow the --ds-series-fill / --ds-series-pattern
+ *   sequential cells follow the --fgd-series-fill / --fgd-series-pattern
  *   switches, which roles.css resolves per scope: two inks and flat steps
  *   on a light base ground or a nested `white` plate, one ink and patterns
  *   everywhere else, the pastels included (§8.7) [D125].
@@ -121,7 +121,7 @@ export type ChartKind = NonNullable<ChartVariants['kind']>
  * Token mirrors. SVG attributes and Recharts' layout take numbers, so these
  * values mirror their tokens (like TOOLTIP_DELAY_MS mirrors its token).
  */
-/** Bar thickness, --size-px-3: at least --ds-space-12 (12 px) at every size [I7]. */
+/** Bar thickness, --size-px-3: at least --size-px-2-5 (12 px) at every size [I7]. */
 const BAR_THICKNESS = 16
 /** Gap between bars in one category: at least 0.3 × the thickness. */
 const BAR_GAP = 6
@@ -129,7 +129,7 @@ const BAR_GAP = 6
 const CATEGORY_GAP = 16
 /** --border-size-1. */
 const STROKE_1 = 1
-/** --ds-stroke-1-5. */
+/** --border-size-1-5. */
 const STROKE_1_5 = 1.5
 /** --border-size-2. */
 const STROKE_2 = 2
@@ -137,9 +137,9 @@ const STROKE_2 = 2
 const MARKER_RADIUS = 4
 /** A column never grows wider than --size-px-8. */
 const MAX_COLUMN = 48
-/** --ds-duration-disclosure: growth by length only, under --motionOK. */
+/** --fgd-duration-disclosure: growth by length only, under --motionOK. */
 const DURATION = 200
-/** --ds-print-live-width, 174 mm at 96 px per inch. */
+/** --fgd-print-live-width, 174 mm at 96 px per inch. */
 const PRINT_WIDTH = 658
 /** Plot height of column, line and area charts. */
 const DEFAULT_HEIGHT = 320

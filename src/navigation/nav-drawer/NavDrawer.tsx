@@ -20,7 +20,7 @@ import styles from './nav-drawer.module.css'
 
 /*
  * Mobile Navigation Drawer (§11.6) [D97, D183]: primary navigation below
- * --ds-nav-inline-n-above, on the Dialog.
+ * --fgd-nav-inline-n-above, on the Dialog.
  *
  * Implementation (CSS Modules + CVA)
  * - Module: nav-drawer.module.css; CVA function `navigationDrawer`.
@@ -36,7 +36,7 @@ import styles from './nav-drawer.module.css'
  *   --motionNotOK; Collapsible Panel the same from its top; menu Button
  *   `data-popup-open` → × plus "Close"; Collapsible Trigger
  *   `data-panel-open` → the D109 glyph turns inward in --primary12;
- *   `aria-current` → the --ds-stroke-3 start-edge bar (weight 700 on
+ *   `aria-current` → the --border-size-2-25 start-edge bar (weight 700 on
  *   links); `:hover` [D181] → group rows and direct links take the
  *   bare-text underline; child (panel) and footer links are §9.3 list
  *   links (Link's `kind="nav"` with `list`), color only, plus the
@@ -138,10 +138,10 @@ export type NavDrawerProps = {
 }
 
 /**
- * The navigation drawer below --ds-nav-inline-n-above [D183]: the menu
+ * The navigation drawer below --fgd-nav-inline-n-above [D183]: the menu
  * Button (the `menu` icon plus "Menu"; × plus "Close" while open) and a
  * modal Dialog sheet in the header's own scope, full screen below
- * --md-n-above and a 480 px side sheet with a --ds-stroke-3 inner edge
+ * --md-n-above and a 480 px side sheet with a --border-size-2-25 inner edge
  * from it. The sheet repeats the header's bar with the close control where
  * the menu Button was, lists independent Collapsible groups and direct
  * links in a Scroll Area, and keeps its footer fixed. Focus moves to the
@@ -339,7 +339,7 @@ export type NavDrawerLinkProps = React.ComponentProps<'a'> & {
  * row without the glyph (the bare-text underline on hover); in a group, a
  * `type-body-ui` child link on the indent guide; in the footer, a utility
  * link. Child and footer links are list links, whose hover is color only
- * [D181]. The current page takes `aria-current="page"`, the --ds-stroke-3
+ * [D181]. The current page takes `aria-current="page"`, the --border-size-2-25
  * start-edge bar and weight 700.
  */
 export function NavDrawerLink(props: NavDrawerLinkProps) {
@@ -378,7 +378,7 @@ export type NavDrawerFooterProps = Omit<React.ComponentProps<'div'>, 'children'>
 /**
  * The drawer's fixed footer zone, under a --border-size-2 --role-rule: the
  * primary pill first (where the header's action goes below 480 px), then
- * the utility links at a --ds-size-hit pitch, then the locale Select. Put
+ * the utility links at a --fgd-size-hit pitch, then the locale Select. Put
  * it in the drawer's `footer`.
  */
 export function NavDrawerFooter(props: NavDrawerFooterProps) {

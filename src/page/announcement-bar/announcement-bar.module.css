@@ -32,7 +32,7 @@
 
 @layer base {
   .base {
-    --announcement-min: var(--ds-size-bar-utility);
+    --announcement-min: var(--fgd-size-bar-utility);
 
     display: block;
     color: var(--primary12);
@@ -49,9 +49,9 @@
     justify-content: center;
     gap: var(--size-px-2) var(--size-px-3);
     box-sizing: content-box;
-    max-inline-size: var(--ds-container-content);
+    max-inline-size: var(--fgd-container-content);
     margin-inline: auto;
-    padding-inline: var(--ds-space-margin);
+    padding-inline: var(--fgd-space-margin);
   }
 
   .message {
@@ -123,17 +123,17 @@
     text-transform: uppercase;
   }
 
-  /* Dismiss: the close glyph (inline tier) in a --ds-size-hit target; no circle [D181]. */
+  /* Dismiss: the close glyph (inline tier) in a --fgd-size-hit target; no circle [D181]. */
   .dismiss {
     position: relative;
     flex: none;
     display: grid;
     place-items: center;
-    inline-size: var(--ds-size-hit);
-    block-size: var(--ds-size-hit);
+    inline-size: var(--fgd-size-hit);
+    block-size: var(--fgd-size-hit);
     margin: 0;
     /* The glyph, not its target, meets the container edge (from --lg-n-above, the container's own edge). */
-    margin-inline-end: calc((var(--ds-size-hit) - var(--size-px-3)) / -2);
+    margin-inline-end: calc((var(--fgd-size-hit) - var(--size-px-3)) / -2);
     padding: 0;
     border: 0;
     border-radius: var(--radius-round);
@@ -146,7 +146,7 @@
   @media (--motionOK) {
     .dismiss {
       transition-property: color, background-color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -174,7 +174,7 @@
 
   /*
    * Field bar [D180]: the strip keeps --size-px-2 of page ground above and
-   * below; the field spans the container with Ground's --ds-radius-8 and
+   * below; the field spans the container with Ground's --radius-2-25 and
    * --primary12 edge, and the row inside it.
    */
   .field .container {
@@ -194,7 +194,7 @@
   }
 
   .interactive {
-    --announcement-min: var(--ds-size-hit);
+    --announcement-min: var(--fgd-size-hit);
   }
 
   /* Mono: type-data set in caps for dated or technical notices ("CLOSED 24–26 DEC"). */
@@ -208,7 +208,7 @@
    * the text serif, untracked, at the run's size (cap heights within ≈ 5%).
    */
   .dual .accent {
-    font-family: var(--ds-font-text);
+    font-family: var(--fgd-font-text);
     font-weight: var(--font-weight-6);
     letter-spacing: 0;
   }

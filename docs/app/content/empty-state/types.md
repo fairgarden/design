@@ -29,7 +29,7 @@ page's main next step; "Clear Filters" after a filter (title case).
 
 ### EmptyStateDrawing
 
-The drawing (`illustrated`): a §6.5 Sticker at `--ds-size-art-s` with its
+The drawing (`illustrated`): a §6.5 Sticker at `--fgd-size-art-s` with its
 halo, decorative (`aria-hidden`); the spot size `--size-px-9` below
 360 px. Pass the asset's `viewBox`, its pre-expanded `halo` path and its
 line art as children. The sticker brings its own `white` scope, so it
@@ -37,11 +37,11 @@ looks the same on every ground and ignores the empty state's props.
 
 **EmptyStateDrawing Props:**
 
-| Prop     | Type              | Default | Description                                                                                                                                                                                                                                                                                   |
-| :------- | :---------------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| halo     | `React.ReactNode` | -       | The halo layer: the asset's pre-expanded path, 8 px (`--ds-space-halo`)&#xA;outside every part, merged into one silhouette with rounded concave&#xA;bridges and no sharp outer corners. Never a runtime stroke, outline or&#xA;blur. Filled `--primary1`; no edge, ever. Ignored with `bare`. |
-| viewBox  | `string`          | -       | The asset's viewBox, drawn at its native size: `0 0 152 152` for S,&#xA;`0 0 312 312` for L (other aspect ratios keep the width).                                                                                                                                                             |
-| children | `React.ReactNode` | -       | The line art, stroked in `--role-heading` at the silhouette weight&#xA;(`--ds-stroke-3` at S, `--ds-stroke-4` at L), round caps and joins, no&#xA;fill; give ink-spot parts `fill="currentColor"`, and wrap interior lines&#xA;in `StickerDetail`. No text inside the art.                    |
+| Prop     | Type              | Default | Description                                                                                                                                                                                                                                                                                    |
+| :------- | :---------------- | :------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| halo     | `React.ReactNode` | -       | The halo layer: the asset's pre-expanded path, 8 px (`--fgd-space-halo`)&#xA;outside every part, merged into one silhouette with rounded concave&#xA;bridges and no sharp outer corners. Never a runtime stroke, outline or&#xA;blur. Filled `--primary1`; no edge, ever. Ignored with `bare`. |
+| viewBox  | `string`          | -       | The asset's viewBox, drawn at its native size: `0 0 152 152` for S,&#xA;`0 0 312 312` for L (other aspect ratios keep the width).                                                                                                                                                              |
+| children | `React.ReactNode` | -       | The line art, stroked in `--role-heading` at the silhouette weight&#xA;(`--border-size-2-25` at S, `--border-size-2-75` at L), round caps and joins, no&#xA;fill; give ink-spot parts `fill="currentColor"`, and wrap interior lines&#xA;in `StickerDetail`. No text inside the art.           |
 
 ### EmptyStateHeading
 
@@ -83,7 +83,7 @@ Props for EmptyStateDrawing: `div` props, `render`, and the sticker's art (`view
 type EmptyStateDrawingProps = {
   /**
    * The line art, stroked in `--role-heading` at the silhouette weight
-   * (`--ds-stroke-3` at S, `--ds-stroke-4` at L), round caps and joins, no
+   * (`--border-size-2-25` at S, `--border-size-2-75` at L), round caps and joins, no
    * fill; give ink-spot parts `fill="currentColor"`, and wrap interior lines
    * in `StickerDetail`. No text inside the art.
    */
@@ -94,7 +94,7 @@ type EmptyStateDrawingProps = {
    */
   viewBox: string;
   /**
-   * The halo layer: the asset's pre-expanded path, 8 px (`--ds-space-halo`)
+   * The halo layer: the asset's pre-expanded path, 8 px (`--fgd-space-halo`)
    * outside every part, merged into one silhouette with rounded concave
    * bridges and no sharp outer corners. Never a runtime stroke, outline or
    * blur. Filled `--primary1`; no edge, ever. Ignored with `bare`.

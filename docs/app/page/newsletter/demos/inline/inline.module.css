@@ -1,6 +1,6 @@
 .band {
   inline-size: 100%;
-  padding: var(--size-px-7) var(--ds-space-margin);
+  padding: var(--size-px-7) var(--fgd-space-margin);
 }
 
 .column {

@@ -4,32 +4,32 @@
 }
 
 .band {
-  padding-block: var(--ds-space-section);
+  padding-block: var(--fgd-space-section);
 }
 
 /* The pause above a hill: at least --size-px-10 of empty upper ground. */
 .night {
-  padding-block: var(--ds-space-section) var(--size-px-10);
+  padding-block: var(--fgd-space-section) var(--size-px-10);
 }
 
 .container {
   display: grid;
   gap: var(--size-px-3);
-  inline-size: min(100% - 2 * var(--ds-space-margin), var(--ds-container-content));
+  inline-size: min(100% - 2 * var(--fgd-space-margin), var(--fgd-container-content));
   margin-inline: auto;
 }
 
 .head {
   margin: 0;
-  font-family: var(--ds-font-display);
-  font-size: var(--ds-font-size-kicker);
+  font-family: var(--fgd-font-display);
+  font-size: var(--fgd-font-size-kicker);
   font-weight: var(--font-weight-7);
   color: var(--role-heading);
 }
 
 .text {
   margin: 0;
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-body-ui);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-body-ui);
   color: var(--primary12);
 }

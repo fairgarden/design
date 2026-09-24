@@ -53,7 +53,7 @@ export function Logo(props: React.SVGProps<SVGSVGElement>) {
 }
 
 /**
- * The FairGarden Design lockup: the logo on the left at --ds-size-logo, then
+ * The FairGarden Design lockup: the logo on the left at --fgd-size-logo, then
  * the wordmark in the kicker role, centered on it.
  */
 export function Lockup({ className }: { className?: string }) {

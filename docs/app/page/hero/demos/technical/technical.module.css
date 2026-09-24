@@ -5,8 +5,8 @@
 
 .label {
   margin: 0;
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-label);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-label);
   font-weight: var(--font-weight-6);
   letter-spacing: var(--font-letterspacing-3);
   text-transform: uppercase;
@@ -14,7 +14,7 @@
 }
 
 .code {
-  font-family: var(--ds-font-mono);
-  font-size: var(--ds-font-size-body-ui);
+  font-family: var(--fgd-font-mono);
+  font-size: var(--fgd-font-size-body-ui);
   color: var(--primary12);
 }

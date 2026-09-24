@@ -32,7 +32,7 @@ import styles from './section-divider.module.css'
  *   ornament (the pause), shape (the hill), fringe (the tick row),
  *   fallback (the straight rule, print and forced colors only).
  * - Scope: none of its own. The shaped edges read the night band's
- *   --ds-edge-shaped switch (block only where tone separates the seam:
+ *   --fgd-edge-shaped switch (block only where tone separates the seam:
  *   the night band against a page ground in light mode [D179]); on a page
  *   ground the `shape` and `fringe` hosts are aria-hidden `night` band
  *   Grounds that carry that switch only, painting nothing of their own.
@@ -41,7 +41,7 @@ import styles from './section-divider.module.css'
  *
  * Placement. A band seam (seam, page-seam, hill, fringe) is the lower
  * band's first child: it inherits that band's scope and pulls itself up
- * through the band's --ds-space-section top padding (§11.1) to sit on the
+ * through the band's --fgd-space-section top padding (§11.1) to sit on the
  * seam. `chrome` and `pause` sit in the flow where they are placed.
  */
 export const sectionDivider = cva(styles.base, {
@@ -143,7 +143,7 @@ function DotRun() {
   )
 }
 
-/** The five-point `--ds-ornament-star` (9 px), solid, on the dotted run's centre line. */
+/** The five-point `--fgd-ornament-star` (9 px), solid, on the dotted run's centre line. */
 function Star({ className }: { className: string }) {
   return (
     <svg className={className} viewBox="0 0 18 18" aria-hidden="true" focusable="false">
@@ -183,7 +183,7 @@ function Ornament({ ornament }: { ornament: SectionDividerOrnament }) {
 /**
  * The seam between two bands, or a pause inside one. Render a band seam
  * (`seam`, `page-seam`, `hill`, `fringe`) as the first child of the lower
- * band's `<Ground kind="band">`, whose block padding is `--ds-space-section`
+ * band's `<Ground kind="band">`, whose block padding is `--fgd-space-section`
  * (§11.1): the divider takes that band's colors and sits on its top edge.
  *
  * A shaped edge sits only where tone separates the seam: the night band

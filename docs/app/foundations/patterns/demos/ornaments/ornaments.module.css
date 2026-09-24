@@ -11,16 +11,16 @@
   gap: var(--size-px-7);
 }
 
-/* The entry trail runs into its label, which sits --ds-space-halo past the terminal. */
+/* The entry trail runs into its label, which sits --fgd-space-halo past the terminal. */
 .entry {
   display: flex;
   align-items: flex-end;
-  gap: var(--ds-space-halo);
+  gap: var(--fgd-space-halo);
 }
 
 .label {
-  font-family: var(--ds-font-display);
-  font-size: var(--ds-font-size-kicker);
+  font-family: var(--fgd-font-display);
+  font-size: var(--fgd-font-size-kicker);
   font-weight: var(--font-weight-7);
   color: var(--role-heading);
 }
@@ -33,15 +33,15 @@
 }
 
 .name {
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-caption);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-caption);
 }
 
 /* A stat numeral on the blob mount; the mount colors it with the front disc's contrast ink. */
 .numeral {
-  font-family: var(--ds-font-display);
-  font-size: var(--ds-font-size-h2);
+  font-family: var(--fgd-font-display);
+  font-size: var(--fgd-font-size-h2);
   font-weight: var(--font-weight-7);
-  font-variant-numeric: var(--ds-numerals-data);
-  line-height: var(--ds-leading-display);
+  font-variant-numeric: var(--fgd-numerals-data);
+  line-height: var(--fgd-leading-display);
 }

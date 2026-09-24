@@ -1,6 +1,6 @@
 .row {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--ds-space-12);
+  gap: var(--size-px-2-5);
   align-items: center;
 }

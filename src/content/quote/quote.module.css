@@ -57,11 +57,11 @@
   .mark {
     display: block;
     color: var(--primary12);
-    font-family: var(--ds-font-display);
-    font-variation-settings: var(--ds-font-display-settings);
-    font-size: calc(3 * var(--ds-font-size-quote));
+    font-family: var(--fgd-font-display);
+    font-variation-settings: var(--fgd-font-display-settings);
+    font-size: calc(3 * var(--fgd-font-size-quote));
     font-weight: var(--font-weight-9);
-    line-height: var(--ds-leading-display);
+    line-height: var(--fgd-leading-display);
     block-size: 0.75em;
     overflow: hidden;
     overflow: clip;
@@ -85,7 +85,7 @@
 
   .attribution:has(> .portrait) {
     grid-template-columns: auto minmax(0, 1fr);
-    column-gap: var(--ds-space-12);
+    column-gap: var(--size-px-2-5);
     align-items: center;
   }
 
@@ -136,7 +136,7 @@
     column-gap: var(--size-px-2);
     padding: var(--size-px-7);
     border: var(--border-size-2) solid var(--primary12);
-    border-radius: var(--ds-radius-none);
+    border-radius: var(--radius-0);
   }
 
   .framed > .mark {
@@ -152,10 +152,10 @@
     hanging-punctuation: first last;
   }
 
-  /* Blockquote: type-body indented --size-px-5 behind a --ds-stroke-3 left rule. */
+  /* Blockquote: type-body indented --size-px-5 behind a --border-size-2-25 left rule. */
   .block .textBody {
     padding-inline-start: var(--size-px-5);
-    border-inline-start: var(--ds-stroke-3) solid var(--primary12);
+    border-inline-start: var(--border-size-2-25) solid var(--primary12);
   }
 
   /* Epigraph: display bold italic, no marks. */
@@ -173,7 +173,7 @@
 
     .text,
     .textBody {
-      max-inline-size: var(--ds-measure-print);
+      max-inline-size: var(--fgd-measure-print);
     }
 
     /* A pull quote that repeats body text is hidden in print [D174]. */

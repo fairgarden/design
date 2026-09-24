@@ -25,7 +25,7 @@ import styles from './switch.module.css'
  * - Defaults: kind row; color axes none [D133].
  * - Color fallback: inherits the scope; its secondary drives the on state
  *   through the --role-select aliases.
- * - States: data-checked → track fill --role-select, edge --ds-stroke-3
+ * - States: data-checked → track fill --role-select, edge --border-size-2-25
  *   --role-select-edge, thumb a --role-select-mark disc at the end;
  *   :hover (not disabled, read-only or busy) [D181] → off track fill
  *   --role-soft-hover (--primary3 where soft fills apply), on track fill

@@ -21,7 +21,7 @@
 }
 
 @layer base {
-  /* The outline badge: --size-px-5 tall, --ds-space-12 padding, a --ds-stroke-1-5 --primary12 edge, no fill. */
+  /* The outline badge: --size-px-5 tall, --size-px-2-5 padding, a --border-size-1-5 --primary12 edge, no fill. */
   .base {
     display: inline-flex;
     align-items: center;
@@ -31,8 +31,8 @@
     block-size: var(--size-px-5);
     max-inline-size: 100%;
     padding-block: 0;
-    padding-inline: var(--ds-space-12);
-    border-width: var(--ds-stroke-1-5);
+    padding-inline: var(--size-px-2-5);
+    border-width: var(--border-size-1-5);
     border-color: var(--primary12);
     border-radius: var(--radius-round);
     color: var(--primary12);
@@ -59,7 +59,7 @@
     color: var(--role-status);
     fill: var(--role-status-fill);
     stroke: var(--role-status-fill);
-    stroke-width: var(--ds-stroke-1-5);
+    stroke-width: var(--border-size-1-5);
     stroke-linecap: round;
     stroke-linejoin: round;
   }
@@ -100,8 +100,8 @@
   /* The sticker: a nested face scope named --primary1, ring and bold caps --primary12 [D144]. */
   .sticker {
     display: inline-flex;
-    border-block: var(--ds-stroke-1-5) solid var(--primary12);
-    border-inline: var(--ds-stroke-1-5) solid var(--primary12);
+    border-block: var(--border-size-1-5) solid var(--primary12);
+    border-inline: var(--border-size-1-5) solid var(--primary12);
     background-color: var(--primary1);
     color: var(--primary12);
   }
@@ -120,7 +120,7 @@
   .success,
   .warning,
   .danger {
-    padding-inline: var(--size-px-2) var(--ds-space-12);
+    padding-inline: var(--size-px-2) var(--size-px-2-5);
     border-color: var(--role-status);
     background-color: var(--role-status-fill);
     color: var(--role-status-text);

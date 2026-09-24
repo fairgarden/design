@@ -29,7 +29,7 @@ export { menu, type MenuPopupProps } from './popup'
  *   color axes: none.
  * - Color fallback: the popup takes the `white` preset's defaults; a
  *   destructive item's secondary falls back to the danger scale [D129].
- * - States: item data-highlighted → --primary4 plus the --ds-stroke-3
+ * - States: item data-highlighted → --primary4 plus the --border-size-2-25
  *   start-edge bar in --primary12 [D145] (a destructive item: the
  *   --role-danger fill, its label and bar --role-danger-label [D192]);
  *   data-checked on checkbox and
@@ -95,7 +95,7 @@ export function MenuTrigger(props: MenuTriggerProps) {
 
 /**
  * The popup, rendered through its Base UI Portal as a nested `white`
- * scope: --primary1 face, --border-size-2 --primary12 edge, --ds-radius-8,
+ * scope: --primary1 face, --border-size-2 --primary12 edge, --radius-2-25,
  * --size-px-1 padding, 200 px to --size-px-14 wide and at least the
  * trigger's width, --size-px-2 from the trigger, aligned to its start
  * edge. It opens instantly or with a clip reveal from the trigger side.
@@ -126,7 +126,7 @@ export type MenuItemProps = BaseMenu.Item.Props & {
 }
 
 /**
- * An action row (Base UI Menu.Item): --ds-size-hit tall at every
+ * An action row (Base UI Menu.Item): --fgd-size-hit tall at every
  * breakpoint, a --size-px-5 leading slot, the label in `type-body-ui`
  * sentence case, and an optional trailing shortcut. Highlight (pointer or
  * keyboard) is the --primary4 fill plus the start-edge bar (the danger fill

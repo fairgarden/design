@@ -4,7 +4,7 @@ import styles from './seams.module.css'
 
 /**
  * paper → paper → tide → white. Each band pads its block edges with
- * --ds-space-section, and each seam divider is the lower band's first child.
+ * --fgd-space-section, and each seam divider is the lower band's first child.
  * A pause breaks a band's reading column once, between two runs of text,
  * never at the band's edge.
  */

@@ -37,7 +37,7 @@ import styles from './card-grid.module.css'
  *   queries it, and each card's face padding reads it (§12.2). Baseline
  *   without support: `list` is a grid auto-fit with minmax tracks at the
  *   288 px card minimum (compact 152 px), capped at 3 (compact 4), gutter
- *   --ds-space-margin; compact drops to 1 column at --xs-n-below.
+ *   --fgd-space-margin; compact drops to 1 column at --xs-n-below.
  *   Thresholds (§5.10.2): editorial and block 2-up from 608, 3-up from 944;
  *   compact 1 below 360, 2 below 704, 4-up from 704 [D163].
  */

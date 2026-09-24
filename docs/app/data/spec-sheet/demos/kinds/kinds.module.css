@@ -1,21 +1,21 @@
 .stack {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--ds-space-40);
+  gap: var(--size-px-7-5);
   /* A flex item of the preview: fill it, since the sheets have no intrinsic width. */
   inline-size: 100%;
 }
 
 .title {
   margin: 0;
-  font-family: var(--ds-font-display);
-  font-size: var(--ds-font-size-itemhead);
+  font-family: var(--fgd-font-display);
+  font-size: var(--fgd-font-size-itemhead);
   font-weight: var(--font-weight-7);
 }
 
 .steps {
   margin: 0;
   padding-inline-start: var(--size-px-5);
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-body-ui);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-body-ui);
 }

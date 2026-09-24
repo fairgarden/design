@@ -14,8 +14,8 @@
   gap: var(--size-px-3);
   align-items: center;
   justify-content: space-between;
-  min-block-size: var(--ds-size-control-xl);
-  padding: var(--size-px-2) var(--ds-space-margin);
+  min-block-size: var(--fgd-size-control-xl);
+  padding: var(--size-px-2) var(--fgd-space-margin);
   border-block-end: var(--border-size-1) solid var(--role-rule);
 }
 
@@ -29,17 +29,17 @@
 .brand {
   display: inline-flex;
   align-items: center;
-  min-block-size: var(--ds-size-hit);
+  min-block-size: var(--fgd-size-hit);
   color: var(--role-heading);
   text-decoration: none;
 }
 
 .frame {
   display: grid;
-  gap: var(--ds-space-40);
-  max-inline-size: var(--ds-container-wide);
+  gap: var(--size-px-7-5);
+  max-inline-size: var(--fgd-container-wide);
   margin-inline: auto;
-  padding-inline: var(--ds-space-margin);
+  padding-inline: var(--fgd-space-margin);
 }
 
 @media (--md-n-above) {
@@ -50,7 +50,7 @@
 
 .main {
   min-inline-size: 0;
-  padding-block: var(--ds-space-40) var(--ds-space-section);
+  padding-block: var(--size-px-7-5) var(--fgd-space-section);
 }
 
 /*
@@ -60,7 +60,7 @@
  */
 .nav {
   order: 1;
-  padding-block: var(--ds-space-40);
+  padding-block: var(--size-px-7-5);
   border-block-start: var(--border-size-1) solid var(--role-hairline);
 }
 
@@ -92,7 +92,7 @@
   composes: typeEyebrow from '../../src/utils/type.module.css';
   display: flex;
   align-items: center;
-  min-block-size: var(--ds-size-hit);
+  min-block-size: var(--fgd-size-hit);
   color: var(--role-heading);
   text-decoration: none;
 }
@@ -101,9 +101,9 @@
   composes: typeBodyUi from '../../src/utils/type.module.css';
   display: flex;
   align-items: center;
-  min-block-size: var(--ds-size-hit);
+  min-block-size: var(--fgd-size-hit);
   padding-inline-start: var(--size-px-3);
-  border-inline-start: var(--ds-stroke-3) solid var(--role-ground);
+  border-inline-start: var(--border-size-2-25) solid var(--role-ground);
   color: var(--primary12);
   text-decoration: none;
 
@@ -126,8 +126,8 @@
 .searchInput {
   composes: typeBodyUi from '../../src/utils/type.module.css';
   inline-size: 100%;
-  min-block-size: var(--ds-size-control-md);
-  padding-inline: var(--ds-space-12);
+  min-block-size: var(--fgd-size-control-md);
+  padding-inline: var(--size-px-2-5);
   border: var(--border-size-1) solid var(--role-rule);
   border-radius: var(--radius-1);
   background-color: var(--primary1);
@@ -139,8 +139,8 @@
 
   /* Text entry shows the ring on any focus [D90]. */
   &:focus {
-    outline: var(--ds-focus-width) solid var(--primary12);
-    outline-offset: var(--ds-focus-offset);
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: var(--fgd-focus-offset);
   }
 }
 
@@ -155,14 +155,14 @@
   padding: var(--size-px-2) 0;
   overflow-y: auto;
   border: var(--border-size-2) solid var(--primary12);
-  border-radius: var(--ds-radius-8);
+  border-radius: var(--radius-2-25);
   background-color: var(--primary1);
   list-style: none;
 }
 
 .resultGroup {
   composes: typeLabel from '../../src/utils/type.module.css';
-  padding: var(--size-px-2) var(--ds-space-12) var(--size-px-1);
+  padding: var(--size-px-2) var(--size-px-2-5) var(--size-px-1);
   color: var(--role-muted);
 }
 
@@ -170,8 +170,8 @@
   composes: typeBodyUi from '../../src/utils/type.module.css';
   display: flex;
   align-items: center;
-  min-block-size: var(--ds-size-hit);
-  padding-inline: var(--ds-space-12);
+  min-block-size: var(--fgd-size-hit);
+  padding-inline: var(--size-px-2-5);
   color: var(--primary12);
   text-decoration: none;
 
@@ -184,7 +184,7 @@
 
 .noResults {
   composes: typeCaption from '../../src/utils/type.module.css';
-  padding: var(--size-px-2) var(--ds-space-12);
+  padding: var(--size-px-2) var(--size-px-2-5);
   color: var(--role-muted);
 }
 
@@ -210,7 +210,7 @@
   block-size: 100%;
   padding: var(--size-px-5);
   border: var(--border-size-1) solid var(--role-rule);
-  border-radius: var(--ds-radius-8);
+  border-radius: var(--radius-2-25);
   color: var(--primary12);
   text-decoration: none;
 
@@ -229,7 +229,7 @@
 
 .demoTitle {
   composes: typeSubhead from '../../src/utils/type.module.css';
-  margin-block: var(--ds-space-40) var(--size-px-3);
+  margin-block: var(--size-px-7-5) var(--size-px-3);
 
   & a {
     color: inherit;

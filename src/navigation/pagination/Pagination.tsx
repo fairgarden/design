@@ -30,7 +30,7 @@ import styles from './pagination.module.css'
  *   offset --size-px-1), `:active` → the underline at --border-size-2
  *   [D181]. Step buttons are icon-only outline Buttons, whose hover, press
  *   and ring are Button's. aria-current="page" on `current` → the
- *   --ds-stroke-3 bar plus --font-weight-7; aria-current="true" on the
+ *   --border-size-2-25 bar plus --font-weight-7; aria-current="true" on the
  *   current `dot` → solid and larger. Ends omit the control and keep its
  *   space; nothing is ever disabled. The list region the pager drives
  *   carries aria-busy while loading; the pager stays put.

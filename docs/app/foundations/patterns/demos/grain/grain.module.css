@@ -11,20 +11,20 @@
   align-content: start;
   min-block-size: var(--size-px-12);
   padding: var(--size-px-5);
-  border-radius: var(--ds-radius-20);
+  border-radius: var(--radius-3-25);
 }
 
 .head {
   margin: 0;
-  font-family: var(--ds-font-display);
-  font-size: var(--ds-font-size-itemhead);
+  font-family: var(--fgd-font-display);
+  font-size: var(--fgd-font-size-itemhead);
   font-weight: var(--font-weight-7);
-  line-height: var(--ds-leading-display);
+  line-height: var(--fgd-leading-display);
 }
 
 .body {
   margin: 0;
-  font-family: var(--ds-font-text);
-  font-size: var(--ds-font-size-body);
-  line-height: var(--ds-leading-compact);
+  font-family: var(--fgd-font-text);
+  font-size: var(--fgd-font-size-body);
+  line-height: var(--fgd-leading-compact);
 }

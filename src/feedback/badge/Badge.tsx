@@ -102,7 +102,7 @@ const STICKER_PRESET: PageGroundPreset = 'paper'
 type BadgeKindProps =
   | {
       /**
-       * Omitted: the outline badge (`--ds-stroke-1-5` `--primary12` edge and
+       * Omitted: the outline badge (`--border-size-1-5` `--primary12` edge and
        * label). `solid`: the pill badge, a step-9 fill of the secondary with
        * its edge and a contrast-ink label; on a scale with no step-9 text ink
        * (pink, red, crimson, gold, ruby, tomato) it takes the static fill.

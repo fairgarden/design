@@ -7,14 +7,14 @@
 .row {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--ds-space-12);
+  gap: var(--size-px-2-5);
   align-items: center;
 }
 
 .copy {
   margin: 0;
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-body-ui);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-body-ui);
   line-height: var(--font-lineheight-3);
 }
 
@@ -25,7 +25,7 @@
 
 .heading {
   margin: 0;
-  font-family: var(--ds-font-display);
-  font-size: var(--ds-font-size-kicker);
+  font-family: var(--fgd-font-display);
+  font-size: var(--fgd-font-size-kicker);
   color: var(--role-heading);
 }

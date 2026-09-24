@@ -37,7 +37,7 @@ An action row; see MenuItem.
 ### ContextMenuPopup
 
 The popup: the Menu's build (a `white` scope, --border-size-2 --primary12
-edge, --ds-size-hit rows, the highlight with its start-edge bar),
+edge, --fgd-size-hit rows, the highlight with its start-edge bar),
 anchored to the pointer, or to the focused object for keyboard
 invocation. Compose the Menu item parts inside it, re-exported here as
 ContextMenuItem, ContextMenuCheckboxItem and so on.

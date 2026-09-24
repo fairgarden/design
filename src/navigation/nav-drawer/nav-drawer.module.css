@@ -55,8 +55,8 @@
     align-items: center;
     gap: var(--size-px-2);
     box-sizing: border-box;
-    min-block-size: var(--ds-size-hit);
-    min-inline-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
+    min-inline-size: var(--fgd-size-hit);
     margin: 0;
     padding-block: 0;
     padding-inline: var(--size-px-1);
@@ -99,8 +99,8 @@
     align-items: center;
     gap: var(--size-px-3);
     box-sizing: content-box;
-    block-size: var(--ds-size-control-xl);
-    padding-inline: var(--ds-space-margin);
+    block-size: var(--fgd-size-control-xl);
+    padding-inline: var(--fgd-space-margin);
     border-block-end: var(--border-size-1) solid var(--role-rule);
   }
 
@@ -108,7 +108,7 @@
     display: inline-flex;
     flex: none;
     align-items: center;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     color: var(--primary12);
     text-decoration-line: none;
   }
@@ -153,11 +153,11 @@
   .item:not(:first-child)::before {
     content: '';
     display: block;
-    margin-inline: var(--ds-space-margin);
+    margin-inline: var(--fgd-space-margin);
     border-block-start: var(--border-size-1) solid var(--role-hairline);
   }
 
-  /* Group rows and direct links: the display serif at a --ds-size-control-xl pitch [D60]. */
+  /* Group rows and direct links: the display serif at a --fgd-size-control-xl pitch [D60]. */
   .groupRow,
   .directLink {
     position: relative;
@@ -166,10 +166,10 @@
     gap: var(--size-px-3);
     box-sizing: border-box;
     inline-size: 100%;
-    min-block-size: var(--ds-size-control-xl);
+    min-block-size: var(--fgd-size-control-xl);
     margin: 0;
     padding-block: 0;
-    padding-inline: var(--ds-space-margin);
+    padding-inline: var(--fgd-space-margin);
     border: 0;
     background: none;
     color: var(--primary12);
@@ -202,7 +202,7 @@
     text-underline-offset: var(--size-px-1);
   }
 
-  /* The D109 glyph, right-aligned at the header's icon tier (20 px at --ds-stroke-1-5). */
+  /* The D109 glyph, right-aligned at the header's icon tier (20 px at --border-size-1-5). */
   .glyph {
     flex: none;
   }
@@ -216,8 +216,8 @@
 
   /* Child links sit on a --border-size-1 --role-hairline indent guide, --size-px-5 in. */
   .childList {
-    margin-inline-start: calc(var(--ds-space-margin) + var(--size-px-5));
-    margin-inline-end: var(--ds-space-margin);
+    margin-inline-start: calc(var(--fgd-space-margin) + var(--size-px-5));
+    margin-inline-end: var(--fgd-space-margin);
     margin-block-end: var(--size-px-5);
     border-inline-start: var(--border-size-1) solid var(--role-hairline);
   }
@@ -232,7 +232,7 @@
     display: flex;
     align-items: center;
     box-sizing: border-box;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     padding-inline: var(--size-px-3);
     color: var(--primary12);
     text-decoration-line: none;
@@ -250,9 +250,9 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
     padding-block: var(--size-px-3);
-    padding-inline: var(--ds-space-margin);
+    padding-inline: var(--fgd-space-margin);
     border-block-start: var(--border-size-2) solid var(--role-rule);
   }
 
@@ -269,25 +269,25 @@
     position: relative;
     display: flex;
     align-items: center;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     color: var(--primary12);
     text-decoration-line: none;
   }
 
-  /* Hover transitions [D181]: color only, --ds-duration-quick. */
+  /* Hover transitions [D181]: color only, --fgd-duration-quick. */
   @media (--motionOK) {
     .menuLabel,
     .closeLabel,
     .rowLabel,
     .linkLabel {
       transition-property: color, text-decoration-color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
 
     .panel {
       transition-property: block-size;
-      transition-duration: var(--ds-duration-disclosure);
+      transition-duration: var(--fgd-duration-disclosure);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -312,14 +312,14 @@
     clip-path: inset(0);
   }
 
-  /* From --md-n-above: a --size-sm side sheet docked at the trigger's (end) edge, --ds-stroke-3 inner edge [D92]. */
+  /* From --md-n-above: a --size-sm side sheet docked at the trigger's (end) edge, --border-size-2-25 inner edge [D92]. */
   @media (--md-n-above) {
     .base {
       --nav-drawer-clip-from: inset(0 0 0 100%);
 
       inset-inline-start: auto;
       inline-size: min(var(--size-sm), 100%);
-      border-inline-start: var(--ds-stroke-3) solid var(--primary12);
+      border-inline-start: var(--border-size-2-25) solid var(--primary12);
     }
 
     .base:dir(rtl) {
@@ -330,7 +330,7 @@
   @media (--motionOK) {
     .base {
       transition-property: clip-path;
-      transition-duration: var(--ds-duration-disclosure);
+      transition-duration: var(--fgd-duration-disclosure);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -356,7 +356,7 @@
   .menuTrigger:hover .menuLabel,
   .close:hover .closeLabel {
     color: var(--role-link-hover);
-    text-decoration-line: var(--ds-link-hover-line);
+    text-decoration-line: var(--fgd-link-hover-line);
   }
 
   /* Pressed: the inverse pair (§9.2). */
@@ -399,11 +399,11 @@
     outline-offset: calc(-1 * var(--border-size-2));
   }
 
-  /* Current: the --ds-stroke-3 start-edge bar; links also take weight 700 [D15]. */
+  /* Current: the --border-size-2-25 start-edge bar; links also take weight 700 [D15]. */
   .groupRow[aria-current='true']::before,
   .directLink[aria-current='page']::before,
   .childLink[aria-current='page']::before {
-    border-inline-start-width: var(--ds-stroke-3);
+    border-inline-start-width: var(--border-size-2-25);
   }
 
   .childLink[aria-current='page'],

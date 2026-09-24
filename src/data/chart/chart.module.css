@@ -194,11 +194,11 @@
    * (§8.7); print always shows the pattern (below).
    */
   .stepFill {
-    display: var(--ds-series-fill, inline);
+    display: var(--fgd-series-fill, inline);
   }
 
   .stepPattern {
-    display: var(--ds-series-pattern, none);
+    display: var(--fgd-series-pattern, none);
   }
 
   /* SVG parts. Inks arrive as role-variable props; geometry and type here. */
@@ -346,7 +346,7 @@
 
     .print {
       display: block;
-      inline-size: var(--ds-print-live-width);
+      inline-size: var(--fgd-print-live-width);
       max-inline-size: 100%;
     }
 

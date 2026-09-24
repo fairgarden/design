@@ -13,7 +13,7 @@
  *   --table-pad-block, --table-pad-inline  cell padding by density
  *   --table-row-min                         minimum row pitch (compact 32, interactive 44)
  *   --table-row-rule                        width of the --role-rule row rule (compact)
- * Each starts from its --ds-table-* density token (tokens.css), so a
+ * Each starts from its --fgd-table-* density token (tokens.css), so a
  * Ground's data-density reaches the table; the `density` prop overrides it.
  */
 
@@ -58,17 +58,17 @@
 
 @layer base {
   .base {
-    --table-pad-block: var(--ds-table-pad-block);
-    --table-pad-inline: var(--ds-table-pad-inline);
-    --table-row-min: var(--ds-table-row-min);
-    --table-row-rule: var(--ds-table-row-rule);
+    --table-pad-block: var(--fgd-table-pad-block);
+    --table-pad-inline: var(--fgd-table-pad-inline);
+    --table-row-min: var(--fgd-table-row-min);
+    --table-row-rule: var(--fgd-table-row-rule);
 
     container-type: inline-size;
     /* Size containment leaves no intrinsic width: fill the box, never collapse as a flex or shrink-to-fit item. */
     inline-size: 100%;
     display: flex;
     flex-direction: column;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
     min-inline-size: 0;
     color: var(--primary12);
   }
@@ -88,13 +88,13 @@
     border-spacing: 0;
     border-block: var(--border-size-2) solid var(--primary12);
     color: var(--primary12);
-    font-variant-numeric: var(--ds-numerals-data);
+    font-variant-numeric: var(--fgd-numerals-data);
   }
 
   /* Caption block above the table; it stays in view while a wide table scrolls. */
   .caption {
     caption-side: top;
-    padding-block-end: var(--ds-space-12);
+    padding-block-end: var(--size-px-2-5);
     text-align: start;
   }
 
@@ -196,9 +196,9 @@
     inset-inline: 0;
     inset-block-end: 0;
     block-size: 0;
-    border-block-end: var(--ds-dot-fine) solid var(--role-rule);
+    border-block-end: var(--fgd-dot-fine) solid var(--role-rule);
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 1'%3E%3Ccircle cx='1.5' cy='0.5' r='0.5'/%3E%3C/svg%3E");
-    mask-size: var(--ds-dot-fine-pitch) var(--ds-dot-fine);
+    mask-size: var(--fgd-dot-fine-pitch) var(--fgd-dot-fine);
     mask-repeat: round no-repeat;
     mask-origin: border-box;
     pointer-events: none;
@@ -227,14 +227,14 @@
 
   /*
    * Total rule: line-double-hair in --primary12, two --border-size-1 lines
-   * --ds-double-hair-gap apart, drawn on the foot's first row (a cell
+   * --fgd-double-hair-gap apart, drawn on the foot's first row (a cell
    * border plus a second line) because cells cannot host the composed
    * line class.
    */
   .totalRule > .row:first-child > * {
     border-block-start: var(--border-size-1) solid var(--primary12);
     padding-block-start: calc(
-      var(--table-pad-block) + var(--ds-double-hair-gap) + var(--border-size-1)
+      var(--table-pad-block) + var(--fgd-double-hair-gap) + var(--border-size-1)
     );
   }
 
@@ -242,18 +242,18 @@
     content: '';
     position: absolute;
     inset-inline: 0;
-    inset-block-start: var(--ds-double-hair-gap);
+    inset-block-start: var(--fgd-double-hair-gap);
     border-block-start: var(--border-size-1) solid var(--primary12);
     pointer-events: none;
   }
 
-  /* Selected or current row bar: --ds-stroke-3 --primary12 at the row's start edge [D15]. */
+  /* Selected or current row bar: --border-size-2-25 --primary12 at the row's start edge [D15]. */
   .rowBar {
     display: none;
     position: absolute;
     inset-block: 0;
     inset-inline-start: 0;
-    inline-size: var(--ds-stroke-3);
+    inline-size: var(--border-size-2-25);
     background-color: var(--primary12);
   }
 
@@ -277,14 +277,14 @@
     appearance: none;
   }
 
-  /* Every target reaches --ds-size-hit (§9.1) [D43]. */
+  /* Every target reaches --fgd-size-hit (§9.1) [D43]. */
   .sortButton::after {
     content: '';
     position: absolute;
     top: 50%;
     left: 50%;
-    inline-size: var(--ds-size-hit);
-    block-size: var(--ds-size-hit);
+    inline-size: var(--fgd-size-hit);
+    block-size: var(--fgd-size-hit);
     min-inline-size: 100%;
     min-block-size: 100%;
     translate: -50% -50%;
@@ -297,11 +297,11 @@
     text-underline-offset: var(--size-px-1);
   }
 
-  /* Hover and press transitions [D181]: --ds-duration-quick, --ease-out-3. */
+  /* Hover and press transitions [D181]: --fgd-duration-quick, --ease-out-3. */
   @media (--motionOK) {
     .sortButton {
       transition-property: color, background-color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -339,24 +339,24 @@
 }
 
 @layer variants {
-  /* Density [D83]: compact padding --size-px-2 × --ds-space-12, rows ≥ 32 px, --role-rule row rules. */
+  /* Density [D83]: compact padding --size-px-2 × --size-px-2-5, rows ≥ 32 px, --role-rule row rules. */
   .compact {
     --table-pad-block: var(--size-px-2);
-    --table-pad-inline: var(--ds-space-12);
+    --table-pad-inline: var(--size-px-2-5);
     --table-row-min: var(--size-px-7);
     --table-row-rule: var(--border-size-1);
   }
 
   .densityDefault {
-    --table-pad-block: var(--ds-space-12);
+    --table-pad-block: var(--size-px-2-5);
     --table-pad-inline: var(--size-px-3);
     --table-row-min: 0px;
     --table-row-rule: 0px;
   }
 
-  /* Interactive rows are click targets: ≥ --ds-size-hit tall with --role-rule rules [D83]. */
+  /* Interactive rows are click targets: ≥ --fgd-size-hit tall with --role-rule rules [D83]. */
   .interactive {
-    --table-row-min: var(--ds-size-hit);
+    --table-row-min: var(--fgd-size-hit);
   }
 
   .interactive .body > .row > * {
@@ -376,9 +376,9 @@
     inset-inline: 0;
     inset-block-end: 0;
     block-size: 0;
-    border-block-end: var(--ds-dot-fine) solid var(--role-rule);
+    border-block-end: var(--fgd-dot-fine) solid var(--role-rule);
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 1'%3E%3Ccircle cx='1.5' cy='0.5' r='0.5'/%3E%3C/svg%3E");
-    mask-size: var(--ds-dot-fine-pitch) var(--ds-dot-fine);
+    mask-size: var(--fgd-dot-fine-pitch) var(--fgd-dot-fine);
     mask-repeat: round no-repeat;
     mask-origin: border-box;
     pointer-events: none;
@@ -500,9 +500,9 @@
     .stack .rowHeader {
       display: block;
       padding-block-end: var(--size-px-2);
-      font-family: var(--ds-font-display);
-      font-variation-settings: var(--ds-font-display-settings);
-      font-size: var(--ds-font-size-itemhead);
+      font-family: var(--fgd-font-display);
+      font-variation-settings: var(--fgd-font-display-settings);
+      font-size: var(--fgd-font-size-itemhead);
       font-weight: var(--font-weight-7);
       line-height: var(--font-lineheight-0);
     }
@@ -538,9 +538,9 @@
       flex: 1 0 var(--size-px-5);
       align-self: last baseline;
       block-size: 0;
-      border-block-end: var(--ds-dot-fine) solid var(--role-rule);
+      border-block-end: var(--fgd-dot-fine) solid var(--role-rule);
       mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 1'%3E%3Ccircle cx='1.5' cy='0.5' r='0.5'/%3E%3C/svg%3E");
-      mask-size: var(--ds-dot-fine-pitch) var(--ds-dot-fine);
+      mask-size: var(--fgd-dot-fine-pitch) var(--fgd-dot-fine);
       mask-repeat: round no-repeat;
       mask-origin: border-box;
     }
@@ -606,9 +606,9 @@
       .stack .rowHeader {
         display: block;
         padding-block-end: var(--size-px-2);
-        font-family: var(--ds-font-display);
-        font-variation-settings: var(--ds-font-display-settings);
-        font-size: var(--ds-font-size-itemhead);
+        font-family: var(--fgd-font-display);
+        font-variation-settings: var(--fgd-font-display-settings);
+        font-size: var(--fgd-font-size-itemhead);
         font-weight: var(--font-weight-7);
         line-height: var(--font-lineheight-0);
       }
@@ -642,9 +642,9 @@
         flex: 1 0 var(--size-px-5);
         align-self: last baseline;
         block-size: 0;
-        border-block-end: var(--ds-dot-fine) solid var(--role-rule);
+        border-block-end: var(--fgd-dot-fine) solid var(--role-rule);
         mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 1'%3E%3Ccircle cx='1.5' cy='0.5' r='0.5'/%3E%3C/svg%3E");
-        mask-size: var(--ds-dot-fine-pitch) var(--ds-dot-fine);
+        mask-size: var(--fgd-dot-fine-pitch) var(--fgd-dot-fine);
         mask-repeat: round no-repeat;
         mask-origin: border-box;
       }

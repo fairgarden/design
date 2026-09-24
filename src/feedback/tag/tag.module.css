@@ -12,11 +12,11 @@
 }
 
 @layer base {
-  /* No container: icon, --ds-space-12, label. */
+  /* No container: icon, --size-px-2-5, label. */
   .base {
     display: inline-flex;
     align-items: center;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
     max-inline-size: 100%;
     color: var(--primary12);
     text-decoration-line: none;
@@ -48,7 +48,7 @@
     text-underline-offset: var(--size-px-1);
   }
 
-  /* A linked tag's target reaches --ds-size-hit, extended invisibly (§9.1) [D43]. */
+  /* A linked tag's target reaches --fgd-size-hit, extended invisibly (§9.1) [D43]. */
   .base[href] {
     position: relative;
   }
@@ -59,8 +59,8 @@
     top: 50%;
     left: 50%;
     inline-size: 100%;
-    block-size: var(--ds-size-hit);
-    min-inline-size: var(--ds-size-hit);
+    block-size: var(--fgd-size-hit);
+    min-inline-size: var(--fgd-size-hit);
     translate: -50% -50%;
   }
 
@@ -70,11 +70,11 @@
     }
   }
 
-  /* Hover transition [D181]: --ds-duration-quick, --ease-out-3. */
+  /* Hover transition [D181]: --fgd-duration-quick, --ease-out-3. */
   @media (--motionOK) {
     .label {
       transition-property: text-decoration-color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }

@@ -26,7 +26,7 @@ import styles from './menubar.module.css'
  * - Color fallback: inherits the scope; the popups take the `white`
  *   preset's defaults like every Menu popup.
  * - States: data-orientation → the bar's direction and rule edge;
- *   trigger data-popup-open → the --ds-stroke-3 bar in --primary12;
+ *   trigger data-popup-open → the --border-size-2-25 bar in --primary12;
  *   trigger :hover (not disabled) → the §9.2 `text` Button hover: label
  *   --role-link-hover, underlined only where that is --primary12 [D181];
  *   :focus-visible → the ring; data-disabled → --role-muted.
@@ -69,7 +69,7 @@ export type MenubarProps = BaseMenubar.Props & {
 }
 
 /**
- * The bar (Base UI Menubar): --ds-size-hit tall with a --border-size-1
+ * The bar (Base UI Menubar): --fgd-size-hit tall with a --border-size-1
  * --role-rule under it, holding `MenubarMenu`s. Below --lg-n-above it
  * collapses into one `collapsedLabel` trigger whose popup lists each menu
  * as a labelled group.

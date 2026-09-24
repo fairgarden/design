@@ -40,8 +40,8 @@ export type { MapPmtiles, MapRoute } from './types'
  * Implementation (CSS Modules + CVA)
  * - Module: map.module.css; CVA function `map`.
  * - Axes: `kind` → technical | location (the frame: technical
- *   --ds-radius-none with a --border-size-1 --role-rule frame; location
- *   --ds-radius-20 with a --border-size-2 --primary12 frame and a text
+ *   --radius-0 with a --border-size-1 --role-rule frame; location
+ *   --radius-3-25 with a --border-size-2 --primary12 frame and a text
  *   address); `primary`, `secondary` → scales module classes.
  * - Compound variants: none.
  * - Defaults: kind technical; color axes: none.
@@ -212,8 +212,8 @@ type HeadingLevel = 2 | 3 | 4 | 5 | 6
 /** Props for Map: `div` props plus the base map, the markers, the figure text and the print extras. */
 export type MapProps = Omit<React.ComponentPropsWithRef<'div'>, 'children' | 'title'> & {
   /**
-   * `technical` (default): --ds-radius-none, a --border-size-1 --role-rule
-   * frame. `location`: --ds-radius-20, a --border-size-2 --primary12 frame,
+   * `technical` (default): --radius-0, a --border-size-1 --role-rule
+   * frame. `location`: --radius-3-25, a --border-size-2 --primary12 frame,
    * always with a mixed-case `address`.
    */
   kind?: MapVariants['kind']
@@ -257,7 +257,7 @@ export type MapProps = Omit<React.ComponentPropsWithRef<'div'>, 'children' | 'ti
   printFallback?: React.ReactNode
   /** The map's URL, printed in `type-url` beside the QR code [D168]. */
   url?: string
-  /** A QR code for `url` as inline SVG, printed at --ds-print-qr beside the URL, never instead of it. */
+  /** A QR code for `url` as inline SVG, printed at --fgd-print-qr beside the URL, never instead of it. */
   qr?: React.ReactNode
   /**
    * One ink: area patterns in --primary12 (a vector map also hatches its

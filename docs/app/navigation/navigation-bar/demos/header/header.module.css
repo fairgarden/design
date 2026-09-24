@@ -4,7 +4,7 @@
 
 .content {
   min-block-size: var(--size-px-14);
-  padding: var(--size-px-5) var(--ds-space-margin);
-  font-family: var(--ds-font-ui);
+  padding: var(--size-px-5) var(--fgd-space-margin);
+  font-family: var(--fgd-font-ui);
   color: var(--role-muted);
 }

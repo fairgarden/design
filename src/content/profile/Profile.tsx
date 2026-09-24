@@ -173,7 +173,7 @@ export type ProfileTeamPhotoProps = useRender.ComponentProps<'img'>
 
 /**
  * A team member's photo: a plain `img`, square at the cell's full width,
- * `--ds-radius-8`, framed in a `--border-size-1` `--role-hairline` line.
+ * `--radius-2-25`, framed in a `--border-size-1` `--role-hairline` line.
  * Give it empty alt when the name follows.
  */
 export function ProfileTeamPhoto(props: ProfileTeamPhotoProps) {

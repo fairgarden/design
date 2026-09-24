@@ -18,7 +18,7 @@ export type { IconName, IconTier }
 /**
  * Icon classes (§6.10) [D166]. `size` is the Material Symbols tier:
  * `inline` 16 px (`--size-px-3`), `tag` 20 px (`--size-px-4`), `block` 36 px
- * (`--ds-size-icon-block`). The icon has no color axes: it is filled in
+ * (`--fgd-size-icon-block`). The icon has no color axes: it is filled in
  * `currentColor` and takes its part's ink role.
  */
 export const icon = cva(styles.base, {

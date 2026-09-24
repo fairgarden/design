@@ -5,7 +5,7 @@
  * toolbar, count, list, item, footer, footerLink (a standalone Link, which
  * draws the chevron). Colors are role variables only; local custom
  * properties carry dimensions only:
- *   --card-grid-gap   the gutter (= --ds-space-margin) [D42]
+ *   --card-grid-gap   the gutter (= --fgd-space-margin) [D42]
  *   --card-grid-min   the card's content minimum (288 px; compact 152 px)
  *   --card-grid-cap   the most columns the auto-fit baseline allows (3; compact 4)
  */
@@ -19,7 +19,7 @@
 
 @layer base {
   .base {
-    --card-grid-gap: var(--ds-space-margin);
+    --card-grid-gap: var(--fgd-space-margin);
     --card-grid-min: 288px; /* card content minimum (§5.10.2) */
     --card-grid-cap: 3;
 
@@ -109,7 +109,7 @@
   }
 
   /* Block edge: --size-px-2 more on the heavy right and bottom sides, so the
-     --ds-stroke-8 edge never touches a neighbor. */
+     --border-size-3-5 edge never touches a neighbor. */
   .block .item {
     padding-inline-end: var(--size-px-2);
     padding-block-end: var(--size-px-2);

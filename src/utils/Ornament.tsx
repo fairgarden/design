@@ -173,7 +173,7 @@ interface TrailGeometry {
  * wanders and turns down into its terminal, pointing at what follows below
  * (the empty state's action). `entry` (176 × 56) loops once near its start
  * (≈ 22 × 40 px), then runs level into a label at its inline end; the label
- * sits --ds-space-halo past the terminal.
+ * sits --fgd-space-halo past the terminal.
  */
 const trails: Record<TrailShape, TrailGeometry> = {
   'short-tail': {

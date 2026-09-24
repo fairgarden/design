@@ -78,16 +78,16 @@
     display: grid;
     align-content: start;
     justify-items: start;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
     min-inline-size: 0;
   }
 
   /* Block-tier icon (36 px) in --role-accent, --size-px-3 above the heading. */
   .icon {
     display: block;
-    inline-size: var(--ds-size-icon-block);
-    block-size: var(--ds-size-icon-block);
-    margin-block-end: calc(var(--size-px-3) - var(--ds-space-12));
+    inline-size: var(--fgd-size-icon-block);
+    block-size: var(--fgd-size-icon-block);
+    margin-block-end: calc(var(--size-px-3) - var(--size-px-2-5));
     color: var(--role-accent);
   }
 
@@ -121,7 +121,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
     min-inline-size: 0;
   }
 
@@ -162,7 +162,7 @@
     align-items: start;
     gap: var(--size-px-2);
     color: var(--primary12);
-    scroll-margin-block: var(--ds-space-margin);
+    scroll-margin-block: var(--fgd-space-margin);
   }
 
   .statusGlyph {
@@ -174,7 +174,7 @@
     color: var(--role-status);
     fill: var(--role-status-fill);
     stroke: var(--role-status-fill);
-    stroke-width: var(--ds-stroke-1-5);
+    stroke-width: var(--border-size-1-5);
     stroke-linecap: round;
     stroke-linejoin: round;
   }
@@ -235,22 +235,22 @@
   }
 
   /*
-   * Straddle card (§5.6.2): a royal field at --ds-radius-conditional-20
+   * Straddle card (§5.6.2): a royal field at --radius-conditional-3-25
    * (square where a phone runs it edge to edge), padding --size-px-4 (the
    * nominal radius). The column width at base; --size-sm, centered, from
    * --md-n-above. It rises across the seam of the band it opens by
    * --newsletter-overlap (measured), sits above both grounds, and keeps
-   * --ds-space-56 before the lower band's content.
+   * --size-px-8-5 before the lower band's content.
    */
   .straddle {
     position: relative;
     z-index: var(--layer-1);
-    margin-block: calc(-1 * var(--newsletter-overlap, 0px)) var(--ds-space-56);
+    margin-block: calc(-1 * var(--newsletter-overlap, 0px)) var(--size-px-8-5);
   }
 
   .card {
     padding: var(--size-px-4);
-    border-radius: var(--ds-radius-conditional-20);
+    border-radius: var(--radius-conditional-3-25);
   }
 
   .straddle .card {
@@ -263,7 +263,7 @@
     }
   }
 
-  /* Heading → field --size-px-7; between fields --ds-space-12; fields → legal → button --size-px-5. */
+  /* Heading → field --size-px-7; between fields --size-px-2-5; fields → legal → button --size-px-5. */
   .straddle .layout {
     gap: var(--size-px-7);
   }
@@ -312,7 +312,7 @@
    */
   @media (--lg-n-above) {
     .reading {
-      max-inline-size: var(--ds-measure-reading);
+      max-inline-size: var(--fgd-measure-reading);
       margin-inline: auto;
     }
 
@@ -351,7 +351,7 @@
     .band .layout {
       grid-template-columns: repeat(12, minmax(0, 1fr));
       align-items: end;
-      column-gap: var(--ds-space-margin);
+      column-gap: var(--fgd-space-margin);
     }
 
     .band .intro {
@@ -398,7 +398,7 @@
     .band .layout {
       grid-template-columns: repeat(12, minmax(0, 1fr));
       align-items: end;
-      column-gap: var(--ds-space-margin);
+      column-gap: var(--fgd-space-margin);
     }
 
     .band .intro {
@@ -430,7 +430,7 @@
   }
 
   .ruled .heading {
-    font-family: var(--ds-font-text);
+    font-family: var(--fgd-font-text);
   }
 
   .ruled .form {
@@ -448,7 +448,7 @@
 
   .ruled .submit {
     margin: var(--size-px-3);
-    border-radius: var(--ds-radius-none);
+    border-radius: var(--radius-0);
   }
 
   .ruled .legal {

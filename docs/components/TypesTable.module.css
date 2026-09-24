@@ -6,7 +6,7 @@
 
 .description {
   composes: typeBodyUi from '../../src/utils/type.module.css';
-  max-inline-size: var(--ds-measure-reading);
+  max-inline-size: var(--fgd-measure-reading);
 }
 
 .scroll {
@@ -22,20 +22,20 @@
 
   /* type-label (composes is not allowed in a nested rule). */
   & th {
-    font-family: var(--ds-font-ui);
+    font-family: var(--fgd-font-ui);
     font-weight: var(--font-weight-6);
-    font-size: var(--ds-font-size-label);
+    font-size: var(--fgd-font-size-label);
     line-height: var(--font-lineheight-1);
     letter-spacing: var(--font-letterspacing-3);
     text-transform: uppercase;
-    padding: var(--size-px-2) var(--ds-space-12);
+    padding: var(--size-px-2) var(--size-px-2-5);
     border-block-end: var(--border-size-1) solid var(--role-rule);
     color: var(--role-muted);
     text-align: start;
   }
 
   & td {
-    padding: var(--ds-space-12);
+    padding: var(--size-px-2-5);
     border-block-end: var(--border-size-1) solid var(--role-hairline);
     vertical-align: top;
   }
@@ -49,8 +49,8 @@
   white-space: nowrap;
 
   & code {
-    font-family: var(--ds-font-mono);
-    font-size: var(--ds-font-size-caption);
+    font-family: var(--fgd-font-mono);
+    font-size: var(--fgd-font-size-caption);
     font-weight: var(--font-weight-5);
   }
 }
@@ -74,14 +74,14 @@
 
 .summary {
   composes: typeFieldLabel from '../../src/utils/type.module.css';
-  min-block-size: var(--ds-size-hit);
+  min-block-size: var(--fgd-size-hit);
   display: flex;
   align-items: center;
-  font-family: var(--ds-font-mono);
+  font-family: var(--fgd-font-mono);
   cursor: pointer;
 
   &:focus-visible {
-    outline: var(--ds-focus-width) solid var(--primary12);
-    outline-offset: var(--ds-focus-offset);
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: var(--fgd-focus-offset);
   }
 }

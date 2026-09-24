@@ -51,8 +51,8 @@ every panel in order, each under its label in `type-subhead`.
 ### TabsTab
 
 One tab: an optional icon and a caps `type-label` label, at least
-`--ds-size-hit` tall. Inactive labels are `--role-muted` at weight 600,
-the current label `--primary12` at 700 with the `--ds-stroke-3` bar.
+`--fgd-size-hit` tall. Inactive labels are `--role-muted` at weight 600,
+the current label `--primary12` at 700 with the `--border-size-2-25` bar.
 Prefer removing a tab to disabling it.
 
 **TabsTab Props:**

@@ -9,7 +9,7 @@
  * glyph (the shared disclosure glyph), details (the Collapsible Panel), footer.
  * Dense module: line semantics only. Colors are role variables only; local
  * custom properties carry dimensions only:
- *   --index-rows-pad   the row's vertical padding (--ds-space-12 ranked and
+ *   --index-rows-pad   the row's vertical padding (--size-px-2-5 ranked and
  *                      related, --size-px-3 article and event)
  *   --index-rows-gap   the gap between the key column and the text column
  */
@@ -109,7 +109,7 @@
 
   .title,
   .titleUi {
-    max-inline-size: var(--ds-measure-reading);
+    max-inline-size: var(--fgd-measure-reading);
     margin: 0;
     color: var(--primary12);
   }
@@ -124,7 +124,7 @@
   }
 
   .dek {
-    max-inline-size: var(--ds-measure-reading);
+    max-inline-size: var(--fgd-measure-reading);
     margin: var(--size-px-1) 0 0;
     color: var(--primary12);
   }
@@ -151,7 +151,7 @@
 
   /* The details: body, key–value pairs and a sm Button, within the reading measure. */
   .details {
-    max-inline-size: var(--ds-measure-reading);
+    max-inline-size: var(--fgd-measure-reading);
   }
 
   .trigger {
@@ -161,7 +161,7 @@
     gap: var(--size-px-3);
     box-sizing: border-box;
     inline-size: 100%;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     margin: 0;
     padding: 0;
     border: 0;
@@ -175,17 +175,17 @@
   .triggerLabel {
     flex: 1 1 auto;
     min-inline-size: 0;
-    max-inline-size: var(--ds-measure-reading);
+    max-inline-size: var(--fgd-measure-reading);
     text-decoration-color: var(--role-accent);
-    text-decoration-thickness: var(--ds-stroke-1-5);
+    text-decoration-thickness: var(--border-size-1-5);
     text-underline-offset: 0.15em;
   }
 
-  /* Hover transition [D181]: --ds-duration-quick, --ease-out-3; instant under --motionNotOK. */
+  /* Hover transition [D181]: --fgd-duration-quick, --ease-out-3; instant under --motionNotOK. */
   @media (--motionOK) {
     .trigger {
       transition-property: color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -202,9 +202,9 @@
     font-weight: var(--font-weight-6);
   }
 
-  /* Ranked: a 2.5ch muted rank column, labels with counts, --ds-space-12 rows. */
+  /* Ranked: a 2.5ch muted rank column, labels with counts, --size-px-2-5 rows. */
   .ranked {
-    --index-rows-pad: var(--ds-space-12);
+    --index-rows-pad: var(--size-px-2-5);
   }
 
   .ranked .row {
@@ -212,25 +212,25 @@
   }
 
   .ranked .rank {
-    font-variant-numeric: var(--ds-numerals-data);
+    font-variant-numeric: var(--fgd-numerals-data);
     text-align: end;
   }
 
-  /* Related: a --ds-size-thumb thumbnail --size-px-2 from the title. */
+  /* Related: a --fgd-size-thumb thumbnail --size-px-2 from the title. */
   .related {
-    --index-rows-pad: var(--ds-space-12);
+    --index-rows-pad: var(--size-px-2-5);
     --index-rows-gap: var(--size-px-2);
   }
 
   .related .row {
-    grid-template-columns: var(--ds-size-thumb) minmax(0, 1fr);
+    grid-template-columns: var(--fgd-size-thumb) minmax(0, 1fr);
   }
 
   .thumb > img {
     display: block;
-    inline-size: var(--ds-size-thumb);
-    block-size: var(--ds-size-thumb);
-    border-radius: var(--ds-radius-8);
+    inline-size: var(--fgd-size-thumb);
+    block-size: var(--fgd-size-thumb);
+    border-radius: var(--radius-2-25);
     object-fit: cover;
   }
 
@@ -376,19 +376,19 @@
     outline-offset: calc(-1 * var(--border-size-2));
   }
 
-  /* Current: a --ds-stroke-3 --primary12 bar at the start edge of the text column
+  /* Current: a --border-size-2-25 --primary12 bar at the start edge of the text column
      (titles already sit at --font-weight-6 or heavier). */
   .rule:has(.titleLink[aria-current]:not([aria-current='false']))::before {
     content: '';
     position: absolute;
     inset-block: 0;
-    inset-inline-start: calc(-1 * (var(--size-px-2) + var(--ds-stroke-3)));
-    border-inline-start: var(--ds-stroke-3) solid var(--primary12);
+    inset-inline-start: calc(-1 * (var(--size-px-2) + var(--border-size-2-25)));
+    border-inline-start: var(--border-size-2-25) solid var(--primary12);
   }
 
   /*
    * Event hover (not disabled): the title takes --role-link-hover, color
-   * only, as a title link; the underline (--ds-stroke-1-5, --role-accent)
+   * only, as a title link; the underline (--border-size-1-5, --role-accent)
    * is added where that ink is --primary12, and under forced colors
    * (§12.11) [D181].
    */
@@ -397,7 +397,7 @@
   }
 
   .trigger:not([data-disabled]):hover .triggerLabel {
-    text-decoration-line: var(--ds-link-hover-line);
+    text-decoration-line: var(--fgd-link-hover-line);
   }
 
   @media (--forcedColors) {
@@ -414,7 +414,7 @@
   /* Expanded: the title moves from --role-muted to --primary12 and grows to type-h2. */
   .trigger[data-panel-open] {
     color: var(--primary12);
-    font-size: var(--ds-font-size-h2);
+    font-size: var(--fgd-font-size-h2);
   }
 }
 

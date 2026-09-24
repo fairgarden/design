@@ -12,5 +12,5 @@
 .mark {
   fill: none;
   stroke: currentColor;
-  stroke-width: var(--ds-stroke-1-5);
+  stroke-width: var(--border-size-1-5);
 }

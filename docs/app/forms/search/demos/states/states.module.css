@@ -2,14 +2,14 @@
   display: grid;
   /* One track the preview's width; an auto track grows to the fields' min-content. */
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--ds-space-40);
+  gap: var(--size-px-7-5);
   inline-size: 100%;
 }
 
 .label {
   margin: 0 0 var(--size-px-2);
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-caption);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-caption);
   color: var(--role-muted);
 }
 
@@ -22,6 +22,6 @@
 
 .dockFrame p {
   margin: 0;
-  padding: var(--size-px-3) var(--ds-space-margin);
-  font-family: var(--ds-font-text);
+  padding: var(--size-px-3) var(--fgd-space-margin);
+  font-family: var(--fgd-font-text);
 }

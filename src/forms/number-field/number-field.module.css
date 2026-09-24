@@ -86,12 +86,12 @@
     min-inline-size: 0;
     margin: 0;
     padding-block: 0;
-    padding-inline: var(--ds-space-12);
+    padding-inline: var(--size-px-2-5);
     border: 0;
     border-radius: 0;
     background: none;
     color: inherit;
-    font-variant-numeric: var(--ds-numerals-data);
+    font-variant-numeric: var(--fgd-numerals-data);
     text-align: center;
     appearance: none;
   }
@@ -110,7 +110,7 @@
   /*
    * With a unit, the value meets the unit, so "12 kg" and "$ 50" read as
    * one run: only the side that meets the unit loses its padding; the side
-   * facing the box edge or a step cell keeps the --ds-space-12 inset (§10.1).
+   * facing the box edge or a step cell keeps the --size-px-2-5 inset (§10.1).
    */
   .affix + .input {
     padding-inline-start: 0;
@@ -123,11 +123,11 @@
   }
 
   .input + .affix {
-    padding-inline-end: var(--ds-space-12);
+    padding-inline-end: var(--size-px-2-5);
   }
 
   .affix:has(+ .input) {
-    padding-inline-start: var(--ds-space-12);
+    padding-inline-start: var(--size-px-2-5);
   }
 
   /* Step cells: --size-px-8 squares joined to the input; glyphs remove / add, inline tier [D166]. */
@@ -151,10 +151,10 @@
   .edge {
     display: none;
     position: absolute;
-    inset-block-start: calc(var(--ds-dot-fine) / 2);
-    inset-inline-start: calc(var(--ds-dot-fine) / 2);
-    inline-size: calc(100% - var(--ds-dot-fine));
-    block-size: calc(100% - var(--ds-dot-fine));
+    inset-block-start: calc(var(--fgd-dot-fine) / 2);
+    inset-inline-start: calc(var(--fgd-dot-fine) / 2);
+    inline-size: calc(100% - var(--fgd-dot-fine));
+    block-size: calc(100% - var(--fgd-dot-fine));
     overflow: visible;
     pointer-events: none;
   }
@@ -162,7 +162,7 @@
   .edgeLine {
     fill: none;
     stroke: var(--role-disabled-edge);
-    rx: calc(var(--number-field-radius) - var(--ds-dot-fine) / 2);
+    rx: calc(var(--number-field-radius) - var(--fgd-dot-fine) / 2);
   }
 
   /* A step cell's dotted divider (or, on the readout, its dotted circle). */
@@ -170,7 +170,7 @@
     display: none;
     position: absolute;
     inset-block: 0;
-    inline-size: var(--ds-dot-fine);
+    inline-size: var(--fgd-dot-fine);
     block-size: 100%;
     overflow: visible;
     pointer-events: none;
@@ -202,7 +202,7 @@
     .decrement,
     .increment {
       transition-property: border-color, background-color, color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -233,7 +233,7 @@
 
   /*
    * Amount: no steppers; the value in type-itemhead with lining tabular
-   * figures, from the start (after the box's --ds-space-12 inset), or
+   * figures, from the start (after the box's --size-px-2-5 inset), or
    * against its suffix.
    */
   .amount .input:not(:has(+ .affix)) {
@@ -277,8 +277,8 @@
   .readout .increment {
     --number-field-cell-edge: var(--border-size-2);
 
-    inline-size: var(--ds-size-control-md);
-    block-size: var(--ds-size-control-md);
+    inline-size: var(--fgd-size-control-md);
+    block-size: var(--fgd-size-control-md);
     border: var(--number-field-cell-edge) solid var(--primary12);
     border-radius: var(--radius-round);
   }
@@ -291,22 +291,22 @@
     grid-area: increment;
   }
 
-  /* Every readout target reaches --ds-size-hit [D43]. */
+  /* Every readout target reaches --fgd-size-hit [D43]. */
   .readout .decrement::after,
   .readout .increment::after {
     content: '';
     position: absolute;
     inset-block-start: 50%;
     inset-inline-start: 50%;
-    inline-size: var(--ds-size-hit);
-    block-size: var(--ds-size-hit);
+    inline-size: var(--fgd-size-hit);
+    block-size: var(--fgd-size-hit);
     translate: -50% -50%;
   }
 
   .readout .cellEdge {
-    inset: calc(var(--ds-dot-fine) / 2);
-    inline-size: calc(100% - var(--ds-dot-fine));
-    block-size: calc(100% - var(--ds-dot-fine));
+    inset: calc(var(--fgd-dot-fine) / 2);
+    inline-size: calc(100% - var(--fgd-dot-fine));
+    block-size: calc(100% - var(--fgd-dot-fine));
   }
 
   /* Stack guard: below --xs-n-below the readout buttons stack under the value [D73]. */
@@ -417,7 +417,7 @@
   /* Read-only: the box is removed, a --border-size-1 bottom rule remains; steppers leave. */
   .group[data-readonly] {
     border-width: 0 0 var(--border-size-1);
-    border-radius: var(--ds-radius-none);
+    border-radius: var(--radius-0);
     background: none;
   }
 

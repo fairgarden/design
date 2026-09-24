@@ -7,21 +7,21 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ds-space-12);
+  gap: var(--size-px-2-5);
   max-inline-size: var(--size-sm);
   padding-block: var(--size-px-2);
   border-block: var(--border-size-1) solid var(--role-rule);
 }
 
 .object {
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-body-ui);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-body-ui);
   color: var(--primary12);
 }
 
 .status {
   margin: 0;
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-caption);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-caption);
   color: var(--role-muted);
 }

@@ -36,7 +36,7 @@ import styles from './pricing.module.css'
  *   secondary to the scope's action scale in its own `solid` class; the
  *   badge computes its own scale.
  * - States: `tier:has(choice [data-checked])` → the selected edge
- *   (--ds-stroke-3 --primary12 in the outer scope, drawn by the Card's
+ *   (--border-size-2-25 --primary12 in the outer scope, drawn by the Card's
  *   `--card-frame` hook over its --role-edge edge); `choice` is the Card's
  *   `CardChoice`, so its `data-disabled` draws the Card's line-dotted-fine
  *   unavailable edge, and the module adds --role-muted ink; the action's
@@ -72,7 +72,7 @@ export const pricing = cva(styles.base, {
   },
 })
 
-/** Tier classes: `recommended` draws the --ds-stroke-3 --primary12 frame and the badge. */
+/** Tier classes: `recommended` draws the --border-size-2-25 --primary12 frame and the badge. */
 export const pricingTier = cva(styles.tier, {
   variants: {
     recommended: {
@@ -245,7 +245,7 @@ export type PricingStruckProps = useRender.ComponentProps<'s'> & {
 }
 
 /**
- * The original price of a sale, struck through at `--ds-stroke-1-5` in
+ * The original price of a sale, struck through at `--border-size-1-5` in
  * `--role-muted` (never a status color), with a hidden "Was" for assistive
  * technology. Put a `PricingPrice` inside.
  */
@@ -282,7 +282,7 @@ export type PricingTierListProps = useRender.ComponentProps<'ul'>
  * The tier set's layout, queried on the `pricing` container: stacked below
  * 1024 px of container (author the recommended tier first, since visual
  * order follows source order), columns of one comparison row from 1024,
- * capped at `--ds-container-content`. When the plans feed a form, wrap it
+ * capped at `--fgd-container-content`. When the plans feed a form, wrap it
  * in a `RadioGroup` and put each tier's `Radio` in its `PricingChoice`.
  */
 export function PricingTierList(props: PricingTierListProps) {
@@ -299,7 +299,7 @@ export function PricingTierList(props: PricingTierListProps) {
 export type PricingTierProps = useRender.ComponentProps<'li'> &
   VariantProps<typeof pricingTier> & {
     /**
-     * Marks the recommended plan: a `--ds-stroke-3` `--primary12` frame and
+     * Marks the recommended plan: a `--border-size-2-25` `--primary12` frame and
      * the badge. Default `false`. Never fill-only.
      */
     recommended?: boolean

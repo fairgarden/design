@@ -16,7 +16,7 @@
 @layer base {
   .base,
   .text {
-    text-decoration-thickness: var(--ds-stroke-1-5);
+    text-decoration-thickness: var(--border-size-1-5);
     text-underline-offset: 0.15em;
     /* Unbroken through descenders, so it prints as a clean rule (§9.3 Tokens). */
     text-decoration-skip-ink: none;
@@ -50,7 +50,7 @@
     color: var(--primary12);
     fill: none;
     stroke: currentColor;
-    stroke-width: var(--ds-stroke-1-25);
+    stroke-width: var(--border-size-1-25);
     stroke-linecap: round;
     stroke-linejoin: round;
   }
@@ -76,14 +76,14 @@
     display: none;
   }
 
-  /* Hover transitions [D181]: --ds-duration-quick, --ease-out-3; instant under --motionNotOK. */
+  /* Hover transitions [D181]: --fgd-duration-quick, --ease-out-3; instant under --motionNotOK. */
   @media (--motionOK) {
     .base,
     .text {
       transition:
-        color var(--ds-duration-quick) var(--ease-out-3),
-        text-decoration-color var(--ds-duration-quick) var(--ease-out-3),
-        text-decoration-thickness var(--ds-duration-quick) var(--ease-out-3);
+        color var(--fgd-duration-quick) var(--ease-out-3),
+        text-decoration-color var(--fgd-duration-quick) var(--ease-out-3),
+        text-decoration-thickness var(--fgd-duration-quick) var(--ease-out-3);
     }
   }
 
@@ -100,19 +100,19 @@
 }
 
 @layer variants {
-  /* Inline: surrounding type; --role-accent underline at --ds-stroke-1-5. */
+  /* Inline: surrounding type; --role-accent underline at --border-size-1-5. */
   .inline {
     text-decoration-line: underline;
     text-decoration-color: var(--role-accent);
   }
 
   /* Standalone: type-label caps module link, underline under the label only,
-     › after a --ds-space-12 gap; 44 px tall [D160, D165]. */
+     › after a --size-px-2-5 gap; 44 px tall [D160, D165]. */
   .standalone {
     display: inline-flex;
     align-items: center;
-    gap: var(--ds-space-12);
-    min-block-size: var(--ds-size-hit);
+    gap: var(--size-px-2-5);
+    min-block-size: var(--fgd-size-hit);
     vertical-align: middle;
   }
 
@@ -130,7 +130,7 @@
   .nav {
     display: inline-flex;
     align-items: center;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
   }
 
   /* Title: no rest underline; the hit area stretches over the item [D157].
@@ -193,7 +193,7 @@
    *   at a --size-px-1 offset (bar and utility items, page numbers, toolbar
    *   links).
    * - Card title link (title): --role-link-hover only, plus the underline
-   *   where --role-link-hover is --primary12 (--ds-link-hover-line).
+   *   where --role-link-hover is --primary12 (--fgd-link-hover-line).
    * - List link (nav list, below; nav-panel, footer, drawer and breadcrumb
    *   lists) and the muted ancestor (muted): the same color-only hover.
    * Press keeps the [D84] line change: the underline thickens and turns
@@ -231,26 +231,26 @@
     text-decoration-thickness: var(--border-size-2);
   }
 
-  /* Current: the --ds-stroke-3 bar plus --font-weight-7 (nav only). */
+  /* Current: the --border-size-2-25 bar plus --font-weight-7 (nav only). */
   .nav[aria-current='page'],
   .nav[data-active] {
     text-decoration-line: underline;
     text-decoration-color: var(--primary12);
-    text-decoration-thickness: var(--ds-stroke-3);
+    text-decoration-thickness: var(--border-size-2-25);
     font-weight: var(--font-weight-7);
   }
 
   .title:hover {
     color: var(--role-link-hover);
-    text-decoration-line: var(--ds-link-hover-line);
+    text-decoration-line: var(--fgd-link-hover-line);
     text-decoration-color: var(--role-accent);
   }
 
   /*
    * List link (nav-panel, footer, drawer and breadcrumb lists) and the muted
    * ancestor ink (breadcrumb ancestors): --role-link-hover only, plus a
-   * --ds-stroke-1-5 --role-accent underline where that ink is --primary12
-   * (--ds-link-hover-line). On `nav` it replaces the bar item's bare-text
+   * --border-size-1-5 --role-accent underline where that ink is --primary12
+   * (--fgd-link-hover-line). On `nav` it replaces the bar item's bare-text
    * underline (§9.3, §9.8) [D181].
    */
   .list:hover,
@@ -260,9 +260,9 @@
 
   .nav.list:not([aria-current='page'], [data-active]):hover,
   .nav.muted:not([aria-current='page'], [data-active]):hover {
-    text-decoration-line: var(--ds-link-hover-line);
+    text-decoration-line: var(--fgd-link-hover-line);
     text-decoration-color: var(--role-accent);
-    text-decoration-thickness: var(--ds-stroke-1-5);
+    text-decoration-thickness: var(--border-size-1-5);
     text-underline-offset: 0.15em;
   }
 

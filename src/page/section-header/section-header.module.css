@@ -9,7 +9,7 @@
  *
  * Gaps are visual gaps [D74]: text parts trim their half-leading where the
  * browser supports `text-box`, so eyebrow → rule → content measure 14 / 19
- * (--ds-space-eyebrow-rule / --ds-space-eyebrow-content) [D100].
+ * (--fgd-space-eyebrow-rule / --fgd-space-eyebrow-content) [D100].
  */
 
 /* Composition sits in top-level rules, outside the layers: Lightning CSS
@@ -66,7 +66,7 @@
   .eyebrowRule {
     grid-area: rule;
     justify-self: stretch;
-    margin-block: var(--ds-space-eyebrow-rule) var(--ds-space-eyebrow-content);
+    margin-block: var(--fgd-space-eyebrow-rule) var(--fgd-space-eyebrow-content);
     border-width: 0;
     border-block-start-width: var(--border-size-1);
     border-color: var(--role-hairline);
@@ -81,7 +81,7 @@
 
   .lede {
     grid-area: lede;
-    max-inline-size: var(--ds-measure-reading);
+    max-inline-size: var(--fgd-measure-reading);
     margin: var(--size-px-5) 0 0;
     color: var(--primary12);
     text-box: trim-both cap alphabetic;
@@ -92,7 +92,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
     margin-block-start: var(--size-px-5);
   }
 
@@ -101,7 +101,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
     margin: 0;
     color: var(--primary12);
     text-box: trim-both cap alphabetic;
@@ -111,13 +111,13 @@
     color: var(--primary12);
   }
 
-  /* Trail kicker: the kicker threaded by the trail, --ds-space-halo either side. */
+  /* Trail kicker: the kicker threaded by the trail, --fgd-space-halo either side. */
   .kickerRow {
     display: flex;
     align-items: center;
-    gap: var(--ds-space-halo);
+    gap: var(--fgd-space-halo);
     max-inline-size: 100%;
-    margin-block-end: var(--ds-space-56);
+    margin-block-end: var(--size-px-8-5);
   }
 
   .kicker {
@@ -138,15 +138,15 @@
 
   .marker {
     fill: none;
-    stroke-width: var(--ds-stroke-1-5);
+    stroke-width: var(--border-size-1-5);
     stroke-dasharray: none;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
 
-  /* Anchored: the sticker at --ds-size-art-s; its halo touches the cap tops, no gap. */
+  /* Anchored: the sticker at --fgd-size-art-s; its halo touches the cap tops, no gap. */
   .art {
-    inline-size: var(--ds-size-art-s);
+    inline-size: var(--fgd-size-art-s);
   }
 
   .art > * {
@@ -159,13 +159,13 @@
     margin-block-end: var(--size-px-3);
   }
 
-  /* "See all →": a standalone link, underlined at rest, --ds-size-hit tall. */
+  /* "See all →": a standalone link, underlined at rest, --fgd-size-hit tall. */
   .seeAll {
     grid-area: seeAll;
     display: inline-flex;
     align-items: center;
     gap: var(--size-px-2);
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     margin-block-start: var(--size-px-5);
     border-radius: var(--radius-1);
     color: var(--primary12);
@@ -175,7 +175,7 @@
   .seeAllLabel {
     text-decoration-line: underline;
     text-decoration-color: var(--role-accent);
-    text-decoration-thickness: var(--ds-stroke-1-5);
+    text-decoration-thickness: var(--border-size-1-5);
     text-underline-offset: 0.15em;
     text-decoration-skip-ink: none;
   }
@@ -190,7 +190,7 @@
 
   @media (--motionOK) {
     .seeAllLabel {
-      transition: color var(--ds-duration-quick) var(--ease-out-3);
+      transition: color var(--fgd-duration-quick) var(--ease-out-3);
     }
   }
 
@@ -213,7 +213,7 @@
     .seeAll {
       align-self: last baseline;
       margin-block-start: 0;
-      margin-inline-start: var(--ds-space-40);
+      margin-inline-start: var(--size-px-7-5);
     }
   }
 }

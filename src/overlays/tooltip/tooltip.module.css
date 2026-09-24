@@ -25,7 +25,7 @@
   /* The face: --primary1 of the overlay scope inside the [D92] frame, --border-size-2 --primary12. */
   .base {
     box-sizing: border-box;
-    max-inline-size: min(var(--ds-size-tooltip), var(--available-width));
+    max-inline-size: min(var(--fgd-size-tooltip), var(--available-width));
     padding: var(--size-px-1) var(--size-px-2);
     border: var(--border-size-2) solid var(--primary12);
     border-radius: var(--radius-1);
@@ -87,7 +87,7 @@
     margin: 0;
     padding: 0 0 var(--border-size-2);
     border-width: 0;
-    border-block-end-width: var(--ds-dot-fine);
+    border-block-end-width: var(--fgd-dot-fine);
     border-color: var(--role-rule);
     background: none;
     color: inherit;

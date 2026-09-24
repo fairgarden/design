@@ -37,9 +37,9 @@
     --role-edge: var(--primary12);
     --ground-edge: var(--border-size-1);
 
-    padding: var(--ds-space-margin);
+    padding: var(--fgd-space-margin);
     border: var(--ground-edge) solid var(--role-edge);
-    border-radius: var(--ds-radius-8);
+    border-radius: var(--radius-2-25);
   }
 
   /*
@@ -60,11 +60,11 @@
     --role-edge: var(--primary12);
   }
 
-  /* The one framed feature field per page: --ds-radius-feature and a --border-size-2 edge [D95, D177]. */
+  /* The one framed feature field per page: --fgd-radius-feature and a --border-size-2 edge [D95, D177]. */
   .framed {
     --ground-edge: var(--border-size-2);
 
-    border-radius: var(--ds-radius-feature);
+    border-radius: var(--fgd-radius-feature);
   }
 }
 

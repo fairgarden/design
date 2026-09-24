@@ -97,7 +97,7 @@ type QuoteKindProps =
        * `band`: a centered testimonial alone on a light or saturated ground.
        * `framed`: a testimonial in a `--border-size-2` outline with a heavy
        * open-quote glyph. `block`: a quoted passage in `type-body` behind a
-       * `--ds-stroke-3` left rule. `epigraph`: 1–2 lines of display bold
+       * `--border-size-2-25` left rule. `epigraph`: 1–2 lines of display bold
        * italic at a drawing's corner, with no quote marks.
        */
       kind: Exclude<QuoteKind, 'pull'>

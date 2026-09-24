@@ -20,7 +20,7 @@
     block-size: 100%;
     color: var(--primary12);
     background-color: var(--role-ground);
-    font-family: var(--ds-font-ui);
+    font-family: var(--fgd-font-ui);
     font-size: 100%;
     line-height: var(--font-lineheight-3);
     tab-size: 2;
@@ -99,7 +99,7 @@
     color: inherit;
     text-decoration-line: underline;
     text-decoration-color: var(--role-accent);
-    text-decoration-thickness: var(--ds-stroke-1-5);
+    text-decoration-thickness: var(--border-size-1-5);
     text-underline-offset: 0.15em;
   }
 

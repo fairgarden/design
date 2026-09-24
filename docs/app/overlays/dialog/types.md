@@ -26,7 +26,7 @@ bar or above the action bar (the §10.19 overflow edge), never a fade.
 ### DialogClose
 
 Closes the dialog. By default the top bar's X: an icon-only Button with
-the inline-tier `close` glyph and a --ds-size-hit target (§9.2). Pass
+the inline-tier `close` glyph and a --fgd-size-hit target (§9.2). Pass
 `render` (for example `<Button variant="outline">Cancel</Button>`) to
 close from an action instead; `label` is then ignored.
 
@@ -47,9 +47,9 @@ An optional eyebrow above the title, in tracked caps (`type-eyebrow`); dropped b
 ### DialogPopup
 
 The modal panel, rendered in its Base UI Portal as a nested `white` scope
-with the --ds-stroke-3 --primary12 frame. Below --md-n-above it is a
+with the --border-size-2-25 --primary12 frame. Below --md-n-above it is a
 full-screen opaque sheet; from --md-n-above it is centered, at least
-\--ds-space-40 from every edge. It opens instantly or with a clip reveal,
+\--size-px-7-5 from every edge. It opens instantly or with a clip reveal,
 never a fade. Compose `DialogTopBar` (eyebrow, title, close), `DialogBody`
 and `DialogActions` inside it.
 
@@ -63,7 +63,7 @@ Focus moves to the first field in the body, else to Base UI's default
 | cover       | `'pink' \| 'amber' \| 'forest' \| 'leaf' \| 'clay' \| 'royal' \| 'brick'`                                                                                                                                                                                                                                                                          | -       | The optional solid cover, from --md-n-above: the page ground's&#xA;companion field \[D177] (paper, white, meadow and pollen → `forest`;&#xA;tide and heather → `royal`; apricot and rose → `brick`; see&#xA;`companionField` from Ground). It renders as a `kind="field"` Ground of&#xA;that preset at full-viewport geometry with no edge, fully opaque,&#xA;hiding the page \[D88 → D121]. Omitted (default), no backdrop is painted. |
 | primary     | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| null`                                                                                                                               | -       | Primary Radix scale inside the panel's `white` scope: text, frame and&#xA;rules. Omitted, the white preset's default; never the trigger's \[D133].                                                                                                                                                                                                                                                                                      |
 | secondary   | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| 'amber' \| 'blue' \| 'cyan' \| 'grass' \| 'green' \| 'jade' \| 'lime' \| 'mint' \| 'orange' \| 'sky' \| 'teal' \| 'yellow' \| null` | -       | Secondary Radix scale inside the panel: accents only. Omitted, the white preset's default.                                                                                                                                                                                                                                                                                                                                              |
-| wide        | `boolean \| null`                                                                                                                                                                                                                                                                                                                                  | -       | `true`: the detail-view width, --ds-measure-reading, from --md-n-above. Default `false`.                                                                                                                                                                                                                                                                                                                                                |
+| wide        | `boolean \| null`                                                                                                                                                                                                                                                                                                                                  | -       | `true`: the detail-view width, --fgd-measure-reading, from --md-n-above. Default `false`.                                                                                                                                                                                                                                                                                                                                               |
 | container   | `HTMLElement \| ShadowRoot \| React.RefObject<HTMLElement \| ShadowRoot \| null> \| null`                                                                                                                                                                                                                                                          | -       | The element the portal renders into. Default: `document.body`.                                                                                                                                                                                                                                                                                                                                                                          |
 | keepMounted | `boolean`                                                                                                                                                                                                                                                                                                                                          | -       | Keeps the portal mounted while closed.                                                                                                                                                                                                                                                                                                                                                                                                  |
 
@@ -75,8 +75,8 @@ in `type-itemhead`. Every dialog has one.
 ### DialogTopBar
 
 The titled top bar: an optional `DialogEyebrow`, the `DialogTitle` and the
-`DialogClose` X. At least --ds-size-control-xl tall; on the sheet a
-\--ds-stroke-3 --primary12 rule runs under it.
+`DialogClose` X. At least --fgd-size-control-xl tall; on the sheet a
+\--border-size-2-25 --primary12 rule runs under it.
 
 ### DialogTrigger
 

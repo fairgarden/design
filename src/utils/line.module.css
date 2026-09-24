@@ -5,7 +5,7 @@
  * The part colors the line from a role variable (`stroke`, `border-color`,
  * `outline-color`); the line style never carries a color.
  *
- * SVG first. Dots and dashes are drawn in SVG from the --ds- geometry
+ * SVG first. Dots and dashes are drawn in SVG from the --fgd- geometry
  * tokens [D36, D68]: every class sets the SVG stroke properties, which
  * inherit, so an inline <svg><line/></svg> or <rect/> inside the part draws
  * true round dots and exact dash arrays (round caps extend each dash by the
@@ -28,27 +28,27 @@
   /* Relation: leaders, tethers, estimates, disabled edges. 1 px at 3 px. */
   .lineDottedFine {
     border-style: dotted;
-    border-width: var(--ds-dot-fine);
-    stroke-width: var(--ds-dot-fine);
-    stroke-dasharray: 0 var(--ds-dot-fine-pitch);
+    border-width: var(--fgd-dot-fine);
+    stroke-width: var(--fgd-dot-fine);
+    stroke-dasharray: 0 var(--fgd-dot-fine-pitch);
     stroke-linecap: round;
   }
 
   /* Relation, grouping frames, ornamental rules. 2 px at 5 px. */
   .lineDotted {
     border-style: dotted;
-    border-width: var(--ds-dot);
-    stroke-width: var(--ds-dot);
-    stroke-dasharray: 0 var(--ds-dot-pitch);
+    border-width: var(--fgd-dot);
+    stroke-width: var(--fgd-dot);
+    stroke-dasharray: 0 var(--fgd-dot-pitch);
     stroke-linecap: round;
   }
 
   /* Ornamental dot underline; dot-and-star rule. 4 px at 9 px. */
   .lineDottedBold {
     border-style: dotted;
-    border-width: var(--ds-dot-bold);
-    stroke-width: var(--ds-dot-bold);
-    stroke-dasharray: 0 var(--ds-dot-bold-pitch);
+    border-width: var(--fgd-dot-bold);
+    stroke-width: var(--fgd-dot-bold);
+    stroke-dasharray: 0 var(--fgd-dot-bold-pitch);
     stroke-linecap: round;
   }
 
@@ -57,7 +57,7 @@
     border-style: dashed;
     border-width: var(--border-size-1);
     stroke-width: var(--border-size-1);
-    stroke-dasharray: var(--ds-dash-fine) var(--ds-dash-fine-gap);
+    stroke-dasharray: var(--fgd-dash-fine) var(--fgd-dash-fine-gap);
     stroke-linecap: butt;
   }
 
@@ -66,13 +66,13 @@
     border-style: dashed;
     border-width: var(--border-size-2);
     stroke-width: var(--border-size-2);
-    stroke-dasharray: calc(var(--ds-dash) - var(--border-size-2))
-      calc(var(--ds-dash-gap) + var(--border-size-2));
+    stroke-dasharray: calc(var(--fgd-dash) - var(--border-size-2))
+      calc(var(--fgd-dash-gap) + var(--border-size-2));
     stroke-linecap: round;
   }
 
   /*
-   * Frame / terminal: outer --border-size-2, --ds-double-gap, inner
+   * Frame / terminal: outer --border-size-2, --fgd-double-gap, inner
    * --border-size-1. The inner line is an outline inset inside the border;
    * set `outline-color` with `border-color`.
    */
@@ -82,13 +82,13 @@
     outline-style: solid;
     outline-width: var(--border-size-1);
     outline-offset: calc(
-      -1 * (var(--border-size-2) + var(--ds-double-gap) + var(--border-size-1))
+      -1 * (var(--border-size-2) + var(--fgd-double-gap) + var(--border-size-1))
     );
   }
 
   /*
    * Table totals, running header: two --border-size-1 hairlines
-   * --ds-double-hair-gap apart. The element sits between its block-start
+   * --fgd-double-hair-gap apart. The element sits between its block-start
    * and block-end borders: empty, it is the gap; as a band, content grows it.
    */
   .lineDoubleHair {
@@ -96,6 +96,6 @@
     border-style: solid;
     border-width: 0;
     border-block-width: var(--border-size-1);
-    min-block-size: var(--ds-double-hair-gap);
+    min-block-size: var(--fgd-double-hair-gap);
   }
 }

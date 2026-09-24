@@ -28,7 +28,7 @@ import styles from './hero.module.css'
  *   classes (variants A–D); `stacked` → `stacked` ("C, stacked"; split
  *   only, excluded in the types for the other kinds); `landing` →
  *   `landing` (allows `type-display-xl`); `transactional` → `transactional`
- *   (the `--ds-size-control-xl` pill row); `primary`, `secondary` → the
+ *   (the `--fgd-size-control-xl` pill row); `primary`, `secondary` → the
  *   scales module classes, which the hero's Ground scope writes.
  * - Compound variants: none.
  * - Defaults: kind editorial, stacked false, landing false, transactional
@@ -136,7 +136,7 @@ type HeroCommonProps = Omit<React.ComponentPropsWithRef<'header'>, 'title' | 'ch
   landing?: boolean
   /**
    * A transactional hero: the actions carry the page's single
-   * `--ds-size-control-xl` pill (pass `size="xl"` to its Button). Default `false`.
+   * `--fgd-size-control-xl` pill (pass `size="xl"` to its Button). Default `false`.
    */
   transactional?: boolean
   /** Primary Radix scale for the hero's scope. Never defaulted; omitted, the preset's default [D133]. */
@@ -240,7 +240,7 @@ type HeroIllustratedProps = {
   kind: 'illustrated'
   preset?: PageGroundPreset
   edge?: never
-  /** The sticker drawing with its halo: `--ds-size-art-s` at base, `--ds-size-art-l` from `--lg-n-above`. */
+  /** The sticker drawing with its halo: `--fgd-size-art-s` at base, `--fgd-size-art-l` from `--lg-n-above`. */
   drawing?: React.ReactNode
   /** A campaign hero: the lockup and drawing sit in the page's one `leaf` or `amber` field [D177]. */
   field?: 'leaf' | 'amber'

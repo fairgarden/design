@@ -70,19 +70,19 @@ export function OverlayScope({ children }: { children?: React.ReactNode }) {
 }
 
 /**
- * The anchored-panel offset from the trigger, `--ds-popup-offset` (8 px,
+ * The anchored-panel offset from the trigger, `--fgd-popup-offset` (8 px,
  * §9.1, §10.1). Base UI positions in JavaScript, so the token is restated.
  */
 export const OVERLAY_SIDE_OFFSET = POPUP_OFFSET_PX
 
 /**
- * Viewport clearance before a panel flips or shifts: `--ds-popup-clearance`
- * (16 px, the base `--ds-space-margin`, §10.1).
+ * Viewport clearance before a panel flips or shifts: `--fgd-popup-clearance`
+ * (16 px, the base `--fgd-space-margin`, §10.1).
  */
 export const OVERLAY_COLLISION_PADDING = POPUP_CLEARANCE_PX
 
 /**
- * The anchored-panel tail on a 12 × 8 box (--ds-space-12 wide): 6 px of
+ * The anchored-panel tail on a 12 × 8 box (--size-px-2-5 wide): 6 px of
  * triangle plus the 2 px band that overlaps the panel's frame, filled with
  * the face so the frame opens under the tail, and the two slanted edges at
  * the frame's --border-size-2. The host module sets fill and stroke.

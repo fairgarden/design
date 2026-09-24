@@ -30,7 +30,7 @@ export { NAV_DELAY_MS }
 
 /*
  * Navigation Menu (§9.6) [D182]: site wayfinding in the bar, from
- * --ds-nav-inline-n-above [D183]. Below it the Navigation Bar shows the
+ * --fgd-nav-inline-n-above [D183]. Below it the Navigation Bar shows the
  * drawer (§11.6) instead.
  *
  * Implementation (CSS Modules + CVA)
@@ -43,21 +43,21 @@ export { NAV_DELAY_MS }
  * - Color fallback: the bar's parts inherit the scope; the panels take the
  *   `white` preset's defaults (olive × green) and never the bar's scales.
  * - Delays [D182]: NAV_DELAY_MS (utils/tokens.ts) mirrors
- *   --ds-delay-nav-open (150 ms) and --ds-delay-nav-close (300 ms) into
+ *   --fgd-delay-nav-open (150 ms) and --fgd-delay-nav-close (300 ms) into
  *   Root `delay` and `closeDelay`; hover opens and closes only for a mouse
  *   (a fine, hovering pointer); click, Enter, Space and ArrowDown open on
  *   every input. Base UI drops the open delay to 0 ms between adjacent
  *   triggers once a panel is mounted, and its safe-polygon path keeps a
  *   diagonal move into a panel from switching panels.
- * - States: trigger `data-popup-open` → the --ds-stroke-3 open bar flush
+ * - States: trigger `data-popup-open` → the --border-size-2-25 open bar flush
  *   with the bar's rule, chevron flipped; `data-active` on a link → current
- *   (bar: the --ds-stroke-3 bar plus --font-weight-7; panel: weight plus a
- *   --ds-stroke-3 underline); `aria-current="true"` on a bar trigger or
+ *   (bar: the --border-size-2-25 bar plus --font-weight-7; panel: weight plus a
+ *   --border-size-2-25 underline); `aria-current="true"` on a bar trigger or
  *   link whose section is a path prefix of the page → parent of current
  *   (the --border-size-2 bar); `:hover` (not disabled) [D181] → bar items
  *   the bare-text underline, panel links --role-link-hover only, overview
  *   link, group headings and featured bar the chevron-link hover; `:active`
- *   → bar items a --ds-stroke-3 --primary12 underline (derived; flagged),
+ *   → bar items a --border-size-2-25 --primary12 underline (derived; flagged),
  *   panel links a --border-size-2 --primary12 underline; `:focus-visible`
  *   → the ring on the hit area; popup `data-starting-style` → the
  *   first-open clip reveal only; switching and closing are instant, with no
@@ -115,7 +115,7 @@ export { toPath, isCurrentPath, isInSection } from '../../utils/navigation'
 export interface NavigationMenuFrame {
   /** The bar element; panels attach at 0 offset under its bottom rule. Default: the menu's `nav`. */
   anchorRef?: React.RefObject<HTMLElement | null>
-  /** The content container (--ds-container-content). Default: the anchor. */
+  /** The content container (--fgd-container-content). Default: the anchor. */
   boundaryRef?: React.RefObject<HTMLElement | null>
   /** The current page's URL path, for current and parent-of-current. */
   currentPath?: string
@@ -213,7 +213,7 @@ export type NavigationMenuProps = Omit<
  * The desktop site navigation [D182]: a `nav` labelled "Main" holding the
  * bar's items. Triggers are buttons that open their panel on click, Enter,
  * Space or ArrowDown, and on hover intent under a mouse
- * (--ds-delay-nav-open, closing --ds-delay-nav-close after the pointer
+ * (--fgd-delay-nav-open, closing --fgd-delay-nav-close after the pointer
  * leaves); focus alone never opens one. Opening from the keyboard moves
  * focus to the panel's first link; Escape closes and returns focus to the
  * trigger. Panels attach at 0 offset under the bar's bottom rule, switch
@@ -505,7 +505,7 @@ const panelLink = link({ kind: 'nav', list: true })
 
 /**
  * A link. In the bar it is a caps item with no rest underline; in a panel
- * it is a `type-body-ui` row at a `--ds-size-hit` pitch in Link's list-link
+ * it is a `type-body-ui` row at a `--fgd-size-hit` pitch in Link's list-link
  * build (`kind="nav"` with `list`), whose hover is `--role-link-hover` only
  * (§9.3) [D181]. `active` defaults to "its path is the current page"
  * (`aria-current="page"`); a bar link whose path is a prefix of the page is
@@ -602,9 +602,9 @@ export type NavigationMenuContentProps = ContentBaseProps &
 /**
  * A panel. It renders in the menu's portaled `white` overlay scope,
  * attached under the bar's bottom rule: `overview` full-bleed with its
- * content on the 12-column grid of `--ds-container-content`; `index` and
+ * content on the 12-column grid of `--fgd-container-content`; `index` and
  * `dropdown` at the trigger's start edge, end-aligned to the content
- * container, with square top and `--ds-radius-8` bottom corners.
+ * container, with square top and `--radius-2-25` bottom corners.
  */
 export function NavigationMenuContent(props: NavigationMenuContentProps) {
   const {
@@ -713,7 +713,7 @@ export type NavigationMenuGroupProps = Omit<React.ComponentProps<'div'>, 'childr
 
 /**
  * A caps link group in an `overview` panel: a heading (a link with › when
- * `href` is given) over its links at a `--ds-size-hit` pitch.
+ * `href` is given) over its links at a `--fgd-size-hit` pitch.
  */
 export function NavigationMenuGroup(props: NavigationMenuGroupProps) {
   const { heading, href, className, children, ...rest } = props
@@ -793,7 +793,7 @@ export type NavigationMenuCategoryProps = {
 /**
  * One category of an `index` panel: a row in the category list (a trigger
  * of the nested vertical menu) and its links in the pane. The selected
- * category takes a `--ds-stroke-3` start-edge bar and `--font-weight-7`.
+ * category takes a `--border-size-2-25` start-edge bar and `--font-weight-7`.
  */
 export function NavigationMenuCategory(props: NavigationMenuCategoryProps) {
   const { label, value, className, children } = props
@@ -847,7 +847,7 @@ function isCategory(node: React.ReactNode): node is CategoryElement {
  * its triggers, the link pane as its viewport) and the featured bar. One
  * category is always selected: the one holding the current page, else the
  * first. Categories switch on click, Enter or mouse rest after
- * --ds-delay-nav-open, instantly.
+ * --fgd-delay-nav-open, instantly.
  */
 function IndexPanel({
   featuredBar,

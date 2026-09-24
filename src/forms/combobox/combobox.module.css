@@ -55,7 +55,7 @@
     min-block-size: var(--size-px-8);
     margin: 0;
     padding-block: 0;
-    padding-inline: calc(var(--ds-space-12) + var(--border-size-1) - var(--combobox-edge)) 0;
+    padding-inline: calc(var(--size-px-2-5) + var(--border-size-1) - var(--combobox-edge)) 0;
     border: var(--combobox-edge) solid var(--role-rule);
     border-radius: var(--combobox-radius);
     background: none;
@@ -84,7 +84,7 @@
     color: var(--role-muted);
     font-weight: max(
       var(--type-weight-floor, 400),
-      calc(var(--type-weight, 400) - var(--ds-muted-weight-step))
+      calc(var(--type-weight, 400) - var(--fgd-muted-weight-step))
     );
   }
 
@@ -94,7 +94,7 @@
     color: inherit;
   }
 
-  /* Clear × and the chevron trigger: glyph cells with a --ds-size-hit target. */
+  /* Clear × and the chevron trigger: glyph cells with a --fgd-size-hit target. */
   .clear,
   .trigger {
     position: relative;
@@ -102,8 +102,8 @@
     display: grid;
     place-items: center;
     align-self: stretch;
-    inline-size: var(--ds-size-hit);
-    min-block-size: var(--ds-size-hit);
+    inline-size: var(--fgd-size-hit);
+    min-block-size: var(--fgd-size-hit);
     margin: 0;
     padding: 0;
     border: 0;
@@ -140,10 +140,10 @@
   .edge {
     display: none;
     position: absolute;
-    inset-block-start: calc(var(--ds-dot-fine) / 2);
-    inset-inline-start: calc(var(--ds-dot-fine) / 2);
-    inline-size: calc(100% - var(--ds-dot-fine));
-    block-size: calc(100% - var(--ds-dot-fine));
+    inset-block-start: calc(var(--fgd-dot-fine) / 2);
+    inset-inline-start: calc(var(--fgd-dot-fine) / 2);
+    inline-size: calc(100% - var(--fgd-dot-fine));
+    block-size: calc(100% - var(--fgd-dot-fine));
     overflow: visible;
     pointer-events: none;
   }
@@ -151,7 +151,7 @@
   .edgeLine {
     fill: none;
     stroke: var(--role-disabled-edge);
-    rx: calc(var(--combobox-radius) - var(--ds-dot-fine) / 2);
+    rx: calc(var(--combobox-radius) - var(--fgd-dot-fine) / 2);
   }
 
   .positioner {
@@ -159,16 +159,16 @@
     outline: 0;
   }
 
-  /* The overlay face: the white scope's --primary1, the --border-size-2 --primary12 frame, --ds-radius-8. */
+  /* The overlay face: the white scope's --primary1, the --border-size-2 --primary12 frame, --radius-2-25. */
   .popup {
     /* The clip reveal starts from the trigger side. */
     --combobox-reveal-from: inset(0 0 100% 0);
 
     box-sizing: border-box;
     inline-size: var(--anchor-width);
-    max-inline-size: calc(100vw - 2 * var(--ds-space-margin));
+    max-inline-size: calc(100vw - 2 * var(--fgd-space-margin));
     border: var(--border-size-2) solid var(--primary12);
-    border-radius: var(--ds-radius-8);
+    border-radius: var(--radius-2-25);
     background-color: var(--primary1);
     color: var(--primary12);
     clip-path: inset(0);
@@ -180,7 +180,7 @@
     box-sizing: border-box;
     max-block-size: min(
       var(--available-height, 100vh),
-      calc(8 * var(--ds-size-hit) + 2 * var(--size-px-1))
+      calc(8 * var(--fgd-size-hit) + 2 * var(--size-px-1))
     );
     padding: var(--size-px-1);
     overflow-y: auto;
@@ -193,16 +193,16 @@
     padding: 0;
   }
 
-  /* Items as Select (§10.5): --ds-size-hit rows, the ✓ column first. */
+  /* Items as Select (§10.5): --fgd-size-hit rows, the ✓ column first. */
   .item {
     position: relative;
     display: grid;
     grid-template-columns: var(--size-px-3) minmax(0, 1fr);
     align-items: center;
     column-gap: var(--size-px-2);
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     padding-inline: var(--size-px-3);
-    border-radius: calc(var(--ds-radius-8) - var(--size-px-1));
+    border-radius: calc(var(--radius-2-25) - var(--size-px-1));
     color: var(--primary12);
     cursor: default;
     outline: 0;
@@ -215,7 +215,7 @@
     position: absolute;
     inset-block: 0;
     inset-inline-start: 0;
-    border-inline-start: var(--ds-stroke-3) solid var(--primary12);
+    border-inline-start: var(--border-size-2-25) solid var(--primary12);
   }
 
   .itemIndicator {
@@ -284,7 +284,7 @@
     color: var(--role-status);
     fill: var(--role-status-fill);
     stroke: var(--role-status-fill);
-    stroke-width: var(--ds-stroke-1-5);
+    stroke-width: var(--border-size-1-5);
     stroke-linecap: round;
     stroke-linejoin: round;
   }
@@ -314,17 +314,17 @@
   @media (--motionOK) {
     .base {
       transition-property: border-color, outline-color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
 
     .chevron {
-      transition: rotate var(--ds-duration-quick) var(--ease-out-3);
+      transition: rotate var(--fgd-duration-quick) var(--ease-out-3);
     }
 
     /* The clip reveal (the edge wipes open), never a fade [D91]. */
     .popup {
-      transition: clip-path var(--ds-duration-disclosure) var(--ease-out-3);
+      transition: clip-path var(--fgd-duration-disclosure) var(--ease-out-3);
     }
   }
 
@@ -340,7 +340,7 @@
   /* Stack guard: chips keep their × and truncate their label [D73] (`.chips` outranks the chip's own cap). */
   @media (--xs-n-below) {
     .chips .chip {
-      max-inline-size: calc(100% - var(--ds-size-hit));
+      max-inline-size: calc(100% - var(--fgd-size-hit));
     }
   }
 }
@@ -452,7 +452,7 @@
   .base[data-readonly] {
     border-width: 0 0 var(--border-size-1);
     border-color: var(--role-rule);
-    border-radius: var(--ds-radius-none);
+    border-radius: var(--radius-0);
     background: none;
   }
 

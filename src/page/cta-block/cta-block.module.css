@@ -43,7 +43,7 @@
 
   /*
    * The content: the inline-size container `cta`. Baseline: a centered
-   * stack; kicker → headline --ds-space-56, headline → action --size-px-7.
+   * stack; kicker → headline --size-px-8-5, headline → action --size-px-7.
    */
   .content {
     container: cta / inline-size;
@@ -71,10 +71,10 @@
   .kicker {
     display: flex;
     align-items: center;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
     justify-self: start;
     margin: 0;
-    margin-block-end: var(--ds-space-56);
+    margin-block-end: var(--size-px-8-5);
     margin-inline-start: 15%;
     color: var(--role-heading);
     text-align: start;
@@ -113,12 +113,12 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
   }
 
   /*
    * Decoration behind the content, in --role-tint, clipped by its box (the
-   * block; the sunburst kind's reaches --ds-space-40 below it, below). A
+   * block; the sunburst kind's reaches --size-px-7-5 below it, below). A
    * custom node sits centred on the bottom edge. `.base .decor` outranks
    * the pattern class's own `position: relative` in this layer.
    */
@@ -161,11 +161,11 @@
     stroke: var(--primary12);
   }
 
-  /* A "+" of --ds-mark-arm --border-size-1 arms at each corner, overhanging --ds-mark-overhang. */
+  /* A "+" of --fgd-mark-arm --border-size-1 arms at each corner, overhanging --fgd-mark-overhang. */
   .cornerMark {
     position: absolute;
-    inline-size: var(--ds-mark-arm);
-    block-size: var(--ds-mark-arm);
+    inline-size: var(--fgd-mark-arm);
+    block-size: var(--fgd-mark-arm);
     overflow: visible;
     fill: none;
     stroke: var(--primary12);
@@ -174,23 +174,23 @@
   }
 
   .startStart {
-    inset-block-start: calc(-1 * var(--ds-mark-overhang));
-    inset-inline-start: calc(-1 * var(--ds-mark-overhang));
+    inset-block-start: calc(-1 * var(--fgd-mark-overhang));
+    inset-inline-start: calc(-1 * var(--fgd-mark-overhang));
   }
 
   .startEnd {
-    inset-block-start: calc(-1 * var(--ds-mark-overhang));
-    inset-inline-end: calc(-1 * var(--ds-mark-overhang));
+    inset-block-start: calc(-1 * var(--fgd-mark-overhang));
+    inset-inline-end: calc(-1 * var(--fgd-mark-overhang));
   }
 
   .endStart {
-    inset-block-end: calc(-1 * var(--ds-mark-overhang));
-    inset-inline-start: calc(-1 * var(--ds-mark-overhang));
+    inset-block-end: calc(-1 * var(--fgd-mark-overhang));
+    inset-inline-start: calc(-1 * var(--fgd-mark-overhang));
   }
 
   .endEnd {
-    inset-block-end: calc(-1 * var(--ds-mark-overhang));
-    inset-inline-end: calc(-1 * var(--ds-mark-overhang));
+    inset-block-end: calc(-1 * var(--fgd-mark-overhang));
+    inset-inline-end: calc(-1 * var(--fgd-mark-overhang));
   }
 }
 
@@ -201,12 +201,12 @@
   }
 
   /*
-   * Sunburst: the decoration reaches --ds-space-40 below the block's bottom
+   * Sunburst: the decoration reaches --size-px-7-5 below the block's bottom
    * edge, into its band's bottom padding, and pattern-sunburst centres its
    * origin there, so that edge clips the lower half (§4.10.1, §11.10).
    */
   .sunburst .decor {
-    inset-block-end: calc(-1 * var(--ds-space-40));
+    inset-block-end: calc(-1 * var(--size-px-7-5));
   }
 
   /* Mission: the mount replaces the kicker's trail; the headline follows it directly. */
@@ -217,13 +217,13 @@
 
   /*
    * The CTA field [D177]: inset in the content container, never full-bleed;
-   * --ds-radius-20; padding --size-px-7, --size-px-10 from --lg-n-above
+   * --radius-3-25; padding --size-px-7, --size-px-10 from --lg-n-above
    * (≥ the radius); Ground draws the --primary12 edge.
    */
   .field {
     position: relative;
     padding: var(--size-px-7);
-    border-radius: var(--ds-radius-20);
+    border-radius: var(--radius-3-25);
   }
 
   @media (--lg-n-above) {
@@ -241,7 +241,7 @@
   /* Framed: the crop-mark box around --size-px-7 of padding, square. */
   .framed {
     padding: var(--size-px-7);
-    border-radius: var(--ds-radius-none);
+    border-radius: var(--radius-0);
   }
 
   /*
@@ -253,7 +253,7 @@
     .framed .layout {
       grid-template-columns: repeat(12, minmax(0, 1fr));
       align-items: center;
-      column-gap: var(--ds-space-margin);
+      column-gap: var(--fgd-space-margin);
       justify-items: stretch;
       text-align: start;
     }
@@ -307,7 +307,7 @@
     .framed .layout {
       grid-template-columns: repeat(12, minmax(0, 1fr));
       align-items: center;
-      column-gap: var(--ds-space-margin);
+      column-gap: var(--fgd-space-margin);
       justify-items: stretch;
       text-align: start;
     }

@@ -6,8 +6,8 @@
  * cell's ::before), frame (a faced Card, which draws its own edge and face).
  * Pure line and type: colors are role variables only; local custom
  * properties carry dimensions only:
- *   --feature-grid-gap   the column gutter (= --ds-space-margin) [D42]
- *   --feature-grid-row   the gap between rows (--ds-space-56, the rhythm's "next")
+ *   --feature-grid-gap   the column gutter (= --fgd-space-margin) [D42]
+ *   --feature-grid-row   the gap between rows (--size-px-8-5, the rhythm's "next")
  */
 
 /* Composition sits in top-level rules, outside the layers: Lightning CSS
@@ -31,8 +31,8 @@
 
 @layer base {
   .base {
-    --feature-grid-gap: var(--ds-space-margin);
-    --feature-grid-row: var(--ds-space-56);
+    --feature-grid-gap: var(--fgd-space-margin);
+    --feature-grid-row: var(--size-px-8-5);
 
     container: feature-grid / inline-size;
     min-inline-size: 0;
@@ -67,8 +67,8 @@
   .icon {
     display: block;
     flex: none;
-    inline-size: var(--ds-size-icon-block);
-    block-size: var(--ds-size-icon-block);
+    inline-size: var(--fgd-size-icon-block);
+    block-size: var(--fgd-size-icon-block);
     margin-block-end: var(--size-px-3);
     color: var(--role-accent);
     fill: currentColor;
@@ -80,20 +80,20 @@
     block-size: 100%;
   }
 
-  /* Numeral: a --ds-size-control-xl outline circle at --ds-stroke-1-5, zero-padded data figures. */
+  /* Numeral: a --fgd-size-control-xl outline circle at --border-size-1-5, zero-padded data figures. */
   .numeral {
     display: flex;
     flex: none;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    inline-size: var(--ds-size-control-xl);
-    block-size: var(--ds-size-control-xl);
+    inline-size: var(--fgd-size-control-xl);
+    block-size: var(--fgd-size-control-xl);
     margin-block-end: var(--size-px-3);
-    border: var(--ds-stroke-1-5) solid var(--primary12);
+    border: var(--border-size-1-5) solid var(--primary12);
     border-radius: var(--radius-round);
     color: var(--primary12);
-    font-variant-numeric: var(--ds-numerals-data);
+    font-variant-numeric: var(--fgd-numerals-data);
   }
 
   .numeral::before {
@@ -182,7 +182,7 @@
 
   /*
    * Numbered: centered within --size-content-2 while stacked, cells
-   * separated by --border-size-1 --role-rule inset rules (--ds-space-40 in
+   * separated by --border-size-1 --role-rule inset rules (--size-px-7-5 in
    * from each side), centered in the row gap. Once cells sit in a row the
    * separator turns into a vertical column rule in the gutter; it is dropped
    * at the start of each row.
@@ -204,7 +204,7 @@
     content: '';
     position: absolute;
     inset-block-start: calc(var(--feature-grid-row) / -2);
-    inset-inline: var(--ds-space-40);
+    inset-inline: var(--size-px-7-5);
     border-block-start: var(--border-size-1) solid var(--role-rule);
   }
 
@@ -236,7 +236,7 @@
     .numbered .cell:nth-child(n)::before {
       display: block;
       inset-block: calc(var(--feature-grid-row) / -2) auto;
-      inset-inline: var(--ds-space-40);
+      inset-inline: var(--size-px-7-5);
       border-block-start: var(--border-size-1) solid var(--role-rule);
       border-inline-start: 0;
     }
@@ -282,7 +282,7 @@
 
   /* Framed: 2 × 2 inside the faced frame; the frame sits in the outer scope. */
   .framed .frame {
-    border-radius: var(--ds-radius-8);
+    border-radius: var(--radius-2-25);
   }
 
   @media (--md-n-above) {
@@ -305,7 +305,7 @@
 
   /* Glossary: drawings with caps captions, no rules. */
   .glossary .caption + .body {
-    margin-block-start: var(--ds-space-12);
+    margin-block-start: var(--size-px-2-5);
   }
 }
 

@@ -11,8 +11,8 @@
 
 .modeName {
   margin: 0;
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-caption);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-caption);
   font-weight: var(--font-weight-6);
 }
 
@@ -25,15 +25,15 @@
 /* A face on a page ground draws --role-edge: --primary10 [D179]. */
 .face {
   display: grid;
-  gap: var(--ds-space-12);
+  gap: var(--size-px-2-5);
   padding: var(--size-px-3);
   border: var(--border-size-1) solid var(--role-edge);
-  border-radius: var(--ds-radius-8);
+  border-radius: var(--radius-2-25);
 }
 
 .name {
-  font-family: var(--ds-font-display);
-  font-size: var(--ds-font-size-kicker);
+  font-family: var(--fgd-font-display);
+  font-size: var(--fgd-font-size-kicker);
   font-weight: var(--font-weight-7);
   color: var(--role-heading);
 }

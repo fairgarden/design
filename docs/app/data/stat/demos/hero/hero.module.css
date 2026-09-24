@@ -6,10 +6,10 @@
 }
 
 .text {
-  max-inline-size: var(--ds-measure-reading);
+  max-inline-size: var(--fgd-measure-reading);
   margin: 0;
-  font-family: var(--ds-font-text);
-  font-size: var(--ds-font-size-body);
-  line-height: var(--ds-leading-reading);
+  font-family: var(--fgd-font-text);
+  font-size: var(--fgd-font-size-body);
+  line-height: var(--fgd-leading-reading);
   color: var(--primary12);
 }

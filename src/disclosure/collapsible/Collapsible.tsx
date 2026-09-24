@@ -23,7 +23,7 @@ import styles from './collapsible.module.css'
  *   --border-size-2, offset --size-px-1), the glyph unchanged [D109, D181];
  *   `:focus-visible` → ring;
  *   `data-disabled` → label and glyph --role-muted. Panel `data-starting-style`
- *   / `data-ending-style` → the clip reveal at --ds-duration-disclosure,
+ *   / `data-ending-style` → the clip reveal at --fgd-duration-disclosure,
  *   instant under --motionNotOK, never opacity [D91].
  * - Parts: base, trigger, glyph, label, panel (+ `content`, the padded inner box).
  * - Scope: none. Container: none; inherits its context.
@@ -67,9 +67,9 @@ export const disclosureGlyphHost: string = styles.glyphHost
 /** Props for DisclosureGlyph: SVG props (without `children`) and the tier. */
 export type DisclosureGlyphProps = Omit<React.ComponentPropsWithRef<'svg'>, 'children'> & {
   /**
-   * `row` (default): `--size-px-4` (20 px) at `--ds-stroke-1-5`, for trigger
+   * `row` (default): `--size-px-4` (20 px) at `--border-size-1-5`, for trigger
    * rows (Accordion, FAQ). `chrome`: `--size-px-3` (16 px) at
-   * `--ds-stroke-1-25`, for bars, drawer groups and an inline "Show more".
+   * `--border-size-1-25`, for bars, drawer groups and an inline "Show more".
    */
   size?: VariantProps<typeof disclosureGlyph>['size']
 }
@@ -176,7 +176,7 @@ export type CollapsiblePanelProps = BaseCollapsible.Panel.Props
 /**
  * The panel. It stays in the DOM while closed (`hiddenUntilFound`, default
  * `true`), so find-in-page reaches it and print shows it expanded. It opens
- * with a clip reveal at `--ds-duration-disclosure`, instant under reduced
+ * with a clip reveal at `--fgd-duration-disclosure`, instant under reduced
  * motion.
  */
 export function CollapsiblePanel(props: CollapsiblePanelProps) {

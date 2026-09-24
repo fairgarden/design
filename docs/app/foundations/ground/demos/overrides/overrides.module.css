@@ -7,16 +7,16 @@
 
 .face {
   display: grid;
-  gap: var(--ds-space-12);
+  gap: var(--size-px-2-5);
   padding: var(--size-px-5);
   border: var(--border-size-1) solid var(--role-edge);
-  border-radius: var(--ds-radius-8);
+  border-radius: var(--radius-2-25);
 }
 
 /* Section heads take --role-heading: the secondary's step 12 on light grounds. */
 .head {
-  font-family: var(--ds-font-display);
-  font-size: var(--ds-font-size-kicker);
+  font-family: var(--fgd-font-display);
+  font-size: var(--fgd-font-size-kicker);
   font-weight: var(--font-weight-7);
   color: var(--role-heading);
 }

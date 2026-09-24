@@ -46,7 +46,7 @@
     block-size: var(--size-px-8);
     margin: 0;
     padding-block: 0;
-    padding-inline: calc(var(--ds-space-12) + var(--border-size-1) - var(--select-edge));
+    padding-inline: calc(var(--size-px-2-5) + var(--border-size-1) - var(--select-edge));
     border: var(--select-edge) solid var(--role-rule);
     border-radius: var(--select-radius);
     background: none;
@@ -75,12 +75,12 @@
     color: inherit;
   }
 
-  /* The swatch: a --ds-space-12 disc of the product's color (content), ringed in --primary12. */
+  /* The swatch: a --size-px-2-5 disc of the product's color (content), ringed in --primary12. */
   .swatch {
     flex: none;
     display: block;
-    inline-size: var(--ds-space-12);
-    block-size: var(--ds-space-12);
+    inline-size: var(--size-px-2-5);
+    block-size: var(--size-px-2-5);
     overflow: visible;
   }
 
@@ -92,10 +92,10 @@
   .edge {
     display: none;
     position: absolute;
-    inset-block-start: calc(var(--ds-dot-fine) / 2);
-    inset-inline-start: calc(var(--ds-dot-fine) / 2);
-    inline-size: calc(100% - var(--ds-dot-fine));
-    block-size: calc(100% - var(--ds-dot-fine));
+    inset-block-start: calc(var(--fgd-dot-fine) / 2);
+    inset-inline-start: calc(var(--fgd-dot-fine) / 2);
+    inline-size: calc(100% - var(--fgd-dot-fine));
+    block-size: calc(100% - var(--fgd-dot-fine));
     overflow: visible;
     pointer-events: none;
   }
@@ -103,7 +103,7 @@
   .edgeLine {
     fill: none;
     stroke: var(--role-disabled-edge);
-    rx: calc(var(--select-radius) - var(--ds-dot-fine) / 2);
+    rx: calc(var(--select-radius) - var(--fgd-dot-fine) / 2);
   }
 
   /* The popup sits --size-px-2 below its trigger on --layer-3. */
@@ -114,7 +114,7 @@
 
   /*
    * The overlay face: the white scope's --primary1, the --border-size-2
-   * --primary12 frame in both modes, --ds-radius-8; at least the trigger's
+   * --primary12 frame in both modes, --radius-2-25; at least the trigger's
    * width, and never wider than the viewport minus the page margins.
    */
   .popup {
@@ -123,9 +123,9 @@
 
     box-sizing: border-box;
     min-inline-size: var(--anchor-width);
-    max-inline-size: calc(100vw - 2 * var(--ds-space-margin));
+    max-inline-size: calc(100vw - 2 * var(--fgd-space-margin));
     border: var(--border-size-2) solid var(--primary12);
-    border-radius: var(--ds-radius-8);
+    border-radius: var(--radius-2-25);
     background-color: var(--primary1);
     color: var(--primary12);
     clip-path: inset(0);
@@ -137,7 +137,7 @@
     box-sizing: border-box;
     max-block-size: min(
       var(--available-height, 100vh),
-      calc(8 * var(--ds-size-hit) + 2 * var(--size-px-1))
+      calc(8 * var(--fgd-size-hit) + 2 * var(--size-px-1))
     );
     padding: var(--size-px-1);
     overflow-y: auto;
@@ -146,30 +146,30 @@
     outline: 0;
   }
 
-  /* Items: --ds-size-hit rows at every width, --size-px-3 padding; highlight radius 8 − 4 [D40]. */
+  /* Items: --fgd-size-hit rows at every width, --size-px-3 padding; highlight radius 8 − 4 [D40]. */
   .item {
     position: relative;
     display: grid;
     grid-template-columns: var(--size-px-3) minmax(0, 1fr);
     align-items: center;
     column-gap: var(--size-px-2);
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     padding-inline: var(--size-px-3);
-    border-radius: calc(var(--ds-radius-8) - var(--size-px-1));
+    border-radius: calc(var(--radius-2-25) - var(--size-px-1));
     color: var(--primary12);
     cursor: default;
     outline: 0;
     user-select: none;
   }
 
-  /* The highlight bar: a --ds-stroke-3 start edge in --primary12, drawn as a border so it survives forced colors. */
+  /* The highlight bar: a --border-size-2-25 start edge in --primary12, drawn as a border so it survives forced colors. */
   .item::before {
     content: '';
     display: none;
     position: absolute;
     inset-block: 0;
     inset-inline-start: 0;
-    border-inline-start: var(--ds-stroke-3) solid var(--primary12);
+    border-inline-start: var(--border-size-2-25) solid var(--primary12);
   }
 
   .itemIndicator {
@@ -203,7 +203,7 @@
   @media (--md-n-above) {
     /* From --md-n-above the popup is the trigger's width, up to 360 px. */
     .popup {
-      max-inline-size: max(var(--anchor-width), var(--ds-size-overlay-max));
+      max-inline-size: max(var(--anchor-width), var(--fgd-size-overlay-max));
     }
   }
 
@@ -216,17 +216,17 @@
   @media (--motionOK) {
     .base {
       transition-property: border-color, border-width, outline-color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
 
     .icon {
-      transition: rotate var(--ds-duration-quick) var(--ease-out-3);
+      transition: rotate var(--fgd-duration-quick) var(--ease-out-3);
     }
 
     /* The clip reveal (the edge wipes open), never a fade [D91]. */
     .popup {
-      transition: clip-path var(--ds-duration-disclosure) var(--ease-out-3);
+      transition: clip-path var(--fgd-duration-disclosure) var(--ease-out-3);
     }
   }
 }
@@ -240,16 +240,16 @@
   /*
    * Underline: no box; the trigger's text and chevron over a --border-size-2
    * --role-accent underline the width of the trigger only; it hugs its
-   * content and keeps a --ds-size-hit target.
+   * content and keeps a --fgd-size-hit target.
    */
   .underline {
-    --select-radius: var(--ds-radius-none);
+    --select-radius: var(--radius-0);
 
     display: inline-flex;
     inline-size: auto;
     max-inline-size: 100%;
     block-size: auto;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     padding-inline: 0;
     border-width: 0 0 var(--select-underline);
     border-color: var(--role-accent);
@@ -274,7 +274,7 @@
     color: var(--role-muted);
     font-weight: max(
       var(--type-weight-floor, 400),
-      calc(var(--type-weight, 400) - var(--ds-muted-weight-step))
+      calc(var(--type-weight, 400) - var(--fgd-muted-weight-step))
     );
   }
 
@@ -282,19 +282,19 @@
    * Hover (not disabled, invalid or read-only): the boxed edge steps
    * --role-rule → --primary12 [D140]; the underline steps --role-accent →
    * --primary12 at the same --border-size-2 weight (derived), so only the
-   * open state takes --ds-stroke-3 and hover never reads as open [D181].
+   * open state takes --border-size-2-25 and hover never reads as open [D181].
    */
   .base:hover:not([data-disabled], [data-invalid], [data-readonly]) {
     border-color: var(--primary12);
   }
 
-  /* Open: the boxed edge goes to --primary12, the underline to --ds-stroke-3, the chevron turns. */
+  /* Open: the boxed edge goes to --primary12, the underline to --border-size-2-25, the chevron turns. */
   .base[data-popup-open] {
     border-color: var(--primary12);
   }
 
   .base.underline[data-popup-open] {
-    --select-underline: var(--ds-stroke-3);
+    --select-underline: var(--border-size-2-25);
 
     border-color: var(--role-accent);
   }
@@ -336,7 +336,7 @@
   }
 
   .base[data-disabled] .swatchRing {
-    stroke-dasharray: 0 var(--ds-dot-fine-pitch);
+    stroke-dasharray: 0 var(--fgd-dot-fine-pitch);
     stroke-linecap: round;
   }
 
@@ -344,7 +344,7 @@
   .base[data-readonly] {
     border-width: 0 0 var(--border-size-1);
     border-color: var(--role-rule);
-    border-radius: var(--ds-radius-none);
+    border-radius: var(--radius-0);
     background: none;
   }
 

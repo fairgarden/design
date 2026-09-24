@@ -26,7 +26,7 @@ import styles from './checkbox.module.css'
  * - Color fallback: inherits the scope; its secondary drives the
  *   --role-select aliases and never switches to the danger scale (§10.1).
  * - States: data-checked / data-indeterminate → --role-select fill,
- *   --role-select-mark ✓ or bar, --ds-stroke-3 --role-select-edge box edge,
+ *   --role-select-mark ✓ or bar, --border-size-2-25 --role-select-edge box edge,
  *   card edge --border-size-2 --role-select-edge (read through :has());
  *   :hover (not disabled or read-only) [D181] → unchecked box fill
  *   --role-soft-hover (--primary3 where soft fills apply), checked box fill

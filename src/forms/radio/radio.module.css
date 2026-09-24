@@ -42,7 +42,7 @@
     align-items: start;
     align-content: center;
     box-sizing: border-box;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     min-inline-size: 0;
     color: var(--primary12);
   }
@@ -60,7 +60,7 @@
     inline-size: var(--size-px-4);
     block-size: var(--size-px-4);
     margin-block: calc((1lh - var(--size-px-4)) / 2) 0;
-    margin-inline: 0 var(--ds-space-12);
+    margin-inline: 0 var(--size-px-2-5);
     border: var(--radio-edge) solid var(--primary12);
     border-radius: var(--radius-round);
     background: none;
@@ -93,10 +93,10 @@
   .edge {
     display: none;
     position: absolute;
-    inset-block-start: calc(var(--ds-dot-fine) / 2);
-    inset-inline-start: calc(var(--ds-dot-fine) / 2);
-    inline-size: calc(100% - var(--ds-dot-fine));
-    block-size: calc(100% - var(--ds-dot-fine));
+    inset-block-start: calc(var(--fgd-dot-fine) / 2);
+    inset-inline-start: calc(var(--fgd-dot-fine) / 2);
+    inline-size: calc(100% - var(--fgd-dot-fine));
+    block-size: calc(100% - var(--fgd-dot-fine));
     overflow: visible;
     pointer-events: none;
   }
@@ -104,7 +104,7 @@
   .edgeLine {
     fill: none;
     stroke: var(--role-disabled-edge);
-    rx: calc(var(--radio-edge-radius) - var(--ds-dot-fine) / 2);
+    rx: calc(var(--radio-edge-radius) - var(--fgd-dot-fine) / 2);
   }
 
   /* The swatch disc: --size-px-7, ringed in --border-size-1 --primary12. Its color is content. */
@@ -159,7 +159,7 @@
     color: var(--role-status);
     fill: var(--role-status-fill);
     stroke: var(--role-status-fill);
-    stroke-width: var(--ds-stroke-1-5);
+    stroke-width: var(--border-size-1-5);
     stroke-linecap: round;
     stroke-linejoin: round;
   }
@@ -197,21 +197,21 @@
     }
   }
 
-  /* Hover transitions [D181]: --ds-duration-quick, --ease-out-3. */
+  /* Hover transitions [D181]: --fgd-duration-quick, --ease-out-3. */
   @media (--motionOK) {
     .circle,
     .base,
     .swatch,
     .label {
       transition-property: border-color, background-color, text-decoration-color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }
 }
 
 @layer variants {
-  /* Standard: circle, then label, description and feedback; --ds-space-12 gap. */
+  /* Standard: circle, then label, description and feedback; --size-px-2-5 gap. */
   .standard {
     grid-template-columns: auto minmax(0, 1fr);
     grid-template-areas:
@@ -254,11 +254,11 @@
 
   .pill .feedback {
     margin-block-start: 0;
-    margin-inline-start: var(--ds-space-12);
+    margin-inline-start: var(--size-px-2-5);
   }
 
   /*
-   * Swatch: the circle becomes the --ds-size-hit target holding the disc
+   * Swatch: the circle becomes the --fgd-size-hit target holding the disc
    * and the mark; the name is the accessible label, shown in print.
    */
   .kindSwatch {
@@ -271,8 +271,8 @@
   .kindSwatch .circle {
     --radio-edge-radius: calc(var(--size-px-7) / 2);
 
-    inline-size: var(--ds-size-hit);
-    block-size: var(--ds-size-hit);
+    inline-size: var(--fgd-size-hit);
+    block-size: var(--fgd-size-hit);
     margin: 0;
     border-style: none;
   }
@@ -286,10 +286,10 @@
 
   /* The disabled dotted ring follows the disc, not the hit area. */
   .kindSwatch .edge {
-    inset-block-start: calc((var(--ds-size-hit) - var(--size-px-7) + var(--ds-dot-fine)) / 2);
-    inset-inline-start: calc((var(--ds-size-hit) - var(--size-px-7) + var(--ds-dot-fine)) / 2);
-    inline-size: calc(var(--size-px-7) - var(--ds-dot-fine));
-    block-size: calc(var(--size-px-7) - var(--ds-dot-fine));
+    inset-block-start: calc((var(--fgd-size-hit) - var(--size-px-7) + var(--fgd-dot-fine)) / 2);
+    inset-inline-start: calc((var(--fgd-size-hit) - var(--size-px-7) + var(--fgd-dot-fine)) / 2);
+    inline-size: calc(var(--size-px-7) - var(--fgd-dot-fine));
+    block-size: calc(var(--size-px-7) - var(--fgd-dot-fine));
   }
 
   .kindSwatch .label {
@@ -311,9 +311,9 @@
 }
 
 @layer states {
-  /* Checked: --role-select fill, --role-select-mark ●, --ds-stroke-3 --role-select-edge (§10.1). */
+  /* Checked: --role-select fill, --role-select-mark ●, --border-size-2-25 --role-select-edge (§10.1). */
   .standard .circle[data-checked] {
-    --radio-edge: var(--ds-stroke-3);
+    --radio-edge: var(--border-size-2-25);
 
     border-color: var(--role-select-edge);
     background-color: var(--role-select);
@@ -331,9 +331,9 @@
     color: var(--role-select-mark);
   }
 
-  /* The chosen swatch: a --ds-stroke-3 --primary12 ring outside a --size-px-1 ground gap. */
+  /* The chosen swatch: a --border-size-2-25 --primary12 ring outside a --size-px-1 ground gap. */
   .circle[data-checked] > .swatch {
-    outline: var(--ds-stroke-3) solid var(--primary12);
+    outline: var(--border-size-2-25) solid var(--primary12);
     outline-offset: var(--size-px-1);
   }
 
@@ -366,8 +366,8 @@
 
   /* Focus: 2 px --primary12 ring at a 2 px offset, keyboard only [D45]; on the pill for pills. */
   .circle:focus-visible {
-    outline: var(--ds-focus-width) solid var(--primary12);
-    outline-offset: var(--ds-focus-offset);
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: var(--fgd-focus-offset);
   }
 
   .pill .circle:focus-visible {
@@ -375,8 +375,8 @@
   }
 
   .pill:has(.circle:focus-visible) {
-    outline: var(--ds-focus-width) solid var(--primary12);
-    outline-offset: var(--ds-focus-offset);
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: var(--fgd-focus-offset);
   }
 
   /*

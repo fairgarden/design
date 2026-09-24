@@ -51,7 +51,7 @@ One consequence sentence, in `type-body-ui` --primary12.
 
 ### AlertDialogPopup
 
-The alert panel: the Dialog panel (--size-sm, white scope, --ds-stroke-3
+The alert panel: the Dialog panel (--size-sm, white scope, --border-size-2-25
 \--primary12 frame, full-screen sheet below --md-n-above) with the status
 glyph above the title. Compose `AlertDialogBody` (title and one
 consequence sentence) and `AlertDialogActions` inside it; there is no

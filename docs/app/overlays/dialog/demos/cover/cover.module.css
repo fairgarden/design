@@ -6,11 +6,11 @@
 
 .list {
   display: grid;
-  gap: var(--ds-space-12);
+  gap: var(--size-px-2-5);
   margin: 0;
   padding-inline-start: var(--size-px-5);
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-body-ui);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-body-ui);
   color: var(--primary12);
 }
 
@@ -25,7 +25,7 @@
 
 .status {
   margin: 0;
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-caption);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-caption);
   color: var(--role-muted);
 }

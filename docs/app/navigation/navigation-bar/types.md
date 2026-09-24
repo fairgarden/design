@@ -8,7 +8,7 @@
 
 The site header: a skip link first, the green brand strip, an optional
 utility row, then the bar holding the logo (a home link), the Navigation
-Menu (from --ds-nav-inline-n-above), icon Buttons, the one action and,
+Menu (from --fgd-nav-inline-n-above), icon Buttons, the one action and,
 below the threshold, the drawer's menu Button. It is opaque, ruled at the
 bottom in --role-rule, 56 px tall (64 px from --lg-n-above), and its
 items never wrap: overflow goes to the utility row, then a "More" item
@@ -19,11 +19,11 @@ items never wrap: overflow goes to the utility row, then a "More" item
 | Prop         | Type                                                                                                                                                                                                                                                                                                                                               | Default | Description                                                                                                                                                                                 |
 | :----------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | action       | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | The one primary action: a `solid` Button at `size="sm"`. Below 480 px it moves to the drawer footer, so repeat it there.                                                                    |
-| brandDrawing | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | An optional fine-line brand drawing (--ds-stroke-0-75) beside the logo; dropped when compact.                                                                                               |
+| brandDrawing | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | An optional fine-line brand drawing (--border-size-0-75) beside the logo; dropped when compact.                                                                                             |
 | compact      | `boolean \| null`                                                                                                                                                                                                                                                                                                                                  | -       | `true`: the compact header, even undocked. The sticky observer sets it while docked. Default `false`.                                                                                       |
 | currentPath  | `string`                                                                                                                                                                                                                                                                                                                                           | -       | The current page's URL path, shared with the menu, drawer and utility links.                                                                                                                |
 | dock         | `NavigationBarDock`                                                                                                                                                                                                                                                                                                                                | -       | How the header docks. Default `none`.                                                                                                                                                       |
-| drawer       | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | The `NavDrawer` (menu Button and sheet), shown below --ds-nav-inline-n-above.                                                                                                               |
+| drawer       | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | The `NavDrawer` (menu Button and sheet), shown below --fgd-nav-inline-n-above.                                                                                                              |
 | logo         | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | The logo: an ink logo in `currentColor` (an `svg` or `img`), 28 px tall, 36 px from --lg-n-above.                                                                                           |
 | logoHref     | `string`                                                                                                                                                                                                                                                                                                                                           | -       | The home link. Default "/".                                                                                                                                                                 |
 | logoLabel    | `string`                                                                                                                                                                                                                                                                                                                                           | -       | The home link's accessible name, e.g. "FairGarden home".                                                                                                                                    |
@@ -37,15 +37,15 @@ items never wrap: overflow goes to the utility row, then a "More" item
 | sentinelRef  | `React.RefObject<Element \| null>`                                                                                                                                                                                                                                                                                                                 | -       | With `dock="swap"`: a zero-height element at the section bar's in-flow position.                                                                                                            |
 | skipHref     | `string`                                                                                                                                                                                                                                                                                                                                           | -       | The skip link's target. Default "#main".                                                                                                                                                    |
 | skipLabel    | `string`                                                                                                                                                                                                                                                                                                                                           | -       | The skip link's words. Default "Skip to main content".                                                                                                                                      |
-| utility      | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | A `NavigationBarUtility` row above the bar, from --ds-nav-inline-n-above; never docks.                                                                                                      |
-| children     | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | The `NavigationMenu`, inline from --ds-nav-inline-n-above.                                                                                                                                  |
+| utility      | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | A `NavigationBarUtility` row above the bar, from --fgd-nav-inline-n-above; never docks.                                                                                                     |
+| children     | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | The `NavigationMenu`, inline from --fgd-nav-inline-n-above.                                                                                                                                 |
 
 ### NavigationBarUtility
 
 The 36 px utility row above the bar (§11.3): secondary destinations as
 text links in a `nav` labelled "Utility", divided from the bar by a
-\--role-hairline rule, aligned to --ds-container-content. Shown from
-\--ds-nav-inline-n-above (below it, repeat its links in the drawer
+\--role-hairline rule, aligned to --fgd-container-content. Shown from
+\--fgd-nav-inline-n-above (below it, repeat its links in the drawer
 footer); the compact docked header drops it \[D183]. Put it in the bar's
 `utility` slot.
 
@@ -63,7 +63,7 @@ footer); the compact docked header drops it \[D183]. Put it in the bar's
 A utility link: `type-label` caps, no rest underline, the bare-text
 underline on hover \[D181], a 24 px target at a 24 px pitch (the §1.5.12
 utility exemption). The current page (its path equals the bar's
-`currentPath`) takes `aria-current="page"` and the --ds-stroke-3 bar.
+`currentPath`) takes `aria-current="page"` and the --border-size-2-25 bar.
 
 ## Additional Types
 
@@ -241,17 +241,17 @@ type NavigationBarProps = {
   logoLabel: string;
   /** The home link. Default "/". */
   logoHref?: string;
-  /** An optional fine-line brand drawing (--ds-stroke-0-75) beside the logo; dropped when compact. */
+  /** An optional fine-line brand drawing (--border-size-0-75) beside the logo; dropped when compact. */
   brandDrawing?: React.ReactNode;
-  /** A `NavigationBarUtility` row above the bar, from --ds-nav-inline-n-above; never docks. */
+  /** A `NavigationBarUtility` row above the bar, from --fgd-nav-inline-n-above; never docks. */
   utility?: React.ReactNode;
-  /** The `NavigationMenu`, inline from --ds-nav-inline-n-above. */
+  /** The `NavigationMenu`, inline from --fgd-nav-inline-n-above. */
   children?: React.ReactNode;
   /** Icon Buttons, e.g. `<Search kind="trigger" … />`, `--size-px-1` apart. */
   search?: React.ReactNode;
   /** The one primary action: a `solid` Button at `size="sm"`. Below 480 px it moves to the drawer footer, so repeat it there. */
   action?: React.ReactNode;
-  /** The `NavDrawer` (menu Button and sheet), shown below --ds-nav-inline-n-above. */
+  /** The `NavDrawer` (menu Button and sheet), shown below --fgd-nav-inline-n-above. */
   drawer?: React.ReactNode;
   /** The current page's URL path, shared with the menu, drawer and utility links. */
   currentPath?: string;

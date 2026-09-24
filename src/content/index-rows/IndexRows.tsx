@@ -157,7 +157,7 @@ export type IndexRowProps = useRender.ComponentProps<'li'> & {
    * `type-data`. Above the title below 768 px of container, a left column from 768.
    */
   date?: React.ReactNode
-  /** Related rows: a thumbnail `img` (empty alt), `--ds-size-thumb` square, dropped in print. */
+  /** Related rows: a thumbnail `img` (empty alt), `--fgd-size-thumb` square, dropped in print. */
   thumb?: React.ReactNode
 }
 

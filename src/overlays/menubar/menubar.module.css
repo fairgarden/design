@@ -3,10 +3,10 @@
  * Parts: base (the bar and its rule), trigger. The popups are Menu popups
  * (menu.module.css): portaled `white` scopes that never change with the bar.
  *
- * A --ds-size-hit bar with a --border-size-1 --role-rule on its content
+ * A --fgd-size-hit bar with a --border-size-1 --role-rule on its content
  * side; `type-button-sm` triggers, authored in title case with no tracking
  * [D160, D165], at --size-px-5 inline padding. The open trigger takes the
- * --ds-stroke-3 bar in --primary12, never a fill alone. Colors are role
+ * --border-size-2-25 bar in --primary12, never a fill alone. Colors are role
  * variables only; local custom properties carry dimensions only.
  */
 
@@ -21,7 +21,7 @@
   .base {
     display: flex;
     align-items: stretch;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     border-block-end: var(--border-size-1) solid var(--role-rule);
     color: var(--primary12);
   }
@@ -30,7 +30,7 @@
     position: relative;
     display: inline-flex;
     align-items: center;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     margin: 0;
     padding-block: 0;
     padding-inline: var(--size-px-5);
@@ -38,16 +38,16 @@
     background: none;
     color: var(--primary12);
     white-space: nowrap;
-    text-decoration-thickness: var(--ds-stroke-1-5);
+    text-decoration-thickness: var(--border-size-1-5);
     text-underline-offset: 0.15em;
     appearance: none;
   }
 
-  /* Hover transition [D181]: --ds-duration-quick, --ease-out-3; instant under --motionNotOK. */
+  /* Hover transition [D181]: --fgd-duration-quick, --ease-out-3; instant under --motionNotOK. */
   @media (--motionOK) {
     .trigger {
       transition-property: color, text-decoration-color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -59,7 +59,7 @@
     inset-inline: 0;
     inset-block-end: calc(-1 * var(--border-size-1));
     display: none;
-    border-block-end: var(--ds-stroke-3) solid var(--primary12);
+    border-block-end: var(--border-size-2-25) solid var(--primary12);
   }
 }
 
@@ -76,18 +76,18 @@
     inset-block: 0;
     inset-inline: auto calc(-1 * var(--border-size-1));
     border-block-end-width: 0;
-    border-inline-end: var(--ds-stroke-3) solid var(--primary12);
+    border-inline-end: var(--border-size-2-25) solid var(--primary12);
   }
 
   /*
    * Hover (not disabled): the §9.2 `text` Button hover [D181]. The label
    * takes --role-link-hover, underlined in --role-accent only where that
-   * ink is --primary12 (--ds-link-hover-line); forced colors add the
+   * ink is --primary12 (--fgd-link-hover-line); forced colors add the
    * underline. The open bar, not the hover, marks an open menu.
    */
   .trigger:not([data-disabled]):hover {
     color: var(--role-link-hover);
-    text-decoration-line: var(--ds-link-hover-line);
+    text-decoration-line: var(--fgd-link-hover-line);
     text-decoration-color: var(--role-accent);
   }
 
@@ -104,8 +104,8 @@
   /* Focus: the 2 px --primary12 ring at a 2 px offset, drawn above its neighbours. */
   .trigger:focus-visible {
     z-index: 1;
-    outline: var(--ds-focus-width) solid var(--primary12);
-    outline-offset: var(--ds-focus-offset);
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: var(--fgd-focus-offset);
   }
 
   .trigger[data-disabled] {

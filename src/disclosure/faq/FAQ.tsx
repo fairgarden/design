@@ -71,7 +71,7 @@ export type FAQProps = useRender.ComponentProps<'section'> & {
    */
   kind?: FAQVariants['kind']
   /**
-   * Shows a `--ds-stroke-3` `--primary12` bar at the start of each open
+   * Shows a `--border-size-2-25` `--primary12` bar at the start of each open
    * item's row: a bolder line, never a fill. Default `false`.
    */
   barred?: FAQVariants['barred']
@@ -141,7 +141,7 @@ export function FAQTitle(props: FAQTitleProps) {
 /** Props for FAQIntro: paragraph props and `render`. */
 export type FAQIntroProps = useRender.ComponentProps<'p'>
 
-/** An optional lede under the title, within `--ds-measure-reading`. */
+/** An optional lede under the title, within `--fgd-measure-reading`. */
 export function FAQIntro(props: FAQIntroProps) {
   const { render, ref, className, ...rest } = props
   return useRender({
@@ -203,7 +203,7 @@ export type FAQItemProps = Omit<BaseAccordion.Item.Props, 'disabled' | 'title'> 
 /**
  * One question and its answer. The question is an `h3` wrapping the trigger;
  * the disclosure glyph trails it, top-aligned to its first line. The answer
- * is `type-body`, within `--ds-measure-reading`. FAQ items are never
+ * is `type-body`, within `--fgd-measure-reading`. FAQ items are never
  * disabled.
  */
 export function FAQItem(props: FAQItemProps) {

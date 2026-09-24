@@ -24,7 +24,7 @@ A group's label, in `type-label` --role-muted; not focusable (Base UI Menu.Group
 
 ### MenuItem
 
-An action row (Base UI Menu.Item): --ds-size-hit tall at every
+An action row (Base UI Menu.Item): --fgd-size-hit tall at every
 breakpoint, a --size-px-5 leading slot, the label in `type-body-ui`
 sentence case, and an optional trailing shortcut. Highlight (pointer or
 keyboard) is the --primary4 fill plus the start-edge bar (the danger fill
@@ -42,7 +42,7 @@ on a destructive item \[D192]); activation closes the menu.
 ### MenuPopup
 
 The popup, rendered through its Base UI Portal as a nested `white`
-scope: --primary1 face, --border-size-2 --primary12 edge, --ds-radius-8,
+scope: --primary1 face, --border-size-2 --primary12 edge, --radius-2-25,
 \--size-px-1 padding, 200 px to --size-px-14 wide and at least the
 trigger's width, --size-px-2 from the trigger, aligned to its start
 edge. It opens instantly or with a clip reveal from the trigger side.

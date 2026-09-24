@@ -7,7 +7,7 @@
  * links, address and colophon --primary12; legal text --role-muted over a
  * --role-rule rule; every rule that bounds or separates --role-rule (dark
  * --slate9 on night) [D173]; newsletter column rule --role-rule; sign-off
- * --role-tint; hover --role-link-hover [D181]; current: the --ds-stroke-3
+ * --role-tint; hover --role-link-hover [D181]; current: the --border-size-2-25
  * start-edge bar in --primary12. Colors are role variables only; local
  * custom properties carry dimensions only.
  */
@@ -51,23 +51,23 @@
 }
 
 @layer base {
-  /* The band: top --ds-space-56 (--size-px-10 from --lg-n-above), bottom --ds-space-40. */
+  /* The band: top --size-px-8-5 (--size-px-10 from --lg-n-above), bottom --size-px-7-5. */
   .base {
     display: block;
     /* As a grid or flex item, the band takes its track's width, never its content's min-content. */
     min-inline-size: 0;
-    padding-block: var(--ds-space-56) var(--ds-space-40);
+    padding-block: var(--size-px-8-5) var(--size-px-7-5);
     color: var(--primary12);
   }
 
-  /* The frame container: --ds-container-content inside the page margins. */
+  /* The frame container: --fgd-container-content inside the page margins. */
   .container {
     box-sizing: content-box;
     display: grid;
     gap: var(--size-px-7);
-    max-inline-size: var(--ds-container-content);
+    max-inline-size: var(--fgd-container-content);
     margin-inline: auto;
-    padding-inline: var(--ds-space-margin);
+    padding-inline: var(--fgd-space-margin);
   }
 
   /* Action blocks: the container `footer-blocks`; blocks → sitemap --size-px-10. */
@@ -75,7 +75,7 @@
     container: footer-blocks / inline-size;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--ds-space-56) var(--ds-space-margin);
+    gap: var(--size-px-8-5) var(--fgd-space-margin);
     margin-block-end: calc(var(--size-px-10) - var(--size-px-7));
   }
 
@@ -95,8 +95,8 @@
 
   .blockIcon > :where(svg) {
     display: block;
-    inline-size: var(--ds-size-icon-block);
-    block-size: var(--ds-size-icon-block);
+    inline-size: var(--fgd-size-icon-block);
+    block-size: var(--fgd-size-icon-block);
   }
 
   .blockHeading {
@@ -122,7 +122,7 @@
   .main {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--size-px-7) var(--ds-space-margin);
+    gap: var(--size-px-7) var(--fgd-space-margin);
     min-inline-size: 0;
   }
 
@@ -150,18 +150,18 @@
     color: var(--primary12);
     text-decoration-line: underline;
     text-decoration-color: var(--role-accent);
-    text-decoration-thickness: var(--ds-stroke-1-5);
+    text-decoration-thickness: var(--border-size-1-5);
     text-underline-offset: 0.15em;
     text-decoration-skip-ink: none;
   }
 
-  /* Social: outline icons at the tag tier (20 px) or text, each in a --ds-size-hit target. */
+  /* Social: outline icons at the tag tier (20 px) or text, each in a --fgd-size-hit target. */
   .social {
     display: flex;
     flex-wrap: wrap;
     gap: 0 var(--size-px-2);
     margin: 0;
-    margin-inline-start: calc((var(--ds-size-hit) - var(--size-px-4)) / -2);
+    margin-inline-start: calc((var(--fgd-size-hit) - var(--size-px-4)) / -2);
     padding: 0;
     list-style: none;
   }
@@ -170,8 +170,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-inline-size: var(--ds-size-hit);
-    min-block-size: var(--ds-size-hit);
+    min-inline-size: var(--fgd-size-hit);
+    min-block-size: var(--fgd-size-hit);
     border-radius: var(--radius-1);
     color: var(--primary12);
     text-decoration-line: none;
@@ -197,7 +197,7 @@
   .groups {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--size-px-7) var(--ds-space-margin);
+    gap: var(--size-px-7) var(--fgd-space-margin);
   }
 
   .group {
@@ -211,7 +211,7 @@
 
   /* The group head link: a Link list link (`kind="nav"` with `list`), which owns its ink and states [D181]. */
   .groupLink {
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
   }
 
   /* The group chevron: chevron_right, inline tier, --role-accent on every ground (§9.1). */
@@ -227,7 +227,7 @@
 
   /*
    * Sitemap links: type-body-ui, no rest underline. They are Link list
-   * links (`kind="nav"` with `list`): Link sets the --ds-size-hit row, so
+   * links (`kind="nav"` with `list`): Link sets the --fgd-size-hit row, so
    * every link meets the hit minimum (navigation, not prose), the ink, the
    * external mark and the states [D43, D80, D181].
    */
@@ -235,9 +235,9 @@
     box-sizing: border-box;
   }
 
-  /* The section's own link heads its list at base (the Accordion), › after a --ds-space-12 gap. */
+  /* The section's own link heads its list at base (the Accordion), › after a --size-px-2-5 gap. */
   .link .chevron {
-    margin-inline-start: var(--ds-space-12);
+    margin-inline-start: var(--size-px-2-5);
   }
 
   /* The newsletter column: behind its rule; the rule is horizontal while the column stacks. */
@@ -318,7 +318,7 @@
     .socialLink,
     .contactLink {
       transition-property: color, text-decoration-color, text-decoration-thickness;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -379,7 +379,7 @@
     .newsletterColumn .columnRule {
       position: absolute;
       inset-block: 0;
-      inset-inline-start: calc(var(--ds-space-margin) / -2);
+      inset-inline-start: calc(var(--fgd-space-margin) / -2);
       margin: 0;
       border-block-start: 0;
       border-inline-start: var(--border-size-1) solid var(--role-rule);
@@ -468,13 +468,13 @@
    */
   .wordmark {
     box-sizing: content-box;
-    max-inline-size: var(--ds-container-content);
+    max-inline-size: var(--fgd-container-content);
     block-size: 0.75em;
     margin: var(--size-px-7) auto 0;
-    padding-inline: var(--ds-space-margin);
+    padding-inline: var(--fgd-space-margin);
     overflow: clip;
     color: var(--role-tint);
-    font-size: calc(var(--ds-font-size-display-xl) * 3);
+    font-size: calc(var(--fgd-font-size-display-xl) * 3);
     line-height: 1;
     white-space: nowrap;
     user-select: none;
@@ -607,7 +607,7 @@
   }
 
   /*
-   * Current page: a --ds-stroke-3 --primary12 start-edge bar and weight 700,
+   * Current page: a --border-size-2-25 --primary12 start-edge bar and weight 700,
    * hanging in the gutter, in place of Link's current underline [D15]. The
    * list parent raises these over Link's `nav` current rule.
    */
@@ -615,9 +615,9 @@
   .linkLine .link[aria-current='page'],
   .cells .cell[aria-current='page'],
   .legalLinks .legalLink[aria-current='page'] {
-    margin-inline-start: calc(-1 * (var(--ds-stroke-3) + var(--size-px-2)));
+    margin-inline-start: calc(-1 * (var(--border-size-2-25) + var(--size-px-2)));
     padding-inline-start: var(--size-px-2);
-    border-inline-start: var(--ds-stroke-3) solid var(--primary12);
+    border-inline-start: var(--border-size-2-25) solid var(--primary12);
     color: var(--primary12);
     font-weight: var(--font-weight-7);
     text-decoration-line: none;

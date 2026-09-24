@@ -14,8 +14,8 @@
  * --primary12 on the saturated fields [D14, D117]. The index marker names
  * its --primary1 face directly (a face under ink, not a knockout) [D144].
  *
- * Geometry. Fixed pixel sizes from the --ds-marker-* tokens, never scaled
- * with a figure or the viewport (P9). Open shapes at --ds-stroke-1-5 with
+ * Geometry. Fixed pixel sizes from the --fgd-marker-* tokens, never scaled
+ * with a figure or the viewport (P9). Open shapes at --border-size-1-5 with
  * round caps and joins; `marker-current` is the one solid mark, a data mark
  * a legend defines [D58]. A dash stops --size-px-1 short of a marker and
  * restarts past it, so no partial dash touches one (§4.7.5).
@@ -61,25 +61,25 @@
     overflow: visible;
     fill: none;
     stroke: currentColor;
-    stroke-width: var(--ds-stroke-1-5);
+    stroke-width: var(--border-size-1-5);
     stroke-linecap: round;
     stroke-linejoin: round;
   }
 
   .markerOrigin {
-    --marker-size: var(--ds-marker-trail);
+    --marker-size: var(--fgd-marker-trail);
   }
 
   .markerWaypoint {
-    --marker-size: var(--ds-marker-waypoint);
+    --marker-size: var(--fgd-marker-waypoint);
   }
 
   .markerTerminal {
-    --marker-size: var(--ds-arrow-head);
+    --marker-size: var(--fgd-arrow-head);
   }
 
   .markerCurrent {
-    --marker-size: var(--ds-marker-current);
+    --marker-size: var(--fgd-marker-current);
 
     fill: currentColor;
     stroke: none;
@@ -87,7 +87,7 @@
 
   /*
    * marker-index (§4.7.5, §8.10): a --size-px-5 circle, a --primary1 face
-   * with a --ds-stroke-1-5 --primary12 edge, holding a zero-padded numeral
+   * with a --border-size-1-5 --primary12 edge, holding a zero-padded numeral
    * in type-label (--font-weight-6). Numbered map and figure callouts keyed
    * to a list; never an unstroked colored disc.
    */
@@ -98,11 +98,11 @@
     box-sizing: border-box;
     inline-size: var(--size-px-5);
     block-size: var(--size-px-5);
-    border: var(--ds-stroke-1-5) solid var(--primary12);
+    border: var(--border-size-1-5) solid var(--primary12);
     border-radius: var(--radius-round);
     background-color: var(--primary1);
     color: var(--primary12);
-    font-variant-numeric: var(--ds-numerals-data);
+    font-variant-numeric: var(--fgd-numerals-data);
     line-height: 1;
   }
 
@@ -115,7 +115,7 @@
     display: inline-block;
     flex: none;
     min-inline-size: 2.5ch;
-    font-variant-numeric: var(--ds-numerals-data);
+    font-variant-numeric: var(--fgd-numerals-data);
     text-align: end;
   }
 
@@ -123,7 +123,7 @@
    * ornament-trail (§4.7.1): a freehand line-dashed path with its markers,
    * 110–220 × 45–90 px, decorative. At most one per band and two per page;
    * never with an eyebrow rule or on a haloed lockup [D38]; it stops
-   * --ds-space-halo short of a label and hides rather than touch type.
+   * --fgd-space-halo short of a label and hides rather than touch type.
    */
   .ornamentTrail {
     display: block;
@@ -188,7 +188,7 @@
   .trailMarker {
     fill: none;
     stroke: currentColor;
-    stroke-width: var(--ds-stroke-1-5);
+    stroke-width: var(--border-size-1-5);
     stroke-dasharray: none;
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -196,9 +196,9 @@
 }
 
 @layer variants {
-  /* On a timeline, origin and terminal take --ds-marker-timeline (8 px) (§4.7.2). */
+  /* On a timeline, origin and terminal take --fgd-marker-timeline (8 px) (§4.7.2). */
   .markerTimeline {
-    --marker-size: var(--ds-marker-timeline);
+    --marker-size: var(--fgd-marker-timeline);
   }
 
   /* Where the mount is omitted (forest, the solid fields), the bare mark takes the scope's one ink. */
@@ -211,8 +211,8 @@
   @media print {
     /* The trail prints black at 0.75 pt with 3 / 2.5 pt dashes, markers kept [D142]. */
     .ornamentTrailPath {
-      stroke-width: var(--ds-print-trail-stroke);
-      stroke-dasharray: var(--ds-print-trail-dash) var(--ds-print-trail-gap);
+      stroke-width: var(--fgd-print-trail-stroke);
+      stroke-dasharray: var(--fgd-print-trail-dash) var(--fgd-print-trail-gap);
       stroke-linecap: butt;
     }
 

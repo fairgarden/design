@@ -50,9 +50,9 @@
     flex: 1 0 var(--size-px-5);
     align-self: last baseline;
     block-size: 0;
-    border-block-end: var(--ds-dot-fine) solid var(--role-rule);
+    border-block-end: var(--fgd-dot-fine) solid var(--role-rule);
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 1'%3E%3Ccircle cx='1.5' cy='0.5' r='0.5'/%3E%3C/svg%3E");
-    mask-size: var(--ds-dot-fine-pitch) var(--ds-dot-fine);
+    mask-size: var(--fgd-dot-fine-pitch) var(--fgd-dot-fine);
     mask-repeat: round no-repeat;
     mask-origin: border-box;
   }
@@ -64,7 +64,7 @@
     min-inline-size: 0;
     margin: 0;
     color: var(--primary12);
-    font-variant-numeric: var(--ds-numerals-data);
+    font-variant-numeric: var(--fgd-numerals-data);
     text-align: end;
   }
 

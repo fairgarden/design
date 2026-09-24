@@ -8,7 +8,7 @@
 
 The seam between two bands, or a pause inside one. Render a band seam
 (`seam`, `page-seam`, `hill`, `fringe`) as the first child of the lower
-band's `<Ground kind="band">`, whose block padding is `--ds-space-section`
+band's `<Ground kind="band">`, whose block padding is `--fgd-space-section`
 (§11.1): the divider takes that band's colors and sits on its top edge.
 
 A shaped edge sits only where tone separates the seam: the night band

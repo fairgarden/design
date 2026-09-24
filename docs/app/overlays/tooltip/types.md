@@ -15,7 +15,7 @@ prints: definitions behind terms must also exist as footnotes.
 ### TooltipPopup
 
 The popup: one short line of `type-caption` (three at most), at most
-`--ds-size-tooltip` (280 px) wide, on the overlay scope's `--primary1` face inside a
+`--fgd-size-tooltip` (280 px) wide, on the overlay scope's `--primary1` face inside a
 `--border-size-2` `--primary12` frame with `--radius-1`. It sits
 `--size-px-2` from the trigger (`side`, default `top`) and flips or shifts
 to stay inside the viewport.
@@ -31,7 +31,7 @@ to stay inside the viewport.
 ### TooltipProvider
 
 Shares the open delay across a group of triggers, such as a toolbar: the
-first tooltip opens after `--ds-delay-tooltip` (500 ms), its neighbors
+first tooltip opens after `--fgd-delay-tooltip` (500 ms), its neighbors
 open at once while one is showing.
 
 ### TooltipTrigger

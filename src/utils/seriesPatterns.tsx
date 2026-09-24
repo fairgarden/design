@@ -90,10 +90,10 @@ type Geometry =
   | { kind: 'dots'; pitch: 4 | 5 | 6; heavy: boolean }
 
 /*
- * §1.5.9 geometry, px: hatch 1 px lines at --ds-hatch-pitch 6 px, measured
+ * §1.5.9 geometry, px: hatch 1 px lines at --fgd-hatch-pitch 6 px, measured
  * perpendicular to the lines (an SVG pattern rotates an exact 6 px tile, so
- * it needs no 8 px CSS tile); dot screens --ds-dotscreen-dot 1.25 px or
- * --ds-dotscreen-dot-heavy 2 px at --ds-dotscreen-pitch-1/-2/-3 (6/5/4 px).
+ * it needs no 8 px CSS tile); dot screens --fgd-dotscreen-dot 1.25 px or
+ * --fgd-dotscreen-dot-heavy 2 px at --fgd-dotscreen-pitch-1/-2/-3 (6/5/4 px).
  * SVG pattern attributes cannot read custom properties, so the values are
  * mirrored here.
  */

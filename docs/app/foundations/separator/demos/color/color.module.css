@@ -6,7 +6,7 @@
 
 .name {
   margin-block-start: var(--size-px-2);
-  font-family: var(--ds-font-mono);
-  font-size: var(--ds-font-size-caption);
+  font-family: var(--fgd-font-mono);
+  font-size: var(--fgd-font-size-caption);
   color: var(--role-muted);
 }

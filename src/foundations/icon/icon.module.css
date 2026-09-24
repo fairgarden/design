@@ -42,7 +42,7 @@
   }
 
   .block {
-    --icon-size: var(--ds-size-icon-block);
+    --icon-size: var(--fgd-size-icon-block);
   }
 
   /* Directional glyphs mirror in right-to-left layouts (§6.10, §1.3.6). */

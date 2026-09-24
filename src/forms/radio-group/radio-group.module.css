@@ -11,7 +11,7 @@
     container: radio-group / inline-size;
     display: flex;
     flex-wrap: wrap;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
     min-inline-size: 0;
   }
 
@@ -28,10 +28,10 @@
 
   /* Option pills always stack: they are answers to read. */
   .pill {
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
   }
 
-  /* Swatches wrap at --ds-size-hit targets, --ds-space-12 apart (5 per row at 320 px [D73]). */
+  /* Swatches wrap at --fgd-size-hit targets, --size-px-2-5 apart (5 per row at 320 px [D73]). */
   .kindSwatch > * {
     flex: 0 0 auto;
   }

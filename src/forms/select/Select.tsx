@@ -29,10 +29,10 @@ import styles from './select.module.css'
  * - States: trigger `:hover` (not disabled) → boxed edge → --primary12
  *   [D140], underline --role-accent → --primary12 at the same weight
  *   [D181]; `data-popup-open` → boxed edge
- *   --primary12, underline --ds-stroke-3, chevron rotated; `:focus-visible`
+ *   --primary12, underline --border-size-2-25, chevron rotated; `:focus-visible`
  *   → ring; `data-disabled` → dotted edge, --role-muted; `data-invalid` →
  *   error edge or danger underline. Item `data-highlighted` → --primary4
- *   plus the --ds-stroke-3 start bar [D145]; `data-selected` → leading ✓
+ *   plus the --border-size-2-25 start bar [D145]; `data-selected` → leading ✓
  *   plus --font-weight-6; `data-disabled` → --role-muted, never
  *   highlighted. Popup `data-starting-style` / `data-ending-style` → the
  *   clip reveal from `data-side` [D91].
@@ -284,8 +284,8 @@ export type SelectItemProps = Omit<BaseSelect.Item.Props, 'className'> & {
 }
 
 /**
- * One option: a `--ds-size-hit` row. Highlighted rows take the `--primary4`
- * soft fill and the `--ds-stroke-3` start bar; the chosen row a leading ✓
+ * One option: a `--fgd-size-hit` row. Highlighted rows take the `--primary4`
+ * soft fill and the `--border-size-2-25` start bar; the chosen row a leading ✓
  * and `--font-weight-6` [D145].
  */
 export function SelectItem(props: SelectItemProps) {

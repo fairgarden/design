@@ -9,7 +9,7 @@
 The page's sticky section bar: a Base UI Toolbar in a `nav` named "In
 this section", on the covered band's page ground, with a
 `--border-size-1` `--role-rule` bottom rule and no shadow; one line, at
-least `--ds-size-hit` tall.
+least `--fgd-size-hit` tall.
 
 - Base: the disclosure glyph opens the staircase breadcrumb (capped at
   half the viewport), the caps title follows the section in view, and

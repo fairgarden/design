@@ -145,7 +145,7 @@ export type EmptyStateDrawingProps = Omit<useRender.ComponentProps<'div'>, 'chil
   Pick<StickerProps, 'viewBox' | 'halo' | 'children'>
 
 /**
- * The drawing (`illustrated`): a §6.5 Sticker at `--ds-size-art-s` with its
+ * The drawing (`illustrated`): a §6.5 Sticker at `--fgd-size-art-s` with its
  * halo, decorative (`aria-hidden`); the spot size `--size-px-9` below
  * 360 px. Pass the asset's `viewBox`, its pre-expanded `halo` path and its
  * line art as children. The sticker brings its own `white` scope, so it

@@ -8,12 +8,12 @@
   display: grid;
   min-inline-size: 0;
   padding: var(--size-px-3) var(--size-px-5) var(--size-px-5);
-  border-radius: var(--ds-radius-8);
+  border-radius: var(--radius-2-25);
 }
 
 .name {
   margin: 0;
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-caption);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-caption);
   font-weight: var(--font-weight-6);
 }

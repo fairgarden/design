@@ -19,28 +19,28 @@
 /* Ground's field class draws the --primary12 edge and radius; this sets the layout. */
 .field {
   display: grid;
-  gap: var(--ds-space-12);
+  gap: var(--size-px-2-5);
 }
 
 /* A face draws the --role-edge its Ground publishes: --primary10, or --primary12 as a light island. */
 .face {
   display: grid;
-  gap: var(--ds-space-12);
+  gap: var(--size-px-2-5);
   padding: var(--size-px-3);
   border: var(--border-size-1) solid var(--role-edge);
-  border-radius: var(--ds-radius-8);
+  border-radius: var(--radius-2-25);
 }
 
 .head {
   margin: 0;
-  font-family: var(--ds-font-display);
-  font-size: var(--ds-font-size-kicker);
+  font-family: var(--fgd-font-display);
+  font-size: var(--fgd-font-size-kicker);
   font-weight: var(--font-weight-7);
   color: var(--role-heading);
 }
 
 .label {
   margin: 0;
-  font-family: var(--ds-font-ui);
+  font-family: var(--fgd-font-ui);
   font-weight: var(--font-weight-6);
 }

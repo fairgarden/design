@@ -8,7 +8,7 @@
  * custom properties carry dimensions only.
  *
  * Band seams sit on the lower band's top edge: the root is that band's
- * first child and pulls itself up through the band's --ds-space-section
+ * first child and pulls itself up through the band's --fgd-space-section
  * top padding (§11.1), then restores it below.
  */
 
@@ -75,15 +75,15 @@
   .dots {
     display: block;
     inline-size: 100%;
-    inline-size: calc(round(down, 100% - var(--ds-dot), var(--ds-dot-pitch)) + var(--ds-dot));
-    block-size: var(--ds-dot);
+    inline-size: calc(round(down, 100% - var(--fgd-dot), var(--fgd-dot-pitch)) + var(--fgd-dot));
+    block-size: var(--fgd-dot);
     overflow: visible;
   }
 
   .dotLine {
     fill: none;
     stroke: currentColor;
-    stroke-dashoffset: calc(var(--ds-dot) / -2);
+    stroke-dashoffset: calc(var(--fgd-dot) / -2);
   }
 
   /* ornament-rule-dot (§4.8.2): two hairlines and a solid dot between. */
@@ -96,18 +96,18 @@
 
   .dot {
     flex: none;
-    inline-size: var(--ds-ornament-dot);
-    block-size: var(--ds-ornament-dot);
-    margin-inline: var(--ds-ornament-dot-gap);
+    inline-size: var(--fgd-ornament-dot);
+    block-size: var(--fgd-ornament-dot);
+    margin-inline: var(--fgd-ornament-dot-gap);
     fill: currentColor;
   }
 
   /* ornament-rule-star: the solid star once at the centre, halo-clear. */
   .star {
     flex: none;
-    inline-size: var(--ds-ornament-star);
-    block-size: var(--ds-ornament-star);
-    margin-inline: var(--ds-space-halo);
+    inline-size: var(--fgd-ornament-star);
+    block-size: var(--fgd-ornament-star);
+    margin-inline: var(--fgd-space-halo);
     fill: currentColor;
   }
 
@@ -134,7 +134,7 @@
   .kindPageSeam,
   .kindHill,
   .kindFringe {
-    margin-block: calc(-1 * var(--ds-space-section)) var(--ds-space-section);
+    margin-block: calc(-1 * var(--fgd-space-section)) var(--fgd-space-section);
   }
 
   /* Chrome and pause rules sit in the flow where they are placed. */
@@ -161,7 +161,7 @@
 
   .ornamentDotted .ornament,
   .ornamentStar .ornament {
-    inline-size: min(100%, var(--ds-measure-reading));
+    inline-size: min(100%, var(--fgd-measure-reading));
   }
 
   .ornamentStar,
@@ -176,11 +176,11 @@
 
   /*
    * The hill [D189]. The root paints the lower band's own ground; `shape`
-   * is a night Ground used only for its --ds-edge-shaped switch (block in
+   * is a night Ground used only for its --fgd-edge-shaped switch (block in
    * light mode, none on a dark page, where the night band's --primary12
    * seam is the edge). In the flow it is the amplitude added to the band's
-   * top padding: 4.6% of the width, clamped --ds-edge-hill-min to
-   * --ds-edge-hill-max. Its ::before rises the same height above the seam
+   * top padding: 4.6% of the width, clamped --fgd-edge-hill-min to
+   * --fgd-edge-hill-max. Its ::before rises the same height above the seam
    * as one hard-edged curve in the lower ground: low at the start, crest at
    * 0.667 of the width, the end falling 30% of the rise; no rule under it.
    * These rules sit above Ground's own base-layer paint and seam.
@@ -190,12 +190,12 @@
   }
 
   .shape {
-    display: var(--ds-edge-shaped, block);
+    display: var(--fgd-edge-shaped, block);
     position: relative;
     inline-size: 100%;
     aspect-ratio: 1000 / 46;
-    min-block-size: var(--ds-edge-hill-min);
-    max-block-size: var(--ds-edge-hill-max);
+    min-block-size: var(--fgd-edge-hill-min);
+    max-block-size: var(--fgd-edge-hill-max);
     border: 0;
     background-color: inherit;
     color: inherit;

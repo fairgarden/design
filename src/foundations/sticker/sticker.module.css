@@ -6,15 +6,15 @@
  * --primary1, named directly [D144]; the line --role-heading, section-head
  * rank for hand art [D60]. Bare, the line takes the host's --role-heading.
  * Local custom properties carry dimensions only:
- *   --sticker-size          the native width (--ds-size-art-s or -l)
+ *   --sticker-size          the native width (--fgd-size-art-s or -l)
  *   --sticker-stroke        the silhouette weight
  *   --sticker-stroke-detail the interior weight, one step lighter
  */
 
 @layer base {
   .base {
-    --sticker-size: var(--ds-size-art-s);
-    --sticker-stroke: var(--ds-stroke-3);
+    --sticker-size: var(--fgd-size-art-s);
+    --sticker-stroke: var(--border-size-2-25);
     --sticker-stroke-detail: var(--border-size-2);
 
     display: inline-block;
@@ -57,18 +57,18 @@
 }
 
 @layer variants {
-  /* S: 152 px, silhouette --ds-stroke-3, interior --border-size-2 (§6.2). */
+  /* S: 152 px, silhouette --border-size-2-25, interior --border-size-2 (§6.2). */
   .s {
-    --sticker-size: var(--ds-size-art-s);
-    --sticker-stroke: var(--ds-stroke-3);
+    --sticker-size: var(--fgd-size-art-s);
+    --sticker-stroke: var(--border-size-2-25);
     --sticker-stroke-detail: var(--border-size-2);
   }
 
-  /* L: 312 px, silhouette --ds-stroke-4, interior --ds-stroke-3 (§6.2). */
+  /* L: 312 px, silhouette --border-size-2-75, interior --border-size-2-25 (§6.2). */
   .l {
-    --sticker-size: var(--ds-size-art-l);
-    --sticker-stroke: var(--ds-stroke-4);
-    --sticker-stroke-detail: var(--ds-stroke-3);
+    --sticker-size: var(--fgd-size-art-l);
+    --sticker-stroke: var(--border-size-2-75);
+    --sticker-stroke-detail: var(--border-size-2-25);
   }
 
   /* Bare: the host scope's --role-heading, no halo (the line's color is already that role). */

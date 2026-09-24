@@ -52,7 +52,7 @@ import styles from './toast.module.css'
  *   [D23, D89, D139, D156].
  * - Container: none; the bar is page frame and uses the viewport media.
  *
- * Timing: auto-dismissing toasts stay at least --ds-duration-toast (6 s)
+ * Timing: auto-dismissing toasts stay at least --fgd-duration-toast (6 s)
  * and pause on hover, on focus and while the tab is hidden; warning,
  * danger and action toasts persist until acted on or dismissed.
  */
@@ -60,7 +60,7 @@ export const toast = cva(styles.base)
 
 export type ToastStatus = Status
 
-/** --ds-duration-toast, restated in ms for Base UI's timers. */
+/** --fgd-duration-toast, restated in ms for Base UI's timers. */
 const TOAST_DURATION = 6000
 
 /** An action cell's button props: its label (`children`, title case), `onClick`, `aria-busy` … */
@@ -100,7 +100,7 @@ export interface ToastOptions {
   actions?: ToastAction[]
   /**
    * Auto-dismiss time in ms for a neutral, info or success toast without
-   * actions: at least 6000 (--ds-duration-toast); `0` persists.
+   * actions: at least 6000 (--fgd-duration-toast); `0` persists.
    */
   timeout?: number
   /** Called when the toast starts closing. */
@@ -121,7 +121,7 @@ function toStatus(type: string | undefined): ToastStatus | undefined {
   return isStatus(type) ? type : undefined
 }
 
-/** At least --ds-duration-toast; 0 persists; undefined keeps the provider's. */
+/** At least --fgd-duration-toast; 0 persists; undefined keeps the provider's. */
 function clampTimeout(timeout: number | undefined): number | undefined {
   if (timeout === undefined) return undefined
   return timeout <= 0 ? 0 : Math.max(timeout, TOAST_DURATION)
@@ -182,7 +182,7 @@ export function useToastManager(): ToastManager {
 export interface ToastProviderProps {
   children?: React.ReactNode
   /**
-   * Default auto-dismiss time in ms, at least 6000 (--ds-duration-toast).
+   * Default auto-dismiss time in ms, at least 6000 (--fgd-duration-toast).
    * Timers pause on hover, on focus and while the tab is hidden.
    */
   timeout?: number
@@ -202,7 +202,7 @@ export interface ToastProviderProps {
  * Provides toasts to its children and renders the docked bar: full width
  * at the bottom viewport edge on --layer-5, a `white` scope with a
  * --border-size-2 --primary12 top rule, content aligned to
- * --ds-container-content. One toast shows at a time; a queue count
+ * --fgd-container-content. One toast shows at a time; a queue count
  * ("1 of 3") shows while more wait. The page reserves no space for it.
  */
 export function ToastProvider(props: ToastProviderProps) {

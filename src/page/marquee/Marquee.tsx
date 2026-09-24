@@ -36,7 +36,7 @@ import styles from './marquee.module.css'
  *   within their rations) with its radius and its `--primary12` edge in
  *   `--role-edge` [D177, D178].
  * - Container: none: a page-frame part. Place it full width in its band;
- *   it sets its own `--ds-container-content` container, and any responsive
+ *   it sets its own `--fgd-container-content` container, and any responsive
  *   change is a viewport rule [D163].
  */
 export const marquee = cva(styles.base, {
@@ -75,8 +75,8 @@ interface MarqueeCommonProps extends Omit<React.ComponentPropsWithRef<'section'>
    */
   phrases: readonly string[]
   /**
-   * An optional hanging drawing (an `aria-hidden` SVG at `--ds-size-art-l`,
-   * `--ds-size-art-s` below `--md-n-above`): `--primary12` lines
+   * An optional hanging drawing (an `aria-hidden` SVG at `--fgd-size-art-l`,
+   * `--fgd-size-art-s` below `--md-n-above`): `--primary12` lines
    * (`currentColor`) and `--role-halo` fills. It tucks under the field's
    * bottom edge and hangs into the page ground below.
    */

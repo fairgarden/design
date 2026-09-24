@@ -22,7 +22,7 @@ task depends on. Every panel prints expanded and the trigger is hidden.
 
 The panel. It stays in the DOM while closed (`hiddenUntilFound`, default
 `true`), so find-in-page reaches it and print shows it expanded. It opens
-with a clip reveal at `--ds-duration-disclosure`, instant under reduced
+with a clip reveal at `--fgd-duration-disclosure`, instant under reduced
 motion.
 
 ### CollapsibleTrigger
@@ -48,9 +48,9 @@ instantly and never rotates; collapsed it is --role-muted, expanded
 
 **DisclosureGlyph Props:**
 
-| Prop | Type                        | Default | Description                                                                                                                                                                                                       |
-| :--- | :-------------------------- | :------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| size | `'row' \| 'chrome' \| null` | -       | `row` (default): `--size-px-4` (20 px) at `--ds-stroke-1-5`, for trigger&#xA;rows (Accordion, FAQ). `chrome`: `--size-px-3` (16 px) at&#xA;`--ds-stroke-1-25`, for bars, drawer groups and an inline "Show more". |
+| Prop | Type                        | Default | Description                                                                                                                                                                                                           |
+| :--- | :-------------------------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| size | `'row' \| 'chrome' \| null` | -       | `row` (default): `--size-px-4` (20 px) at `--border-size-1-5`, for trigger&#xA;rows (Accordion, FAQ). `chrome`: `--size-px-3` (16 px) at&#xA;`--border-size-1-25`, for bars, drawer groups and an inline "Show more". |
 
 ## Additional Types
 
@@ -166,9 +166,9 @@ Props for DisclosureGlyph: SVG props (without `children`) and the tier.
 ```typescript
 type DisclosureGlyphProps = {
   /**
-   * `row` (default): `--size-px-4` (20 px) at `--ds-stroke-1-5`, for trigger
+   * `row` (default): `--size-px-4` (20 px) at `--border-size-1-5`, for trigger
    * rows (Accordion, FAQ). `chrome`: `--size-px-3` (16 px) at
-   * `--ds-stroke-1-25`, for bars, drawer groups and an inline "Show more".
+   * `--border-size-1-25`, for bars, drawer groups and an inline "Show more".
    */
   size?: 'row' | 'chrome' | null;
 };

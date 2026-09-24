@@ -111,7 +111,7 @@ The saving as a word, "Save $300", in `--primary12`: the word carries the sale, 
 
 ### PricingStruck
 
-The original price of a sale, struck through at `--ds-stroke-1-5` in
+The original price of a sale, struck through at `--border-size-1-5` in
 `--role-muted` (never a status color), with a hidden "Was" for assistive
 technology. Put a `PricingPrice` inside.
 
@@ -139,14 +139,14 @@ states follow the Radio's `data-checked` and `data-disabled`.
 | :---------- | :--------------------------------------------------------------------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------- |
 | badge       | `React.ReactNode`                                                      | -       | The badge word straddling the top edge. Defaults to "Recommended" on&#xA;the recommended tier; pass your own words, or `null` for none. |
 | frameProps  | `Omit<useRender.ComponentProps<'article', {}, HTMLProps>, 'children'>` | -       | Props for the tier's frame, the faced Card (an `article`), such as `aria-labelledby`.                                                   |
-| recommended | `boolean`                                                              | -       | Marks the recommended plan: a `--ds-stroke-3` `--primary12` frame and&#xA;the badge. Default `false`. Never fill-only.                  |
+| recommended | `boolean`                                                              | -       | Marks the recommended plan: a `--border-size-2-25` `--primary12` frame and&#xA;the badge. Default `false`. Never fill-only.             |
 
 ### PricingTierList
 
 The tier set's layout, queried on the `pricing` container: stacked below
 1024 px of container (author the recommended tier first, since visual
 order follows source order), columns of one comparison row from 1024,
-capped at `--ds-container-content`. When the plans feed a form, wrap it
+capped at `--fgd-container-content`. When the plans feed a form, wrap it
 in a `RadioGroup` and put each tier's `Radio` in its `PricingChoice`.
 
 ### PricingTierName
@@ -333,7 +333,7 @@ type PricingSummaryProps = useRender.ComponentProps<'p'>;
 
 ### pricingTier
 
-Tier classes: `recommended` draws the --ds-stroke-3 --primary12 frame and the badge.
+Tier classes: `recommended` draws the --border-size-2-25 --primary12 frame and the badge.
 
 ```typescript
 type pricingTier = pricingTier;

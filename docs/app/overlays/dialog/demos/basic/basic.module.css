@@ -10,8 +10,8 @@
 }
 
 .label {
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-button);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-button);
   font-weight: var(--font-weight-6);
   color: var(--primary12);
 }
@@ -20,12 +20,12 @@
   box-sizing: border-box;
   inline-size: 100%;
   block-size: var(--size-px-8);
-  padding-inline: var(--ds-space-12);
+  padding-inline: var(--size-px-2-5);
   border: var(--border-size-1) solid var(--role-rule);
   border-radius: var(--radius-1);
   background: none;
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-body-ui);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-body-ui);
   color: var(--primary12);
 }
 
@@ -36,7 +36,7 @@
 
 .status {
   margin: 0;
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-caption);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-caption);
   color: var(--role-muted);
 }

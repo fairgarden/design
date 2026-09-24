@@ -6,7 +6,7 @@
 
 .list {
   display: grid;
-  gap: var(--ds-space-12);
+  gap: var(--size-px-2-5);
 }
 
 .group {
@@ -16,8 +16,8 @@
 
 .legend {
   margin: 0;
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-button);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-button);
   font-weight: var(--font-weight-6);
   color: var(--primary12);
 }

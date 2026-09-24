@@ -39,7 +39,7 @@ export type { SitemapLink, SitemapSection } from '../../utils/navigation'
  *   on that Ground. Block actions are §9.2 Buttons, whose `solid` class
  *   aliases the scope's action scale.
  * - States: the Accordion's `data-open`, `data-panel-open` and clip reveal
- *   live in its module; `aria-current="page"` → the --ds-stroke-3
+ *   live in its module; `aria-current="page"` → the --border-size-2-25
  *   start-edge bar and weight 700; `:hover` [D181] → sitemap, group,
  *   cell and back-to-top links are §9.3 list links (Link `kind="nav"`
  *   with `list`) and legal links its `muted` ancestor ink, so Link owns

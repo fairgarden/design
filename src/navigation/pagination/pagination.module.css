@@ -51,14 +51,14 @@
 
 @layer base {
   /* Previous at the start, Next at the end, the numbers centered; an omitted
-     end keeps its column, so the row stays put. --ds-space-40 above. */
+     end keeps its column, so the row stays put. --size-px-7-5 above. */
   .base {
     container: pagination / inline-size;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
-    column-gap: var(--ds-space-12);
-    margin-block-start: var(--ds-space-40);
+    column-gap: var(--size-px-2-5);
+    margin-block-start: var(--size-px-7-5);
     color: var(--primary12);
     white-space: nowrap;
   }
@@ -98,38 +98,38 @@
     color: var(--primary12);
   }
 
-  /* Current: unlinked, on the same --ds-size-hit cell as a page link. */
+  /* Current: unlinked, on the same --fgd-size-hit cell as a page link. */
   .current {
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-inline-size: var(--ds-size-hit);
-    min-block-size: var(--ds-size-hit);
+    min-inline-size: var(--fgd-size-hit);
+    min-block-size: var(--fgd-size-hit);
     color: var(--primary12);
   }
 
-  /* The current bar: --ds-stroke-3, --size-px-4 wide, under the numeral. A
+  /* The current bar: --border-size-2-25, --size-px-4 wide, under the numeral. A
      border, so it survives forced colors. Physical offsets: centering is
      direction-agnostic with the translate. */
   .current::after {
     content: '';
     position: absolute;
-    bottom: var(--ds-space-12);
+    bottom: var(--size-px-2-5);
     left: 50%;
     display: none;
     inline-size: var(--size-px-4);
-    border-block-end: var(--ds-stroke-3) solid var(--primary12);
+    border-block-end: var(--border-size-2-25) solid var(--primary12);
     translate: -50% 0;
   }
 
-  /* Gap "…": --role-muted, not focusable, on a --ds-size-hit cell. */
+  /* Gap "…": --role-muted, not focusable, on a --fgd-size-hit cell. */
   .gap {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-inline-size: var(--ds-size-hit);
-    min-block-size: var(--ds-size-hit);
+    min-inline-size: var(--fgd-size-hit);
+    min-block-size: var(--fgd-size-hit);
     color: var(--role-muted);
   }
 
@@ -147,10 +147,10 @@
     text-underline-offset: var(--size-px-1);
   }
 
-  /* The step pager's dots: 10 px --ds-stroke-1-5 --primary12 outlines, --size-px-2 apart. */
+  /* The step pager's dots: 10 px --border-size-1-5 --primary12 outlines, --size-px-2 apart. */
   .dots {
-    --pagination-dot: var(--ds-size-pager-dot);
-    --pagination-dot-current: var(--ds-size-pager-dot-current);
+    --pagination-dot: var(--fgd-size-pager-dot);
+    --pagination-dot-current: var(--fgd-size-pager-dot-current);
 
     display: flex;
     align-items: center;
@@ -162,14 +162,14 @@
     box-sizing: border-box;
     inline-size: var(--pagination-dot);
     block-size: var(--pagination-dot);
-    border: var(--ds-stroke-1-5) solid var(--primary12);
+    border: var(--border-size-1-5) solid var(--primary12);
     border-radius: var(--radius-round);
   }
 
   @media (--motionOK) {
     .word {
       transition-property: text-decoration-color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -200,13 +200,13 @@
   .current,
   .gap,
   .statusCount {
-    font-size: var(--ds-font-size-label);
+    font-size: var(--fgd-font-size-label);
   }
 
-  /* A number: a --ds-size-hit square hit area, no box, no rest underline [D80]. */
+  /* A number: a --fgd-size-hit square hit area, no box, no rest underline [D80]. */
   .page {
     justify-content: center;
-    min-inline-size: var(--ds-size-hit);
+    min-inline-size: var(--fgd-size-hit);
   }
 
   /* Compact: "Page 5 of 12" between the steps at every width. */
@@ -215,12 +215,12 @@
   }
 
   /*
-   * Step pager: icon-only ‹ › circles (--ds-size-control-md) around the
+   * Step pager: icon-only ‹ › circles (--fgd-size-control-md) around the
    * mono "3 of 12", centred; an omitted end keeps its column (§9.9).
    */
   .kindStep,
   .kindDots {
-    grid-template-columns: var(--ds-size-control-md) auto var(--ds-size-control-md);
+    grid-template-columns: var(--fgd-size-control-md) auto var(--fgd-size-control-md);
     justify-content: center;
   }
 
@@ -312,7 +312,7 @@
   }
 
   /* Stack guard: below 360 px the words drop and the chevrons stand alone on
-     their --ds-size-hit targets, still named "Previous" and "Next" [D166].
+     their --fgd-size-hit targets, still named "Previous" and "Next" [D166].
      The Button's gap closes with the word. */
   @media (--xs-n-below) {
     .step {
@@ -346,7 +346,7 @@
 }
 
 @layer states {
-  /* Current: the --ds-stroke-3 bar in --primary12 plus --font-weight-7. */
+  /* Current: the --border-size-2-25 bar in --primary12 plus --font-weight-7. */
   .current[aria-current='page'] {
     font-weight: var(--font-weight-7);
   }

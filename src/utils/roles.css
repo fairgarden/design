@@ -56,7 +56,7 @@
  *
  * Charts [D125]: --role-series-odd is the odd series slots' ink,
  * --secondary11 on light base grounds (and a `white` plate) and --primary12
- * elsewhere (§8.7); the --ds-series-fill / --ds-series-pattern switches
+ * elsewhere (§8.7); the --fgd-series-fill / --fgd-series-pattern switches
  * (tokens.css) pick the sequential cells' screen fill or one-ink pattern.
  */
 @layer roles {
@@ -172,11 +172,11 @@
     --role-danger-hover: var(--danger12);
     --role-danger-text: var(--danger11);
     /* Switches (tokens.css): shaped edges only on the night band in light mode [D179]. */
-    --ds-edge-shaped: none;
-    --ds-link-hover-line: none;
-    --ds-soft-hover-line: none;
-    --ds-series-fill: none;
-    --ds-series-pattern: inline;
+    --fgd-edge-shaped: none;
+    --fgd-link-hover-line: none;
+    --fgd-soft-hover-line: none;
+    --fgd-series-fill: none;
+    --fgd-series-pattern: inline;
   }
 
   /* Tone-resolved aliases [D155, D141]. */
@@ -186,8 +186,8 @@
     --role-status-fill: var(--secondary4);
     /* Two-ink charts: odd slots --secondary11 and the sequential screen fills, in both modes (§8.7). */
     --role-series-odd: var(--secondary11);
-    --ds-series-fill: inline;
-    --ds-series-pattern: none;
+    --fgd-series-fill: inline;
+    --fgd-series-pattern: none;
   }
 
   [data-tone='tinted'] {
@@ -206,7 +206,7 @@
   [data-tone='solid-dark'] {
     --role-soft-hover: var(--role-ground);
     --role-soft-hover-face: var(--role-halo);
-    --ds-soft-hover-line: underline;
+    --fgd-soft-hover-line: underline;
   }
 
   /* Dark fixed scopes: a pill fill that reaches 3:1 is its own edge. */
@@ -227,7 +227,7 @@
     /* One ink [D14]: link hover is that ink plus the underline; selection hovers the inverse pair [D181]. */
     --role-link-hover: var(--primary12);
     --role-select-hover: var(--primary11);
-    --ds-link-hover-line: underline;
+    --fgd-link-hover-line: underline;
     /* The ink pill. */
     --role-pill: var(--primary12);
     --role-pill-label: var(--role-inverse);
@@ -298,7 +298,7 @@
     --role-grain-light: var(--primary4);
     --role-grain-dark: var(--primary1);
     /* The one seam tone separates (from a light page ground): the shaped edge may sit here [D179]. */
-    --ds-edge-shaped: block;
+    --fgd-edge-shaped: block;
   }
 
   [data-ground='forest'] {
@@ -320,7 +320,7 @@
     --role-grain-light: var(--primary8);
     --role-grain-dark: var(--primary6);
     --role-disabled-edge: var(--primary12); /* one text ink [D85, D115] */
-    --ds-muted-weight-step: 0; /* no muted tier [D175] */
+    --fgd-muted-weight-step: 0; /* no muted tier [D175] */
   }
 
   [data-ground='leaf'] {
@@ -339,7 +339,7 @@
     --role-action-edge: var(--primary12);
     --role-grain-light: var(--secondary8);
     --role-grain-dark: var(--secondary10);
-    --ds-muted-weight-step: 0; /* no muted tier [D175] */
+    --fgd-muted-weight-step: 0; /* no muted tier [D175] */
   }
 
   [data-ground='amber'] {
@@ -358,7 +358,7 @@
     --role-action-edge: var(--primary12);
     --role-grain-light: var(--secondary6);
     --role-grain-dark: var(--secondary8);
-    --ds-muted-weight-step: 0; /* no muted tier [D175] */
+    --fgd-muted-weight-step: 0; /* no muted tier [D175] */
   }
 
   [data-ground='clay'] {
@@ -377,7 +377,7 @@
     --role-action-edge: var(--primary12);
     --role-grain-light: var(--secondary8);
     --role-grain-dark: var(--secondary10);
-    --ds-muted-weight-step: 0; /* no muted tier [D175] */
+    --fgd-muted-weight-step: 0; /* no muted tier [D175] */
   }
 
   [data-ground='pink'] {
@@ -395,7 +395,7 @@
     --role-action-label: var(--primary1);
     --role-action-edge: var(--primary12);
     --role-grain-light: var(--secondary7);
-    --ds-muted-weight-step: 0; /* no muted tier [D175] */
+    --fgd-muted-weight-step: 0; /* no muted tier [D175] */
   }
 
   [data-ground='royal'] {
@@ -413,7 +413,7 @@
     --role-action-label: var(--secondary-contrast);
     --role-action-edge: var(--secondary9);
     --role-grain-dark: var(--secondary7);
-    --ds-muted-weight-step: 0; /* no muted tier [D175] */
+    --fgd-muted-weight-step: 0; /* no muted tier [D175] */
   }
 
   [data-ground='brick'] {
@@ -434,7 +434,7 @@
     --role-status-text: var(--secondary12);
     --role-grain-light: var(--secondary8);
     --role-grain-dark: var(--secondary6);
-    --ds-muted-weight-step: 0; /* no muted tier [D175] */
+    --fgd-muted-weight-step: 0; /* no muted tier [D175] */
   }
 
   /*
@@ -483,7 +483,7 @@
    */
   [data-theme='dark']:not([data-ground]) [data-ground='night'] {
     --role-seam: var(--primary12);
-    --ds-edge-shaped: none;
+    --fgd-edge-shaped: none;
   }
 
   /*
@@ -514,7 +514,7 @@
     --role-pill: var(--secondary9);
     --role-pill-label: var(--secondary-contrast);
     --role-pill-edge: var(--secondary9);
-    --ds-link-hover-line: none;
+    --fgd-link-hover-line: none;
   }
 
   [data-theme='dark'] [data-ground='white'][data-scheme='page'] {
@@ -550,14 +550,14 @@
     --role-select-text-label: var(--role-select-mark);
     --role-select-text-edge: var(--role-select-edge);
     --role-select-text-hover: var(--role-select-hover);
-    --ds-link-hover-line: none;
+    --fgd-link-hover-line: none;
   }
 
   [data-theme='dark'] [data-ground='rose'][data-scheme='page'],
   [data-theme='dark'] [data-ground='heather'][data-scheme='page'] {
     /* No text-safe accent (--red9 4.17, --purple10 3.55): links stay ink, and hover adds the underline [D176, D181]. */
     --role-link-hover: var(--primary12);
-    --ds-link-hover-line: underline;
+    --fgd-link-hover-line: underline;
   }
 
   [data-theme='dark'] [data-ground='heather'][data-scheme='page'] {
@@ -619,7 +619,7 @@
       --role-pill: var(--secondary9);
       --role-pill-label: var(--secondary-contrast);
       --role-pill-edge: var(--secondary9);
-      --ds-link-hover-line: none;
+      --fgd-link-hover-line: none;
     }
 
     :root:not([data-theme='light']) [data-ground='white'][data-scheme='page'] {
@@ -654,14 +654,14 @@
       --role-select-text-label: var(--role-select-mark);
       --role-select-text-edge: var(--role-select-edge);
       --role-select-text-hover: var(--role-select-hover);
-      --ds-link-hover-line: none;
+      --fgd-link-hover-line: none;
     }
 
     :root:not([data-theme='light']) [data-ground='rose'][data-scheme='page'],
     :root:not([data-theme='light']) [data-ground='heather'][data-scheme='page'] {
       /* No text-safe accent (--red9 4.17, --purple10 3.55): links stay ink, and hover adds the underline [D176, D181]. */
       --role-link-hover: var(--primary12);
-      --ds-link-hover-line: underline;
+      --fgd-link-hover-line: underline;
     }
 
     :root:not([data-theme='light']) [data-ground='heather'][data-scheme='page'] {
@@ -678,7 +678,7 @@
 
     :root:not([data-theme='light']) [data-ground='night'] {
       --role-seam: var(--primary12);
-      --ds-edge-shaped: none;
+      --fgd-edge-shaped: none;
     }
   }
 
@@ -712,7 +712,7 @@
     --role-pill: var(--secondary9);
     --role-pill-label: var(--secondary-contrast);
     --role-pill-edge: var(--secondary11);
-    --ds-link-hover-line: none;
+    --fgd-link-hover-line: none;
   }
 
   [data-ground='white'],
@@ -751,7 +751,7 @@
     --role-pill: var(--secondary9);
     --role-pill-label: var(--secondary-contrast);
     --role-pill-edge: var(--secondary11);
-    --ds-link-hover-line: none;
+    --fgd-link-hover-line: none;
   }
 
   [data-ground='rose'],
@@ -794,6 +794,6 @@
    */
   :root [data-theme='light']:not([data-ground]) [data-ground='night'] {
     --role-seam: var(--role-ground);
-    --ds-edge-shaped: block;
+    --fgd-edge-shaped: block;
   }
 }

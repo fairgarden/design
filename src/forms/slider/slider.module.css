@@ -44,7 +44,7 @@
       'label value'
       'control control';
     align-items: baseline;
-    column-gap: var(--ds-space-12);
+    column-gap: var(--size-px-2-5);
     min-inline-size: 0;
     color: var(--primary12);
   }
@@ -65,13 +65,13 @@
     --type-weight: var(--font-weight-6);
   }
 
-  /* The control is the --ds-size-hit tall press target; the track sits centered in it. */
+  /* The control is the --fgd-size-hit tall press target; the track sits centered in it. */
   .control {
     grid-area: control;
     display: flex;
     align-items: center;
     box-sizing: border-box;
-    block-size: var(--ds-size-hit);
+    block-size: var(--fgd-size-hit);
     touch-action: none;
     user-select: none;
   }
@@ -109,14 +109,14 @@
     background-color: var(--role-halo);
   }
 
-  /* Every thumb reaches --ds-size-hit; the hit area extends invisibly [D43]. */
+  /* Every thumb reaches --fgd-size-hit; the hit area extends invisibly [D43]. */
   .thumb::after {
     content: '';
     position: absolute;
     inset-block-start: 50%;
     inset-inline-start: 50%;
-    inline-size: var(--ds-size-hit);
-    block-size: var(--ds-size-hit);
+    inline-size: var(--fgd-size-hit);
+    block-size: var(--fgd-size-hit);
     translate: -50% -50%;
   }
 
@@ -141,10 +141,10 @@
   .edge {
     display: none;
     position: absolute;
-    inset-block-start: calc(var(--ds-dot-fine) / 2);
-    inset-inline-start: calc(var(--ds-dot-fine) / 2);
-    inline-size: calc(100% - var(--ds-dot-fine));
-    block-size: calc(100% - var(--ds-dot-fine));
+    inset-block-start: calc(var(--fgd-dot-fine) / 2);
+    inset-inline-start: calc(var(--fgd-dot-fine) / 2);
+    inline-size: calc(100% - var(--fgd-dot-fine));
+    block-size: calc(100% - var(--fgd-dot-fine));
     overflow: visible;
     pointer-events: none;
   }
@@ -152,7 +152,7 @@
   .edgeLine {
     fill: none;
     stroke: var(--role-disabled-edge);
-    rx: calc(var(--slider-edge-radius) - var(--ds-dot-fine) / 2);
+    rx: calc(var(--slider-edge-radius) - var(--fgd-dot-fine) / 2);
   }
 
   /*
@@ -163,8 +163,8 @@
   .ticks {
     grid-area: ticks;
     position: relative;
-    min-block-size: calc(var(--ds-space-12) + var(--size-px-1) + 1lh);
-    margin-block-start: calc(var(--size-px-2) - (var(--ds-size-hit) - var(--size-px-2)) / 2);
+    min-block-size: calc(var(--size-px-2-5) + var(--size-px-1) + 1lh);
+    margin-block-start: calc(var(--size-px-2) - (var(--fgd-size-hit) - var(--size-px-2)) / 2);
     margin-inline: var(--border-size-1);
   }
 
@@ -178,17 +178,17 @@
     inline-size: 0;
   }
 
-  /* Minor ticks are half the --ds-space-12 major tick (2:1); both --border-size-1 in --primary12. */
+  /* Minor ticks are half the --size-px-2-5 major tick (2:1); both --border-size-1 in --primary12. */
   .tick::before {
     content: '';
     display: block;
     inline-size: 0;
-    block-size: var(--ds-size-tick-minor);
+    block-size: var(--fgd-size-tick-minor);
     border-inline-start: var(--border-size-1) solid var(--primary12);
   }
 
   .tickMajor::before {
-    block-size: var(--ds-space-12);
+    block-size: var(--size-px-2-5);
   }
 
   .tickStart {
@@ -236,11 +236,11 @@
     }
   }
 
-  /* Hover and drag transitions [D181]: --ds-duration-quick, --ease-out-3. */
+  /* Hover and drag transitions [D181]: --fgd-duration-quick, --ease-out-3. */
   @media (--motionOK) {
     .thumb {
       transition-property: border-color, background-color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -260,7 +260,7 @@
   .control[data-orientation='vertical'] {
     flex-direction: column;
     justify-content: center;
-    inline-size: var(--ds-size-hit);
+    inline-size: var(--fgd-size-hit);
     block-size: 100%;
     min-block-size: var(--size-px-13);
   }
@@ -285,14 +285,14 @@
    * --primary3 fill where soft fills apply and its rest --role-halo where
    * they drop (--role-soft-hover-face, never the ground color), edge
    * unchanged (§10.10; derived, flagged) [D181]. Dragging: the edge steps
-   * to --ds-stroke-3, an active state, and the face returns to rest.
+   * to --border-size-2-25, an active state, and the face returns to rest.
    */
   .thumb:not([data-disabled]):hover {
     background-color: var(--role-soft-hover-face);
   }
 
   .thumb[data-dragging]:not([data-disabled]) {
-    --slider-thumb-edge: var(--ds-stroke-3);
+    --slider-thumb-edge: var(--border-size-2-25);
 
     background-color: var(--role-halo);
   }
@@ -311,8 +311,8 @@
 
   /* Focus: the ring sits on the thumb when its range input has keyboard focus [D45]. */
   .thumb:has(:focus-visible) {
-    outline: var(--ds-focus-width) solid var(--primary12);
-    outline-offset: var(--ds-focus-offset);
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: var(--fgd-focus-offset);
   }
 
   /*

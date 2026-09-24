@@ -13,7 +13,7 @@
 .row {
   display: flex;
   align-items: center;
-  gap: var(--ds-space-12);
+  gap: var(--size-px-2-5);
   padding-inline-end: var(--size-px-2);
   border-block-end: var(--border-size-1) solid var(--role-rule);
 }
@@ -23,7 +23,7 @@
   flex: 1 1 auto;
   align-items: center;
   align-self: stretch;
-  min-block-size: var(--ds-size-hit);
+  min-block-size: var(--fgd-size-hit);
   padding-inline: var(--size-px-2);
   -webkit-touch-callout: none;
 }
@@ -34,14 +34,14 @@
 }
 
 .name {
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-body-ui);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-body-ui);
   color: var(--primary12);
 }
 
 .status {
   margin: 0;
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-caption);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-caption);
   color: var(--role-muted);
 }

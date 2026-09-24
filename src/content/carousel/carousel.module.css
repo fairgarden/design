@@ -45,7 +45,7 @@
     --carousel-slide: 88%;
 
     display: flex;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -56,7 +56,7 @@
     content: '';
     flex: none;
     inline-size: var(--carousel-bleed, 0px);
-    margin-inline-start: calc(-1 * var(--ds-space-12));
+    margin-inline-start: calc(-1 * var(--size-px-2-5));
   }
 
   .slide {
@@ -82,7 +82,7 @@
 
   .pager {
     display: flex;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
   }
 
   .printSummary {
@@ -115,7 +115,7 @@
    * post 3 + peek, photos the 480 px strip [D186].
    */
   .cards .list {
-    --carousel-slide: calc((88% - var(--ds-space-12)) / 2);
+    --carousel-slide: calc((88% - var(--size-px-2-5)) / 2);
   }
 
   .post .list {
@@ -140,7 +140,7 @@
 
   @container carousel (width >= 360px) {
     .cards .list {
-      --carousel-slide: calc((88cqi - var(--ds-space-12)) / 2);
+      --carousel-slide: calc((88cqi - var(--size-px-2-5)) / 2);
     }
 
     .post .list {
@@ -154,13 +154,13 @@
 
   @container carousel (width >= 768px) {
     .post .list {
-      --carousel-slide: calc((88cqi - var(--ds-space-12)) / 2);
+      --carousel-slide: calc((88cqi - var(--size-px-2-5)) / 2);
     }
   }
 
   @container carousel (width >= 1024px) {
     .post .list {
-      --carousel-slide: calc((88cqi - 2 * var(--ds-space-12)) / 3);
+      --carousel-slide: calc((88cqi - 2 * var(--size-px-2-5)) / 3);
     }
 
     /*
@@ -176,7 +176,7 @@
   /*
    * A slide's figure runs its photo and caption across its full width and
    * never takes the side caption, so the Figure's 12-track gutters go:
-   * eleven of them would floor a portrait slide at 11 × --ds-space-margin
+   * eleven of them would floor a portrait slide at 11 × --fgd-space-margin
    * and push its photo past the slide into the next.
    */
   .photo {

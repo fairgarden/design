@@ -3,7 +3,7 @@
  * Parts: base (the panel, beside the Dialog's own base), glyph. The panel,
  * body, title, description and action bar are the Dialog's
  * (dialog.module.css); this module adds only the Alert's status glyph:
- * ▲ with ! (warning) or ◆ with × (danger) at --ds-size-icon-block above the
+ * ▲ with ! (warning) or ◆ with × (danger) at --fgd-size-icon-block above the
  * title, in --role-status of the status scale, which the glyph carries as
  * its own secondary, with its inner mark [D58, D129, D141, D155].
  */
@@ -28,15 +28,15 @@
   .glyph {
     flex: none;
     display: block;
-    inline-size: var(--ds-size-icon-block);
-    block-size: var(--ds-size-icon-block);
+    inline-size: var(--fgd-size-icon-block);
+    block-size: var(--fgd-size-icon-block);
     margin-block-start: var(--alert-dialog-inset);
     margin-inline: var(--alert-dialog-inset);
     overflow: visible;
     color: var(--role-status);
     fill: var(--role-status-fill);
     stroke: var(--role-status-fill);
-    stroke-width: var(--ds-stroke-1-5);
+    stroke-width: var(--border-size-1-5);
     stroke-linecap: round;
     stroke-linejoin: round;
   }

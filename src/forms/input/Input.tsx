@@ -169,7 +169,7 @@ interface MultilineProps {
 
 type LabelInsideProps =
   | {
-      /** The `--ds-size-control-xl` box with the label inside. Default `false`. */
+      /** The `--fgd-size-control-xl` box with the label inside. Default `false`. */
       labelInside: true
       /** The label drawn inside the box, title case [D160]. Required with `labelInside`. */
       label: React.ReactNode
@@ -178,7 +178,7 @@ type LabelInsideProps =
 
 type ButtedProps =
   | {
-      /** Joins the action cell at the box's end: --ds-radius-none at the seam. */
+      /** Joins the action cell at the box's end: --radius-0 at the seam. */
       butted: 'end'
       /** The butted action cell; one-field forms only. */
       action: InputAction

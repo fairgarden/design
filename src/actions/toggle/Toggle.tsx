@@ -29,7 +29,7 @@ import styles from './toggle.module.css'
  *   --size-px-7), iconOnly false; color axes none [D133]. Inside a
  *   ToggleGroup the group passes `segment` or `chip` through context.
  * - Color fallback: inherits the scope.
- * - States: data-pressed → selected: --ds-stroke-3 inside edge, ✓ / ● or
+ * - States: data-pressed → selected: --border-size-2-25 inside edge, ✓ / ● or
  *   the icon swap, --font-weight-7, and the inverse pair (outline, segment)
  *   or --role-select (chip); :active → the momentary inverse pair; :hover
  *   (not disabled) [D181] → off outline and segment: a --role-soft-hover

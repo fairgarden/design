@@ -7,14 +7,14 @@
 
 .face {
   display: flex;
-  gap: var(--ds-space-12);
+  gap: var(--size-px-2-5);
   align-items: center;
   padding: var(--size-px-5);
   border: var(--border-size-1) solid var(--role-edge);
-  border-radius: var(--ds-radius-8);
+  border-radius: var(--radius-2-25);
 }
 
 .name {
-  font-family: var(--ds-font-ui);
+  font-family: var(--fgd-font-ui);
   font-weight: var(--font-weight-6);
 }

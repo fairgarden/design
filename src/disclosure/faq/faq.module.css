@@ -44,11 +44,11 @@
     color: var(--primary12);
   }
 
-  /* Chapter stack (§3.5 Recipe A): H2, then --ds-space-stack to the first rule. */
+  /* Chapter stack (§3.5 Recipe A): H2, then --fgd-space-stack to the first rule. */
   .header {
     display: grid;
     gap: var(--size-px-5);
-    margin-block-end: var(--ds-space-stack);
+    margin-block-end: var(--fgd-space-stack);
   }
 
   /* Section head in --role-heading; the item heads below are --primary12 [D60]. */
@@ -59,7 +59,7 @@
 
   .intro {
     margin: 0;
-    max-inline-size: var(--ds-measure-reading);
+    max-inline-size: var(--fgd-measure-reading);
     color: var(--primary12);
   }
 
@@ -87,7 +87,7 @@
     margin: 0;
   }
 
-  /* The row: ≥ --ds-size-control-xl tall, --size-px-3 vertical padding. */
+  /* The row: ≥ --fgd-size-control-xl tall, --size-px-3 vertical padding. */
   .trigger {
     position: relative;
     display: flex;
@@ -95,7 +95,7 @@
     gap: var(--size-px-3);
     box-sizing: border-box;
     inline-size: 100%;
-    min-block-size: var(--ds-size-control-xl);
+    min-block-size: var(--fgd-size-control-xl);
     margin: 0;
     padding-block: var(--size-px-3);
     padding-inline: var(--faq-bar-inset) 0;
@@ -123,13 +123,13 @@
     margin-block: calc((1lh - var(--size-px-4)) / 2);
   }
 
-  /* The optional open bar: a --ds-stroke-3 line at the row's start edge, shown under `barred`. */
+  /* The optional open bar: a --border-size-2-25 line at the row's start edge, shown under `barred`. */
   .openBar {
     display: none;
     position: absolute;
     inset-block: 0;
     inset-inline-start: 0;
-    border-inline-start: var(--ds-stroke-3) solid var(--primary12);
+    border-inline-start: var(--border-size-2-25) solid var(--primary12);
   }
 
   /* The §10.13 clip reveal [D91]: the panel's edge wipes open; never a fade. */
@@ -139,9 +139,9 @@
     overflow: clip;
   }
 
-  /* Answers: text serif within the reading measure; --ds-space-12 below the question, --size-px-5 below. */
+  /* Answers: text serif within the reading measure; --size-px-2-5 below the question, --size-px-5 below. */
   .answer {
-    max-inline-size: var(--ds-measure-reading);
+    max-inline-size: var(--fgd-measure-reading);
     padding-block: 0 var(--size-px-5);
     padding-inline-start: var(--faq-bar-inset);
     color: var(--primary12);
@@ -155,14 +155,14 @@
   @media (--motionOK) {
     .panel {
       transition-property: block-size;
-      transition-duration: var(--ds-duration-disclosure);
+      transition-duration: var(--fgd-duration-disclosure);
       transition-timing-function: var(--ease-out-3);
     }
 
-    /* Hover transition [D181]: --ds-duration-quick, --ease-out-3. */
+    /* Hover transition [D181]: --fgd-duration-quick, --ease-out-3. */
     .question {
       transition-property: text-decoration-color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -177,17 +177,17 @@
 
   /* Keyed detail: a leading block icon per row; answers indent to the question column. */
   .keyed .icon {
-    margin-block: calc((1lh - var(--ds-size-icon-block)) / 2);
+    margin-block: calc((1lh - var(--fgd-size-icon-block)) / 2);
     color: var(--primary12);
   }
 
   .keyed .answer {
-    padding-inline-start: calc(var(--faq-bar-inset) + var(--ds-size-icon-block) + var(--size-px-3));
+    padding-inline-start: calc(var(--faq-bar-inset) + var(--fgd-size-icon-block) + var(--size-px-3));
   }
 
   /* Barred: every row keeps the bar's inset, so questions stay aligned open or closed. */
   .barred {
-    --faq-bar-inset: var(--ds-space-12);
+    --faq-bar-inset: var(--size-px-2-5);
   }
 
   /* Split (§12.5): a page-grid placement from --lg-n-above, header in 4 of 12 columns, the list in 8. */
@@ -195,7 +195,7 @@
     .split {
       display: grid;
       grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
-      column-gap: var(--ds-space-margin);
+      column-gap: var(--fgd-space-margin);
       align-items: start;
     }
 
@@ -213,9 +213,9 @@
 }
 
 @layer states {
-  /* Expanded: the question-to-answer gap closes to --ds-space-12. */
+  /* Expanded: the question-to-answer gap closes to --size-px-2-5. */
   .trigger[data-panel-open] {
-    padding-block-end: var(--ds-space-12);
+    padding-block-end: var(--size-px-2-5);
   }
 
   .barred .trigger[data-panel-open] .openBar {
@@ -259,7 +259,7 @@
     .trigger,
     .trigger[data-panel-open] {
       min-block-size: 0;
-      padding-block-end: var(--ds-space-12);
+      padding-block-end: var(--size-px-2-5);
     }
 
     .panel,

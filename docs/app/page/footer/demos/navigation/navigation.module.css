@@ -4,8 +4,8 @@
 }
 
 .content {
-  padding: var(--size-px-7) var(--ds-space-margin);
-  font-family: var(--ds-font-ui);
+  padding: var(--size-px-7) var(--fgd-space-margin);
+  font-family: var(--fgd-font-ui);
   color: var(--role-muted);
 }
 

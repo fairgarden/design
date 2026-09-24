@@ -5,8 +5,8 @@
  * dashes are exact [D36]), drawing (holds the §6.5 Sticker), trail (holds
  * the shared ornament-trail), heading, text, action. Static. Colors are role
  * variables only; local custom properties carry dimensions only:
- *   --empty-state-pad   the frame padding (--ds-space-40; --size-px-5 below 360 px)
- *   --empty-state-art   the drawing's fixed size (--ds-size-art-s; --size-px-9 below 360 px)
+ *   --empty-state-pad   the frame padding (--size-px-7-5; --size-px-5 below 360 px)
+ *   --empty-state-art   the drawing's fixed size (--fgd-size-art-s; --size-px-9 below 360 px)
  */
 
 /* Composition sits in top-level rules, outside the layers: Lightning CSS
@@ -27,8 +27,8 @@
 
 @layer base {
   .base {
-    --empty-state-pad: var(--ds-space-40);
-    --empty-state-art: var(--ds-size-art-s);
+    --empty-state-pad: var(--size-px-7-5);
+    --empty-state-art: var(--fgd-size-art-s);
 
     container-type: inline-size;
     min-inline-size: 0;
@@ -45,7 +45,7 @@
     text-align: center;
   }
 
-  /* The §4.7.4 provisional frame: line-dashed in --role-rule, --ds-radius-8, inset by
+  /* The §4.7.4 provisional frame: line-dashed in --role-rule, --radius-2-25, inset by
      half its stroke so the whole line sits inside the box. */
   .frameLine {
     position: absolute;
@@ -59,8 +59,8 @@
   .frameRect {
     fill: none;
     stroke: var(--role-rule);
-    rx: var(--ds-radius-8);
-    ry: var(--ds-radius-8);
+    rx: var(--radius-2-25);
+    ry: var(--radius-2-25);
   }
 
   /* Stack: drawing or trail → 24 → heading → 12 → text → 24 → action. */
@@ -97,7 +97,7 @@
   .text {
     position: relative;
     max-inline-size: 40ch;
-    margin: var(--ds-space-12) 0 0;
+    margin: var(--size-px-2-5) 0 0;
     color: var(--primary12);
   }
 
@@ -106,7 +106,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
     margin-block-start: var(--size-px-5);
   }
 
@@ -130,7 +130,7 @@
   /* Framed and illustrated share the dashed frame; illustrated adds the drawing. */
   .framed .frame,
   .illustrated .frame {
-    border-radius: var(--ds-radius-8);
+    border-radius: var(--radius-2-25);
   }
 
   /* Inline: one sentence in place of the content; no frame, no padding. */

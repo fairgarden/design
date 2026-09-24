@@ -120,7 +120,7 @@ interface GroundFieldProps {
    */
   preset: FieldPreset
   /**
-   * The one framed feature field per page: `--ds-radius-feature` and a
+   * The one framed feature field per page: `--fgd-radius-feature` and a
    * `--border-size-2` `--primary12` edge [D95]. Default `false`.
    */
   framed?: boolean

@@ -27,7 +27,7 @@ import styles from './tabs.module.css'
  * - Defaults: variant underline, filled false; color axes: none.
  * - Color fallback: inherits the scope.
  * - States: the current tab (`data-active`, Base UI's name for §9.5's
- *   `data-selected`) → the --ds-stroke-3 bar (the Indicator, placed from
+ *   `data-selected`) → the --border-size-2-25 bar (the Indicator, placed from
  *   Base UI's active-tab position variables) and --font-weight-7, plus the
  *   --role-select cell under `filled`; `:hover` (not disabled) → the
  *   bare-text underline under the label (--role-accent at --border-size-2,
@@ -249,8 +249,8 @@ export type TabsTabProps = BaseTabs.Tab.Props & {
 
 /**
  * One tab: an optional icon and a caps `type-label` label, at least
- * `--ds-size-hit` tall. Inactive labels are `--role-muted` at weight 600,
- * the current label `--primary12` at 700 with the `--ds-stroke-3` bar.
+ * `--fgd-size-hit` tall. Inactive labels are `--role-muted` at weight 600,
+ * the current label `--primary12` at 700 with the `--border-size-2-25` bar.
  * Prefer removing a tab to disabling it.
  */
 export function TabsTab(props: TabsTabProps) {

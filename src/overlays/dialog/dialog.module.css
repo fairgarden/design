@@ -5,7 +5,7 @@
  * description, actions, backdrop.
  *
  * The face is the `white` overlay scope's --primary1 and the frame is
- * --ds-stroke-3 --primary12 in both modes, never --role-rule [D92, D156].
+ * --border-size-2-25 --primary12 in both modes, never --role-rule [D92, D156].
  * No tinted backdrop: the frame, the titled top bar, the inert page and the
  * full-screen sheet carry the modal state [D24 → D121]. Below --md-n-above
  * the panel is a full-screen opaque sheet; from it, centered. Motion is
@@ -49,21 +49,21 @@
     margin: 0;
     padding: 0;
     border: 0 solid var(--primary12);
-    border-radius: var(--ds-radius-none);
+    border-radius: var(--radius-0);
     background-color: var(--primary1);
     color: var(--primary12);
     clip-path: inset(0);
   }
 
-  /* Centered panel: --size-sm wide, at least --ds-space-40 from every edge, framed. */
+  /* Centered panel: --size-sm wide, at least --size-px-7-5 from every edge, framed. */
   @media (--md-n-above) {
     .base {
-      inline-size: min(var(--size-sm), calc(100% - 2 * var(--ds-space-40)));
+      inline-size: min(var(--size-sm), calc(100% - 2 * var(--size-px-7-5)));
       block-size: fit-content;
-      max-block-size: calc(100% - 2 * var(--ds-space-40));
+      max-block-size: calc(100% - 2 * var(--size-px-7-5));
       margin: auto;
-      border-width: var(--ds-stroke-3);
-      border-radius: var(--ds-radius-8);
+      border-width: var(--border-size-2-25);
+      border-radius: var(--radius-2-25);
     }
   }
 
@@ -80,9 +80,9 @@
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     column-gap: var(--size-px-3);
-    min-block-size: var(--ds-size-control-xl);
+    min-block-size: var(--fgd-size-control-xl);
     padding: var(--dialog-inset);
-    border-block-end: var(--ds-stroke-3) solid var(--primary12);
+    border-block-end: var(--border-size-2-25) solid var(--primary12);
   }
 
   @media (--md-n-above) {
@@ -142,7 +142,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
     padding: var(--dialog-inset);
   }
 
@@ -172,17 +172,17 @@
   @media (--motionOK) {
     .base {
       transition-property: clip-path;
-      transition-duration: var(--ds-duration-disclosure);
+      transition-duration: var(--fgd-duration-disclosure);
       transition-timing-function: var(--ease-out-3);
     }
   }
 }
 
 @layer variants {
-  /* Wide: the detail-view width, --ds-measure-reading, from --md-n-above. */
+  /* Wide: the detail-view width, --fgd-measure-reading, from --md-n-above. */
   @media (--md-n-above) {
     .wide {
-      inline-size: min(var(--ds-measure-reading), calc(100% - 2 * var(--ds-space-40)));
+      inline-size: min(var(--fgd-measure-reading), calc(100% - 2 * var(--size-px-7-5)));
     }
   }
 
@@ -214,8 +214,8 @@
 
   /* Focus parked on the panel itself (opened by touch): the ring sits inside the frame. */
   .base:focus-visible {
-    outline: var(--ds-focus-width) solid var(--primary12);
-    outline-offset: calc(-2 * var(--ds-focus-width));
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: calc(-2 * var(--fgd-focus-width));
   }
 
   /* Overflow edges: --border-size-2 --role-rule while content is hidden in that direction (§10.19). */

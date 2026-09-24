@@ -45,7 +45,7 @@
     align-items: start;
     align-content: center;
     box-sizing: border-box;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     min-inline-size: 0;
     color: var(--primary12);
   }
@@ -62,7 +62,7 @@
     inline-size: var(--size-px-4);
     block-size: var(--size-px-4);
     margin-block: calc((1lh - var(--size-px-4)) / 2) 0;
-    margin-inline: 0 var(--ds-space-12);
+    margin-inline: 0 var(--size-px-2-5);
     border: var(--checkbox-edge) solid var(--primary12);
     border-radius: var(--radius-1);
     background: none;
@@ -111,15 +111,15 @@
   .value {
     grid-area: value;
     color: var(--primary12);
-    font-variant-numeric: var(--ds-numerals-data);
+    font-variant-numeric: var(--fgd-numerals-data);
   }
 
   .thumb {
     grid-area: thumb;
     display: block;
-    inline-size: var(--ds-size-thumb);
+    inline-size: var(--fgd-size-thumb);
     aspect-ratio: var(--ratio-square);
-    margin-inline-end: var(--ds-space-12);
+    margin-inline-end: var(--size-px-2-5);
     overflow: hidden;
     overflow: clip;
   }
@@ -149,10 +149,10 @@
   .edge {
     display: none;
     position: absolute;
-    inset-block-start: calc(var(--ds-dot-fine) / 2);
-    inset-inline-start: calc(var(--ds-dot-fine) / 2);
-    inline-size: calc(100% - var(--ds-dot-fine));
-    block-size: calc(100% - var(--ds-dot-fine));
+    inset-block-start: calc(var(--fgd-dot-fine) / 2);
+    inset-inline-start: calc(var(--fgd-dot-fine) / 2);
+    inline-size: calc(100% - var(--fgd-dot-fine));
+    block-size: calc(100% - var(--fgd-dot-fine));
     overflow: visible;
     pointer-events: none;
   }
@@ -160,7 +160,7 @@
   .edgeLine {
     fill: none;
     stroke: var(--role-disabled-edge);
-    rx: calc(var(--checkbox-edge-radius) - var(--ds-dot-fine) / 2);
+    rx: calc(var(--checkbox-edge-radius) - var(--fgd-dot-fine) / 2);
   }
 
   @media (--forcedColors) {
@@ -170,20 +170,20 @@
     }
   }
 
-  /* Hover transitions [D181]: --ds-duration-quick, --ease-out-3. */
+  /* Hover transitions [D181]: --fgd-duration-quick, --ease-out-3. */
   @media (--motionOK) {
     .box,
     .base,
     .label {
       transition-property: border-color, background-color, text-decoration-color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }
 }
 
 @layer variants {
-  /* Standard: box, then label and description; --ds-space-12 gap. */
+  /* Standard: box, then label and description; --size-px-2-5 gap. */
   .standard {
     grid-template-columns: auto minmax(0, 1fr);
     grid-template-areas:
@@ -193,13 +193,13 @@
 
   /*
    * The option card (§10.7 owns it; §12.2 cites it): a bordered row with a
-   * --border-size-1 --role-rule edge, --ds-radius-8 and --size-px-3
+   * --border-size-1 --role-rule edge, --radius-2-25 and --size-px-3
    * padding. The padding absorbs the edge step, so checking never moves
    * the content.
    */
   .card {
     --checkbox-card-edge: var(--border-size-1);
-    --checkbox-edge-radius: var(--ds-radius-8);
+    --checkbox-edge-radius: var(--radius-2-25);
 
     grid-template-columns: auto auto minmax(0, 1fr) auto;
     grid-template-areas:
@@ -208,7 +208,7 @@
     align-items: center;
     padding: calc(var(--size-px-3) + var(--border-size-1) - var(--checkbox-card-edge));
     border: var(--checkbox-card-edge) solid var(--role-rule);
-    border-radius: var(--ds-radius-8);
+    border-radius: var(--radius-2-25);
   }
 
   .card .box {
@@ -217,7 +217,7 @@
 
   .card .value {
     justify-self: end;
-    margin-inline-start: var(--ds-space-12);
+    margin-inline-start: var(--size-px-2-5);
     text-align: end;
   }
 
@@ -276,10 +276,10 @@
 }
 
 @layer states {
-  /* Checked and indeterminate: --role-select fill, the mark, a --ds-stroke-3 --role-select-edge (§10.1). */
+  /* Checked and indeterminate: --role-select fill, the mark, a --border-size-2-25 --role-select-edge (§10.1). */
   .box[data-checked],
   .box[data-indeterminate] {
-    --checkbox-edge: var(--ds-stroke-3);
+    --checkbox-edge: var(--border-size-2-25);
 
     border-color: var(--role-select-edge);
     background-color: var(--role-select);
@@ -327,8 +327,8 @@
 
   /* Focus: 2 px --primary12 ring at a 2 px offset outside the box, keyboard only [D45]. */
   .box:focus-visible {
-    outline: var(--ds-focus-width) solid var(--primary12);
-    outline-offset: var(--ds-focus-offset);
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: var(--fgd-focus-offset);
   }
 
   /*
@@ -370,14 +370,14 @@
 
 @layer print {
   @media print {
-    /* A 0.75 pt square; checked keeps its --ds-stroke-3 step and a black mark (§10.7). */
+    /* A 0.75 pt square; checked keeps its --border-size-2-25 step and a black mark (§10.7). */
     .box {
       --checkbox-edge: var(--border-size-1);
     }
 
     .box[data-checked],
     .box[data-indeterminate] {
-      --checkbox-edge: var(--ds-stroke-3);
+      --checkbox-edge: var(--border-size-2-25);
     }
 
     /* Disabled controls do not print (§10.1). */

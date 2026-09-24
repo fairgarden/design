@@ -3,9 +3,9 @@
   inline-size: 100%;
 }
 
-/* A §11.1 band: --ds-space-section block padding, the reading column inside. */
+/* A §11.1 band: --fgd-space-section block padding, the reading column inside. */
 .band {
-  padding-block: var(--ds-space-section);
+  padding-block: var(--fgd-space-section);
 }
 
 /* The band's reading column: the page margin, then at most one measure,
@@ -13,22 +13,22 @@
 .column {
   display: grid;
   gap: var(--size-px-3);
-  inline-size: min(100% - 2 * var(--ds-space-margin), var(--ds-measure-reading));
+  inline-size: min(100% - 2 * var(--fgd-space-margin), var(--fgd-measure-reading));
   margin-inline: auto;
 }
 
 .head {
   margin: 0;
-  font-family: var(--ds-font-display);
-  font-size: var(--ds-font-size-kicker);
+  font-family: var(--fgd-font-display);
+  font-size: var(--fgd-font-size-kicker);
   font-weight: var(--font-weight-7);
   color: var(--role-heading);
 }
 
 .text {
   margin: 0;
-  font-family: var(--ds-font-text);
-  font-size: var(--ds-font-size-body);
+  font-family: var(--fgd-font-text);
+  font-size: var(--fgd-font-size-body);
   color: var(--primary12);
 }
 

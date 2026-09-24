@@ -51,11 +51,11 @@ const inventory = {
 
 // Tier → size (px) and target strokes (px): rest = the tier's stroke,
 // emphasis = the next stroke tier (§1.5.7). Block's next tier is
-// --ds-stroke-3, since no icon tier sits above it.
+// --border-size-2-25, since no icon tier sits above it.
 const tiers = {
-  inline: { size: 16, rest: 1.25, emphasis: 1.5 }, // --ds-stroke-1-25 → --ds-stroke-1-5
-  tag: { size: 20, rest: 1.5, emphasis: 2 }, // --ds-stroke-1-5 → --border-size-2
-  block: { size: 36, rest: 2, emphasis: 3 }, // --border-size-2 → --ds-stroke-3
+  inline: { size: 16, rest: 1.25, emphasis: 1.5 }, // --border-size-1-25 → --border-size-1-5
+  tag: { size: 20, rest: 1.5, emphasis: 2 }, // --border-size-1-5 → --border-size-2
+  block: { size: 36, rest: 2, emphasis: 3 }, // --border-size-2 → --border-size-2-25
 }
 
 // The calibrated weights (nearest measured stem to each target; see the

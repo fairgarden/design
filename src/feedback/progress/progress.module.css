@@ -27,7 +27,7 @@
 
 @keyframes dashAdvance {
   to {
-    stroke-dashoffset: calc(-1 * (var(--ds-dash) + var(--ds-dash-gap)));
+    stroke-dashoffset: calc(-1 * (var(--fgd-dash) + var(--fgd-dash-gap)));
   }
 }
 
@@ -73,7 +73,7 @@
     box-sizing: content-box;
     block-size: calc(var(--size-px-2) - 2 * var(--border-size-1));
     border: var(--border-size-1) solid var(--primary12);
-    border-radius: var(--ds-radius-none);
+    border-radius: var(--radius-0);
   }
 
   /* The indicator's height is Base UI's inline `inherit`: the track's content height. */
@@ -92,12 +92,12 @@
     stroke: var(--primary12);
   }
 
-  /* Segmented: outlined --ds-space-12 cells, --border-size-1, 2 px apart; filled cells solid. */
+  /* Segmented: outlined --size-px-2-5 cells, --border-size-1, 2 px apart; filled cells solid. */
   .cell {
     flex: none;
     box-sizing: border-box;
-    inline-size: var(--ds-space-12);
-    block-size: var(--ds-space-12);
+    inline-size: var(--size-px-2-5);
+    block-size: var(--size-px-2-5);
     border: var(--border-size-1) solid var(--primary12);
   }
 
@@ -150,7 +150,7 @@
     color: var(--role-status);
     fill: var(--role-status-fill);
     stroke: var(--role-status-fill);
-    stroke-width: var(--ds-stroke-1-5);
+    stroke-width: var(--border-size-1-5);
     stroke-linecap: round;
     stroke-linejoin: round;
   }
@@ -262,7 +262,7 @@
   /* The dashes advance slowly, and only under --motionOK; never shimmer, pulse or opacity (§10.20). */
   @media (--motionOK) {
     .base[data-indeterminate] .dashLine {
-      animation: dashAdvance calc(var(--ds-duration-disclosure) * 6) linear infinite;
+      animation: dashAdvance calc(var(--fgd-duration-disclosure) * 6) linear infinite;
     }
   }
 }

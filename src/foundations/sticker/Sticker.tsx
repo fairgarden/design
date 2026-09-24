@@ -24,7 +24,7 @@ import styles from './sticker.module.css'
  *
  * Implementation (CSS Modules + CVA)
  * - Module: sticker.module.css; CVA function `sticker`.
- * - Axes: `size` → s | l (`--ds-size-art-s` 152 px, `--ds-size-art-l`
+ * - Axes: `size` → s | l (`--fgd-size-art-s` 152 px, `--fgd-size-art-l`
  *   312 px, with their stroke pairs); `bare` → `bare` (no halo and no scope
  *   of its own: the host's `--role-heading`, counters open); `primary`,
  *   `secondary` → scales module classes (bare only; a haloed sticker passes
@@ -82,7 +82,7 @@ export type StickerProps = Omit<useRender.ComponentProps<'span'>, 'children'> & 
    */
   viewBox: string
   /**
-   * The halo layer: the asset's pre-expanded path, 8 px (`--ds-space-halo`)
+   * The halo layer: the asset's pre-expanded path, 8 px (`--fgd-space-halo`)
    * outside every part, merged into one silhouette with rounded concave
    * bridges and no sharp outer corners. Never a runtime stroke, outline or
    * blur. Filled `--primary1`; no edge, ever. Ignored with `bare`.
@@ -90,12 +90,12 @@ export type StickerProps = Omit<useRender.ComponentProps<'span'>, 'children'> & 
   halo?: React.ReactNode
   /**
    * The line art, stroked in `--role-heading` at the silhouette weight
-   * (`--ds-stroke-3` at S, `--ds-stroke-4` at L), round caps and joins, no
+   * (`--border-size-2-25` at S, `--border-size-2-75` at L), round caps and joins, no
    * fill; give ink-spot parts `fill="currentColor"`, and wrap interior lines
    * in `StickerDetail`. No text inside the art.
    */
   children: React.ReactNode
-  /** `s` (default): `--ds-size-art-s`, 152 px. `l`: `--ds-size-art-l`, 312 px. */
+  /** `s` (default): `--fgd-size-art-s`, 152 px. `l`: `--fgd-size-art-l`, 312 px. */
   size?: StickerSize
   /**
    * The bare variant: no halo and no scope of its own; the art draws in the
@@ -186,7 +186,7 @@ export type StickerDetailProps = Omit<React.SVGProps<SVGGElement>, 'ref'>
 
 /**
  * Interior lines, one stroke step lighter than the silhouette
- * (`--border-size-2` at S, `--ds-stroke-3` at L): at most two weights per
+ * (`--border-size-2` at S, `--border-size-2-25` at L): at most two weights per
  * drawing, depth by weight, never tone (§6.2).
  */
 export function StickerDetail(props: StickerDetailProps) {

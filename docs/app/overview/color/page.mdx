@@ -56,7 +56,7 @@ Roles name a job, not a step, and resolve per ground and mode.
 
 ## Hover
 
-Hover follows one model [D181]: it changes a fill or an ink, never an edge, a transform or a shadow. It runs for `--ds-duration-quick` with `--ease-out-3`, is instant under reduced motion, and never applies to a disabled control.
+Hover follows one model [D181]: it changes a fill or an ink, never an edge, a transform or a shadow. It runs for `--fgd-duration-quick` with `--ease-out-3`, is instant under reduced motion, and never applies to a disabled control.
 
 - **Contained buttons lighten.** A solid [Button](../../actions/button/page.mdx)'s fill moves to `--role-action-hover`, and a contained selection fill to `--role-select-hover`. Label and edge stay, with no underline.
 - **Outline buttons tint** to `--role-soft-hover`; where soft fills drop, the label underlines instead.
@@ -73,7 +73,7 @@ Hover follows one model [D181]: it changes a fill or an ink, never an edge, a tr
 | `--role-soft-hover` | The outline button's `--primary3` fill, or the ground where soft fills drop (the pastels, `forest`, the solid fields) |
 | `--role-soft-hover-face` | The same hover for a part whose face is `--role-halo`, such as the slider thumb: `--primary3`, or the unchanged face where soft fills drop |
 
-Wherever `--role-link-hover` is `--primary12`, an ink-only hover also underlines (`--ds-link-hover-line`); where soft fills drop, `--ds-soft-hover-line` underlines the outline button's label. Under forced colors, hover adds an underline to links and text and an outline to buttons.
+Wherever `--role-link-hover` is `--primary12`, an ink-only hover also underlines (`--fgd-link-hover-line`); where soft fills drop, `--fgd-soft-hover-line` underlines the outline button's label. Under forced colors, hover adds an underline to links and text and an outline to buttons.
 
 Text is always `--primary12`, and the focus ring is a 2 px `--primary12` line. Every fill has an edge [D12].
 

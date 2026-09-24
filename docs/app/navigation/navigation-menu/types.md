@@ -45,7 +45,7 @@ type ReturnValue = boolean;
 The desktop site navigation \[D182]: a `nav` labelled "Main" holding the
 bar's items. Triggers are buttons that open their panel on click, Enter,
 Space or ArrowDown, and on hover intent under a mouse
-(--ds-delay-nav-open, closing --ds-delay-nav-close after the pointer
+(--fgd-delay-nav-open, closing --fgd-delay-nav-close after the pointer
 leaves); focus alone never opens one. Opening from the keyboard moves
 focus to the panel's first link; Escape closes and returns focus to the
 trigger. Panels attach at 0 offset under the bar's bottom rule, switch
@@ -65,7 +65,7 @@ instantly and scroll in a Scroll Area when taller than the viewport.
 
 One category of an `index` panel: a row in the category list (a trigger
 of the nested vertical menu) and its links in the pane. The selected
-category takes a `--ds-stroke-3` start-edge bar and `--font-weight-7`.
+category takes a `--border-size-2-25` start-edge bar and `--font-weight-7`.
 
 **NavigationMenuCategory Props:**
 
@@ -80,9 +80,9 @@ category takes a `--ds-stroke-3` start-edge bar and `--font-weight-7`.
 
 A panel. It renders in the menu's portaled `white` overlay scope,
 attached under the bar's bottom rule: `overview` full-bleed with its
-content on the 12-column grid of `--ds-container-content`; `index` and
+content on the 12-column grid of `--fgd-container-content`; `index` and
 `dropdown` at the trigger's start edge, end-aligned to the content
-container, with square top and `--ds-radius-8` bottom corners.
+container, with square top and `--radius-2-25` bottom corners.
 
 **NavigationMenuContent Props:**
 
@@ -116,7 +116,7 @@ it in `featuredBar`.
 ### NavigationMenuGroup
 
 A caps link group in an `overview` panel: a heading (a link with › when
-`href` is given) over its links at a `--ds-size-hit` pitch.
+`href` is given) over its links at a `--fgd-size-hit` pitch.
 
 **NavigationMenuGroup Props:**
 
@@ -135,7 +135,7 @@ controlled; omitted, one is generated.
 ### NavigationMenuLink
 
 A link. In the bar it is a caps item with no rest underline; in a panel
-it is a `type-body-ui` row at a `--ds-size-hit` pitch in Link's list-link
+it is a `type-body-ui` row at a `--fgd-size-hit` pitch in Link's list-link
 build (`kind="nav"` with `list`), whose hover is `--role-link-hover` only
 (§9.3) \[D181]. `active` defaults to "its path is the current page"
 (`aria-current="page"`); a bar link whose path is a prefix of the page is
@@ -310,7 +310,7 @@ bottom rule the panels attach under, the content container an `index` or
 type NavigationMenuFrame = {
   /** The bar element; panels attach at 0 offset under its bottom rule. Default: the menu's `nav`. */
   anchorRef?: React.RefObject<HTMLElement | null>;
-  /** The content container (--ds-container-content). Default: the anchor. */
+  /** The content container (--fgd-container-content). Default: the anchor. */
   boundaryRef?: React.RefObject<HTMLElement | null>;
   /** The current page's URL path, for current and parent-of-current. */
   currentPath?: string;

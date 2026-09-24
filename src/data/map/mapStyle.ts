@@ -103,7 +103,7 @@ export interface Palette {
   accent: string
   /** --border-size-2, px: routes and label halos. */
   stroke: number
-  /** --ds-dash and --ds-dash-gap, px. */
+  /** --fgd-dash and --fgd-dash-gap, px. */
   dash: number
   gap: number
   /** Water polygons take the 45° hatch instead of the fill (one ink, print). */
@@ -167,8 +167,8 @@ export function readPalette(root: Element, oneInk: boolean): Palette {
     green: oneInk ? ink : color('--secondary11', ink),
     accent: color('--role-accent', ink),
     stroke: length('--border-size-2', 2),
-    dash: length('--ds-dash', 5),
-    gap: length('--ds-dash-gap', 4),
+    dash: length('--fgd-dash', 5),
+    gap: length('--fgd-dash-gap', 4),
     hatchWater: oneInk,
   }
 }
@@ -254,7 +254,7 @@ function unquote(value: string): string {
   return value.trim().replace(/^(['"])(.*)\1$/, '$2')
 }
 
-/** The first family of a font-family list, e.g. `'Figtree Variable'` from --ds-font-ui. */
+/** The first family of a font-family list, e.g. `'Figtree Variable'` from --fgd-font-ui. */
 function firstFamily(list: string): string | null {
   const first = list.split(',')[0]
   return first ? unquote(first) || null : null
@@ -274,12 +274,12 @@ let fontFacesCache: { key: string; value: FontFacesSpecification | undefined } |
 
 /**
  * Maps the basemap's font names to the files of the page's UI font
- * (--ds-font-ui), found in the document's @font-face rules, so labels draw
+ * (--fgd-font-ui), found in the document's @font-face rules, so labels draw
  * in it [D159]. Returns `undefined` when none is readable (cross-origin
  * sheets, fonts not loaded): labels then use the Protomaps glyphs.
  */
 export function readFontFaces(root: Element): FontFacesSpecification | undefined {
-  const family = firstFamily(getComputedStyle(root).getPropertyValue('--ds-font-ui'))
+  const family = firstFamily(getComputedStyle(root).getPropertyValue('--fgd-font-ui'))
   if (!family) return undefined
   // Rescan only when the family or the set of loaded stylesheets changes.
   const key = `${family}|${document.styleSheets.length}`

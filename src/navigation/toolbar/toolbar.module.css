@@ -25,7 +25,7 @@
 }
 
 @layer base {
-  /* The row: --size-px-8 tall (--ds-size-control-md items plus --size-px-1
+  /* The row: --size-px-8 tall (--fgd-size-control-md items plus --size-px-1
      padding), the band's ground, no face of its own. Never wraps. */
   .base {
     container: toolbar / inline-size;
@@ -125,12 +125,12 @@
   }
 
   /* Docked: opaque on the band's ground, a --border-size-1 --role-rule on the
-     content side, --ds-space-margin at the ends, --layer-2 [D23, D89]. */
+     content side, --fgd-space-margin at the ends, --layer-2 [D23, D89]. */
   .docked {
     position: sticky;
     inset-block-start: 0;
     z-index: var(--layer-2);
-    padding-inline: var(--ds-space-margin);
+    padding-inline: var(--fgd-space-margin);
     border-block-end: var(--border-size-1) solid var(--role-rule);
     background-color: var(--role-ground);
   }

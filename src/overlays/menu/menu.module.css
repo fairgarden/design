@@ -7,8 +7,8 @@
  *
  * The §9.1 overlay panel: the `white` scope's --primary1 face, a
  * --border-size-2 --primary12 edge in both modes, never --role-rule
- * [D92, D156], --ds-radius-8, --size-px-1 padding, no shadow or backdrop.
- * The list highlight is --primary4 plus a --ds-stroke-3 start-edge bar in
+ * [D92, D156], --radius-2-25, --size-px-1 padding, no shadow or backdrop.
+ * The list highlight is --primary4 plus a --border-size-2-25 start-edge bar in
  * --primary12 (a destructive item: the danger fill, its label and bar
  * --role-danger-label [D192]); a checked option is a leading ✓ or ● and --font-weight-6,
  * with no fill and no bar [D145]. Motion is instant or a clip reveal from
@@ -39,33 +39,33 @@
   /* 200 px to --size-px-14, at least the trigger's width, at most the viewport less its margins. */
   .base {
     --menu-clip-from: inset(0);
-    --menu-item-radius: calc(var(--ds-radius-8) - var(--size-px-1));
+    --menu-item-radius: calc(var(--radius-2-25) - var(--size-px-1));
 
     box-sizing: border-box;
     min-inline-size: min(
-      max(var(--ds-size-menu-min), var(--anchor-width, 0px)),
-      calc(100vw - 2 * var(--ds-space-margin))
+      max(var(--fgd-size-menu-min), var(--anchor-width, 0px)),
+      calc(100vw - 2 * var(--fgd-space-margin))
     );
-    max-inline-size: min(var(--size-px-14), calc(100vw - 2 * var(--ds-space-margin)));
+    max-inline-size: min(var(--size-px-14), calc(100vw - 2 * var(--fgd-space-margin)));
     max-block-size: var(--available-height);
     overflow-y: auto;
     overscroll-behavior: contain;
     padding: var(--size-px-1);
     border: var(--border-size-2) solid var(--primary12);
-    border-radius: var(--ds-radius-8);
+    border-radius: var(--radius-2-25);
     background-color: var(--primary1);
     color: var(--primary12);
     clip-path: inset(0);
   }
 
-  /* A row: --ds-size-hit tall at every breakpoint, --ds-space-12 padding. */
+  /* A row: --fgd-size-hit tall at every breakpoint, --size-px-2-5 padding. */
   .item {
     position: relative;
     display: flex;
     align-items: center;
     gap: var(--size-px-2);
-    min-block-size: var(--ds-size-hit);
-    padding-inline: var(--ds-space-12);
+    min-block-size: var(--fgd-size-hit);
+    padding-inline: var(--size-px-2-5);
     border-radius: var(--menu-item-radius);
     color: var(--primary12);
     cursor: default;
@@ -81,7 +81,7 @@
     inset-block: 0;
     inset-inline-start: 0;
     display: none;
-    border-inline-start: var(--ds-stroke-3) solid var(--primary12);
+    border-inline-start: var(--border-size-2-25) solid var(--primary12);
     border-start-start-radius: var(--menu-item-radius);
     border-end-start-radius: var(--menu-item-radius);
   }
@@ -114,7 +114,7 @@
     overflow: visible;
     fill: var(--primary1);
     stroke: var(--primary1);
-    stroke-width: var(--ds-stroke-1-5);
+    stroke-width: var(--border-size-1-5);
     stroke-linecap: round;
     stroke-linejoin: round;
   }
@@ -136,7 +136,7 @@
     display: flex;
     align-items: center;
     padding-block: var(--size-px-2) var(--size-px-1);
-    padding-inline: var(--ds-space-12);
+    padding-inline: var(--size-px-2-5);
     color: var(--role-muted);
   }
 
@@ -151,7 +151,7 @@
   @media (--motionOK) {
     .base {
       transition-property: clip-path;
-      transition-duration: var(--ds-duration-disclosure);
+      transition-duration: var(--fgd-duration-disclosure);
       transition-timing-function: var(--ease-out-3);
     }
   }

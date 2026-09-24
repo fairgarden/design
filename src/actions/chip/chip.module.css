@@ -2,7 +2,7 @@
  * Chip (§10.11): the removable chip. CVA function `chip`. It matches the
  * Combobox's chips (combobox.module.css) part for part, so the two read as
  * one component.
- * Color roles (§10.11): edge --role-rule at --ds-stroke-1-5; label and ×
+ * Color roles (§10.11): edge --role-rule at --border-size-1-5; label and ×
  * --primary12; × pressed: the inverse pair; disabled: --role-muted label
  * and ×, `line-dotted-fine` edge in --role-disabled-edge (--role-rule, or
  * --primary12 on one-ink grounds [D85]). Colors are role variables only;
@@ -32,7 +32,7 @@
     max-inline-size: 100%;
     block-size: var(--chip-height);
     padding-inline: var(--size-px-3);
-    border: var(--ds-stroke-1-5) solid var(--role-rule);
+    border: var(--border-size-1-5) solid var(--role-rule);
     border-radius: var(--radius-round);
     color: var(--primary12);
     vertical-align: middle;
@@ -50,7 +50,7 @@
     text-overflow: ellipsis;
   }
 
-  /* The × in its own cell, full chip height, with a --ds-size-hit target. */
+  /* The × in its own cell, full chip height, with a --fgd-size-hit target. */
   .remove {
     position: relative;
     flex: none;
@@ -73,8 +73,8 @@
     position: absolute;
     inset-block-start: 50%;
     inset-inline-start: 50%;
-    inline-size: var(--ds-size-hit);
-    block-size: var(--ds-size-hit);
+    inline-size: var(--fgd-size-hit);
+    block-size: var(--fgd-size-hit);
     translate: -50% -50%;
   }
 
@@ -82,10 +82,10 @@
   .edge {
     display: none;
     position: absolute;
-    inset-block-start: calc(var(--ds-dot-fine) / 2);
-    inset-inline-start: calc(var(--ds-dot-fine) / 2);
-    inline-size: calc(100% - var(--ds-dot-fine));
-    block-size: calc(100% - var(--ds-dot-fine));
+    inset-block-start: calc(var(--fgd-dot-fine) / 2);
+    inset-inline-start: calc(var(--fgd-dot-fine) / 2);
+    inline-size: calc(100% - var(--fgd-dot-fine));
+    block-size: calc(100% - var(--fgd-dot-fine));
     overflow: visible;
     pointer-events: none;
   }
@@ -93,7 +93,7 @@
   .edgeLine {
     fill: none;
     stroke: var(--role-disabled-edge);
-    rx: calc(var(--chip-height) / 2 - var(--ds-dot-fine) / 2);
+    rx: calc(var(--chip-height) / 2 - var(--fgd-dot-fine) / 2);
   }
 
   @media (--forcedColors) {
@@ -105,7 +105,7 @@
   @media (--motionOK) {
     .remove {
       transition-property: color, background-color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -134,7 +134,7 @@
 
   /* Disabled: fill none, muted ink, the dotted edge; the solid edge's width moves into the padding. */
   .base[data-disabled] {
-    padding-inline-start: calc(var(--size-px-3) + var(--ds-stroke-1-5));
+    padding-inline-start: calc(var(--size-px-3) + var(--border-size-1-5));
     border-style: none;
     color: var(--role-muted);
   }

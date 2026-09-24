@@ -9,7 +9,7 @@
  * visuallyHidden; `badgeHalo` wraps the Badge and draws the edge knockout.
  * Dense module: line semantics only. Colors are role variables only; local
  * custom properties carry dimensions only:
- *   --pricing-gap          the tier gutter (= --ds-space-margin) [D42]
+ *   --pricing-gap          the tier gutter (= --fgd-space-margin) [D42]
  *   --pricing-badge-room   the room above each tier for the straddling badge
  *   --pricing-edge         the tier's edge width (1 px; 3 px recommended or
  *                          selected), which places the badge and its knockout
@@ -17,7 +17,7 @@
  * Edges (§12.9) come from the faced Card, never restyled here: its face
  * draws the rest edge at --border-size-1 in its --role-edge (--primary10 on
  * a page ground, --primary12 as a light island) [D179]. The recommended and
- * selected edges set the Card's `--card-frame` hook to --ds-stroke-3, which
+ * selected edges set the Card's `--card-frame` hook to --border-size-2-25, which
  * draws the outer scope's --primary12 over that edge; the unavailable edge
  * is the Card's own, from the Radio's data-disabled in its CardChoice.
  */
@@ -59,7 +59,7 @@
 
 @layer base {
   .base {
-    --pricing-gap: var(--ds-space-margin);
+    --pricing-gap: var(--fgd-space-margin);
     --pricing-badge-room: calc(var(--size-px-5) / 2);
 
     min-inline-size: 0;
@@ -84,7 +84,7 @@
   .amount {
     color: var(--primary12);
     font-weight: var(--font-weight-7);
-    font-variant-numeric: var(--ds-numerals-data);
+    font-variant-numeric: var(--fgd-numerals-data);
   }
 
   .amountStat,
@@ -100,11 +100,11 @@
     vertical-align: super;
   }
 
-  /* The struck original: --role-muted, a --ds-stroke-1-5 line-through; never a status color. */
+  /* The struck original: --role-muted, a --border-size-1-5 line-through; never a status color. */
   .struck {
     color: var(--role-muted);
     text-decoration-line: line-through;
-    text-decoration-thickness: var(--ds-stroke-1-5);
+    text-decoration-thickness: var(--border-size-1-5);
     text-decoration-color: currentColor;
     text-decoration-skip-ink: none;
   }
@@ -152,7 +152,7 @@
   /*
    * The badge straddles the frame's top edge, centered. Its ::before is a
    * knockout exactly as tall as the edge, in the outer ground, so the edge
-   * breaks --ds-space-halo on either side of the badge (§12.9 Tokens).
+   * breaks --fgd-space-halo on either side of the badge (§12.9 Tokens).
    * It stacks above the Card's frame (its ::after, z-index 1, later in the
    * tier), or the recommended edge would strike through the badge word.
    */
@@ -179,7 +179,7 @@
     position: absolute;
     z-index: -1;
     inset-block-start: 50%;
-    inset-inline: calc(-1 * var(--ds-space-halo));
+    inset-inline: calc(-1 * var(--fgd-space-halo));
     block-size: var(--pricing-edge);
     translate: 0 -50%;
     background-color: var(--role-ground);
@@ -242,13 +242,13 @@
     inline-size: 100%;
     border-collapse: collapse;
     color: var(--primary12);
-    font-variant-numeric: var(--ds-numerals-data);
+    font-variant-numeric: var(--fgd-numerals-data);
   }
 
   .matrix th,
   .matrix td {
     position: relative;
-    padding: var(--size-px-2) var(--ds-space-12);
+    padding: var(--size-px-2) var(--size-px-2-5);
     text-align: start;
     vertical-align: baseline;
   }
@@ -276,12 +276,12 @@
     inset-block-start: 0;
     inset-inline: 0;
     box-sizing: content-box;
-    block-size: var(--ds-double-hair-gap);
+    block-size: var(--fgd-double-hair-gap);
     border-block: var(--border-size-1) solid var(--primary12);
   }
 
   .matrix tfoot > tr:first-child > * {
-    padding-block-start: calc(var(--size-px-2) + var(--ds-double-hair-gap) + 2 * var(--border-size-1));
+    padding-block-start: calc(var(--size-px-2) + var(--fgd-double-hair-gap) + 2 * var(--border-size-1));
   }
 
   /* The column name inside a cell shows only when rows become blocks. */
@@ -326,13 +326,13 @@
     display: block;
   }
 
-  /* Recommended: a --ds-stroke-3 --primary12 frame in the outer scope, through the Card's frame hook. */
+  /* Recommended: a --border-size-2-25 --primary12 frame in the outer scope, through the Card's frame hook. */
   .recommended {
-    --pricing-edge: var(--ds-stroke-3);
+    --pricing-edge: var(--border-size-2-25);
   }
 
   .recommended .frame {
-    --card-frame: var(--ds-stroke-3);
+    --card-frame: var(--border-size-2-25);
   }
 
   /* Viewport fallback: tier columns from --lg-n-above. */
@@ -340,7 +340,7 @@
     .tierList {
       grid-auto-flow: column;
       grid-auto-columns: minmax(0, 1fr);
-      max-inline-size: var(--ds-container-content);
+      max-inline-size: var(--fgd-container-content);
       margin-inline: auto;
     }
   }
@@ -358,7 +358,7 @@
     .tierList {
       grid-auto-flow: column;
       grid-auto-columns: minmax(0, 1fr);
-      max-inline-size: var(--ds-container-content);
+      max-inline-size: var(--fgd-container-content);
       margin-inline: auto;
     }
   }
@@ -428,19 +428,19 @@
 }
 
 @layer states {
-  /* Selected (the tier's Radio is checked): the edge steps to --ds-stroke-3 in --primary12 [D15]. */
+  /* Selected (the tier's Radio is checked): the edge steps to --border-size-2-25 in --primary12 [D15]. */
   .tier:has(.choice [data-checked]) {
-    --pricing-edge: var(--ds-stroke-3);
+    --pricing-edge: var(--border-size-2-25);
   }
 
   .tier:has(.choice [data-checked]) .frame {
-    --card-frame: var(--ds-stroke-3);
+    --card-frame: var(--border-size-2-25);
   }
 
   /* Unavailable (the Radio is disabled): the Card's line-dotted-fine edge, even when
      recommended, and --role-muted ink [D16]. */
   .tier:has(.choice [data-disabled]) {
-    --pricing-edge: var(--ds-dot-fine);
+    --pricing-edge: var(--fgd-dot-fine);
   }
 
   .tier:has(.choice [data-disabled]) .frame {
@@ -455,7 +455,7 @@
 @layer print {
   @media print {
     /* Tiers print whole, stacked; the badge prints as a word above its frame; edges print
-       0.75 pt, the recommended frame 2.25 pt, through the stroke tokens' print values. */
+       0.75 pt, the recommended frame 2.25 pt, through the border-size steps' print values. */
     .base {
       --pricing-gap: var(--size-px-5);
     }

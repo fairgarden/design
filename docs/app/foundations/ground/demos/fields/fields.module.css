@@ -8,13 +8,13 @@
 /* Ground's field class draws the --primary12 edge and radius; this sets the layout. */
 .field {
   display: grid;
-  gap: var(--ds-space-12);
+  gap: var(--size-px-2-5);
   padding: var(--size-px-3);
 }
 
 .name {
-  font-family: var(--ds-font-display);
-  font-size: var(--ds-font-size-kicker);
+  font-family: var(--fgd-font-display);
+  font-size: var(--fgd-font-size-kicker);
   font-weight: var(--font-weight-7);
   color: var(--role-heading);
 }

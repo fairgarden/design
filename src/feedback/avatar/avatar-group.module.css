@@ -59,7 +59,7 @@
   }
 
   .md {
-    --avatar-group-size: var(--ds-size-control-md);
+    --avatar-group-size: var(--fgd-size-control-md);
   }
 
   .lg {
@@ -67,6 +67,6 @@
   }
 
   .xl {
-    --avatar-group-size: var(--ds-size-avatar-xl);
+    --avatar-group-size: var(--fgd-size-avatar-xl);
   }
 }

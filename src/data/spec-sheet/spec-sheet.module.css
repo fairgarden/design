@@ -101,7 +101,7 @@
   .body {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: var(--size-px-5) var(--ds-space-margin);
+    gap: var(--size-px-5) var(--fgd-space-margin);
     min-inline-size: 0;
   }
 
@@ -112,11 +112,11 @@
     min-inline-size: 0;
   }
 
-  /* Lead → provenance --ds-space-12 (§3.5 Recipe C). */
+  /* Lead → provenance --size-px-2-5 (§3.5 Recipe C). */
   .intro {
     display: grid;
     align-content: start;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
   }
 
   .lead,
@@ -143,7 +143,7 @@
     margin: 0;
   }
 
-  /* "More Details": the Collapsible (§10.13) below the grid; its rows start --ds-space-12 under the trigger. */
+  /* "More Details": the Collapsible (§10.13) below the grid; its rows start --size-px-2-5 under the trigger. */
   .more {
     min-inline-size: 0;
   }
@@ -153,19 +153,19 @@
   }
 
   .morePanel .grid {
-    margin-block-start: var(--ds-space-12);
+    margin-block-start: var(--size-px-2-5);
   }
 }
 
 @layer variants {
   /* At a Glance: the lead is prose, held to the reading measure beside or above the grid. */
   .glance .intro {
-    max-inline-size: var(--ds-measure-reading);
+    max-inline-size: var(--fgd-measure-reading);
   }
 
   /* Leader list: one column, the value column aligned right, held to the reading measure. */
   .kindLeader .sheet {
-    max-inline-size: var(--ds-measure-reading);
+    max-inline-size: var(--fgd-measure-reading);
   }
 
   /* Manual page: the frame's parts stand --size-px-5 apart. */
@@ -177,7 +177,7 @@
   .frame {
     padding: var(--size-px-5);
     border-color: var(--primary12);
-    border-radius: var(--ds-radius-none);
+    border-radius: var(--radius-0);
     outline-color: var(--primary12);
   }
 
@@ -191,7 +191,7 @@
   .formBox .grid {
     padding: var(--size-px-3);
     border: var(--border-size-1) solid var(--role-rule);
-    border-radius: var(--ds-radius-none);
+    border-radius: var(--radius-0);
   }
 
   /*

@@ -1,7 +1,7 @@
 /*
  * The lockup: the logo on the left, a prominent mark rather than an inline
  * glyph, and the "FairGarden Design" wordmark after it, centered on the
- * logo. The logo is --ds-size-logo tall (40 px, 48 px from --lg-n-above,
+ * logo. The logo is --fgd-size-logo tall (40 px, 48 px from --lg-n-above,
  * 32 px below --xs-n-below), which fills the header bar's control height
  * inside its 56 and 64 px. The lockup keeps its own height wherever it sits,
  * so a smaller logo slot (the Navigation Bar's, the drawer's) centers it
@@ -11,7 +11,7 @@
 .lockup {
   display: inline-flex;
   align-items: center;
-  gap: var(--ds-space-12);
+  gap: var(--size-px-2-5);
   block-size: auto;
   white-space: nowrap;
 }
@@ -27,7 +27,7 @@
  */
 .mark {
   flex: none;
-  block-size: var(--ds-size-logo);
+  block-size: var(--fgd-size-logo);
   inline-size: auto;
   aspect-ratio: 1;
   border-radius: var(--radius-round);

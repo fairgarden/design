@@ -21,18 +21,18 @@
 
 @layer base {
   .base {
-    --marquee-art: var(--ds-size-art-s);
+    --marquee-art: var(--fgd-size-art-s);
 
     display: block;
     color: var(--primary12);
   }
 
-  /* The page-frame container: --ds-container-content inside the page margins. */
+  /* The page-frame container: --fgd-container-content inside the page margins. */
   .container {
     box-sizing: content-box;
-    max-inline-size: var(--ds-container-content);
+    max-inline-size: var(--fgd-container-content);
     margin-inline: auto;
-    padding-inline: var(--ds-space-margin);
+    padding-inline: var(--fgd-space-margin);
   }
 
   /* The run: --size-px-8 minimum, never clipped. */
@@ -50,26 +50,26 @@
     overflow-wrap: break-word;
   }
 
-  /* The separator: a solid --ds-ornament-dot disc on the cap-height center, a word space each side. */
+  /* The separator: a solid --fgd-ornament-dot disc on the cap-height center, a word space each side. */
   .dot {
     display: inline-block;
-    inline-size: var(--ds-ornament-dot);
-    block-size: var(--ds-ornament-dot);
+    inline-size: var(--fgd-ornament-dot);
+    block-size: var(--fgd-ornament-dot);
     fill: currentColor;
-    vertical-align: calc(0.35em - var(--ds-ornament-dot) / 2);
+    vertical-align: calc(0.35em - var(--fgd-ornament-dot) / 2);
   }
 
   /* The drawing size steps between fixed art sizes, never fluid [D78]. */
   @media (--md-n-above) {
     .base {
-      --marquee-art: var(--ds-size-art-l);
+      --marquee-art: var(--fgd-size-art-l);
     }
   }
 }
 
 @layer variants {
   /*
-   * The full-container field: Ground draws the ground, the --ds-radius-8 and
+   * The full-container field: Ground draws the ground, the --radius-2-25 and
    * the --primary12 edge; the run sets the height, so the field adds only
    * inline padding. It stays above a hanging drawing.
    */
@@ -132,7 +132,7 @@
     .fielded .field {
       padding: 0;
       border: 0;
-      border-radius: var(--ds-radius-none);
+      border-radius: var(--radius-0);
     }
 
     .run {

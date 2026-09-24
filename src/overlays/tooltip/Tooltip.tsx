@@ -64,7 +64,7 @@ export const tooltipTrigger = cva('', {
 type TooltipVariants = VariantProps<typeof tooltip>
 export type TooltipTriggerKind = NonNullable<VariantProps<typeof tooltipTrigger>['kind']>
 
-/** The open delay, mirroring `--ds-delay-tooltip` (500 ms, §1.5.15) [D175]. */
+/** The open delay, mirroring `--fgd-delay-tooltip` (500 ms, §1.5.15) [D175]. */
 export { TOOLTIP_DELAY_MS }
 
 /** The open delay a TooltipProvider sets for the triggers inside it. */
@@ -75,7 +75,7 @@ export type TooltipProviderProps = BaseTooltip.Provider.Props
 
 /**
  * Shares the open delay across a group of triggers, such as a toolbar: the
- * first tooltip opens after `--ds-delay-tooltip` (500 ms), its neighbors
+ * first tooltip opens after `--fgd-delay-tooltip` (500 ms), its neighbors
  * open at once while one is showing.
  */
 export function TooltipProvider({ delay = TOOLTIP_DELAY_MS, ...rest }: TooltipProviderProps) {
@@ -161,7 +161,7 @@ export type TooltipPopupProps = BaseTooltip.Popup.Props &
 
 /**
  * The popup: one short line of `type-caption` (three at most), at most
- * `--ds-size-tooltip` (280 px) wide, on the overlay scope's `--primary1` face inside a
+ * `--fgd-size-tooltip` (280 px) wide, on the overlay scope's `--primary1` face inside a
  * `--border-size-2` `--primary12` frame with `--radius-1`. It sits
  * `--size-px-2` from the trigger (`side`, default `top`) and flips or shifts
  * to stay inside the viewport.

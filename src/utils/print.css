@@ -9,44 +9,44 @@
 @layer print {
   @media print {
     @page {
-      margin: var(--ds-print-margin-block) var(--ds-print-margin-inline);
+      margin: var(--fgd-print-margin-block) var(--fgd-print-margin-inline);
     }
 
     :root {
       color-scheme: light;
-      --ds-font-fine: var(--ds-font-text);
-      --ds-muted-weight-step: 0;
+      --fgd-font-fine: var(--fgd-font-text);
+      --fgd-muted-weight-step: 0;
 
       /* Print values of the tokens (§1.5). 1 px = 0.75 pt, so most px values already map exactly. */
-      --ds-font-size-display-xl: 26pt;
-      --ds-font-size-stat: 24pt; /* type-stat (§1.5.6, §8.8); type-display-xl keeps 26 pt */
-      --ds-font-size-display: 22pt;
-      --ds-font-size-h2: 17pt;
-      --ds-font-size-itemhead: 13pt;
-      --ds-font-size-kicker: 10.5pt;
-      --ds-font-size-subhead: 11pt;
-      --ds-font-size-lead: 12pt;
-      --ds-font-size-quote: 14pt;
-      --ds-font-size-body: 10.5pt;
-      --ds-font-size-body-ui: 10pt;
-      --ds-font-size-marquee: 11pt;
-      --ds-font-size-button-lg: 10pt;
-      --ds-font-size-button: 9pt;
-      --ds-font-size-footnote: 8.5pt;
-      --ds-font-size-caption: 8.5pt;
-      --ds-font-size-eyebrow: 8pt;
-      --ds-font-size-label: 8pt;
-      --ds-leading-reading: var(--ds-leading-compact);
-      --ds-space-56: 36pt;
-      --ds-space-section: 36pt;
+      --fgd-font-size-display-xl: 26pt;
+      --fgd-font-size-stat: 24pt; /* type-stat (§1.5.6, §8.8); type-display-xl keeps 26 pt */
+      --fgd-font-size-display: 22pt;
+      --fgd-font-size-h2: 17pt;
+      --fgd-font-size-itemhead: 13pt;
+      --fgd-font-size-kicker: 10.5pt;
+      --fgd-font-size-subhead: 11pt;
+      --fgd-font-size-lead: 12pt;
+      --fgd-font-size-quote: 14pt;
+      --fgd-font-size-body: 10.5pt;
+      --fgd-font-size-body-ui: 10pt;
+      --fgd-font-size-marquee: 11pt;
+      --fgd-font-size-button-lg: 10pt;
+      --fgd-font-size-button: 9pt;
+      --fgd-font-size-footnote: 8.5pt;
+      --fgd-font-size-caption: 8.5pt;
+      --fgd-font-size-eyebrow: 8pt;
+      --fgd-font-size-label: 8pt;
+      --fgd-leading-reading: var(--fgd-leading-compact);
+      --size-px-8-5: 36pt;
+      --fgd-space-section: 36pt;
       --size-px-10: 36pt;
       --size-px-11: 48pt;
-      --ds-space-margin: 0;
-      --ds-stroke-0-75: 0.75pt;
-      --ds-stroke-1-25: 1pt;
-      --ds-stroke-1-5: 1.1pt;
-      --ds-stroke-8: 4pt;
-      --ds-measure-reading: var(--ds-measure-print);
+      --fgd-space-margin: 0;
+      --border-size-0-75: 0.75pt;
+      --border-size-1-25: 1pt;
+      --border-size-1-5: 1.1pt;
+      --border-size-3-5: 4pt;
+      --fgd-measure-reading: var(--fgd-measure-print);
     }
 
     :root,

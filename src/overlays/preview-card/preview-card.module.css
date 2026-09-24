@@ -5,7 +5,7 @@
  *
  * The anchored overlay surface (§10.1): the `white` scope's --primary1 face,
  * a --border-size-2 --primary12 frame in both modes [D92, D156],
- * --ds-radius-8, 240–360 px wide, --size-px-3 padding. Motion is instant or
+ * --radius-2-25, 240–360 px wide, --size-px-3 padding. Motion is instant or
  * a clip reveal from the trigger side, never a fade [D91]. Shown only with
  * hover and a fine pointer. Colors are role variables only; local custom
  * properties carry dimensions only.
@@ -36,8 +36,8 @@
   }
 
   .base {
-    --preview-card-tail-inline: var(--ds-space-12);
-    --preview-card-tail-block: calc(var(--ds-space-12) / 2 + var(--border-size-2));
+    --preview-card-tail-inline: var(--size-px-2-5);
+    --preview-card-tail-block: calc(var(--size-px-2-5) / 2 + var(--border-size-2));
     --preview-card-bleed: calc(-1 * var(--preview-card-tail-block));
     --preview-card-clip-from: inset(var(--preview-card-bleed));
 
@@ -46,11 +46,11 @@
     row-gap: var(--size-px-2);
     box-sizing: border-box;
     inline-size: max-content;
-    min-inline-size: min(var(--size-px-13), calc(100vw - 2 * var(--ds-space-margin)));
-    max-inline-size: min(var(--ds-size-overlay-max), calc(100vw - 2 * var(--ds-space-margin)));
+    min-inline-size: min(var(--size-px-13), calc(100vw - 2 * var(--fgd-space-margin)));
+    max-inline-size: min(var(--fgd-size-overlay-max), calc(100vw - 2 * var(--fgd-space-margin)));
     padding: var(--size-px-3);
     border: var(--border-size-2) solid var(--primary12);
-    border-radius: var(--ds-radius-8);
+    border-radius: var(--radius-2-25);
     background-color: var(--primary1);
     color: var(--primary12);
     clip-path: inset(var(--preview-card-bleed));
@@ -63,7 +63,7 @@
     block-size: auto;
     aspect-ratio: var(--ratio-widescreen);
     object-fit: cover;
-    border-radius: max(var(--radius-1), calc(var(--ds-radius-8) - var(--size-px-3)));
+    border-radius: max(var(--radius-1), calc(var(--radius-2-25) - var(--size-px-3)));
   }
 
   .title,
@@ -94,7 +94,7 @@
   @media (--motionOK) {
     .base {
       transition-property: clip-path;
-      transition-duration: var(--ds-duration-disclosure);
+      transition-duration: var(--fgd-duration-disclosure);
       transition-timing-function: var(--ease-out-3);
     }
   }

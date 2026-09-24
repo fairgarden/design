@@ -1,13 +1,13 @@
 .stack {
   display: grid;
-  gap: var(--ds-space-12);
+  gap: var(--size-px-2-5);
   min-inline-size: 0;
 }
 
 .name {
   margin: 0;
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-caption);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-caption);
   font-weight: var(--font-weight-6);
 }
 
@@ -19,14 +19,14 @@
   max-inline-size: 100%;
   padding-inline: var(--size-px-2);
   border: var(--border-size-1) solid var(--role-hairline);
-  border-radius: var(--ds-radius-8);
+  border-radius: var(--radius-2-25);
   overflow: auto;
   resize: horizontal;
 }
 
 .status {
   margin: 0;
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-caption);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-caption);
   color: var(--role-muted);
 }

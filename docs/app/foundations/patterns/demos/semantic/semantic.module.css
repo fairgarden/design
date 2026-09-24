@@ -10,14 +10,14 @@
 
 .item {
   display: flex;
-  gap: var(--ds-space-12);
+  gap: var(--size-px-2-5);
   align-items: center;
 }
 
 .swatch {
   flex: none;
   inline-size: var(--size-px-9);
-  block-size: var(--ds-space-40);
+  block-size: var(--size-px-7-5);
 }
 
 .text {
@@ -25,12 +25,12 @@
 }
 
 .name {
-  font-family: var(--ds-font-mono);
-  font-size: var(--ds-font-size-caption);
+  font-family: var(--fgd-font-mono);
+  font-size: var(--fgd-font-size-caption);
 }
 
 .note {
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-caption);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-caption);
   color: var(--role-muted);
 }

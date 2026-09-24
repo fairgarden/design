@@ -7,16 +7,16 @@
 
 .face {
   display: grid;
-  gap: var(--ds-space-12);
+  gap: var(--size-px-2-5);
   align-content: start;
   padding: var(--size-px-5);
   border: var(--border-size-1) solid var(--role-edge);
-  border-radius: var(--ds-radius-8);
+  border-radius: var(--radius-2-25);
 }
 
 .text {
   margin: 0;
-  font-family: var(--ds-font-text);
-  font-size: var(--ds-font-size-body);
-  line-height: var(--ds-leading-reading);
+  font-family: var(--fgd-font-text);
+  font-size: var(--fgd-font-size-body);
+  line-height: var(--fgd-leading-reading);
 }

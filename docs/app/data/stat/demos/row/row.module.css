@@ -7,7 +7,7 @@
 
 .note {
   margin: 0;
-  font-family: var(--ds-font-text);
-  font-size: var(--ds-font-size-footnote);
+  font-family: var(--fgd-font-text);
+  font-size: var(--fgd-font-size-footnote);
   color: var(--primary12);
 }

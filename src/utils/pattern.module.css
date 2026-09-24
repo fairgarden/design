@@ -21,8 +21,8 @@
  * never share an element.
  *
  * Geometry. Tiles are drawn at the §1.5.9 token values and sized by the
- * tokens (--ds-dotgrid-pitch, --ds-hatch-tile, --ds-dotscreen-pitch-*,
- * --ds-awning-stripe); a mark keeps its proportion to its tile. Ranges and
+ * tokens (--fgd-dotgrid-pitch, --fgd-hatch-tile, --fgd-dotscreen-pitch-*,
+ * --fgd-awning-stripe); a mark keeps its proportion to its tile. Ranges and
  * jitter (grain, fringe) are generator parameters baked into their tiles.
  *
  * Decorative (dotgrid, speckle, sunburst, grain, awning, fringe): dropped
@@ -34,7 +34,7 @@
  * under 35% of the page above the footer at each breakpoint; patterned bands
  * never touch; only --primary12 text sits on a decorative pattern, and never
  * --role-rule or --role-muted; behind running text a pattern covers ≤ 12%
- * with marks ≤ --ds-sunburst-dot (grain ≈ 10.6%, dotgrid 0.7%). Dotgrid and
+ * with marks ≤ --fgd-sunburst-dot (grain ≈ 10.6%, dotgrid 0.7%). Dotgrid and
  * awning carry display type and one action only; running text sits on a
  * solid plate (a nested ground face). Semantic patterns carry no text: a
  * label sits on a --primary1 knockout plate.
@@ -89,8 +89,8 @@
   }
 
   /*
-   * pattern-dotgrid (decorative) [D72, D111]: --ds-dotgrid-dot (1.5 px) true
-   * circles at --ds-dotgrid-pitch (16 px) in --role-tint; --role-hairline on
+   * pattern-dotgrid (decorative) [D72, D111]: --fgd-dotgrid-dot (1.5 px) true
+   * circles at --fgd-dotgrid-pitch (16 px) in --role-tint; --role-hairline on
    * a plate (patternPlate). Technical grounds, figure plates, and the dot
    * field on forest, night and amber feature bands (§2.2.1). Never behind
    * running text.
@@ -99,27 +99,27 @@
   .patternDotgridFine::before {
     background-color: var(--role-tint);
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='0.75'/%3E%3C/svg%3E");
-    mask-size: var(--ds-dotgrid-pitch) var(--ds-dotgrid-pitch);
-    mask-position: calc(var(--ds-dotgrid-pitch) / -2) calc(var(--ds-dotgrid-pitch) / -2);
+    mask-size: var(--fgd-dotgrid-pitch) var(--fgd-dotgrid-pitch);
+    mask-position: calc(var(--fgd-dotgrid-pitch) / -2) calc(var(--fgd-dotgrid-pitch) / -2);
   }
 
   /*
-   * pattern-dotgrid-fine: --ds-dotgrid-fine-dot (1 px) at
-   * --ds-dotgrid-fine-pitch (8 px), only at ≥ 2 dppx; below, the standard
+   * pattern-dotgrid-fine: --fgd-dotgrid-fine-dot (1 px) at
+   * --fgd-dotgrid-fine-pitch (8 px), only at ≥ 2 dppx; below, the standard
    * grid, because 1 px dots smudge gray at 1–1.5× density [D72].
    */
   @media (min-resolution: 2dppx) {
     .patternDotgridFine::before {
       mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Ccircle cx='4' cy='4' r='0.5'/%3E%3C/svg%3E");
-      mask-size: var(--ds-dotgrid-fine-pitch) var(--ds-dotgrid-fine-pitch);
-      mask-position: calc(var(--ds-dotgrid-fine-pitch) / -2)
-        calc(var(--ds-dotgrid-fine-pitch) / -2);
+      mask-size: var(--fgd-dotgrid-fine-pitch) var(--fgd-dotgrid-fine-pitch);
+      mask-position: calc(var(--fgd-dotgrid-fine-pitch) / -2)
+        calc(var(--fgd-dotgrid-fine-pitch) / -2);
     }
   }
 
   /*
-   * pattern-speckle (decorative) [D176, D177]: one mark per --ds-speckle-grid
-   * (16 px) cell, jittered ±4 px: 70% round dots of --ds-speckle-dot (2 px)
+   * pattern-speckle (decorative) [D176, D177]: one mark per --fgd-speckle-grid
+   * (16 px) cell, jittered ±4 px: 70% round dots of --fgd-speckle-dot (2 px)
    * and 30% seed strokes 1 × 4 px at random angles, a third of them comma
    * flecks, in --role-tint. A seamless tile of 16 × 16 cells (256 px;
    * seeded, so deterministic); marks never leave their cell. One full-bleed
@@ -129,16 +129,16 @@
   .patternSpeckle::before {
     background-color: var(--role-tint);
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256' fill='none' stroke='%23000' stroke-linecap='round'%3E%3Cpath d='M9.4 5.5h0M20.7 10.1h0M53.9 5.6h0M70.3 7.9h0M88.4 8.9h0M119.4 9.1h0M133.8 10.4h0M167.1 9.8h0M217.6 5h0M232.7 10.7h0M251.6 6.2h0M39.5 20.5h0M72.4 20.9h0M88.5 21.1h0M123.2 22.5h0M134.5 20.9h0M151 24.3h0M166 27.4h0M184.6 24.4h0M202.5 23.1h0M212.9 21h0M228.4 24.8h0M245.2 24.2h0M5.3 36.1h0M20.2 42.8h0M36.3 43.3h0M56.6 39.3h0M76 43.4h0M86.1 39.2h0M103.8 36.3h0M120.5 38.5h0M169.4 40h0M183.6 36.9h0M229.3 38.4h0M251.7 37h0M68.1 55.3h0M89.5 54.5h0M103.9 52.9h0M135.9 54.2h0M154.4 52.1h0M167.7 58h0M200.2 54.3h0M217 52.5h0M230.9 59.4h0M246.8 57.3h0M5.4 71.7h0M27.3 68.2h0M38.6 73.6h0M59 74.4h0M69.2 74.8h0M85.9 73.5h0M118.4 75.3h0M133.3 70.1h0M165.5 74.1h0M186.4 73.2h0M198.2 71h0M235.8 75.9h0M251.2 75.4h0M27.1 85.3h0M43.2 91.6h0M75.2 88.6h0M90.9 91.4h0M103.6 91.8h0M116.6 87.1h0M132 90.5h0M170.3 85.8h0M186.4 90.3h0M247.6 89.7h0M27.5 105h0M38.1 104.3h0M57.4 101.1h0M121.5 102.2h0M137 107.3h0M169.6 104h0M228.9 105.3h0M11.7 120.2h0M59.4 119.7h0M73.7 121.4h0M103.5 122.3h0M118.5 122.8h0M155.7 123h0M168.2 122.3h0M183.3 117.2h0M244.1 122.4h0M11.3 132.5h0M43.1 138.4h0M52.7 139.3h0M72.8 133.5h0M119.8 139.5h0M140 136.3h0M168.3 138.9h0M219.2 137.1h0M232.4 135.3h0M8.1 155.6h0M37.4 150h0M69.3 155.3h0M86.7 150.8h0M123.6 148.2h0M138.1 154.3h0M155 154.8h0M170.1 148.3h0M180.9 152.7h0M200.5 155.5h0M214.2 148.3h0M229.6 150.4h0M246.2 154.2h0M8.5 166.3h0M52.6 166.7h0M73.2 165.2h0M123.6 168.7h0M155.9 169.2h0M168.6 171.5h0M185.9 170.7h0M214.1 164.2h0M228.7 168.8h0M7.2 184.2h0M21.6 180.6h0M43.5 185.4h0M70.4 187.6h0M84.6 187.3h0M117 184h0M136.6 185.2h0M165.2 186.6h0M182.8 183.9h0M231.3 187.7h0M244.9 182.4h0M6.8 203h0M25.1 198.2h0M41.3 196.2h0M55 200.3h0M68.6 203.1h0M85.2 197h0M103 201.4h0M116.6 197.1h0M148.2 196.7h0M184.6 203.2h0M202.1 196.6h0M214.1 202.3h0M245.2 200.2h0M20.2 217.8h0M36.5 214.1h0M55.8 217.7h0M100.5 212.3h0M117.3 216h0M132.9 215.2h0M154 214.7h0M197.1 218.3h0M215.1 216.7h0M231.5 218.9h0M244.7 215.2h0M7.1 232.6h0M26 231h0M57.2 235.7h0M69.4 229.8h0M88 234.1h0M136.4 234.7h0M151.7 233.4h0M166.6 229.3h0M196.4 234.4h0M214 232.7h0M233.5 234.8h0M246.1 232.9h0M8.8 248.8h0M25.6 248.4h0M53.5 248.8h0M71.7 251.5h0M85.8 247.8h0M106.3 247.9h0M117.5 250.5h0M137.8 248.1h0M153.3 248.6h0M171.5 247.8h0M183.7 245.6h0M198.1 247.6h0M212.7 251h0M250.1 249.8h0' stroke-width='2'/%3E%3Cpath d='M37.2 8.2Q36.4 10.6 38.9 10.7M99.7 3.2L101.3 5.8M149.3 4Q149.4 6.5 151.8 5.7M181.3 9.1L182.6 11.8M197.8 4.3L197.2 7.3M5.9 21.5Q3.4 21.8 4.4 24.1M25.5 24.2L23.4 26.4M55.6 20.1L58.5 20.6M99.8 24.7L100.6 27.6M137.6 40.1L140.5 40.7M151.1 38L154 38.8M196.8 39.6L198.9 41.8M213.1 37.3L213.7 40.2M8.9 54.5Q6.4 54.7 7.3 57M20 51.6L22.1 53.7M43.2 52.1L44.2 55M57.7 55Q57.2 57.4 59.7 57.3M121.1 52.9Q121.5 55.3 123.7 54.2M180.7 57Q178.3 57.8 179.7 59.9M100.8 71.7L102.5 74.2M154.9 70.6Q153.4 72.6 155.7 73.5M215.8 74L218.6 75M8.1 88.2L5.1 88.3M58.9 84.5Q56.8 85.9 58.7 87.5M155.2 90.9Q153.2 89.3 152.3 91.6M196.7 86.5L199.3 88M215.2 83.7Q212.7 83.1 212.9 85.6M228.5 87.8L230.4 90.2M8 100L7.1 102.8M69.5 105.3L71.3 107.7M91.4 101.3L88.4 101.6M102.4 101.9L101.3 104.7M149 106.9L151.5 108.6M182.2 103.2Q179.9 104.1 181.5 106.1M197.4 105.2L195.4 107.4M214.8 100.3L211.9 101.1M249.6 105.8L246.8 106.7M22.3 117.6L22.8 120.6M39.1 118.5L38.4 121.4M87.9 116Q86 117.6 88.1 119M137.9 122.8Q138.8 125.1 140.8 123.7M203.6 118.1Q202 120 204.3 121M218.4 119.6L221.2 120.4M235.8 121.2L235 124.1M27.2 132.8L24.4 133.8M89.9 135.6L92.7 136.8M102.2 134.1L105.2 134.2M156.7 131.5L153.9 132.6M185.7 133.2L182.8 134.1M197.9 133.5Q195.8 135 197.8 136.5M243.6 136.2L246.4 137.3M25.3 152.8Q24.4 155.1 26.9 155.3M57.7 147.8L55 149.2M99.2 152.3L101.9 153.7M27.7 170.3L24.8 170.8M39.7 170.2Q37.6 171.5 39.5 173.1M91.4 168L88.5 168.9M103.4 167.5Q101.7 169.3 103.9 170.4M134.9 170.5L137.7 171.6M199.7 169.7L198.4 172.4M250 164Q247.8 165.2 249.6 167M51.8 179.6L53.8 181.9M101.9 180.1L103 182.9M151.5 179.8L154 181.5M195.7 182.6L197.8 184.7M216 182.8Q214.9 185.1 217.3 185.5M140.3 203.1L137.8 204.8M167.7 199.1L165.7 201.4M231.3 195L233.2 197.3M4.6 218L6.6 220.2M67.6 212.1L70.4 213.1M90.2 215.3Q87.7 215.9 88.9 218M170 218L168 220.3M181.9 212.2L181.8 215.2M41.5 228.5L38.5 228.8M101.3 234.2Q98.8 233.7 99 236.2M117 228.5L115.7 231.2M184.7 231.3Q183.7 233.6 186.1 233.9M41.3 247.4Q39.4 245.8 38.4 248M229.2 248.9L231.3 251' stroke-width='1'/%3E%3C/svg%3E");
-    mask-size: calc(16 * var(--ds-speckle-grid)) calc(16 * var(--ds-speckle-grid));
+    mask-size: calc(16 * var(--fgd-speckle-grid)) calc(16 * var(--fgd-speckle-grid));
   }
 
   /*
    * pattern-sunburst (decorative) [D143]: 60 rays 6° apart from an origin at
-   * the host's bottom centre, radius --ds-sunburst-radius (290 px), clipped
+   * the host's bottom centre, radius --fgd-sunburst-radius (290 px), clipped
    * by the host's edges. Lay the host out so that its bottom edge is the
-   * origin: --ds-space-40 below the CTA's bottom edge, or the band's bottom
-   * edge, which then clips the lower half. Marks are --ds-sunburst-dot
-   * (2.5 px) round-capped dashes on shared radii --ds-sunburst-pitch
+   * origin: --size-px-7-5 below the CTA's bottom edge, or the band's bottom
+   * edge, which then clips the lower half. Marks are --fgd-sunburst-dot
+   * (2.5 px) round-capped dashes on shared radii --fgd-sunburst-pitch
    * (6.5 px) apart, so arcs form across the rays, in five discrete zones
    * outward: dots, then 4, 6, 8 and 10 px dashes (no ramp [D21]); the
    * 6–10 px dashes take every second radius. In --role-tint. CTA backdrop
@@ -149,10 +149,10 @@
   .patternSunburst::before {
     background-color: var(--role-tint);
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-290 -290 580 580' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round'%3E%3Cdefs%3E%3Cpath id='r' d='M0-39V-287' stroke-dasharray='0 6.5 0 6.5 0 6.5 0 6.5 0 6.5 0 6.5 0 6.5 0 6.5 0 6.5 1.5 5 1.5 5 1.5 5 1.5 5 1.5 5 1.5 5 1.5 5 1.5 5 3.5 9.5 3.5 9.5 3.5 9.5 3.5 9.5 5.5 7.5 5.5 7.5 5.5 7.5 5.5 7.5 7.5 5.5 7.5 5.5 7.5 5.5'/%3E%3Cg id='a'%3E%3Cuse href='%23r'/%3E%3Cuse href='%23r' transform='rotate(6)'/%3E%3C/g%3E%3Cg id='b'%3E%3Cuse href='%23a'/%3E%3Cuse href='%23a' transform='rotate(12)'/%3E%3C/g%3E%3Cg id='c'%3E%3Cuse href='%23b'/%3E%3Cuse href='%23b' transform='rotate(24)'/%3E%3Cuse href='%23b' transform='rotate(48)'/%3E%3C/g%3E%3C/defs%3E%3Cuse href='%23c'/%3E%3Cuse href='%23c' transform='rotate(72)'/%3E%3Cuse href='%23c' transform='rotate(144)'/%3E%3Cuse href='%23c' transform='rotate(216)'/%3E%3Cuse href='%23c' transform='rotate(288)'/%3E%3C/svg%3E");
-    mask-size: calc(2 * var(--ds-sunburst-radius)) calc(2 * var(--ds-sunburst-radius));
+    mask-size: calc(2 * var(--fgd-sunburst-radius)) calc(2 * var(--fgd-sunburst-radius));
     mask-repeat: no-repeat;
     mask-origin: border-box;
-    mask-position: left 50% bottom calc(-1 * var(--ds-sunburst-radius));
+    mask-position: left 50% bottom calc(-1 * var(--fgd-sunburst-radius));
   }
 
   /*
@@ -178,14 +178,14 @@
 
   /*
    * pattern-awning (decorative) [D172, D175]: equal vertical stripes of
-   * --ds-awning-stripe (24 px), --role-tint alternating with the ground,
+   * --fgd-awning-stripe (24 px), --role-tint alternating with the ground,
    * starting at the left content-box edge; the band keeps a straight edge.
    * Campaign bands only, at most one per page; display type and one action.
    */
   .patternAwning::before {
     background-color: var(--role-tint);
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 1' preserveAspectRatio='none' shape-rendering='crispEdges'%3E%3Crect width='1' height='1'/%3E%3C/svg%3E");
-    mask-size: calc(2 * var(--ds-awning-stripe)) 100%;
+    mask-size: calc(2 * var(--fgd-awning-stripe)) 100%;
   }
 
   /* Semantic patterns: a --border-size-1 --primary12 outline on every fill [D12]. */
@@ -214,71 +214,71 @@
 
   /*
    * pattern-hatch (semantic): 1 px lines at 45°. As a CSS tile the 45° hatch
-   * uses --ds-hatch-tile (8 px, ≈ 5.7 px pitch): an exact 6 px pitch needs an
+   * uses --fgd-hatch-tile (8 px, ≈ 5.7 px pitch): an exact 6 px pitch needs an
    * 8.49 px tile and shows seams [D72]. An SVG chart pattern rotates a 6 px
    * pitch instead. Partial, projected or other; series slot 2.
    */
   .patternHatch::before {
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath d='M-1 1l2-2M0 8l8-8M7 9l2-2' stroke='%23000'/%3E%3C/svg%3E");
-    mask-size: var(--ds-hatch-tile) var(--ds-hatch-tile);
+    mask-size: var(--fgd-hatch-tile) var(--fgd-hatch-tile);
   }
 
-  /* pattern-hatch-0: 1 px horizontal lines at --ds-hatch-pitch (6 px); series slot 4. */
+  /* pattern-hatch-0: 1 px horizontal lines at --fgd-hatch-pitch (6 px); series slot 4. */
   .patternHatch0::before {
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 6'%3E%3Crect width='6' height='1'/%3E%3C/svg%3E");
-    mask-size: var(--ds-hatch-pitch) var(--ds-hatch-pitch);
+    mask-size: var(--fgd-hatch-pitch) var(--fgd-hatch-pitch);
   }
 
   /* pattern-hatch-135: reserved for projected or partial data, never a series slot. */
   .patternHatch135::before {
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath d='M-1 7l2 2M0 0l8 8M7-1l2 2' stroke='%23000'/%3E%3C/svg%3E");
-    mask-size: var(--ds-hatch-tile) var(--ds-hatch-tile);
+    mask-size: var(--fgd-hatch-tile) var(--fgd-hatch-tile);
   }
 
   /* pattern-hatch-crossed: 45° and 135° together; series slot 5, sequential step 5. */
   .patternHatchCrossed::before {
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath d='M-1 1l2-2M0 8l8-8M7 9l2-2M-1 7l2 2M0 0l8 8M7-1l2 2' stroke='%23000'/%3E%3C/svg%3E");
-    mask-size: var(--ds-hatch-tile) var(--ds-hatch-tile);
+    mask-size: var(--fgd-hatch-tile) var(--fgd-hatch-tile);
   }
 
   /*
-   * pattern-dotscreen (semantic) [D72]: --ds-dotscreen-dot (1.25 px) true
-   * circles, orthogonal, at --ds-dotscreen-pitch-1 (6 px); Pitch2 5 px
-   * (series slot 3), Pitch3 4 px; heavy: --ds-dotscreen-dot-heavy (2 px) at
+   * pattern-dotscreen (semantic) [D72]: --fgd-dotscreen-dot (1.25 px) true
+   * circles, orthogonal, at --fgd-dotscreen-pitch-1 (6 px); Pitch2 5 px
+   * (series slot 3), Pitch3 4 px; heavy: --fgd-dotscreen-dot-heavy (2 px) at
    * 4 px. Tone: ≈ 3, 8 and 20% ink, so the steps read in order on paper.
    */
   .patternDotscreen::before {
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 6'%3E%3Ccircle cx='3' cy='3' r='0.625'/%3E%3C/svg%3E");
-    mask-size: var(--ds-dotscreen-pitch-1) var(--ds-dotscreen-pitch-1);
-    mask-position: calc(var(--ds-dotscreen-pitch-1) / -2) calc(var(--ds-dotscreen-pitch-1) / -2);
+    mask-size: var(--fgd-dotscreen-pitch-1) var(--fgd-dotscreen-pitch-1);
+    mask-position: calc(var(--fgd-dotscreen-pitch-1) / -2) calc(var(--fgd-dotscreen-pitch-1) / -2);
   }
 
   .patternDotscreenPitch2::before {
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 5'%3E%3Ccircle cx='2.5' cy='2.5' r='0.625'/%3E%3C/svg%3E");
-    mask-size: var(--ds-dotscreen-pitch-2) var(--ds-dotscreen-pitch-2);
-    mask-position: calc(var(--ds-dotscreen-pitch-2) / -2) calc(var(--ds-dotscreen-pitch-2) / -2);
+    mask-size: var(--fgd-dotscreen-pitch-2) var(--fgd-dotscreen-pitch-2);
+    mask-position: calc(var(--fgd-dotscreen-pitch-2) / -2) calc(var(--fgd-dotscreen-pitch-2) / -2);
   }
 
   .patternDotscreenPitch3::before {
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 4'%3E%3Ccircle cx='2' cy='2' r='0.625'/%3E%3C/svg%3E");
-    mask-size: var(--ds-dotscreen-pitch-3) var(--ds-dotscreen-pitch-3);
-    mask-position: calc(var(--ds-dotscreen-pitch-3) / -2) calc(var(--ds-dotscreen-pitch-3) / -2);
+    mask-size: var(--fgd-dotscreen-pitch-3) var(--fgd-dotscreen-pitch-3);
+    mask-position: calc(var(--fgd-dotscreen-pitch-3) / -2) calc(var(--fgd-dotscreen-pitch-3) / -2);
   }
 
   .patternDotscreenHeavy::before {
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 4'%3E%3Ccircle cx='2' cy='2' r='1'/%3E%3C/svg%3E");
-    mask-size: var(--ds-dotscreen-pitch-3) var(--ds-dotscreen-pitch-3);
-    mask-position: calc(var(--ds-dotscreen-pitch-3) / -2) calc(var(--ds-dotscreen-pitch-3) / -2);
+    mask-size: var(--fgd-dotscreen-pitch-3) var(--fgd-dotscreen-pitch-3);
+    mask-position: calc(var(--fgd-dotscreen-pitch-3) / -2) calc(var(--fgd-dotscreen-pitch-3) / -2);
   }
 
   /*
    * ornament-fringe, the hatched fringe (decorative) [D172, D175]:
-   * --ds-stroke-1-5 ticks, --ds-fringe-tick (6 px) ± 2 px jitter, at
-   * --ds-fringe-pitch (4 px), in the band's --primary12, hanging from its top
+   * --border-size-1-5 ticks, --fgd-fringe-tick (6 px) ± 2 px jitter, at
+   * --fgd-fringe-pitch (4 px), in the band's --primary12, hanging from its top
    * edge along the seam (a 96 px tile of 24 seeded ticks, round-capped at the
    * free end). Drawn ticks, not a mask cut of the band. On the lower band of
    * a campaign page: the page's one shaped edge and one decorative separator
-   * [D38, D39]. --ds-edge-shaped: none (set per scope by the role maps where
+   * [D38, D39]. --fgd-edge-shaped: none (set per scope by the role maps where
    * the band shows its --role-seam rule instead, §4.9.2) removes it.
    */
   .ornamentFringe {
@@ -287,12 +287,12 @@
 
   .ornamentFringe::after {
     content: '';
-    display: var(--ds-edge-shaped, block);
+    display: var(--fgd-edge-shaped, block);
     position: absolute;
     inset-block-start: 0;
     inset-inline: 0;
     z-index: -1;
-    block-size: calc(var(--ds-fringe-tick) + var(--fringe-jitter));
+    block-size: calc(var(--fgd-fringe-tick) + var(--fringe-jitter));
     pointer-events: none;
     background-color: var(--primary12);
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='8'%3E%3Cpath d='M2 0v5.25M6 0v7.25M10 0v4.25M14 0v6.25M18 0v3.25M22 0v5.25M26 0v6.25M30 0v4.25M34 0v7.25M38 0v5.25M42 0v3.25M46 0v6.25M50 0v4.25M54 0v5.25M58 0v7.25M62 0v4.25M66 0v6.25M70 0v5.25M74 0v3.25M78 0v7.25M82 0v5.25M86 0v4.25M90 0v6.25M94 0v5.25' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");

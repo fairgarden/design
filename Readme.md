@@ -29,7 +29,7 @@ carries no promise; it is there so main can be tried without a checkout.
 
 - **React 19** and **Base UI** (`@base-ui/react`, a peer dependency): unstyled, accessible primitives under every interactive component.
 - **CSS Modules plus CVA** (`class-variance-authority`): one module per component, one class per variant value, typed variant axes, all in cascade layers (`reset, tokens, theme, roles, base, variants, compounds, scales, states, print`).
-- **Open Props** for the non-color tokens, plus the system's own `--ds-*` extensions. Text sizes are in rem, spacing in px.
+- **Open Props** for the non-color tokens. A step the system adds between two Open Props steps is named by its position (`--size-px-2-5` sits halfway between `--size-px-2` and `--size-px-3`); every other FairGarden-only token takes `--fgd-*`. Text sizes are in rem, spacing in px.
 - **Radix Colors**: the 31 standard scales as one unified `--{scale}{step}` set (no alpha scales). Light and dark swap the values, never the names: `data-theme="light|dark"` on `html` forces a mode, otherwise the OS `prefers-color-scheme` decides. Components read only scale steps and role variables (`--primary1…12`, `--secondary1…12`, `--role-*`) and never see the mode. Every component takes `primary` and `secondary` scale props; grounds (`Ground`: 8 page grounds, the `night` band, 7 fields) set them for a region.
 - **Material Symbols** (Rounded, FILL 0 by default) compiled to inline SVG paths by `scripts/build-icons.js`; no icon font.
 - **Recharts** for charts (SVG, role colors, opaque fills, pattern defs, no animation unless motion is allowed).

@@ -152,7 +152,7 @@
   .body {
     grid-area: body;
     min-inline-size: 0;
-    max-inline-size: var(--ds-measure-reading);
+    max-inline-size: var(--fgd-measure-reading);
     padding-block-end: var(--size-px-7);
   }
 
@@ -297,7 +297,7 @@
    * marker. Rhythm: marker → 24 → title → 40 → description → 56 → next.
    */
   .day + .day {
-    margin-block-start: var(--ds-space-56);
+    margin-block-start: var(--size-px-8-5);
   }
 
   .dateHead {
@@ -312,21 +312,21 @@
 
   .agenda .list {
     display: grid;
-    gap: var(--ds-space-56);
+    gap: var(--size-px-8-5);
   }
 
   .session {
     position: relative;
     display: grid;
-    grid-template-columns: var(--ds-size-icon-block) minmax(0, 1fr);
+    grid-template-columns: var(--fgd-size-icon-block) minmax(0, 1fr);
     column-gap: var(--size-px-5);
     align-items: start;
   }
 
   .sessionMarker {
     display: block;
-    inline-size: var(--ds-size-icon-block);
-    block-size: var(--ds-size-icon-block);
+    inline-size: var(--fgd-size-icon-block);
+    block-size: var(--fgd-size-icon-block);
     overflow: visible;
     fill: none;
     stroke: var(--role-accent);
@@ -337,7 +337,7 @@
 
   .sessionBody {
     min-inline-size: 0;
-    max-inline-size: var(--ds-measure-reading);
+    max-inline-size: var(--fgd-measure-reading);
   }
 
   .sessionTitle {
@@ -351,7 +351,7 @@
   }
 
   .description {
-    margin: var(--ds-space-40) 0 0;
+    margin: var(--size-px-7-5) 0 0;
     color: var(--primary12);
   }
 }
@@ -412,8 +412,8 @@
 
     /* The spine prints like the trail: 0.75 pt with 3 / 2.5 pt dashes [D142]. */
     .spine {
-      stroke-width: var(--ds-print-trail-stroke);
-      stroke-dasharray: var(--ds-print-trail-dash) var(--ds-print-trail-gap);
+      stroke-width: var(--fgd-print-trail-stroke);
+      stroke-dasharray: var(--fgd-print-trail-dash) var(--fgd-print-trail-gap);
       stroke-linecap: butt;
     }
 

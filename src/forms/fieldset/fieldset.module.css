@@ -39,9 +39,9 @@
     color: var(--primary12);
   }
 
-  /* Fieldsets stand --ds-space-40 apart; the Form's --size-px-5 gap supplies the rest. */
+  /* Fieldsets stand --size-px-7-5 apart; the Form's --size-px-5 gap supplies the rest. */
   .base + .base {
-    margin-block-start: calc(var(--ds-space-40) - var(--size-px-5));
+    margin-block-start: calc(var(--size-px-7-5) - var(--size-px-5));
   }
 
   .legend {
@@ -56,10 +56,10 @@
   /* The ledger frame host covers the border box, inset by half a dot. */
   .frame {
     position: absolute;
-    inset-block-start: calc(var(--ds-dot) / 2);
-    inset-inline-start: calc(var(--ds-dot) / 2);
-    inline-size: calc(100% - var(--ds-dot));
-    block-size: calc(100% - var(--ds-dot));
+    inset-block-start: calc(var(--fgd-dot) / 2);
+    inset-inline-start: calc(var(--fgd-dot) / 2);
+    inline-size: calc(100% - var(--fgd-dot));
+    block-size: calc(100% - var(--fgd-dot));
     overflow: visible;
     pointer-events: none;
   }
@@ -74,7 +74,7 @@
     flex: 1 1 var(--size-px-5);
     align-self: center;
     min-inline-size: var(--size-px-5);
-    block-size: var(--ds-dot-fine);
+    block-size: var(--fgd-dot-fine);
     overflow: visible;
   }
 
@@ -95,7 +95,7 @@
   /*
    * Open (default): the legend is an ordinary block (a floated legend is
    * laid out as a flex item), then a --border-size-1 --role-hairline rule
-   * --ds-space-12 below it; content follows --size-px-5 below the rule.
+   * --size-px-2-5 below it; content follows --size-px-5 below the rule.
    */
   .text .legend,
   .ledger .legend {
@@ -105,15 +105,15 @@
 
   .text .rule {
     display: block;
-    margin-block-start: var(--ds-space-12);
+    margin-block-start: var(--size-px-2-5);
     border-block-start: var(--border-size-1) solid var(--role-hairline);
   }
 
-  /* Framed: a --ds-stroke-3 --primary12 frame, square; the legend sits in its top edge. */
+  /* Framed: a --border-size-2-25 --primary12 frame, square; the legend sits in its top edge. */
   .outline {
     padding: var(--fieldset-padding);
-    border: var(--ds-stroke-3) solid var(--primary12);
-    border-radius: var(--ds-radius-none);
+    border: var(--border-size-2-25) solid var(--primary12);
+    border-radius: var(--radius-0);
   }
 
   /* The legend's --size-px-2 break on each side of the frame line. */
@@ -138,14 +138,14 @@
   @media (--xs-n-below) {
     .outline,
     .ledger {
-      --fieldset-padding: var(--ds-space-12);
+      --fieldset-padding: var(--size-px-2-5);
     }
   }
 
   @container form (width < 360px) {
     .outline,
     .ledger {
-      --fieldset-padding: var(--ds-space-12);
+      --fieldset-padding: var(--size-px-2-5);
     }
   }
 }

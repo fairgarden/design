@@ -29,16 +29,16 @@
   /*
    * Baseline: auto-fit tracks at the 160 px (--size-px-12) minimum column,
    * capped at 4 (a track is never narrower than a quarter of the row).
-   * Gutter = the page margin [D42]; last line → next rule --ds-space-12.
+   * Gutter = the page margin [D42]; last line → next rule --size-px-2-5.
    */
   .grid {
     display: grid;
     grid-template-columns: repeat(
       auto-fit,
-      minmax(max(var(--size-px-12), (100% - 3 * var(--ds-space-margin)) / 4), 1fr)
+      minmax(max(var(--size-px-12), (100% - 3 * var(--fgd-space-margin)) / 4), 1fr)
     );
-    column-gap: var(--ds-space-margin);
-    row-gap: var(--ds-space-12);
+    column-gap: var(--fgd-space-margin);
+    row-gap: var(--size-px-2-5);
     margin: 0;
   }
 
@@ -58,7 +58,7 @@
     align-items: center;
     gap: var(--size-px-1);
     margin: 0;
-    line-height: calc(var(--ds-font-size-body-ui) * var(--font-lineheight-3));
+    line-height: calc(var(--fgd-font-size-body-ui) * var(--font-lineheight-3));
   }
 
   .icon {
@@ -70,7 +70,7 @@
   .value {
     margin: 0;
     color: var(--primary12);
-    font-variant-numeric: var(--ds-numerals-data);
+    font-variant-numeric: var(--fgd-numerals-data);
     overflow-wrap: break-word;
   }
 
@@ -120,9 +120,9 @@
     inset-block-start: 0;
     inset-inline: 0;
     block-size: 0;
-    border-block-end: var(--ds-dot-fine) solid var(--role-rule);
+    border-block-end: var(--fgd-dot-fine) solid var(--role-rule);
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 1'%3E%3Ccircle cx='1.5' cy='0.5' r='0.5'/%3E%3C/svg%3E");
-    mask-size: var(--ds-dot-fine-pitch) var(--ds-dot-fine);
+    mask-size: var(--fgd-dot-fine-pitch) var(--fgd-dot-fine);
     mask-repeat: round no-repeat;
     mask-origin: border-box;
   }

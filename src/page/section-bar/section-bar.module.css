@@ -43,7 +43,7 @@
   composes: typeBodyUi from '../../utils/type.module.css';
 }
 
-/* The dock swap: a --ds-duration-quick clip from the top edge, never tied to scroll. */
+/* The dock swap: a --fgd-duration-quick clip from the top edge, never tied to scroll. */
 @keyframes dock {
   from {
     clip-path: inset(0 0 100% 0);
@@ -55,11 +55,11 @@
 }
 
 @layer base {
-  /* Opaque, on the covered band's ground; one line, at least --ds-size-hit. */
+  /* Opaque, on the covered band's ground; one line, at least --fgd-size-hit. */
   .base {
     position: relative;
     display: block;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
   }
 
   /* A 1 px line the bar overlaps: a zero-height target at the viewport's
@@ -81,16 +81,16 @@
     display: block;
   }
 
-  /* The row: --ds-space-12 sides (tight gutters), capped at the content container from --lg-n-above. */
+  /* The row: --size-px-2-5 sides (tight gutters), capped at the content container from --lg-n-above. */
   .toolbar {
     box-sizing: border-box;
     display: flex;
     align-items: stretch;
     gap: var(--size-px-3);
     inline-size: 100%;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     margin-inline: auto;
-    padding-inline: var(--ds-space-12);
+    padding-inline: var(--size-px-2-5);
   }
 
   /* Base: the disclosure glyph and the caps title. */
@@ -106,10 +106,10 @@
     flex: none;
     align-items: center;
     justify-content: center;
-    inline-size: var(--ds-size-hit);
-    block-size: var(--ds-size-hit);
+    inline-size: var(--fgd-size-hit);
+    block-size: var(--fgd-size-hit);
     margin: 0;
-    margin-inline-start: calc(-1 * var(--ds-space-12));
+    margin-inline-start: calc(-1 * var(--size-px-2-5));
     padding: 0;
     border: 0;
     border-radius: var(--radius-round);
@@ -134,7 +134,7 @@
   }
 
   /* The inline breadcrumb (from --md-n-above): the §9.8 Breadcrumb's one
-     line, whose crumbs truncate on a --ds-size-hit target, never wrap. */
+     line, whose crumbs truncate on a --fgd-size-hit target, never wrap. */
   .breadcrumb {
     display: none;
     align-items: center;
@@ -246,7 +246,7 @@
     align-items: center;
     justify-content: center;
     min-inline-size: 0;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     padding-inline: var(--size-px-3);
     color: var(--primary12);
     text-align: center;
@@ -260,13 +260,13 @@
     white-space: nowrap;
   }
 
-  /* toTop: a --ds-size-hit square icon link at the strip's start. */
+  /* toTop: a --fgd-size-hit square icon link at the strip's start. */
   .toTop {
     display: flex;
     align-items: center;
     justify-content: center;
-    inline-size: var(--ds-size-hit);
-    block-size: var(--ds-size-hit);
+    inline-size: var(--fgd-size-hit);
+    block-size: var(--fgd-size-hit);
     color: var(--primary12);
   }
 
@@ -281,7 +281,7 @@
     max-block-size: 50vh;
     margin: 0;
     padding-block: 0 var(--size-px-2);
-    padding-inline: calc(var(--ds-space-12) + var(--ds-size-hit)) var(--ds-space-12);
+    padding-inline: calc(var(--size-px-2-5) + var(--fgd-size-hit)) var(--size-px-2-5);
     overflow-y: auto;
     list-style: none;
   }
@@ -311,12 +311,12 @@
 
   .jumpPanel {
     box-sizing: border-box;
-    inline-size: min(var(--size-px-14), 100vw - 2 * var(--ds-space-margin));
+    inline-size: min(var(--size-px-14), 100vw - 2 * var(--fgd-space-margin));
     max-block-size: min(60vh, var(--available-height));
     padding-block: var(--size-px-2);
     overflow-y: auto;
     border: var(--border-size-2) solid var(--primary12);
-    border-radius: var(--ds-radius-8);
+    border-radius: var(--radius-2-25);
     background-color: var(--primary1);
     color: var(--primary12);
     clip-path: inset(0);
@@ -328,12 +328,12 @@
     list-style: none;
   }
 
-  /* Rows ≥ --ds-size-control-md in a --ds-size-hit area; no rest underline [D80]. */
+  /* Rows ≥ --fgd-size-control-md in a --fgd-size-hit area; no rest underline [D80]. */
   .jumpItem {
     position: relative;
     display: flex;
     align-items: center;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     padding: var(--size-px-1) var(--size-px-3);
     color: var(--primary12);
     text-decoration: none;
@@ -353,16 +353,16 @@
 
   @media (--motionOK) {
     .breadcrumbPanel {
-      transition: block-size var(--ds-duration-disclosure) var(--ease-out-3);
+      transition: block-size var(--fgd-duration-disclosure) var(--ease-out-3);
     }
 
     .jumpPanel {
-      transition: clip-path var(--ds-duration-disclosure) var(--ease-out-3);
+      transition: clip-path var(--fgd-duration-disclosure) var(--ease-out-3);
     }
 
     .jumpItem,
     .jumpLabel {
-      transition: color var(--ds-duration-quick) var(--ease-out-3);
+      transition: color var(--fgd-duration-quick) var(--ease-out-3);
     }
   }
 
@@ -376,7 +376,7 @@
       display: flex;
       align-items: center;
       gap: var(--size-px-2);
-      padding: 0 var(--ds-space-12) var(--size-px-2);
+      padding: 0 var(--size-px-2-5) var(--size-px-2);
     }
   }
 
@@ -403,7 +403,7 @@
 
   @media (--lg-n-above) {
     .toolbar {
-      max-inline-size: calc(var(--ds-container-content) + 2 * var(--ds-space-12));
+      max-inline-size: calc(var(--fgd-container-content) + 2 * var(--size-px-2-5));
     }
   }
 
@@ -495,7 +495,7 @@
 
   @media (--motionOK) {
     .docked {
-      animation: dock var(--ds-duration-quick) var(--ease-out-3);
+      animation: dock var(--fgd-duration-quick) var(--ease-out-3);
     }
   }
 }
@@ -503,13 +503,13 @@
 @layer states {
   /* Glyph hover: the next tier's weight (§10.1 icon states) [D181]. */
   .glyph:hover svg {
-    stroke-width: var(--ds-stroke-1-5);
+    stroke-width: var(--border-size-1-5);
   }
 
   /* Jump trigger hover: the label takes the link hover ink; the indicator keeps its weight [D181]. */
   .jumpTrigger:hover .jumpLabel {
     color: var(--role-link-hover);
-    text-decoration-line: var(--ds-link-hover-line);
+    text-decoration-line: var(--fgd-link-hover-line);
   }
 
   .jumpTrigger[data-popup-open] .chevron {
@@ -517,13 +517,13 @@
   }
 
   .jumpTrigger[data-popup-open] .jumpIndicator {
-    block-size: var(--ds-stroke-3);
+    block-size: var(--border-size-2-25);
   }
 
   /* Jump item hover: --role-link-hover only; underlined where it is --primary12 [D181]. */
   .jumpItem:hover {
     color: var(--role-link-hover);
-    text-decoration-line: var(--ds-link-hover-line);
+    text-decoration-line: var(--fgd-link-hover-line);
   }
 
   .stairLink:hover {
@@ -535,13 +535,13 @@
     font-weight: var(--font-weight-6);
   }
 
-  /* Current Jump item: the --ds-stroke-3 start bar in --primary12 [D15]. */
+  /* Current Jump item: the --border-size-2-25 start bar in --primary12 [D15]. */
   .jumpItem[aria-current='location']::before {
     content: '';
     position: absolute;
     inset-block: var(--size-px-1);
     inset-inline-start: 0;
-    inline-size: var(--ds-stroke-3);
+    inline-size: var(--border-size-2-25);
     background-color: var(--primary12);
   }
 
@@ -562,22 +562,22 @@
     position: absolute;
     inset-inline: 0;
     inset-block-end: 0;
-    block-size: var(--ds-stroke-3);
+    block-size: var(--border-size-2-25);
     background-color: var(--primary12);
   }
 
   .glyph:focus-visible,
   .jumpTrigger:focus-visible,
   .toTop:focus-visible {
-    outline: var(--ds-focus-width) solid var(--primary12);
-    outline-offset: var(--ds-focus-offset);
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: var(--fgd-focus-offset);
   }
 
   /* Rings inside a scrolling strip or panel sit inset, so nothing clips them. */
   .tab:focus-visible,
   .jumpItem:focus-visible {
-    outline: var(--ds-focus-width) solid var(--primary12);
-    outline-offset: calc(-1 * (var(--ds-focus-width) + var(--ds-focus-offset)));
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: calc(-1 * (var(--fgd-focus-width) + var(--fgd-focus-offset)));
   }
 
   .breadcrumbPanel[data-starting-style],

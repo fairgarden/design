@@ -259,10 +259,10 @@ export function TimelineEntry(props: TimelineEntryProps) {
 
 /**
  * The §4.7 markers at the timeline size (§1.5.16), from the shared ornament
- * utilities: origin, an open circle at --ds-marker-timeline; waypoint, a
- * stroked X at --ds-marker-waypoint; terminal, an open triangle at
- * --ds-marker-timeline pointing along the spine; current, a solid dot at
- * --ds-marker-current. Unfixed, CSS picks the shape from the entry's
+ * utilities: origin, an open circle at --fgd-marker-timeline; waypoint, a
+ * stroked X at --fgd-marker-waypoint; terminal, an open triangle at
+ * --fgd-marker-timeline pointing along the spine; current, a solid dot at
+ * --fgd-marker-current. Unfixed, CSS picks the shape from the entry's
  * position and stage.
  */
 function MarkerGlyph({ fixed }: { fixed?: TimelineMarker }) {

@@ -10,7 +10,7 @@
  * brandDrawing, nav, tools, iconButtons, action, menuSlot.
  *
  * Page frame: it responds to the viewport custom media only, with the
- * inline threshold --ds-nav-inline-n-above a build-time constant [D183].
+ * inline threshold --fgd-nav-inline-n-above a build-time constant [D183].
  * Colors are role variables only; local custom properties carry dimensions
  * only: --navigation-bar-logo-size, --navigation-bar-flow-size (the
  * in-flow height held while docked, written by the sticky observer).
@@ -47,12 +47,12 @@
   .skipLink {
     position: absolute;
     inset-block-start: var(--size-px-2);
-    inset-inline-start: var(--ds-space-margin);
+    inset-inline-start: var(--fgd-space-margin);
     z-index: var(--layer-3);
     display: inline-flex;
     align-items: center;
     box-sizing: border-box;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     padding-inline: var(--size-px-5);
     border: var(--border-size-2) solid var(--primary12);
     border-radius: var(--radius-round);
@@ -62,10 +62,10 @@
     white-space: nowrap;
   }
 
-  /* The brand strip: the first bar's --ds-stroke-3 top line in --secondary9 (green, passed explicitly). */
+  /* The brand strip: the first bar's --border-size-2-25 top line in --secondary9 (green, passed explicitly). */
   .strip {
     block-size: 0;
-    border-block-start: var(--ds-stroke-3) solid var(--secondary9);
+    border-block-start: var(--border-size-2-25) solid var(--secondary9);
   }
 
   /* ── Utility bar (§11.3) ───────────────────────────────────────────── */
@@ -80,8 +80,8 @@
     align-items: center;
     gap: var(--size-px-5);
     box-sizing: border-box;
-    inline-size: min(calc(100% - 2 * var(--ds-space-margin)), var(--ds-container-content));
-    block-size: var(--ds-size-bar-utility);
+    inline-size: min(calc(100% - 2 * var(--fgd-space-margin)), var(--fgd-container-content));
+    block-size: var(--fgd-size-bar-utility);
     margin-inline: auto;
   }
 
@@ -145,17 +145,17 @@
   /* 56 px at base, 64 px from --lg-n-above, over a full-bleed --border-size-1 --role-rule. */
   .bar {
     box-sizing: content-box;
-    block-size: var(--ds-size-control-xl);
+    block-size: var(--fgd-size-control-xl);
     border-block-end: var(--border-size-1) solid var(--role-rule);
   }
 
-  /* Capped at --ds-container-content; the panels align to this box. */
+  /* Capped at --fgd-container-content; the panels align to this box. */
   .inner {
     display: flex;
     align-items: center;
     gap: var(--size-px-5);
     box-sizing: border-box;
-    inline-size: min(calc(100% - 2 * var(--ds-space-margin)), var(--ds-container-content));
+    inline-size: min(calc(100% - 2 * var(--fgd-space-margin)), var(--fgd-container-content));
     block-size: 100%;
     margin-inline: auto;
   }
@@ -167,7 +167,7 @@
     flex: none;
     align-items: center;
     gap: var(--size-px-2);
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     color: var(--primary12);
     text-decoration-line: none;
   }
@@ -184,13 +184,13 @@
     block-size: 100%;
   }
 
-  /* A fine-line drawing in the logo's ink (--ds-stroke-0-75). */
+  /* A fine-line drawing in the logo's ink (--border-size-0-75). */
   .brandDrawing {
     display: inline-flex;
     block-size: var(--navigation-bar-logo-size);
     color: var(--primary12);
     stroke: currentColor;
-    stroke-width: var(--ds-stroke-0-75);
+    stroke-width: var(--border-size-0-75);
     fill: none;
   }
 
@@ -246,12 +246,12 @@
     }
 
     .logo {
-      --navigation-bar-logo-size: var(--ds-size-icon-block);
+      --navigation-bar-logo-size: var(--fgd-size-icon-block);
     }
   }
 
   /* Inline from the threshold: utility row and menu shown, the menu Button removed [D183]. */
-  @media (--ds-nav-inline-n-above) {
+  @media (--fgd-nav-inline-n-above) {
     .utility {
       display: block;
     }
@@ -275,7 +275,7 @@
   }
 
   /* Stacked masthead: a wordmark row over the caps nav row, ruled above and below. */
-  @media (--ds-nav-inline-n-above) {
+  @media (--fgd-nav-inline-n-above) {
     .masthead .bar {
       block-size: auto;
       border-block-start: var(--border-size-2) solid var(--role-rule);
@@ -289,7 +289,7 @@
     .masthead .logo {
       flex: 1 0 100%;
       justify-content: center;
-      block-size: var(--ds-size-control-xl);
+      block-size: var(--fgd-size-control-xl);
       border-block-end: var(--border-size-1) solid var(--role-rule);
     }
 
@@ -304,7 +304,7 @@
     display: none;
   }
 
-  @media (--ds-nav-inline-n-above) {
+  @media (--fgd-nav-inline-n-above) {
     .compact .bar {
       block-size: var(--size-px-9);
       border-block-start-width: 0;
@@ -341,11 +341,11 @@
     clip-path: inset(0);
   }
 
-  /* The swap: a --ds-duration-quick clip cut from the top edge, instant under --motionNotOK [D183]. */
+  /* The swap: a --fgd-duration-quick clip cut from the top edge, instant under --motionNotOK [D183]. */
   @media (--motionOK) {
     .base[data-docked] .frame {
       transition-property: clip-path;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
 
@@ -379,9 +379,9 @@
     text-decoration-line: underline;
   }
 
-  /* Current (aria-current="page"): the --ds-stroke-3 bar under the label [D15]. */
+  /* Current (aria-current="page"): the --border-size-2-25 bar under the label [D15]. */
   .utilityLink[aria-current='page']::after {
-    border-block-end-width: var(--ds-stroke-3);
+    border-block-end-width: var(--border-size-2-25);
   }
 }
 

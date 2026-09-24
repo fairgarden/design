@@ -38,21 +38,21 @@
     appearance: none;
   }
 
-  /* Every target reaches --ds-size-hit; a smaller control extends it invisibly (§9.1) [D43]. */
+  /* Every target reaches --fgd-size-hit; a smaller control extends it invisibly (§9.1) [D43]. */
   .base::after {
     content: '';
     position: absolute;
     top: 50%;
     left: 50%;
-    inline-size: var(--ds-size-hit);
-    block-size: var(--ds-size-hit);
+    inline-size: var(--fgd-size-hit);
+    block-size: var(--fgd-size-hit);
     min-inline-size: 100%;
     min-block-size: 100%;
     translate: -50% -50%;
   }
 
   .label {
-    text-decoration-thickness: var(--ds-stroke-1-5);
+    text-decoration-thickness: var(--border-size-1-5);
     text-underline-offset: 0.15em;
   }
 
@@ -64,10 +64,10 @@
   .edge {
     display: none;
     position: absolute;
-    inset-block-start: calc(var(--ds-dot-fine) / 2);
-    inset-inline-start: calc(var(--ds-dot-fine) / 2);
-    inline-size: calc(100% - var(--ds-dot-fine));
-    block-size: calc(100% - var(--ds-dot-fine));
+    inset-block-start: calc(var(--fgd-dot-fine) / 2);
+    inset-inline-start: calc(var(--fgd-dot-fine) / 2);
+    inline-size: calc(100% - var(--fgd-dot-fine));
+    block-size: calc(100% - var(--fgd-dot-fine));
     overflow: visible;
     pointer-events: none;
   }
@@ -75,7 +75,7 @@
   .edgeLine {
     fill: none;
     stroke: var(--role-disabled-edge);
-    rx: calc(var(--button-edge-radius) - var(--ds-dot-fine) / 2);
+    rx: calc(var(--button-edge-radius) - var(--fgd-dot-fine) / 2);
   }
 
   @media (--forcedColors) {
@@ -84,12 +84,12 @@
     }
   }
 
-  /* Hover and press transitions [D181]: --ds-duration-quick, --ease-out-3; instant under --motionNotOK. */
+  /* Hover and press transitions [D181]: --fgd-duration-quick, --ease-out-3; instant under --motionNotOK. */
   @media (--motionOK) {
     .base,
     .label {
       transition-property: color, background-color, border-color, text-decoration-color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -118,7 +118,7 @@
   }
 
   .md {
-    --button-height: var(--ds-size-control-md);
+    --button-height: var(--fgd-size-control-md);
   }
 
   .lg {
@@ -126,7 +126,7 @@
   }
 
   .xl {
-    --button-height: var(--ds-size-control-xl);
+    --button-height: var(--fgd-size-control-xl);
   }
 
   /*
@@ -200,12 +200,12 @@
     color: var(--primary12);
   }
 
-  /* Butted to a field (§10.3): --radius-1 outside, --ds-radius-none at the seam. */
+  /* Butted to a field (§10.3): --radius-1 outside, --radius-0 at the seam. */
   .buttedStart {
     --button-edge-radius: var(--radius-1);
 
-    border-start-start-radius: var(--ds-radius-none);
-    border-end-start-radius: var(--ds-radius-none);
+    border-start-start-radius: var(--radius-0);
+    border-end-start-radius: var(--radius-0);
     border-start-end-radius: var(--radius-1);
     border-end-end-radius: var(--radius-1);
   }
@@ -215,8 +215,8 @@
 
     border-start-start-radius: var(--radius-1);
     border-end-start-radius: var(--radius-1);
-    border-start-end-radius: var(--ds-radius-none);
-    border-end-end-radius: var(--ds-radius-none);
+    border-start-end-radius: var(--radius-0);
+    border-end-end-radius: var(--radius-0);
   }
 }
 
@@ -273,9 +273,9 @@
    *   label and edge unchanged, no underline;
    * - outline: a --primary3 fill (--role-soft-hover); where soft fills drop
    *   it stays the ground and the label takes the bare-text underline
-   *   (--ds-soft-hover-line);
+   *   (--fgd-soft-hover-line);
    * - text: the label takes --role-link-hover, underlined where that is
-   *   --primary12 (--ds-link-hover-line); the glyph swaps to the next tier's
+   *   --primary12 (--fgd-link-hover-line); the glyph swaps to the next tier's
    *   weight through Icon weight="interactive" (as on icon-only buttons).
    */
   .solid:not([data-disabled], [aria-busy='true']):hover {
@@ -287,7 +287,7 @@
   }
 
   .outline:not([data-disabled], [aria-busy='true']):hover .label {
-    text-decoration-line: var(--ds-soft-hover-line);
+    text-decoration-line: var(--fgd-soft-hover-line);
     text-decoration-color: var(--role-accent);
     text-decoration-thickness: var(--border-size-2);
     text-underline-offset: var(--size-px-1);
@@ -295,7 +295,7 @@
 
   .text:not([data-disabled], [aria-busy='true']):hover .label {
     color: var(--role-link-hover);
-    text-decoration-line: var(--ds-link-hover-line);
+    text-decoration-line: var(--fgd-link-hover-line);
     text-decoration-color: var(--role-accent);
   }
 

@@ -5,13 +5,13 @@
  */
 .h1 {
   composes: typeDisplay from '../../src/utils/type.module.css';
-  margin-block: 0 var(--ds-space-40);
+  margin-block: 0 var(--size-px-7-5);
   color: var(--role-heading);
 }
 
 .h2 {
   composes: typeH2 from '../../src/utils/type.module.css';
-  margin-block: var(--ds-space-56) var(--size-px-5);
+  margin-block: var(--size-px-8-5) var(--size-px-5);
   padding-block-end: var(--size-px-3);
   border-block-end: var(--border-size-1) solid var(--role-hairline);
   color: var(--role-heading);
@@ -19,7 +19,7 @@
 
 .h3 {
   composes: typeSubhead from '../../src/utils/type.module.css';
-  margin-block: var(--ds-space-40) var(--size-px-3);
+  margin-block: var(--size-px-7-5) var(--size-px-3);
   color: var(--primary12);
 }
 
@@ -30,22 +30,22 @@
 
 .p {
   composes: typeBody from '../../src/utils/type.module.css';
-  max-inline-size: var(--ds-measure-reading);
+  max-inline-size: var(--fgd-measure-reading);
   margin-block: 0 var(--size-px-3);
 }
 
 /* The first paragraph after the H1 is the page's description: set as type-lead. */
 .h1 + .p {
-  font-family: var(--ds-font-ui);
+  font-family: var(--fgd-font-ui);
   font-weight: var(--font-weight-4);
-  font-size: var(--ds-font-size-lead);
+  font-size: var(--fgd-font-size-lead);
   line-height: var(--font-lineheight-3);
-  margin-block-end: var(--ds-space-40);
+  margin-block-end: var(--size-px-7-5);
 }
 
 .list {
   composes: typeBody from '../../src/utils/type.module.css';
-  max-inline-size: var(--ds-measure-reading);
+  max-inline-size: var(--fgd-measure-reading);
   margin-block: 0 var(--size-px-3);
   padding-inline-start: var(--size-px-5);
 
@@ -55,7 +55,7 @@
 }
 
 .code {
-  font-family: var(--ds-font-mono);
+  font-family: var(--fgd-font-mono);
   font-size: 0.9em;
   color: var(--primary12);
 }
@@ -73,20 +73,20 @@
   border-block: var(--border-size-1) solid var(--role-rule);
 
   & th {
-    font-family: var(--ds-font-ui);
+    font-family: var(--fgd-font-ui);
     font-weight: var(--font-weight-6);
-    font-size: var(--ds-font-size-label);
+    font-size: var(--fgd-font-size-label);
     line-height: var(--font-lineheight-1);
     letter-spacing: var(--font-letterspacing-3);
     text-transform: uppercase;
-    padding: var(--size-px-2) var(--ds-space-12);
+    padding: var(--size-px-2) var(--size-px-2-5);
     border-block-end: var(--border-size-1) solid var(--role-rule);
     color: var(--role-muted);
     text-align: start;
   }
 
   & td {
-    padding: var(--ds-space-12);
+    padding: var(--size-px-2-5);
     border-block-end: var(--border-size-1) solid var(--role-hairline);
     vertical-align: top;
   }
@@ -99,10 +99,10 @@
 /* Callouts: a block edge in --role-rule, never a tinted fill alone [D84]. */
 .blockquote {
   composes: typeBodyUi from '../../src/utils/type.module.css';
-  max-inline-size: var(--ds-measure-reading);
+  max-inline-size: var(--fgd-measure-reading);
   margin: var(--size-px-5) 0;
   padding: var(--size-px-3) var(--size-px-5);
-  border-inline-start: var(--ds-stroke-3) solid var(--role-rule);
+  border-inline-start: var(--border-size-2-25) solid var(--role-rule);
   background-color: var(--primary2);
 
   & p {
@@ -111,7 +111,7 @@
 }
 
 .hr {
-  margin-block: var(--ds-space-40);
+  margin-block: var(--size-px-7-5);
   border: none;
   border-block-start: var(--border-size-1) solid var(--role-hairline);
 }

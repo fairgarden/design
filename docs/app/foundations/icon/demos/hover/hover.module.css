@@ -8,8 +8,8 @@
 .button {
   display: inline-grid;
   place-items: center;
-  inline-size: var(--ds-size-hit);
-  block-size: var(--ds-size-hit);
+  inline-size: var(--fgd-size-hit);
+  block-size: var(--fgd-size-hit);
   padding: 0;
   border: var(--border-size-2) solid var(--primary12);
   border-radius: var(--radius-round);
@@ -24,7 +24,7 @@
 }
 
 .button:disabled {
-  border-width: var(--ds-dot-fine);
+  border-width: var(--fgd-dot-fine);
   border-style: dotted;
   border-color: var(--role-rule);
   color: var(--role-muted);
@@ -33,17 +33,17 @@
 
 .button:focus-visible,
 .link:focus-visible {
-  outline: var(--ds-focus-width) solid var(--primary12);
-  outline-offset: var(--ds-focus-offset);
+  outline: var(--fgd-focus-width) solid var(--primary12);
+  outline-offset: var(--fgd-focus-offset);
 }
 
 .link {
   display: inline-flex;
   gap: var(--size-px-1);
   align-items: center;
-  min-block-size: var(--ds-size-hit);
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-label);
+  min-block-size: var(--fgd-size-hit);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-label);
   font-weight: var(--font-weight-6);
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -53,7 +53,7 @@
 
 .link:hover {
   text-decoration-line: underline;
-  text-decoration-thickness: var(--ds-stroke-1-5);
+  text-decoration-thickness: var(--border-size-1-5);
   text-underline-offset: 0.2em;
 }
 

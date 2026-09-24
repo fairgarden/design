@@ -27,9 +27,9 @@ import styles from './radio.module.css'
  *   --role-select aliases, never the danger scale. RadioFeedback computes
  *   its secondary from its status (success green, danger red).
  * - States: data-checked → --role-select fill, --role-select-mark ●,
- *   circle edge --ds-stroke-3 --role-select-edge; pill fill --role-select
+ *   circle edge --border-size-2-25 --role-select-edge; pill fill --role-select
  *   with a --border-size-2 --role-select-edge edge and a leading ● (read
- *   through :has()); swatch ring --ds-stroke-3 outside a --size-px-1 gap
+ *   through :has()); swatch ring --border-size-2-25 outside a --size-px-1 gap
  *   plus the mark; :hover (not disabled, not read-only) [D181] → an
  *   unchecked circle's fill --role-soft-hover (--primary3 where soft fills
  *   apply), a checked circle's or pill's fill --role-select-hover, edges

@@ -102,7 +102,7 @@ type SectionHeaderCommonProps = Omit<useRender.ComponentProps<'div'>, 'children'
   heading: React.ReactNode
   /** The heading's `id`, for the band's `aria-labelledby`. */
   headingId?: string
-  /** Why it matters: `type-lead` in `--primary12`, capped at `--ds-measure-reading`. */
+  /** Why it matters: `type-lead` in `--primary12`, capped at `--fgd-measure-reading`. */
   lede?: React.ReactNode
   /** Where to go next: below the lede at base, at the heading row's end from `--lg-n-above`. */
   seeAll?: SectionHeaderSeeAll
@@ -147,7 +147,7 @@ type SectionHeaderKindProps =
   | {
       /** `anchored`: a sticker drawing sitting on the heading, then an action. */
       kind: 'anchored'
-      /** The sticker (§6.14) at `--ds-size-art-s`; its halo touches the heading's cap tops. */
+      /** The sticker (§6.14) at `--fgd-size-art-s`; its halo touches the heading's cap tops. */
       art: React.ReactNode
       eyebrow?: never
       kicker?: never
@@ -181,7 +181,7 @@ export type SectionHeaderProps = SectionHeaderCommonProps & SectionHeaderKindPro
 
 /**
  * The entry-left `ornament-trail` (§4.7.1): an origin circle, a freehand
- * rise with one loop, then a level run stopping `--ds-space-halo` before the
+ * rise with one loop, then a level run stopping `--fgd-space-halo` before the
  * kicker. Fixed art, 120 × 56 px; decorative.
  */
 function TrailEntry() {
@@ -204,7 +204,7 @@ function TrailEntry() {
   )
 }
 
-/** The trail resumed `--ds-space-halo` after the kicker, ending in an open `marker-terminal`. */
+/** The trail resumed `--fgd-space-halo` after the kicker, ending in an open `marker-terminal`. */
 function TrailTail() {
   return (
     <svg
@@ -225,7 +225,7 @@ function TrailTail() {
   )
 }
 
-/** "See all →": `type-label` caps, underlined at rest in `--role-accent`, with a `--ds-size-hit` target. */
+/** "See all →": `type-label` caps, underlined at rest in `--role-accent`, with a `--fgd-size-hit` target. */
 function SeeAll({ href, label, render }: SectionHeaderSeeAll) {
   const url = printUrl(href)
   return useRender({

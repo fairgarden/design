@@ -5,33 +5,33 @@
 }
 
 .toggle {
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-caption);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-caption);
   color: var(--primary12);
 }
 
 .upper {
-  padding: var(--size-px-10) var(--ds-space-margin);
+  padding: var(--size-px-10) var(--fgd-space-margin);
 }
 
 .prose {
-  max-inline-size: var(--ds-measure-reading);
+  max-inline-size: var(--fgd-measure-reading);
   margin: 0 auto;
-  font-family: var(--ds-font-text);
-  font-size: var(--ds-font-size-body);
+  font-family: var(--fgd-font-text);
+  font-size: var(--fgd-font-size-body);
 }
 
 .lower {
-  padding: var(--ds-space-56) var(--ds-space-margin) var(--ds-space-40);
+  padding: var(--size-px-8-5) var(--fgd-space-margin) var(--size-px-7-5);
 }
 
 .container {
-  max-inline-size: var(--ds-container-content);
+  max-inline-size: var(--fgd-container-content);
   margin-inline: auto;
 }
 
 .after {
   margin: 0;
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-body-ui);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-body-ui);
 }

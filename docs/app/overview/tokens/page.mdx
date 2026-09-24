@@ -1,6 +1,8 @@
 # Tokens
 
-Every non-color value comes from Open Props, used as shipped, or from a `--ds-` extension. A `--ds-` token never holds a color.
+Every non-color value is an Open Props step or a FairGarden-only `--fgd-` token, and none holds a color.
+
+Open Props is used as shipped. Where the system needs a value between two of its steps, that value joins the scale as a step named by its position, to the nearest quarter: `--size-px-2-5` (12 px) sits halfway between `--size-px-2` (8 px) and `--size-px-3` (16 px), and on a linear stretch the suffix reads as the value (`--border-size-1-5` is 1.5 px). Everything else the system defines, from type roles to pattern geometry, takes `--fgd-` [D193].
 
 ## Units
 
@@ -15,48 +17,54 @@ Every non-color value comes from Open Props, used as shipped, or from a `--ds-` 
 
 ## Spacing
 
-The Open Props px series, plus three system steps. The rem, fluid and relative size series are not used for spacing.
+The Open Props px series, plus three in-between steps. The rem, fluid and relative size series are not used for spacing.
 
 | Token | Value | Typical use |
 | --- | --- | --- |
 | `--size-px-1` | 4 px | Icon-to-label nudge |
 | `--size-px-2` | 8 px | Tight gaps; halo |
-| `--ds-space-12` | 12 px | Tag icon gap, tight stacks |
+| `--size-px-2-5` | 12 px | Tag icon gap, tight stacks |
 | `--size-px-3` | 16 px | Mobile margin, component padding |
 | `--size-px-5` | 24 px | Heading to body |
 | `--size-px-7` | 32 px | Card padding |
-| `--ds-space-40` | 40 px | Block gap, desktop margin |
-| `--ds-space-56` | 56 px | Section spacing, mobile |
+| `--size-px-7-5` | 40 px | Block gap, desktop margin |
+| `--size-px-8-5` | 56 px | Section spacing, mobile |
 | `--size-px-10` | 80 px | Section spacing, desktop |
 
-`--ds-space-section` and `--ds-space-margin` step up with the page's breakpoints. All gaps are visual: baseline or rule to cap top. The only off-series values are the named exceptions `--ds-space-stack`, `--ds-space-eyebrow-rule` and `--ds-space-eyebrow-content`.
+`--fgd-space-section` and `--fgd-space-margin` step up with the page's breakpoints. All gaps are visual: baseline or rule to cap top. The only off-series values are the named exceptions `--fgd-space-stack`, `--fgd-space-eyebrow-rule` and `--fgd-space-eyebrow-content`.
 
-Density is set per module, never by breakpoint: a Ground's `density` (`compact`, `default` or `spacious`) is written as `data-density` and sets `--ds-space-section` and the table cell padding for everything inside it.
+Density is set per module, never by breakpoint: a Ground's `density` (`compact`, `default` or `spacious`) is written as `data-density` and sets `--fgd-space-section` and the table cell padding for everything inside it.
 
 ## Strokes and radii
 
 | Token | Value | Job |
 | --- | --- | --- |
+| `--border-size-0-75` | 0.75 px | Fine-line drawings |
 | `--border-size-1` | 1 px | Rules; table, field and card borders |
-| `--ds-stroke-1-5` | 1.5 px | Badge edges, link underline |
+| `--border-size-1-25` | 1.25 px | Inline-tier icons, small drawn glyphs |
+| `--border-size-1-5` | 1.5 px | Badge edges, link underline |
 | `--border-size-2` | 2 px | Control edges, outline buttons, focus ring, hover underline |
-| `--ds-stroke-3` | 3 px | Active-tab bar, dialog border |
+| `--border-size-2-25` | 3 px | Active-tab bar, dialog border |
+| `--border-size-2-75` | 4 px | Large sticker silhouettes |
+| `--border-size-3-5` | 8 px | Card block edges |
 | `--radius-1` | 2 px | Inputs, joined controls, tabs |
-| `--ds-radius-8` | 8 px | Photos, standard cards, panels |
-| `--ds-radius-20` | 20 px | Block-edge cards |
-| `--ds-radius-feature` | ≈ 1/7 of the container, at most 64 px | The framed feature field |
+| `--radius-2-25` | 8 px | Photos, standard cards, panels |
+| `--radius-3-25` | 20 px | Block-edge cards |
+| `--fgd-radius-feature` | ≈ 1/7 of the container, at most 64 px | The framed feature field |
 | `--radius-round` | pill | Standalone buttons, badges, tags |
 
-`--ds-radius-conditional-8` and `--ds-radius-conditional-20` keep the full radius while a surface is narrower than the viewport and drop to 0 when it runs full-bleed.
+Line weights and borders are one scale: the in-between `--border-size-*` steps sit between Open Props' `--border-size-1` (1 px), `--border-size-2` (2 px), `--border-size-3` (5 px) and `--border-size-4` (10 px), and the in-between radii between `--radius-2` (5 px), `--radius-3` (16 px) and `--radius-4` (32 px).
+
+`--radius-conditional-2-25` and `--radius-conditional-3-25` follow Open Props' `--radius-conditional-*` pattern: they keep the full radius while a surface is narrower than the viewport and drop to 0 when it runs full-bleed.
 
 ## Sizing, breakpoints and motion
 
-- **Controls:** `--size-px-7` (32 px, small), `--ds-size-control-md` (40 px, default), `--size-px-8` (48 px, large), `--ds-size-control-xl` (56 px); every target is at least `--ds-size-hit` (44 px).
-- **Logo:** `--ds-size-logo`, the logo mark in a lockup beside the wordmark: `--ds-size-control-md` (40 px), `--size-px-8` (48 px) from `--lg-n-above`, and `--size-px-7` (32 px) below `--xs-n-below`, so it fills the header bar's control height.
-- **Custom media** drive the page frame: `--sm-n-above` (480 px), `--md-n-above` (768 px), `--lg-n-above` (1024 px), `--xl-n-above` (1440 px), plus `--ds-nav-inline-n-above` (1024 px by default), where the inline Navigation Bar replaces the drawer. Modules reflow on container queries as a progressive enhancement.
-- **Motion:** `--ds-duration-quick` (120 ms) for state changes and hover, `--ds-duration-disclosure` (200 ms) for reveals, `--ease-out-3`; everything is instant under reduced motion. `--ds-delay-tooltip` (500 ms) and `--ds-delay-nav-open` / `--ds-delay-nav-close` (150 / 300 ms) have number mirrors in `utils/tokens.ts` for Base UI.
+- **Controls:** `--size-px-7` (32 px, small), `--fgd-size-control-md` (40 px, default), `--size-px-8` (48 px, large), `--fgd-size-control-xl` (56 px); every target is at least `--fgd-size-hit` (44 px).
+- **Logo:** `--fgd-size-logo`, the logo mark in a lockup beside the wordmark: `--fgd-size-control-md` (40 px), `--size-px-8` (48 px) from `--lg-n-above`, and `--size-px-7` (32 px) below `--xs-n-below`, so it fills the header bar's control height.
+- **Custom media** drive the page frame: `--sm-n-above` (480 px), `--md-n-above` (768 px), `--lg-n-above` (1024 px), `--xl-n-above` (1440 px), plus `--fgd-nav-inline-n-above` (1024 px by default), where the inline Navigation Bar replaces the drawer. Modules reflow on container queries as a progressive enhancement.
+- **Motion:** `--fgd-duration-quick` (120 ms) for state changes and hover, `--fgd-duration-disclosure` (200 ms) for reveals, `--ease-out-3`; everything is instant under reduced motion. `--fgd-delay-tooltip` (500 ms) and `--fgd-delay-nav-open` / `--fgd-delay-nav-close` (150 / 300 ms) have number mirrors in `utils/tokens.ts` for Base UI.
 
-A few `--ds-` tokens are switches that the role maps set per scope: `--ds-edge-shaped` (whether a shaped edge draws), `--ds-link-hover-line` and `--ds-soft-hover-line` (whether a hover underlines), and `--ds-series-fill` / `--ds-series-pattern` (flat chart fills or one-ink patterns). Components read them; they never set them.
+A few `--fgd-` tokens are switches that the role maps set per scope: `--fgd-edge-shaped` (whether a shaped edge draws), `--fgd-link-hover-line` and `--fgd-soft-hover-line` (whether a hover underlines), and `--fgd-series-fill` / `--fgd-series-pattern` (flat chart fills or one-ink patterns). Components read them; they never set them.
 
 ## Banned
 

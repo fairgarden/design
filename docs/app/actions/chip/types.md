@@ -6,9 +6,9 @@
 
 ### Chip
 
-A removable chip: `--size-px-7` tall, a `--ds-stroke-1-5` `--role-rule`
+A removable chip: `--size-px-7` tall, a `--border-size-1-5` `--role-rule`
 edge, the label in `type-body-ui` and the × (`close`, inline tier) in a
-`--ds-size-hit` target with its own focus ring. It prints as the word.
+`--fgd-size-hit` target with its own focus ring. It prints as the word.
 
 **Chip Props:**
 

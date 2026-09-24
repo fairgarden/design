@@ -26,7 +26,7 @@ import styles from './announcement-bar.module.css'
  *   on with `kind: bar`, excluded with `kind: field`, whose --primary12
  *   edge does that job); `primary`, `secondary` → scales module classes.
  *   `interactive` is computed, never a prop: a bar holding a link or the
- *   dismiss grows to the --ds-size-hit minimum.
+ *   dismiss grows to the --fgd-size-hit minimum.
  * - Compound variants: none.
  * - Defaults: kind bar, voice standard, record false, ruled true; color
  *   axes: none [D133].
@@ -45,7 +45,7 @@ import styles from './announcement-bar.module.css'
  * - Scope: with `kind: bar`, the root is a `kind="band"` Ground of a page
  *   ground when `preset` is given (otherwise it inherits the page ground);
  *   with `kind: field`, a `kind="field"` Ground of a field preset, inset to
- *   the full width of --ds-container-content, with its radius and its
+ *   the full width of --fgd-container-content, with its radius and its
  *   --primary12 edge [D178, D180].
  * - Container: none: it inherits its context and never reflows as a
  *   module; the responsive rules are viewport rules [D163].
@@ -67,7 +67,7 @@ export const announcementBar = cva(styles.base, {
     ruled: {
       true: styles.ruled,
     },
-    // Computed: a link or the dismiss raises the minimum height to --ds-size-hit.
+    // Computed: a link or the dismiss raises the minimum height to --fgd-size-hit.
     interactive: {
       true: styles.interactive,
     },

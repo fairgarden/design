@@ -173,7 +173,7 @@
 
   /*
    * marker-index: a --size-px-5 circle, --primary1 face (named directly, a
-   * face is not a knockout [D144]), --ds-stroke-1-5 --primary12 edge, a
+   * face is not a knockout [D144]), --border-size-1-5 --primary12 edge, a
    * zero-padded numeral in `type-label` at --font-weight-6. Screen size at
    * every zoom; the face layer carries the shape.
    */
@@ -200,19 +200,19 @@
     position: absolute;
     inset: 0;
     box-sizing: border-box;
-    border: var(--ds-stroke-1-5) solid var(--primary12);
+    border: var(--border-size-1-5) solid var(--primary12);
     border-radius: var(--radius-round);
     background-color: var(--primary1);
   }
 
   .markerSquare::before {
-    border-radius: var(--ds-radius-none);
+    border-radius: var(--radius-0);
   }
 
   /* A diamond: the square turned 45°, inset so its points stay inside the 24 px cell. */
   .markerDiamond::before {
     inset: calc(var(--size-px-5) * 0.1464);
-    border-radius: var(--ds-radius-none);
+    border-radius: var(--radius-0);
     rotate: 45deg;
   }
 
@@ -307,7 +307,7 @@
   .street {
     fill: none;
     stroke: var(--primary12);
-    stroke-width: var(--ds-stroke-1-5);
+    stroke-width: var(--border-size-1-5);
   }
 
   .path {
@@ -371,14 +371,14 @@
   .technical .frame {
     border-width: var(--border-size-1);
     border-color: var(--role-rule);
-    border-radius: var(--ds-radius-none);
+    border-radius: var(--radius-0);
   }
 
-  /* Location maps: --ds-radius-20, a --border-size-2 --primary12 frame. */
+  /* Location maps: --radius-3-25, a --border-size-2 --primary12 frame. */
   .location .frame {
     border-width: var(--border-size-2);
     border-color: var(--primary12);
-    border-radius: var(--ds-radius-20);
+    border-radius: var(--radius-3-25);
   }
 
   /* Container rule [D163] (§5.10.2): side by side 2:1 from 1024 px. */
@@ -433,9 +433,9 @@
       display: block;
     }
 
-    /* The static map within --ds-print-figure-max and the 174 mm block. */
+    /* The static map within --fgd-print-figure-max and the 174 mm block. */
     .frame {
-      inline-size: min(100%, calc(var(--ds-print-figure-max) * var(--map-ratio)));
+      inline-size: min(100%, calc(var(--fgd-print-figure-max) * var(--map-ratio)));
       cursor: auto;
     }
 
@@ -489,8 +489,8 @@
     .printQr {
       display: block;
       flex: none;
-      inline-size: var(--ds-print-qr);
-      block-size: var(--ds-print-qr);
+      inline-size: var(--fgd-print-qr);
+      block-size: var(--fgd-print-qr);
     }
 
     /* Standard dot screens print 1 pt dots (§1.5.9). */

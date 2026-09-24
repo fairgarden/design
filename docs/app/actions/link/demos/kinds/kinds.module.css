@@ -6,9 +6,9 @@
 
 .text {
   margin: 0;
-  font-family: var(--ds-font-text);
-  font-size: var(--ds-font-size-body);
-  line-height: var(--ds-leading-reading);
+  font-family: var(--fgd-font-text);
+  font-size: var(--fgd-font-size-body);
+  line-height: var(--fgd-leading-reading);
 }
 
 .nav {
@@ -21,6 +21,6 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-body-ui);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-body-ui);
 }

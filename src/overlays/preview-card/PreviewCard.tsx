@@ -112,7 +112,7 @@ export type PreviewCardPopupProps = BasePreviewCard.Popup.Props & {
 
 /**
  * The preview panel, rendered in its Base UI Portal as a nested `white`
- * scope: --primary1 face, --border-size-2 --primary12 frame, --ds-radius-8,
+ * scope: --primary1 face, --border-size-2 --primary12 frame, --radius-2-25,
  * 240–360 px wide. Compose `PreviewCardThumb`, `PreviewCardTitle`,
  * `PreviewCardDescription` and `PreviewCardDomain` inside it, and
  * `PreviewCardArrow` for the tail. It holds at most one link.
@@ -163,7 +163,7 @@ export function PreviewCardPopup(props: PreviewCardPopupProps) {
 /** Props for PreviewCardArrow: Base UI PreviewCard.Arrow props. */
 export type PreviewCardArrowProps = BasePreviewCard.Arrow.Props
 
-/** The tail: a --ds-space-12 × 6 px triangle whose --border-size-2 edge continues the frame. */
+/** The tail: a --size-px-2-5 × 6 px triangle whose --border-size-2 edge continues the frame. */
 export function PreviewCardArrow(props: PreviewCardArrowProps) {
   const { className, ...rest } = props
   return (
@@ -181,7 +181,7 @@ export type PreviewCardThumbProps = useRender.ComponentProps<'img'>
 
 /**
  * The page's thumbnail: a --ratio-widescreen photograph with the nested
- * radius (--ds-radius-8 − --size-px-3, floored at --radius-1) [D40].
+ * radius (--radius-2-25 − --size-px-3, floored at --radius-1) [D40].
  * Give it `alt` (empty when the title already names it).
  */
 export function PreviewCardThumb(props: PreviewCardThumbProps) {

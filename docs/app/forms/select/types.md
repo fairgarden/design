@@ -38,8 +38,8 @@ A titled group of items.
 
 ### SelectItem
 
-One option: a `--ds-size-hit` row. Highlighted rows take the `--primary4`
-soft fill and the `--ds-stroke-3` start bar; the chosen row a leading ✓
+One option: a `--fgd-size-hit` row. Highlighted rows take the `--primary4`
+soft fill and the `--border-size-2-25` start bar; the chosen row a leading ✓
 and `--font-weight-6` \[D145].
 
 **SelectItem Props:**

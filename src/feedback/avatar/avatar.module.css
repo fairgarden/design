@@ -49,10 +49,10 @@
     border-radius: var(--radius-round);
     background-color: var(--primary1);
     color: var(--primary12);
-    font-family: var(--ds-font-ui);
+    font-family: var(--fgd-font-ui);
     font-size: var(--avatar-initials);
     font-weight: var(--font-weight-7);
-    line-height: var(--ds-leading-display);
+    line-height: var(--fgd-leading-display);
     letter-spacing: 0;
     text-transform: uppercase;
     white-space: nowrap;
@@ -83,16 +83,16 @@
     color: var(--role-status);
     fill: var(--primary1);
     stroke: var(--primary1);
-    stroke-width: var(--ds-stroke-1-5);
+    stroke-width: var(--border-size-1-5);
     stroke-linecap: round;
     stroke-linejoin: round;
   }
 
-  /* Hover transition [D181]: --ds-duration-quick, --ease-out-3. */
+  /* Hover transition [D181]: --fgd-duration-quick, --ease-out-3. */
   @media (--motionOK) {
     .base {
       transition-property: border-color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -122,7 +122,7 @@
   }
 
   .md {
-    --avatar-size: var(--ds-size-control-md);
+    --avatar-size: var(--fgd-size-control-md);
     --avatar-ring: var(--border-size-1);
     --avatar-initials: var(--font-size-1);
   }
@@ -137,9 +137,9 @@
   }
 
   .xl {
-    --avatar-size: var(--ds-size-avatar-xl);
+    --avatar-size: var(--fgd-size-avatar-xl);
     --avatar-ring: var(--border-size-2);
-    --avatar-initials: var(--ds-font-size-display);
+    --avatar-initials: var(--fgd-font-size-display);
 
     border-color: var(--primary12);
   }

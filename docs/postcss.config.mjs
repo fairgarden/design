@@ -24,7 +24,7 @@ const config = {
   plugins: {
     'postcss-import': {},
     // Makes Open Props' custom media, e.g. (--md-n-above), and the design
-    // system's own, e.g. (--ds-nav-inline-n-above), known to every file,
+    // system's own, e.g. (--fgd-nav-inline-n-above), known to every file,
     // global or module, without emitting the definitions.
     '@csstools/postcss-global-data': {
       files: [

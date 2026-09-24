@@ -7,11 +7,11 @@
 /* Stand-in for the §11.8 section header (eyebrow + hairline). */
 .heading {
   margin: 0;
-  padding-block-end: var(--ds-space-eyebrow-rule);
+  padding-block-end: var(--fgd-space-eyebrow-rule);
   border-block-end: var(--border-size-1) solid var(--role-hairline);
   color: var(--role-heading);
-  font-family: var(--ds-font-ui);
-  font-size: var(--ds-font-size-eyebrow);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-eyebrow);
   font-weight: var(--font-weight-6);
   letter-spacing: var(--font-letterspacing-4);
   text-transform: uppercase;

@@ -41,7 +41,7 @@ import styles from './cta-block.module.css'
  *   frameLine), cornerMark.
  * - Scope: sunburst, mission and framed sit on their band's page ground;
  *   for saturated and deep, `field` is a `kind="field"` Ground of a field
- *   preset, with its --ds-radius-20 and its --primary12 edge in
+ *   preset, with its --radius-3-25 and its --primary12 edge in
  *   --role-edge [D177, D178].
  * - Container: `content` is the inline-size container `cta`; the action row
  *   and the deep and framed kinds' headline/actions split (7 / 5 from 768 px)
@@ -113,8 +113,8 @@ interface CTABlockCommonProps extends Omit<React.ComponentPropsWithRef<'section'
   secondaryAction?: CTAAction
   /**
    * Decoration behind the content, in `--role-tint`, clipped by the block
-   * (the `sunburst` kind's reaches `--ds-space-40` below it). Omitted, the
-   * `sunburst` kind draws `pattern-sunburst` from an origin `--ds-space-40`
+   * (the `sunburst` kind's reaches `--size-px-7-5` below it). Omitted, the
+   * `sunburst` kind draws `pattern-sunburst` from an origin `--size-px-7-5`
    * below the block's bottom edge, and the other kinds none; pass your own
    * art in `currentColor` (centred on the bottom edge), or `null` for none.
    * A mission band's `pattern-speckle` belongs on its band's Ground, which

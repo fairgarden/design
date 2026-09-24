@@ -6,12 +6,12 @@ Serif leads the system. Each of the four families has one job, and a change of f
 
 | Token | Role | Family |
 | --- | --- | --- |
-| `--ds-font-display` | Headings, item heads, kicker, stats, quotes | Fraunces |
-| `--ds-font-text` | Long-form body | Source Serif 4 |
-| `--ds-font-ui` | Controls, ledes, subheads, labels, captions | Figtree |
-| `--ds-font-mono` | Data, codes, figure numbers | IBM Plex Mono |
+| `--fgd-font-display` | Headings, item heads, kicker, stats, quotes | Fraunces |
+| `--fgd-font-text` | Long-form body | Source Serif 4 |
+| `--fgd-font-ui` | Controls, ledes, subheads, labels, captions | Figtree |
+| `--fgd-font-mono` | Data, codes, figure numbers | IBM Plex Mono |
 
-`--ds-font-fine` sets footnotes and secondary names: Source Serif 4 in light scopes and print, Figtree in dark scopes, since serif below 17 px does not hold on a reversed ground. The mode blocks set it, so components never choose.
+`--fgd-font-fine` sets footnotes and secondary names: Source Serif 4 in light scopes and print, Figtree in dark scopes, since serif below 17 px does not hold on a reversed ground. The mode blocks set it, so components never choose.
 
 All four are open-license (SIL OFL) and self-hosted from Fontsource by `@fairgarden/design/utils/fonts`, with no font CDN: variable Fraunces, Source Serif 4 and Figtree, and IBM Plex Mono at 400, 500 and 700. Never add a fifth family.
 
@@ -42,13 +42,13 @@ A component part takes a role by composing it from the shared module, never by s
 
 The module holds more roles for single jobs, among them `typeDisplayXl`, `typeKicker`, `typeQuote`, `typeStat`, `typeFootnote`, `typeSmall`, `typeFieldLabel` and `typeUrl`.
 
-Sizes are `rem` clamps, fluid from 360 px to 1024 px; print remaps them to `pt`. `typeMuted` colors text `--role-muted` and, on dark scopes, steps its weight down by `--ds-muted-weight-step`, so components stay mode-blind.
+Sizes are `rem` clamps, fluid from 360 px to 1024 px; print remaps them to `pt`. `typeMuted` colors text `--role-muted` and, on dark scopes, steps its weight down by `--fgd-muted-weight-step`, so components stay mode-blind.
 
 ## Rules
 
 - Headings are sentence case. Button labels and short field labels are title case, authored in the source.
 - Caps are for wayfinding (eyebrows, navigation, tabs, labels), never for actions.
 - Emphasis is italic, weight or family, never color alone.
-- Body text runs at `--ds-measure-reading` (66ch), ragged right.
+- Body text runs at `--fgd-measure-reading` (66ch), ragged right.
 
 Full specification: `DESIGN-SYSTEM.md` §3 (typography) and §1.5.5–§1.5.6 (families and type scale); companion guide §H.

@@ -45,14 +45,14 @@
     margin: 0;
   }
 
-  /* The row: ≥ --ds-size-control-xl tall, --size-px-3 vertical padding, text aligned to the column. */
+  /* The row: ≥ --fgd-size-control-xl tall, --size-px-3 vertical padding, text aligned to the column. */
   .trigger {
     display: flex;
     align-items: flex-start;
     gap: var(--size-px-3);
     box-sizing: border-box;
     inline-size: 100%;
-    min-block-size: var(--ds-size-control-xl);
+    min-block-size: var(--fgd-size-control-xl);
     margin: 0;
     padding-block: var(--size-px-3);
     padding-inline: 0;
@@ -104,15 +104,15 @@
   @media (--motionOK) {
     .panel {
       transition-property: block-size;
-      transition-duration: var(--ds-duration-disclosure);
+      transition-duration: var(--fgd-duration-disclosure);
       transition-timing-function: var(--ease-out-3);
     }
 
-    /* Hover transitions [D181]: --ds-duration-quick, --ease-out-3. */
+    /* Hover transitions [D181]: --fgd-duration-quick, --ease-out-3. */
     .title,
     .circle {
       transition-property: text-decoration-color, border-width;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -141,9 +141,9 @@
     border-block-start-color: var(--primary12);
   }
 
-  /* Plus / minus: a --size-px-5 outline circle at --ds-stroke-1-5, outline in both states. */
+  /* Plus / minus: a --size-px-5 outline circle at --border-size-1-5, outline in both states. */
   .plusminus .circle {
-    --accordion-circle-edge: var(--ds-stroke-1-5);
+    --accordion-circle-edge: var(--border-size-1-5);
 
     display: inline-flex;
     align-items: center;

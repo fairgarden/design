@@ -20,7 +20,7 @@ import styles from './slider.module.css'
  * Implementation (CSS Modules + CVA)
  * - Module: slider.module.css; CVA function `slider`.
  * - Axes: `stepped` → `stepped` (the tick scale: minor ticks half the
- *   --ds-space-12 major ticks, with major labels); `primary`, `secondary`
+ *   --size-px-2-5 major ticks, with major labels); `primary`, `secondary`
  *   → scales module classes.
  * - Compound variants: none.
  * - Defaults: stepped false; color axes none [D133]. The range form is
@@ -30,7 +30,7 @@ import styles from './slider.module.css'
  * - States: :hover (not disabled) → thumb face --role-soft-hover-face
  *   (--primary3 where soft fills apply, unchanged where they drop), edge
  *   unchanged [D181];
- *   data-dragging → thumb edge --ds-stroke-3 and the `chip`; :focus-visible on
+ *   data-dragging → thumb edge --border-size-2-25 and the `chip`; :focus-visible on
  *   each thumb's input → ring on the thumb; data-orientation → track
  *   direction; data-disabled → dotted track and thumb edges, indicator
  *   removed, value kept.

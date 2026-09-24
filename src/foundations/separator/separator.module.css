@@ -41,7 +41,7 @@
     overflow: visible;
     fill: none;
     stroke: currentColor;
-    stroke-dashoffset: calc(var(--ds-dot-fine) / -2);
+    stroke-dashoffset: calc(var(--fgd-dot-fine) / -2);
   }
 
   /* Rule–dot–rule (ornament-rule-dot, §4.8.2): two hairlines and a solid dot. */
@@ -54,9 +54,9 @@
 
   .dot {
     flex: none;
-    inline-size: var(--ds-ornament-dot);
-    block-size: var(--ds-ornament-dot);
-    margin-inline: var(--ds-ornament-dot-gap);
+    inline-size: var(--fgd-ornament-dot);
+    block-size: var(--fgd-ornament-dot);
+    margin-inline: var(--fgd-ornament-dot-gap);
     fill: currentColor;
   }
 
@@ -100,14 +100,14 @@
   /* Relation only: subdivisions inside solid-bounded groups, never the only
      boundary [D66]. The SVG draws it; the box carries no border. */
   .dotted {
-    --separator-thickness: var(--ds-dot-fine);
+    --separator-thickness: var(--fgd-dot-fine);
     --separator-edge-start: 0;
     color: var(--role-rule);
   }
 
-  /* Totals and running-header bands: 1 + 1 px, --ds-double-hair-gap apart. */
+  /* Totals and running-header bands: 1 + 1 px, --fgd-double-hair-gap apart. */
   .doubleHair {
-    --separator-thickness: var(--ds-double-hair-gap);
+    --separator-thickness: var(--fgd-double-hair-gap);
     --separator-edge-end: var(--border-size-1);
     color: var(--role-rule);
   }
@@ -115,7 +115,7 @@
   /* Thematic break: 35% of the text column, max --size-px-13, centred.
      Ornaments in reading bands take --primary12 (§4.8.2). Horizontal only. */
   .ruleDot {
-    --separator-thickness: var(--ds-ornament-dot);
+    --separator-thickness: var(--fgd-ornament-dot);
     --separator-edge-start: 0;
     display: flex;
     align-items: center;
@@ -146,7 +146,7 @@
   .base[data-orientation='horizontal'] .dots {
     inline-size: 100%;
     inline-size: calc(
-      round(down, 100% - var(--ds-dot-fine), var(--ds-dot-fine-pitch)) + var(--ds-dot-fine)
+      round(down, 100% - var(--fgd-dot-fine), var(--fgd-dot-fine-pitch)) + var(--fgd-dot-fine)
     );
     block-size: 100%;
     margin-inline: auto;
@@ -156,7 +156,7 @@
     inline-size: 100%;
     block-size: 100%;
     block-size: calc(
-      round(down, 100% - var(--ds-dot-fine), var(--ds-dot-fine-pitch)) + var(--ds-dot-fine)
+      round(down, 100% - var(--fgd-dot-fine), var(--fgd-dot-fine-pitch)) + var(--fgd-dot-fine)
     );
     margin-block: auto;
   }

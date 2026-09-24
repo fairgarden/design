@@ -73,7 +73,7 @@
   .base {
     display: flex;
     align-self: stretch;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     color: var(--primary12);
   }
 
@@ -126,15 +126,15 @@
     pointer-events: none;
   }
 
-  /* The target: at least --ds-size-hit square, label then chevron --size-px-1 apart. */
+  /* The target: at least --fgd-size-hit square, label then chevron --size-px-1 apart. */
   .hit {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--size-px-1);
     box-sizing: border-box;
-    min-block-size: var(--ds-size-hit);
-    min-inline-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
+    min-inline-size: var(--fgd-size-hit);
   }
 
   .label {
@@ -172,27 +172,27 @@
   .popupOverview {
     inline-size: var(--anchor-width, 100vw);
     border-block-end-width: var(--border-size-2);
-    border-radius: var(--ds-radius-none);
+    border-radius: var(--radius-0);
   }
 
   /*
    * Index and dropdown: attached under the bar but not full-bleed, so the
-   * top corners are square and the bottom ones --ds-radius-8; the edge runs
+   * top corners are square and the bottom ones --radius-2-25; the edge runs
    * down the sides and across the bottom, and the top meets the bar's rule
    * [D182].
    */
   .popupAttached {
     min-inline-size: min(
-      max(var(--ds-size-menu-min), var(--anchor-width, 0px)),
-      calc(100vw - 2 * var(--ds-space-margin))
+      max(var(--fgd-size-menu-min), var(--anchor-width, 0px)),
+      calc(100vw - 2 * var(--fgd-space-margin))
     );
-    max-inline-size: calc(100vw - 2 * var(--ds-space-margin));
+    max-inline-size: calc(100vw - 2 * var(--fgd-space-margin));
     border-inline-width: var(--border-size-2);
     border-block-end-width: var(--border-size-2);
-    border-start-start-radius: var(--ds-radius-none);
-    border-start-end-radius: var(--ds-radius-none);
-    border-end-start-radius: var(--ds-radius-8);
-    border-end-end-radius: var(--ds-radius-8);
+    border-start-start-radius: var(--radius-0);
+    border-start-end-radius: var(--radius-0);
+    border-end-start-radius: var(--radius-2-25);
+    border-end-end-radius: var(--radius-2-25);
     overflow: hidden;
     overflow: clip;
   }
@@ -218,7 +218,7 @@
   }
 
   /*
-   * A panel row: a --ds-size-hit pitch in type-body-ui, no rest underline
+   * A panel row: a --fgd-size-hit pitch in type-body-ui, no rest underline
    * [D80]. Link's list-link build (`kind="nav"` with `list`) gives its ink
    * and its hover, press and current states; the row's full width and
    * underline offset are restated in the compounds layer, above Link's.
@@ -233,12 +233,12 @@
 
   /* 200 px to --size-px-14 wide (§9.1). */
   .dropdown {
-    min-inline-size: var(--ds-size-menu-min);
+    min-inline-size: var(--fgd-size-menu-min);
   }
 
   .dropdownList {
     box-sizing: border-box;
-    min-inline-size: var(--ds-size-menu-min);
+    min-inline-size: var(--fgd-size-menu-min);
     max-inline-size: var(--size-px-14);
     padding-block: var(--size-px-2);
     padding-inline: var(--size-px-3);
@@ -246,11 +246,11 @@
 
   /* ── Overview ──────────────────────────────────────────────────────── */
 
-  /* Content on the 12-column grid of --ds-container-content, aligned with the bar's container. */
+  /* Content on the 12-column grid of --fgd-container-content, aligned with the bar's container. */
   .overview {
     --navigation-menu-overview-size: min(
-      calc(var(--anchor-width, 100vw) - 2 * var(--ds-space-margin)),
-      var(--ds-container-content)
+      calc(var(--anchor-width, 100vw) - 2 * var(--fgd-space-margin)),
+      var(--fgd-container-content)
     );
 
     padding-block: var(--size-px-7) var(--size-px-8);
@@ -259,7 +259,7 @@
   .overviewInner {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--ds-space-margin);
+    column-gap: var(--fgd-space-margin);
     box-sizing: border-box;
     inline-size: var(--navigation-menu-overview-size);
     margin-inline-start: calc(
@@ -293,7 +293,7 @@
     align-items: center;
     gap: var(--size-px-1);
     box-sizing: border-box;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     margin: 0;
     text-decoration-line: none;
   }
@@ -333,7 +333,7 @@
   .groups {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    column-gap: var(--ds-space-margin);
+    column-gap: var(--fgd-space-margin);
     row-gap: var(--size-px-5);
     margin-block-start: var(--size-px-5);
   }
@@ -381,7 +381,7 @@
     align-items: center;
     box-sizing: border-box;
     inline-size: 100%;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     margin: 0;
     padding-block: 0;
     padding-inline: var(--size-px-3);
@@ -439,7 +439,7 @@
     color: var(--role-glyph);
   }
 
-  /* Hover transitions [D181]: color only, --ds-duration-quick; nothing moves. */
+  /* Hover transitions [D181]: color only, --fgd-duration-quick; nothing moves. */
   @media (--motionOK) {
     .label,
     .featured,
@@ -447,14 +447,14 @@
     .headingLabel,
     .categoryLabel {
       transition-property: color, text-decoration-color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
 
     /* First open only: the clip reveal from the top; switching and closing stay instant [D182]. */
     .popup {
       transition-property: clip-path;
-      transition-duration: var(--ds-duration-disclosure);
+      transition-duration: var(--fgd-duration-disclosure);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -492,12 +492,12 @@
     text-decoration-line: underline;
   }
 
-  /* Pressed: a --ds-stroke-3 underline in --primary12 under the label (derived; flagged). */
+  /* Pressed: a --border-size-2-25 underline in --primary12 under the label (derived; flagged). */
   .trigger:not([data-disabled]):active .label,
   .barLink:active .label {
     text-decoration-line: underline;
     text-decoration-color: var(--primary12);
-    text-decoration-thickness: var(--ds-stroke-3);
+    text-decoration-thickness: var(--border-size-2-25);
   }
 
   /* Parent of current (aria-current="true", path prefix): the bar at --border-size-2. */
@@ -506,18 +506,18 @@
     border-block-end-width: var(--border-size-2);
   }
 
-  /* Current (data-active, aria-current="page"): the --ds-stroke-3 bar plus --font-weight-7. */
+  /* Current (data-active, aria-current="page"): the --border-size-2-25 bar plus --font-weight-7. */
   .barLink[data-active]::after {
-    border-block-end-width: var(--ds-stroke-3);
+    border-block-end-width: var(--border-size-2-25);
   }
 
   .barLink[data-active] .label {
     font-weight: var(--font-weight-7);
   }
 
-  /* Open (data-popup-open): the --ds-stroke-3 bar flush with the bar's rule; the chevron flips. */
+  /* Open (data-popup-open): the --border-size-2-25 bar flush with the bar's rule; the chevron flips. */
   .trigger[data-popup-open]::after {
-    border-block-end-width: var(--ds-stroke-3);
+    border-block-end-width: var(--border-size-2-25);
   }
 
   .chevron[data-popup-open] {
@@ -555,7 +555,7 @@
   .heading:hover .headingLabel,
   .featuredBar:hover .featuredLabel {
     color: var(--role-link-hover);
-    text-decoration-line: var(--ds-link-hover-line);
+    text-decoration-line: var(--fgd-link-hover-line);
   }
 
   .featured:active .featuredLabel,
@@ -565,13 +565,13 @@
     text-decoration-thickness: var(--border-size-2);
   }
 
-  /* On the section landing page: --font-weight-7 plus a --ds-stroke-3 underline. */
+  /* On the section landing page: --font-weight-7 plus a --border-size-2-25 underline. */
   .featured[data-active] .featuredLabel,
   .heading[data-active] .headingLabel,
   .featuredBar[data-active] .featuredLabel {
     font-weight: var(--font-weight-7);
     text-decoration-line: underline;
-    text-decoration-thickness: var(--ds-stroke-3);
+    text-decoration-thickness: var(--border-size-2-25);
   }
 
   .featured:focus-visible,
@@ -585,7 +585,7 @@
 
   .categoryTrigger:hover .categoryLabel {
     color: var(--role-link-hover);
-    text-decoration-line: var(--ds-link-hover-line);
+    text-decoration-line: var(--fgd-link-hover-line);
   }
 
   .categoryTrigger:active .categoryLabel {
@@ -593,13 +593,13 @@
     text-decoration-thickness: var(--border-size-2);
   }
 
-  /* Selected (data-popup-open): the --ds-stroke-3 start-edge bar plus --font-weight-7. */
+  /* Selected (data-popup-open): the --border-size-2-25 start-edge bar plus --font-weight-7. */
   .categoryTrigger[data-popup-open] {
     font-weight: var(--font-weight-7);
   }
 
   .categoryTrigger[data-popup-open]::before {
-    border-inline-start-width: var(--ds-stroke-3);
+    border-inline-start-width: var(--border-size-2-25);
   }
 
   .categoryTrigger:focus-visible {

@@ -6,7 +6,7 @@
 
 ### Menubar
 
-The bar (Base UI Menubar): --ds-size-hit tall with a --border-size-1
+The bar (Base UI Menubar): --fgd-size-hit tall with a --border-size-1
 \--role-rule under it, holding `MenubarMenu`s. Below --lg-n-above it
 collapses into one `collapsedLabel` trigger whose popup lists each menu
 as a labelled group.

@@ -70,7 +70,7 @@ export interface LinkProps
   /**
    * With `kind="nav"`: a list link (nav-panel, footer, drawer and breadcrumb
    * lists), whose hover is `--role-link-hover` color only, plus the
-   * `--ds-stroke-1-5` `--role-accent` underline where that ink is
+   * `--border-size-1-5` `--role-accent` underline where that ink is
    * `--primary12`. Without it, `nav` is bare navigation text (bar and
    * utility items, page numbers, toolbar links), whose hover is the
    * `--border-size-2` `--role-accent` underline (§9.3) [D181]. Default

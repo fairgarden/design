@@ -86,7 +86,7 @@
     box-sizing: content-box;
     block-size: calc(var(--size-px-2) - 2 * var(--border-size-1));
     border: var(--border-size-1) solid var(--primary12);
-    border-radius: var(--ds-radius-none);
+    border-radius: var(--radius-0);
   }
 
   /* Solid --primary12; its height is Base UI's inline `inherit`. Only the value edge prints as a line. */
@@ -98,24 +98,24 @@
     background-color: var(--primary12);
   }
 
-  /* Threshold: a --ds-space-12 tick at --border-size-2 across the track (a border, so it prints). */
+  /* Threshold: a --size-px-2-5 tick at --border-size-2 across the track (a border, so it prints). */
   .threshold {
     position: absolute;
     inset-block-start: 50%;
     inset-inline-start: var(--meter-threshold);
     inline-size: 0;
-    block-size: var(--ds-space-12);
-    margin-block-start: calc(var(--ds-space-12) / -2);
+    block-size: var(--size-px-2-5);
+    margin-block-start: calc(var(--size-px-2-5) / -2);
     margin-inline-start: calc(var(--border-size-2) / -2);
     border-inline-start: var(--border-size-2) solid var(--primary12);
   }
 
-  /* Segmented: outlined --ds-space-12 cells, --border-size-1, 2 px apart; filled cells solid. */
+  /* Segmented: outlined --size-px-2-5 cells, --border-size-1, 2 px apart; filled cells solid. */
   .cell {
     flex: none;
     box-sizing: border-box;
-    inline-size: var(--ds-space-12);
-    block-size: var(--ds-space-12);
+    inline-size: var(--size-px-2-5);
+    block-size: var(--size-px-2-5);
     border: var(--border-size-1) solid var(--primary12);
   }
 
@@ -126,7 +126,7 @@
   /* Ordinal: a --border-size-1 track with stop ticks, caps labels under the stops. */
   .stop {
     position: absolute;
-    inset-block-start: var(--ds-space-12);
+    inset-block-start: var(--size-px-2-5);
     inset-inline-start: calc((var(--meter-stop-index) + 0.5) / var(--meter-stops) * 100%);
     block-size: var(--size-px-2);
     margin-inline-start: calc(var(--border-size-1) / -2);
@@ -144,13 +144,13 @@
     position: absolute;
     inset-block-start: 0;
     inset-inline-start: calc((var(--meter-stop-index) + 0.5) / var(--meter-stops) * 100%);
-    inline-size: var(--ds-space-12);
+    inline-size: var(--size-px-2-5);
     block-size: var(--size-px-2);
-    margin-inline-start: calc(var(--ds-space-12) / -2);
+    margin-inline-start: calc(var(--size-px-2-5) / -2);
     overflow: visible;
     fill: none;
     stroke: var(--primary12);
-    stroke-width: var(--ds-stroke-1-25);
+    stroke-width: var(--border-size-1-25);
     stroke-linejoin: round;
   }
 
@@ -175,7 +175,7 @@
     --type-weight: var(--font-weight-7);
 
     font-weight: var(--type-weight);
-    font-size: var(--ds-font-size-caption);
+    font-size: var(--fgd-font-size-caption);
   }
 
   /* Ring: a --border-size-2 --primary12 arc over a --role-hairline track, always with its value. */
@@ -223,7 +223,7 @@
     color: var(--role-status);
     fill: var(--role-status-fill);
     stroke: var(--role-status-fill);
-    stroke-width: var(--ds-stroke-1-5);
+    stroke-width: var(--border-size-1-5);
     stroke-linecap: round;
     stroke-linejoin: round;
   }
@@ -289,7 +289,7 @@
   .ordinal .track::before {
     content: '';
     position: absolute;
-    inset-block-start: calc(var(--ds-space-12) + var(--size-px-1));
+    inset-block-start: calc(var(--size-px-2-5) + var(--size-px-1));
     inset-inline: calc(50% / var(--meter-stops));
     border-block-start: var(--border-size-1) solid var(--primary12);
   }

@@ -35,7 +35,7 @@
     container-type: inline-size;
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--ds-space-margin);
+    column-gap: var(--fgd-space-margin);
     row-gap: var(--size-px-2);
     margin: 0;
     min-inline-size: 0;
@@ -69,9 +69,9 @@
 }
 
 @layer variants {
-  /* Editorial photo: --ds-radius-8 (square when it runs full-bleed); caption right-flush below. */
+  /* Editorial photo: --radius-2-25 (square when it runs full-bleed); caption right-flush below. */
   .photo .media {
-    border-radius: var(--ds-radius-conditional-8);
+    border-radius: var(--radius-conditional-2-25);
     overflow: hidden;
     overflow: clip;
   }
@@ -90,7 +90,7 @@
   /* Technical figure and plate: square, never bleeding, native width; caption left, label on its own line. */
   .technical .media,
   .plate .media {
-    border-radius: var(--ds-radius-none);
+    border-radius: var(--radius-0);
   }
 
   .technical .caption,
@@ -142,15 +142,15 @@
       break-inside: avoid;
     }
 
-    /* Content photos: grayscale in a 0.75 pt frame, no taller than --ds-print-figure-max [D81]. */
+    /* Content photos: grayscale in a 0.75 pt frame, no taller than --fgd-print-figure-max [D81]. */
     .photo .media {
       border: var(--border-size-1) solid var(--role-rule);
-      border-radius: var(--ds-radius-none);
+      border-radius: var(--radius-0);
     }
 
     .photo .media > img {
       inline-size: auto;
-      max-block-size: var(--ds-print-figure-max);
+      max-block-size: var(--fgd-print-figure-max);
       filter: grayscale(1);
     }
 

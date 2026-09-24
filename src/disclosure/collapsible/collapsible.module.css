@@ -53,13 +53,13 @@
     }
   }
 
-  /* The whole trigger is the target, at least --ds-size-hit tall (§9.1). */
+  /* The whole trigger is the target, at least --fgd-size-hit tall (§9.1). */
   .trigger {
     display: inline-flex;
     align-items: center;
     gap: var(--size-px-2);
     box-sizing: border-box;
-    min-block-size: var(--ds-size-hit);
+    min-block-size: var(--fgd-size-hit);
     margin: 0;
     padding: 0;
     border: 0;
@@ -95,15 +95,15 @@
   @media (--motionOK) {
     .panel {
       transition-property: block-size;
-      transition-duration: var(--ds-duration-disclosure);
+      transition-duration: var(--fgd-duration-disclosure);
       transition-timing-function: var(--ease-out-3);
     }
 
-    /* Hover transitions [D181]: --ds-duration-quick, --ease-out-3. */
+    /* Hover transitions [D181]: --fgd-duration-quick, --ease-out-3. */
     .label,
     .glyph {
       transition-property: text-decoration-color, stroke-width;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -116,14 +116,14 @@
    */
   .glyphRow {
     --glyph-size: var(--size-px-4);
-    --glyph-stroke: var(--ds-stroke-1-5);
+    --glyph-stroke: var(--border-size-1-5);
     --glyph-stroke-emphasis: var(--border-size-2);
   }
 
   .glyphChrome {
     --glyph-size: var(--size-px-3);
-    --glyph-stroke: var(--ds-stroke-1-25);
-    --glyph-stroke-emphasis: var(--ds-stroke-1-5);
+    --glyph-stroke: var(--border-size-1-25);
+    --glyph-stroke-emphasis: var(--border-size-1-5);
   }
 }
 

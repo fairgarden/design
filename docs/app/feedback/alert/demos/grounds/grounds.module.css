@@ -7,5 +7,5 @@
 
 .face {
   padding: var(--size-px-5);
-  border-radius: var(--ds-radius-8);
+  border-radius: var(--radius-2-25);
 }

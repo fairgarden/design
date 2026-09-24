@@ -5,7 +5,7 @@
  * §10.12), teamPhoto, details, name (`nameUi` in a byline), nameLink (a
  * title Link), role, bio, links, date, teamList, member. Colors are role
  * variables only; local custom properties carry dimensions only:
- *   --profile-gap   the team gutter (= --ds-space-margin) [D42]
+ *   --profile-gap   the team gutter (= --fgd-space-margin) [D42]
  */
 
 /* Composition sits in top-level rules, outside the layers: Lightning CSS
@@ -33,7 +33,7 @@
 
 @layer base {
   .base {
-    --profile-gap: var(--ds-space-margin);
+    --profile-gap: var(--fgd-space-margin);
 
     position: relative; /* a stretched name link covers the whole profile */
     container: profile / inline-size;
@@ -62,7 +62,7 @@
     position: relative;
     display: flex;
     flex-wrap: wrap;
-    gap: var(--size-px-2) var(--ds-space-12);
+    gap: var(--size-px-2) var(--size-px-2-5);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -71,7 +71,7 @@
   .details {
     display: flex;
     flex-direction: column;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
     min-inline-size: 0;
   }
 
@@ -83,7 +83,7 @@
     aspect-ratio: var(--ratio-square);
     object-fit: cover;
     border: var(--border-size-1) solid var(--role-hairline);
-    border-radius: var(--ds-radius-8);
+    border-radius: var(--radius-2-25);
   }
 
   /* Team baseline (§1.11.11): auto-fit at the 152 px compact minimum, capped at 5. */
@@ -197,8 +197,8 @@
   /* The bio portrait steps from 64 px to the 128 px xl diameter (fixed steps, never fluid). */
   @media (--md-n-above) {
     .kindBio .portrait {
-      --avatar-size: var(--ds-size-avatar-xl);
-      --avatar-initials: var(--ds-font-size-display);
+      --avatar-size: var(--fgd-size-avatar-xl);
+      --avatar-initials: var(--fgd-font-size-display);
     }
   }
 
@@ -217,8 +217,8 @@
 
   @container profile (width >= 768px) {
     .kindBio .portrait {
-      --avatar-size: var(--ds-size-avatar-xl);
-      --avatar-initials: var(--ds-font-size-display);
+      --avatar-size: var(--fgd-size-avatar-xl);
+      --avatar-initials: var(--fgd-font-size-display);
     }
   }
 }
@@ -260,7 +260,7 @@
     }
 
     .teamPhoto {
-      max-block-size: var(--ds-print-figure-max);
+      max-block-size: var(--fgd-print-figure-max);
       filter: grayscale(1);
     }
 

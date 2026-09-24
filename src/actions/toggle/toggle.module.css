@@ -43,7 +43,7 @@
     gap: var(--size-px-2);
     box-sizing: border-box;
     block-size: var(--toggle-height);
-    min-inline-size: var(--ds-size-hit);
+    min-inline-size: var(--fgd-size-hit);
     margin: 0;
     padding-block: 0;
     padding-inline: calc(var(--size-px-3) + var(--toggle-rest-edge) - var(--toggle-edge));
@@ -55,14 +55,14 @@
     appearance: none;
   }
 
-  /* Every target reaches --ds-size-hit; a smaller toggle extends it invisibly [D43]. */
+  /* Every target reaches --fgd-size-hit; a smaller toggle extends it invisibly [D43]. */
   .base::after {
     content: '';
     position: absolute;
     inset-block-start: 50%;
     inset-inline-start: 50%;
-    inline-size: var(--ds-size-hit);
-    block-size: var(--ds-size-hit);
+    inline-size: var(--fgd-size-hit);
+    block-size: var(--fgd-size-hit);
     min-inline-size: 100%;
     min-block-size: 100%;
     translate: -50% -50%;
@@ -84,10 +84,10 @@
   .edge {
     display: none;
     position: absolute;
-    inset-block-start: calc(var(--ds-dot-fine) / 2);
-    inset-inline-start: calc(var(--ds-dot-fine) / 2);
-    inline-size: calc(100% - var(--ds-dot-fine));
-    block-size: calc(100% - var(--ds-dot-fine));
+    inset-block-start: calc(var(--fgd-dot-fine) / 2);
+    inset-inline-start: calc(var(--fgd-dot-fine) / 2);
+    inline-size: calc(100% - var(--fgd-dot-fine));
+    block-size: calc(100% - var(--fgd-dot-fine));
     overflow: visible;
     pointer-events: none;
   }
@@ -95,7 +95,7 @@
   .edgeLine {
     fill: none;
     stroke: var(--role-disabled-edge);
-    rx: calc(var(--toggle-edge-radius) - var(--ds-dot-fine) / 2);
+    rx: calc(var(--toggle-edge-radius) - var(--fgd-dot-fine) / 2);
   }
 
   @media (--forcedColors) {
@@ -104,12 +104,12 @@
     }
   }
 
-  /* Hover and press transitions [D181]: --ds-duration-quick, --ease-out-3. */
+  /* Hover and press transitions [D181]: --fgd-duration-quick, --ease-out-3. */
   @media (--motionOK) {
     .base,
     .label {
       transition-property: color, background-color, border-color, text-decoration-color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -123,7 +123,7 @@
   }
 
   .md {
-    --toggle-height: var(--ds-size-control-md);
+    --toggle-height: var(--fgd-size-control-md);
     --type-weight: var(--font-weight-6);
   }
 
@@ -136,12 +136,12 @@
   .segment {
     --toggle-rest-edge: 0px;
 
-    border-radius: var(--ds-radius-none);
+    border-radius: var(--radius-0);
   }
 
-  /* The filter chip: a quiet --ds-stroke-1-5 --role-rule rest edge (a required boundary [D17]). */
+  /* The filter chip: a quiet --border-size-1-5 --role-rule rest edge (a required boundary [D17]). */
   .chip {
-    --toggle-rest-edge: var(--ds-stroke-1-5);
+    --toggle-rest-edge: var(--border-size-1-5);
 
     border-color: var(--role-rule);
   }
@@ -179,9 +179,9 @@
    * never changes and nothing transforms.
    * - Off text toggle and segment: the outline hover, a --primary3 fill
    *   (--role-soft-hover); where soft fills drop the label takes the
-   *   bare-text underline instead (--ds-soft-hover-line).
+   *   bare-text underline instead (--fgd-soft-hover-line).
    * - Off filter chip: the edge steps --role-rule → --primary12 at the same
-   *   --ds-stroke-1-5 weight [D140], with the soft fill where it applies.
+   *   --border-size-1-5 weight [D140], with the soft fill where it applies.
    * - Icon toggle: the glyph swaps to the next tier's weight (Icon
    *   weight="interactive", hosted by the toggle); no fill.
    * - On (data-pressed): the inverse pair's fill moves to --primary11, a
@@ -195,7 +195,7 @@
 
   .outline:not([data-disabled], [data-pressed], .iconOnly):hover .label,
   .segment:not([data-disabled], [data-pressed], .iconOnly):hover .label {
-    text-decoration-line: var(--ds-soft-hover-line);
+    text-decoration-line: var(--fgd-soft-hover-line);
   }
 
   .chip:not([data-disabled], [data-pressed]):hover {
@@ -220,12 +220,12 @@
   }
 
   /*
-   * Selected (data-pressed): a --ds-stroke-3 inside edge, the glyph and
+   * Selected (data-pressed): a --border-size-2-25 inside edge, the glyph and
    * --font-weight-7. Toggles and segments take the inverse pair; the edge
    * matches the fill on screen and carries the state in print.
    */
   .base[data-pressed] {
-    --toggle-edge: var(--ds-stroke-3);
+    --toggle-edge: var(--border-size-2-25);
     --type-weight: var(--font-weight-7);
 
     border-color: var(--primary12);
@@ -249,8 +249,8 @@
   /* Focus: 2 px --primary12 ring at a 2 px offset, drawn above neighbours [D45]. */
   .base:focus-visible {
     z-index: 1;
-    outline: var(--ds-focus-width) solid var(--primary12);
-    outline-offset: var(--ds-focus-offset);
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: var(--fgd-focus-offset);
   }
 
   /*

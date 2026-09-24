@@ -8,21 +8,21 @@
   :root,
   [data-theme='light'] {
     color-scheme: light;
-    --ds-font-fine: var(--ds-font-text);
-    --ds-muted-weight-step: 0;
+    --fgd-font-fine: var(--fgd-font-text);
+    --fgd-muted-weight-step: 0;
   }
 
   [data-theme='dark'] {
     color-scheme: dark;
-    --ds-font-fine: var(--ds-font-ui);
-    --ds-muted-weight-step: 100;
+    --fgd-font-fine: var(--fgd-font-ui);
+    --fgd-muted-weight-step: 100;
   }
 
   @media only screen and (prefers-color-scheme: dark) {
     :root:not([data-theme='light']) {
       color-scheme: dark;
-      --ds-font-fine: var(--ds-font-ui);
-      --ds-muted-weight-step: 100;
+      --fgd-font-fine: var(--fgd-font-ui);
+      --fgd-muted-weight-step: 100;
     }
   }
 }

@@ -95,7 +95,7 @@
     container: stat-row / inline-size;
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--ds-space-margin);
+    column-gap: var(--fgd-space-margin);
     row-gap: var(--size-px-5);
   }
 
@@ -205,7 +205,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
     text-align: center;
   }
 
@@ -213,7 +213,7 @@
     position: relative;
     display: grid;
     place-items: center;
-    inline-size: var(--ds-size-art-s);
+    inline-size: var(--fgd-size-art-s);
     aspect-ratio: 142 / 140;
   }
 
@@ -253,7 +253,7 @@
 
   .numeralInline {
     font-weight: var(--font-weight-7);
-    font-variant-numeric: var(--ds-numerals-data);
+    font-variant-numeric: var(--fgd-numerals-data);
   }
 
   .inline .qualifier {

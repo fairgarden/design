@@ -28,7 +28,7 @@ import styles from './fieldset.module.css'
  *   ledger's dotted frame in SVG.
  * - Scope: none.
  * - Container: none of its own. Framed padding reads the Form container
- *   `form` (below 360 px: --ds-space-12), with the viewport as fallback.
+ *   `form` (below 360 px: --size-px-2-5), with the viewport as fallback.
  */
 export const fieldset = cva(styles.base, {
   variants: {

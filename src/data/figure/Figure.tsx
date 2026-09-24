@@ -21,7 +21,7 @@ import styles from './figure.module.css'
  *
  * Implementation (CSS Modules + CVA)
  * - Module: figure.module.css; CVA function `figure`.
- * - Axes: `kind` → photo | technical | plate (photo: `--ds-radius-8`,
+ * - Axes: `kind` → photo | technical | plate (photo: `--radius-2-25`,
  *   caption below right-flush; technical: square, caption below
  *   left-aligned with the label on its own line; plate: a specimen plate,
  *   a nested `white` face with a `--border-size-1` `--role-edge` frame over
@@ -89,7 +89,7 @@ FigureContext.displayName = 'FigureContext'
 /** Props for Figure: `figure` props and the kind, frame, caption-placement and color axes. */
 export type FigureProps = React.ComponentPropsWithRef<'figure'> & {
   /**
-   * `photo` (default): an editorial photo, `--ds-radius-8`, the caption
+   * `photo` (default): an editorial photo, `--radius-2-25`, the caption
    * right-flush below it. `technical`: a chart, diagram or drawing, square,
    * the caption left-aligned below it with the label on its own line.
    * `plate`: a specimen plate on a nested `white` face over a fine dot

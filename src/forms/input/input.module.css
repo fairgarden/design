@@ -43,7 +43,7 @@
     --input-height: var(--size-px-8);
     --input-edge: var(--border-size-1);
     --input-radius: var(--radius-1);
-    --input-padding: var(--ds-space-12);
+    --input-padding: var(--size-px-2-5);
 
     position: relative;
     display: flex;
@@ -80,14 +80,14 @@
 
   /*
    * The placeholder: --role-muted at full strength, ending in "…"; one
-   * weight lighter in dark scopes through --ds-muted-weight-step, floored
+   * weight lighter in dark scopes through --fgd-muted-weight-step, floored
    * by the type role [D154, D170].
    */
   .control::placeholder {
     color: var(--role-muted);
     font-weight: max(
       var(--type-weight-floor, 400),
-      calc(var(--type-weight, 400) - var(--ds-muted-weight-step))
+      calc(var(--type-weight, 400) - var(--fgd-muted-weight-step))
     );
   }
 
@@ -129,7 +129,7 @@
     color: var(--role-status);
     fill: var(--role-status-fill);
     stroke: var(--role-status-fill);
-    stroke-width: var(--ds-stroke-1-5);
+    stroke-width: var(--border-size-1-5);
     stroke-linecap: round;
     stroke-linejoin: round;
   }
@@ -150,10 +150,10 @@
   .edge {
     display: none;
     position: absolute;
-    inset-block-start: calc(var(--ds-dot-fine) / 2);
-    inset-inline-start: calc(var(--ds-dot-fine) / 2);
-    inline-size: calc(100% - var(--ds-dot-fine));
-    block-size: calc(100% - var(--ds-dot-fine));
+    inset-block-start: calc(var(--fgd-dot-fine) / 2);
+    inset-inline-start: calc(var(--fgd-dot-fine) / 2);
+    inline-size: calc(100% - var(--fgd-dot-fine));
+    block-size: calc(100% - var(--fgd-dot-fine));
     overflow: visible;
     pointer-events: none;
   }
@@ -161,7 +161,7 @@
   .edgeLine {
     fill: none;
     stroke: var(--role-disabled-edge);
-    rx: calc(var(--input-radius) - var(--ds-dot-fine) / 2);
+    rx: calc(var(--input-radius) - var(--fgd-dot-fine) / 2);
   }
 
   /* Print-only ruled lines for an empty textarea. */
@@ -185,7 +185,7 @@
   @media (--motionOK) {
     .base {
       transition-property: border-color, outline-color;
-      transition-duration: var(--ds-duration-quick);
+      transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
   }
@@ -199,15 +199,15 @@
 
   /* Underline: no box, a lone --border-size-1 --role-rule bottom rule (settings rows, printable blanks). */
   .underline {
-    --input-radius: var(--ds-radius-none);
+    --input-radius: var(--radius-0);
 
     padding-inline: 0;
     border-width: 0 0 var(--input-edge);
   }
 
-  /* Label-inside: the --ds-size-control-xl box; the value sits --size-px-2 from the bottom, larger than the label. */
+  /* Label-inside: the --fgd-size-control-xl box; the value sits --size-px-2 from the bottom, larger than the label. */
   .labelInside {
-    --input-height: var(--ds-size-control-xl);
+    --input-height: var(--fgd-size-control-xl);
   }
 
   .labelInside .control {
@@ -216,7 +216,7 @@
     padding-block-end: calc(var(--size-px-2) - var(--input-edge));
   }
 
-  /* Textarea: at least 3 lines at --ds-leading-compact; vertical resize only. */
+  /* Textarea: at least 3 lines at --fgd-leading-compact; vertical resize only. */
   .multiline {
     --input-height: auto;
 
@@ -228,7 +228,7 @@
 
   .multiline .control {
     min-block-size: 3lh;
-    line-height: var(--ds-leading-compact);
+    line-height: var(--fgd-leading-compact);
     resize: vertical;
   }
 
@@ -244,11 +244,11 @@
     color: var(--primary12);
   }
 
-  /* Butted end: --ds-radius-none at the seam, --radius-1 outside; the cell fills the end. */
+  /* Butted end: --radius-0 at the seam, --radius-1 outside; the cell fills the end. */
   .buttedEnd {
     padding-inline-end: 0;
-    border-start-end-radius: var(--ds-radius-none);
-    border-end-end-radius: var(--ds-radius-none);
+    border-start-end-radius: var(--radius-0);
+    border-end-end-radius: var(--radius-0);
   }
 
   /*
@@ -340,7 +340,7 @@
   /* Read-only: the box is removed; a --border-size-1 --role-rule bottom rule remains. */
   .base:has(.control[readonly]) {
     --input-padding: 0px;
-    --input-radius: var(--ds-radius-none);
+    --input-radius: var(--radius-0);
 
     border-width: 0 0 var(--border-size-1);
     border-color: var(--role-rule);
@@ -387,7 +387,7 @@
     }
 
     .ruled > span {
-      block-size: var(--ds-ruled-pitch);
+      block-size: var(--fgd-ruled-pitch);
       border-block-end: var(--border-size-1) solid var(--role-rule);
     }
   }

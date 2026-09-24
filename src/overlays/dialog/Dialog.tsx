@@ -26,7 +26,7 @@ import styles from './dialog.module.css'
  * - Module: dialog.module.css; CVA functions `dialog` (the popup panel) and
  *   `dialogBackdrop` (the optional solid cover). Alert Dialog composes this
  *   panel and adds its glyph (alert-dialog.module.css).
- * - Axes: `wide` → `wide` (width --ds-measure-reading from --md-n-above);
+ * - Axes: `wide` → `wide` (width --fgd-measure-reading from --md-n-above);
  *   `primary`, `secondary` → scales module classes, applied inside the
  *   panel's scope. `dialogBackdrop`: `covered` → `covered`.
  * - Compound variants: none. Defaults: `wide: false`; color axes: none.
@@ -41,7 +41,7 @@ import styles from './dialog.module.css'
  * - Parts: base, topBar, eyebrow, title, close, body, description, actions,
  *   backdrop.
  * - Scope: the popup renders in its Base UI Portal as a nested `white`
- *   scope (`page` scheme, no data-theme) with the --ds-stroke-3 --primary12
+ *   scope (`page` scheme, no data-theme) with the --border-size-2-25 --primary12
  *   frame [D92, D139, D156]. The cover renders as a `kind="field"` Ground
  *   of the page ground's companion field, which writes its own data-theme
  *   [D148, D177, D178].
@@ -129,7 +129,7 @@ type OpenInteraction = Parameters<InitialFocusFunction>[0]
 
 /** Props for DialogPopup: Base UI Dialog.Popup props plus the panel axes, the cover and the portal options. */
 export type DialogPopupProps = BaseDialog.Popup.Props & {
-  /** `true`: the detail-view width, --ds-measure-reading, from --md-n-above. Default `false`. */
+  /** `true`: the detail-view width, --fgd-measure-reading, from --md-n-above. Default `false`. */
   wide?: DialogVariants['wide']
   /**
    * Primary Radix scale inside the panel's `white` scope: text, frame and
@@ -155,9 +155,9 @@ export type DialogPopupProps = BaseDialog.Popup.Props & {
 
 /**
  * The modal panel, rendered in its Base UI Portal as a nested `white` scope
- * with the --ds-stroke-3 --primary12 frame. Below --md-n-above it is a
+ * with the --border-size-2-25 --primary12 frame. Below --md-n-above it is a
  * full-screen opaque sheet; from --md-n-above it is centered, at least
- * --ds-space-40 from every edge. It opens instantly or with a clip reveal,
+ * --size-px-7-5 from every edge. It opens instantly or with a clip reveal,
  * never a fade. Compose `DialogTopBar` (eyebrow, title, close), `DialogBody`
  * and `DialogActions` inside it.
  *
@@ -236,8 +236,8 @@ export type DialogTopBarProps = useRender.ComponentProps<'div'>
 
 /**
  * The titled top bar: an optional `DialogEyebrow`, the `DialogTitle` and the
- * `DialogClose` X. At least --ds-size-control-xl tall; on the sheet a
- * --ds-stroke-3 --primary12 rule runs under it.
+ * `DialogClose` X. At least --fgd-size-control-xl tall; on the sheet a
+ * --border-size-2-25 --primary12 rule runs under it.
  */
 export function DialogTopBar(props: DialogTopBarProps) {
   const { render, ref, className, ...rest } = props
@@ -302,7 +302,7 @@ export type DialogCloseProps = BaseDialog.Close.Props & {
 
 /**
  * Closes the dialog. By default the top bar's X: an icon-only Button with
- * the inline-tier `close` glyph and a --ds-size-hit target (§9.2). Pass
+ * the inline-tier `close` glyph and a --fgd-size-hit target (§9.2). Pass
  * `render` (for example `<Button variant="outline">Cancel</Button>`) to
  * close from an action instead; `label` is then ignored.
  */

@@ -4,10 +4,10 @@
 }
 
 .band {
-  padding-block: var(--ds-space-section);
+  padding-block: var(--fgd-space-section);
 }
 
 .container {
-  inline-size: min(100% - 2 * var(--ds-space-margin), var(--ds-container-content));
+  inline-size: min(100% - 2 * var(--fgd-space-margin), var(--fgd-container-content));
   margin-inline: auto;
 }

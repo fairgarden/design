@@ -6,7 +6,7 @@
  *
  * The anchored overlay surface (§10.1): the `white` scope's --primary1 face,
  * a --border-size-2 --primary12 frame in both modes, never --role-rule
- * [D92, D156], --ds-radius-8, --size-px-2 from the trigger. No shadow, no
+ * [D92, D156], --radius-2-25, --size-px-2 from the trigger. No shadow, no
  * backdrop. Motion is instant or a clip reveal from the trigger side, never
  * a fade [D91]. Colors are role variables only; local custom properties
  * carry dimensions only.
@@ -46,16 +46,16 @@
    * reveal.
    */
   .base {
-    --popover-tail-inline: var(--ds-space-12);
-    --popover-tail-block: calc(var(--ds-space-12) / 2 + var(--border-size-2));
+    --popover-tail-inline: var(--size-px-2-5);
+    --popover-tail-block: calc(var(--size-px-2-5) / 2 + var(--border-size-2));
     --popover-bleed: calc(-1 * var(--popover-tail-block));
     --popover-clip-from: inset(var(--popover-bleed));
 
     position: relative;
     box-sizing: border-box;
-    inline-size: calc(100vw - 2 * var(--ds-space-margin));
+    inline-size: calc(100vw - 2 * var(--fgd-space-margin));
     border: var(--border-size-2) solid var(--primary12);
-    border-radius: var(--ds-radius-8);
+    border-radius: var(--radius-2-25);
     background-color: var(--primary1);
     color: var(--primary12);
     clip-path: inset(var(--popover-bleed));
@@ -65,8 +65,8 @@
   @media (--md-n-above) {
     .base {
       inline-size: max-content;
-      min-inline-size: min(var(--size-px-13), calc(100vw - 2 * var(--ds-space-margin)));
-      max-inline-size: min(var(--ds-size-overlay-max), calc(100vw - 2 * var(--ds-space-margin)));
+      min-inline-size: min(var(--size-px-13), calc(100vw - 2 * var(--fgd-space-margin)));
+      max-inline-size: min(var(--fgd-size-overlay-max), calc(100vw - 2 * var(--fgd-space-margin)));
     }
   }
 
@@ -100,7 +100,7 @@
   @media (--motionOK) {
     .base {
       transition-property: clip-path;
-      transition-duration: var(--ds-duration-disclosure);
+      transition-duration: var(--fgd-duration-disclosure);
       transition-timing-function: var(--ease-out-3);
     }
   }

@@ -9,17 +9,17 @@
  *
  * Local dimensions (never colors):
  *   --card-edge        faced edge width; 1 → 2 px on press or a checked choice
- *   --card-edge-start  block edge, top and start (--ds-stroke-3)
- *   --card-edge-end    block edge, bottom and end (--ds-stroke-8)
+ *   --card-edge-start  block edge, top and start (--border-size-2-25)
+ *   --card-edge-end    block edge, bottom and end (--border-size-3-5)
  *   --card-padding     face padding by container / viewport tier
  *   --card-inset       padding minus any edge growth, so layout holds
  *   --card-frame       the edge-state hook: a composing module sets a width
- *                      (Pricing: --ds-stroke-3) to draw the outer scope's
+ *                      (Pricing: --border-size-2-25) to draw the outer scope's
  *                      --primary12 frame inset over the face's edge; 0 by
  *                      default
  *
  * The entry card [D185] is a white face with a static --border-size-2
- * --primary12 edge and --ds-radius-8: the square image flush to its start
+ * --primary12 edge and --radius-2-25: the square image flush to its start
  * edge and as tall as the card, the category and title link beside it.
  */
 
@@ -72,7 +72,7 @@
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
-    gap: var(--ds-space-12);
+    gap: var(--size-px-2-5);
     min-inline-size: 0;
     border: 0 solid var(--role-edge);
     color: var(--primary12);
@@ -86,8 +86,8 @@
   .media {
     align-self: stretch;
     margin: 0;
-    aspect-ratio: var(--ds-ratio-photo);
-    border-radius: var(--ds-radius-conditional-8);
+    aspect-ratio: var(--ratio-photo);
+    border-radius: var(--radius-conditional-2-25);
     overflow: hidden;
     overflow: clip;
   }
@@ -164,17 +164,17 @@
 @layer variants {
   /* Editorial rhythm: media → 16 → title → 12 → body → 24 → action. */
   .editorial .media {
-    margin-block-end: calc(var(--size-px-3) - var(--ds-space-12));
+    margin-block-end: calc(var(--size-px-3) - var(--size-px-2-5));
   }
 
   /* The 24 px minimum above the pinned action is padding, so the auto margin still pins it. */
   .editorial .action {
-    padding-block-start: calc(var(--size-px-5) - var(--ds-space-12));
+    padding-block-start: calc(var(--size-px-5) - var(--size-px-2-5));
   }
 
   /* Faced: the face draws a --border-size-1 edge in --role-edge [D178, D179]. */
   .faced {
-    border-radius: var(--ds-radius-conditional-8);
+    border-radius: var(--radius-conditional-2-25);
     overflow: hidden;
     overflow: clip; /* the face and a flush photo follow the frame's curve */
   }
@@ -197,7 +197,7 @@
 
   /* Block edge [D20, D174]: featured cards only, one family per page, 1–3 cards; drawn in --role-edge [D178]. */
   .block {
-    border-radius: var(--ds-radius-conditional-20);
+    border-radius: var(--radius-conditional-3-25);
     overflow: hidden;
     overflow: clip;
   }
@@ -206,8 +206,8 @@
   .block .face {
     --card-padding: var(--size-px-4);
     --card-inset: var(--card-padding);
-    --card-edge-start: var(--ds-stroke-3);
-    --card-edge-end: var(--ds-stroke-8);
+    --card-edge-start: var(--border-size-2-25);
+    --card-edge-end: var(--border-size-3-5);
     border-style: solid;
     border-color: var(--role-edge);
     border-width: var(--card-edge-start) var(--card-edge-end) var(--card-edge-end)
@@ -221,8 +221,8 @@
 
   .block .media {
     aspect-ratio: var(--ratio-widescreen);
-    border-radius: calc(var(--ds-radius-20) - var(--size-px-2)); /* nested rule [D40] */
-    margin-block-end: calc(var(--ds-space-12) - var(--size-px-3));
+    border-radius: calc(var(--radius-3-25) - var(--size-px-2)); /* nested rule [D40] */
+    margin-block-end: calc(var(--size-px-2-5) - var(--size-px-3));
   }
 
   .block .media:first-child {
@@ -235,7 +235,7 @@
   }
 
   .block .action:last-child {
-    margin-block-end: calc(var(--ds-space-12) - var(--card-inset));
+    margin-block-end: calc(var(--size-px-2-5) - var(--card-inset));
   }
 
   /*
@@ -245,7 +245,7 @@
    * as the card; category → --size-px-2 → title, centred beside it.
    */
   .entry {
-    border-radius: var(--ds-radius-8);
+    border-radius: var(--radius-2-25);
     overflow: hidden;
     overflow: clip;
   }
@@ -303,13 +303,13 @@
       display: grid;
       grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
       align-items: start;
-      column-gap: var(--ds-space-margin);
+      column-gap: var(--fgd-space-margin);
     }
 
     .lead .leadBody {
       display: flex;
       flex-direction: column;
-      gap: var(--ds-space-12);
+      gap: var(--size-px-2-5);
       align-self: stretch;
       min-inline-size: 0;
     }
@@ -354,7 +354,7 @@
     }
 
     .lead .media {
-      margin-block-end: calc(var(--size-px-3) - var(--ds-space-12));
+      margin-block-end: calc(var(--size-px-3) - var(--size-px-2-5));
     }
   }
 
@@ -363,13 +363,13 @@
       display: grid;
       grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
       align-items: start;
-      column-gap: var(--ds-space-margin);
+      column-gap: var(--fgd-space-margin);
     }
 
     .lead .leadBody {
       display: flex;
       flex-direction: column;
-      gap: var(--ds-space-12);
+      gap: var(--size-px-2-5);
       align-self: stretch;
       min-inline-size: 0;
     }
@@ -397,9 +397,9 @@
   @container card-grid (width < 944px) {
     .facedLead .media:first-child {
       align-self: stretch;
-      margin-block: calc(-1 * var(--card-inset)) calc(var(--size-px-3) - var(--ds-space-12));
+      margin-block: calc(-1 * var(--card-inset)) calc(var(--size-px-3) - var(--size-px-2-5));
       margin-inline: calc(-1 * var(--card-inset));
-      aspect-ratio: var(--ds-ratio-photo);
+      aspect-ratio: var(--ratio-photo);
     }
   }
 
@@ -445,9 +445,9 @@
    */
   .disabled .face,
   .base:has(.choice [data-disabled]) .face {
-    --card-edge: var(--ds-dot-fine);
-    --card-edge-start: var(--ds-dot-fine);
-    --card-edge-end: var(--ds-dot-fine);
+    --card-edge: var(--fgd-dot-fine);
+    --card-edge-start: var(--fgd-dot-fine);
+    --card-edge-end: var(--fgd-dot-fine);
     border-style: dotted;
     border-color: var(--role-disabled-edge);
   }

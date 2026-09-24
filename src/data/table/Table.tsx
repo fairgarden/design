@@ -120,10 +120,10 @@ export type TableProps = Omit<React.ComponentPropsWithRef<'table'>, 'className'>
   /** The full matrix grid (`--border-size-1` `--role-rule`), for matrices only: marks in cells, centered headers. */
   grid?: boolean
   /**
-   * `compact`: `--size-px-2` × `--ds-space-12` cell padding, rows at least
-   * 32 px, `--role-rule` row rules. `default`: `--ds-space-12` ×
+   * `compact`: `--size-px-2` × `--size-px-2-5` cell padding, rows at least
+   * 32 px, `--role-rule` row rules. `default`: `--size-px-2-5` ×
    * `--size-px-3`. Never defaulted: omitted, the table follows its scope's
-   * density (a Ground's `density`, through the `--ds-table-*` tokens).
+   * density (a Ground's `density`, through the `--fgd-table-*` tokens).
    */
   density?: TableVariants['density']
   /** Rows are click targets: `--role-rule` row rules and rows at least 44 px tall. */
@@ -325,7 +325,7 @@ export function TableFoot(props: TableFootProps) {
 /** Props for TableRow: `tr` props plus the selected and inactive states. */
 export type TableRowProps = React.ComponentPropsWithRef<'tr'> & {
   /**
-   * Draws the `--ds-stroke-3` row bar at the start edge. A row holding a
+   * Draws the `--border-size-2-25` row bar at the start edge. A row holding a
    * checked Checkbox, or the `:target` of a link (give it an `id`), shows
    * the bar without this prop.
    */
