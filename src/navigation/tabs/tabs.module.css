@@ -198,12 +198,12 @@
     inset-block-end: calc(-1 * var(--border-size-1));
   }
 
-  /* Baseline: up to 3 equal cells with wrapping labels (LTA)… */
+  /* Baseline: up to 3 equal cells with wrapping labels… */
   .underline .tab {
     flex: 1 1 0;
   }
 
-  /* …4–6 tabs hug their labels on one scrolling line, the last one clipped (PostHog). */
+  /* …4–6 tabs hug their labels on one scrolling line, the last one clipped. */
   .underline .list:has(> .tab:nth-child(4)) .tab {
     flex: none;
     white-space: nowrap;

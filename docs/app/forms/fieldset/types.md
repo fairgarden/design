@@ -21,7 +21,7 @@ hiding the group is usually better.
 ### FieldsetLeader
 
 The ledger's `line-dotted-fine` leader in `--role-rule`, running from a
-row's label to its control (Inciardi Prints). Place it between the two in
+row's label to its control. Place it between the two in
 a row that lays out inline; it grows to fill the space. Decorative.
 
 ### FieldsetLegend

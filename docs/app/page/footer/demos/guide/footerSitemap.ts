@@ -3,38 +3,38 @@ import type { SitemapSection } from '@fairgarden/design/utils/navigation';
 /** The navigation data: the same sections feed the Navigation Menu panels and the footer sitemap. */
 export const sitemap: readonly SitemapSection[] = [
   {
-    label: 'Why Land Matters',
-    href: '/why-land-matters',
+    label: 'Our Work',
+    href: '/our-work',
     links: [
-      { label: 'Climate', href: '/why-land-matters/climate' },
-      { label: 'Clean Water', href: '/why-land-matters/water', current: true },
-      { label: 'Wildlife', href: '/why-land-matters/wildlife' },
-      { label: 'Farms and Food', href: '/why-land-matters/farms' },
+      { label: 'Climate', href: '/our-work/climate' },
+      { label: 'Clean Water', href: '/our-work/water', current: true },
+      { label: 'Pollinators', href: '/our-work/pollinators' },
+      { label: 'Local Food', href: '/our-work/food' },
     ],
   },
   {
-    label: 'What We Do',
-    href: '/what-we-do',
+    label: 'Programs',
+    href: '/programs',
     links: [
-      { label: 'Conservation Easements', href: '/what-we-do/easements' },
-      { label: 'Stewardship', href: '/what-we-do/stewardship' },
-      { label: 'Policy', href: '/what-we-do/policy' },
+      { label: 'Garden Land Agreements', href: '/programs/agreements' },
+      { label: 'Stewardship', href: '/programs/stewardship' },
+      { label: 'Policy', href: '/programs/policy' },
     ],
   },
   {
-    label: 'Take Action',
-    href: '/take-action',
+    label: 'Get Involved',
+    href: '/get-involved',
     links: [
-      { label: 'Donate', href: '/take-action/donate' },
-      { label: 'Volunteer', href: '/take-action/volunteer' },
-      { label: 'Events', href: '/take-action/events' },
+      { label: 'Donate', href: '/get-involved/donate' },
+      { label: 'Volunteer', href: '/get-involved/volunteer' },
+      { label: 'Events', href: '/get-involved/events' },
     ],
   },
   {
-    label: 'Find a Land Trust',
+    label: 'Find a Garden',
     links: [
       { label: 'Search the Map', href: '/find' },
-      { label: 'Land Trust Alliance', href: 'https://example.org/alliance', external: true },
+      { label: 'Regional Garden Network', href: 'https://example.org/network', external: true },
     ],
   },
 ];

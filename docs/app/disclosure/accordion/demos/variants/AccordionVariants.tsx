@@ -2,7 +2,7 @@ import { Accordion, AccordionItem } from '@fairgarden/design/disclosure/accordio
 import styles from './variants.module.css'
 
 /**
- * The ruled accordion with the LTA disclosure glyph (default), the strong
+ * The ruled accordion with the disclosure glyph (default), the strong
  * top rule for an accordion that follows a heading, and the plus/minus
  * alternate.
  */

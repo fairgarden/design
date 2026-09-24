@@ -21,20 +21,20 @@ export function CTABlockKinds() {
     <div className={styles.stack}>
       <CTABlock
         kicker="Keep exploring"
-        headline="Find a land trust near you"
-        action={{ label: 'Find a Land Trust', href: 'https://example.org/find' }}
+        headline="Find a garden near you"
+        action={{ label: 'Find a Garden', href: 'https://example.org/find' }}
       />
       <CTABlock
         kind="mission"
         mount={<LeafMark />}
-        headline="We protect the places you love"
-        support="Local land trusts work with their neighbors to keep farms, forests and trails open for good."
+        headline="Gardens for every neighborhood"
+        support="Local gardeners work with their neighbors to keep plots, orchards and paths open for good."
         action={{ label: 'Our Mission', href: 'https://example.org/mission' }}
       />
       <CTABlock
         kind="deep"
-        headline="Become a member and protect the places you love"
-        support="Members fund easements, stewardship and the trails you walk."
+        headline="Become a member and keep the gardens growing"
+        support="Members fund seed, stewardship and the paths you walk."
         action={{ label: 'Join Today', href: 'https://example.org/join' }}
         secondaryAction={{ label: 'Learn More', href: 'https://example.org/membership' }}
       />

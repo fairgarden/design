@@ -10,8 +10,8 @@ export function HeroTechnical() {
       kind="technical"
       preset="white"
       className={patterns.patternDotgrid}
-      title="Respinner"
-      lede="v2.4.0 · MIT · 4 kB"
+      title="Hedgerow"
+      lede="v1.3.0 · MIT · 3 kB"
       actions={
         <>
           <Button variant="solid" size="lg">
@@ -23,11 +23,11 @@ export function HeroTechnical() {
       aside={
         <div className={styles.install}>
           <p className={styles.label}>Install</p>
-          <code className={styles.code}>npm i respinner</code>
+          <code className={styles.code}>npm i hedgerow</code>
         </div>
       }
       cells={[
-        { label: 'Size', value: '4 kB' },
+        { label: 'Size', value: '3 kB' },
         { label: 'Dependencies', value: '0' },
         { label: 'Browsers', value: '98%' },
         { label: 'License', value: 'MIT' },

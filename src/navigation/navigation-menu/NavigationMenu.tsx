@@ -570,7 +570,7 @@ export type NavigationMenuContentProps = ContentBaseProps &
       }
     | {
         /**
-         * `overview` (LTA): the section's overview link and description, a
+         * `overview`: the section's overview link and description, a
          * hairline tier rule, an optional search, caps link groups (the
          * children: `NavigationMenuGroup`s) 2-up in columns 1–8 beside the
          * promo, or up to 4-up across 12 without one.
@@ -586,7 +586,7 @@ export type NavigationMenuContentProps = ContentBaseProps &
       }
     | {
         /**
-         * `index` (Audubon): a category list (the children:
+         * `index`: a category list (the children:
          * `NavigationMenuCategory`s) beside the selected category's link
          * pane, with a featured bar across both.
          */

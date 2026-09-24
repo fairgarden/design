@@ -7,7 +7,7 @@ const path: BreadcrumbCrumb[] = [
   { label: 'Programs', href: '#kinds' },
   { label: 'Conservation', href: '#kinds' },
   { label: 'Regional' },
-  { label: 'Land trusts', href: '#kinds' },
+  { label: 'Garden groups', href: '#kinds' },
   { label: 'Stewardship', href: '#kinds' },
 ]
 

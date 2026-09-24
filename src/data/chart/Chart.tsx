@@ -182,7 +182,7 @@ export interface ChartSteps<Key extends string = string> {
   key: Key
   /** The step's name, for the tooltip and the data-table column head. */
   name: string
-  /** End labels of the stepped legend, e.g. `['0/5', '5/5 available']`. */
+  /** End labels of the stepped legend, e.g. `['0/8', '8/8 planted']`. */
   labels?: readonly [React.ReactNode, React.ReactNode]
 }
 
@@ -699,7 +699,7 @@ function Plot(props: PlotProps) {
   }
 
   const categoryTick = { className: styles.categoryTick, fill: INK_PRIMARY }
-  // Value ticks sit on their rules (Crab Fit): the numeral just above its gridline.
+  // Value ticks sit on their rules: the numeral just above its gridline.
   const valueTick = { className: styles.valueTick, fill: INK_PRIMARY, dy: -6 }
 
   if (variant === 'bars' || variant === 'columns') {

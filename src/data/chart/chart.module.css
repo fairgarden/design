@@ -169,7 +169,7 @@
     overflow: hidden;
   }
 
-  /* Sequential legend: a framed stepped bar with end labels (Crab Fit). */
+  /* Sequential legend: a framed stepped bar with end labels. */
   .stepLegend {
     display: inline-flex;
     flex-wrap: wrap;

@@ -244,7 +244,7 @@
     padding-inline: var(--size-px-3);
   }
 
-  /* ── Overview (LTA) ────────────────────────────────────────────────── */
+  /* ── Overview ──────────────────────────────────────────────────────── */
 
   /* Content on the 12-column grid of --ds-container-content, aligned with the bar's container. */
   .overview {
@@ -346,7 +346,7 @@
     color: var(--primary12);
   }
 
-  /* ── Index (Audubon) ───────────────────────────────────────────────── */
+  /* ── Index ─────────────────────────────────────────────────────────── */
 
   /* At most 2 × --size-px-14: the category list, then a pane of at least --size-px-14. */
   .index {

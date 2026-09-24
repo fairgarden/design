@@ -528,7 +528,7 @@
       flex: 0 1 auto;
     }
 
-    /* The leader stops --size-px-2 short of each text (the LTA trail break). It
+    /* The leader stops --size-px-2 short of each text (the trail break). It
        resets the total rule's line, so the total row's cells keep their leaders. */
     .stack .cell::before {
       content: '';

@@ -62,7 +62,7 @@ focusable so their name can be read.
 
 ### ToolbarCount
 
-The list's count in mono `type-data`, `--primary12`, following LTA's parentheses: "Items (54)".
+The list's count in mono `type-data`, `--primary12`, in parentheses: "Items (54)".
 
 ### ToolbarGroup
 

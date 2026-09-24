@@ -429,7 +429,7 @@
     font-weight: var(--font-weight-6);
   }
 
-  /* A as the media hero: with its photo figure the text centres (Audubon). */
+  /* A as the media hero: with its photo figure the text centres. */
   .mediaHero .content {
     text-align: center;
   }

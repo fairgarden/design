@@ -12,9 +12,9 @@ import { Lockup } from '@/components/Logo'
 import styles from './variants.module.css'
 
 const sections = [
-  { href: '/why-land-matters', label: 'Why Land Matters' },
-  { href: '/what-we-do', label: 'What We Do' },
-  { href: '/take-action', label: 'Take Action' },
+  { href: '/our-work', label: 'Our Work' },
+  { href: '/programs', label: 'Programs' },
+  { href: '/get-involved', label: 'Get Involved' },
 ]
 
 function Items() {
@@ -39,10 +39,10 @@ const action = (
 export function NavigationBarVariants() {
   return (
     <div className={styles.stack}>
-      <NavigationBar ruled preset="tide" logo={<Lockup />} logoLabel="FairGarden home" currentPath="/take-action" action={action}>
+      <NavigationBar ruled preset="tide" logo={<Lockup />} logoLabel="FairGarden home" currentPath="/get-involved" action={action}>
         <Items />
       </NavigationBar>
-      <NavigationBar masthead logo={<Lockup />} logoLabel="FairGarden home" currentPath="/what-we-do/our-programs" action={action}>
+      <NavigationBar masthead logo={<Lockup />} logoLabel="FairGarden home" currentPath="/programs/gardens" action={action}>
         <Items />
       </NavigationBar>
       <NavigationBar compact logo={<Lockup />} logoLabel="FairGarden home" action={action}>

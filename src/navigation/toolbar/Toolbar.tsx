@@ -264,7 +264,7 @@ export function ToolbarLink(props: ToolbarLinkProps) {
 /** Props for ToolbarCount: `span` props. */
 export type ToolbarCountProps = React.ComponentPropsWithRef<'span'>
 
-/** The list's count in mono `type-data`, `--primary12`, following LTA's parentheses: "Items (54)". */
+/** The list's count in mono `type-data`, `--primary12`, in parentheses: "Items (54)". */
 export function ToolbarCount(props: ToolbarCountProps) {
   const { className, ...rest } = props
   return <span {...rest} className={cx(styles.count, className)} />

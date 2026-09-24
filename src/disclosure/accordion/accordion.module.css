@@ -2,7 +2,7 @@
  * Accordion (§10.13). Parts: `base` (the Base UI Root), `item` (its top rule;
  * the last item also closes with one), `header` (the heading), `trigger`
  * (the row), `icon` (optional leading subject symbol), `title`, `glyph`
- * (the LTA disclosure glyph, whose direction and color the Collapsible
+ * (the disclosure glyph, whose direction and color the Collapsible
  * module draws, or the plus/minus `circle`), `panel` and its padded inner
  * `content`. Pure type and line: no fill in any state. Colors are role
  * variables only; local custom properties carry dimensions only.
@@ -96,7 +96,7 @@
     color: var(--primary12);
   }
 
-  /* A leading icon indents the panel to the title column (Sofar Sounds). */
+  /* A leading icon indents the panel to the title column. */
   .item:has(.icon) .content {
     padding-inline-start: calc(var(--size-px-4) + var(--size-px-3));
   }
@@ -130,12 +130,12 @@
 }
 
 @layer variants {
-  /* Disclosure (default): the 20 px LTA glyph, centred on the title's first line [D109]. */
+  /* Disclosure (default): the 20 px disclosure glyph, centred on the title's first line [D109]. */
   .disclosure .glyph {
     margin-block: calc((1lh - var(--size-px-4)) / 2);
   }
 
-  /* Strong top: a --border-size-2 --primary12 rule above the first item (turbopuffer). */
+  /* Strong top: a --border-size-2 --primary12 rule above the first item. */
   .headed .item:first-child {
     border-block-start-width: var(--border-size-2);
     border-block-start-color: var(--primary12);

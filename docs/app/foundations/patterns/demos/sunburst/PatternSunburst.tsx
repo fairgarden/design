@@ -10,9 +10,9 @@ import styles from './sunburst.module.css'
 export function PatternSunburst() {
   return (
     <Ground preset="white" className={`${styles.band} ${patterns.patternSunburst}`}>
-      <p className={styles.display}>Find a land trust near you</p>
+      <p className={styles.display}>Find a garden near you</p>
       <Button variant="solid" size="lg" icon="arrow_forward">
-        Find a Land Trust
+        Find a Garden
       </Button>
     </Ground>
   )

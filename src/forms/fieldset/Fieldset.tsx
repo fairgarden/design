@@ -118,7 +118,7 @@ export type FieldsetLeaderProps = Omit<React.ComponentPropsWithRef<'svg'>, 'chil
 
 /**
  * The ledger's `line-dotted-fine` leader in `--role-rule`, running from a
- * row's label to its control (Inciardi Prints). Place it between the two in
+ * row's label to its control. Place it between the two in
  * a row that lays out inline; it grows to fill the space. Decorative.
  */
 export function FieldsetLeader(props: FieldsetLeaderProps) {

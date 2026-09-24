@@ -16,138 +16,134 @@ import { photo } from './photo'
 import styles from './overview.module.css'
 
 /**
- * Three LTA-style overview panels and one dropdown. The page sits in
- * What We Do › Our Programs, so What We Do shows the parent-of-current bar
- * and Our Programs is current inside its panel.
+ * Three overview panels and one dropdown. The page sits in
+ * Programs › Garden Programs, so Programs shows the parent-of-current bar
+ * and Garden Programs is current inside its panel.
  */
 export function NavigationMenuOverview() {
   return (
     <div className={styles.frame}>
-      <NavigationMenu currentPath="/what-we-do/our-programs" className={styles.bar}>
+      <NavigationMenu currentPath="/programs/gardens" className={styles.bar}>
         <NavigationMenuItem>
-          <NavigationMenuTrigger section="/why-land-matters">Why Land Matters</NavigationMenuTrigger>
+          <NavigationMenuTrigger section="/our-work">Our Work</NavigationMenuTrigger>
           <NavigationMenuContent
             kind="overview"
             featured={
               <NavigationMenuFeatured
-                href="/why-land-matters"
-                description="How saving land safeguards our future."
+                href="/our-work"
+                description="Why shared gardens make stronger towns."
               >
-                Why Land Matters
+                Our Work
               </NavigationMenuFeatured>
             }
             promo={
               <NavigationMenuPromo
-                href="/why-land-matters/land-is-the-answer"
-                title="Land Is the Answer"
-                image={<img src={photo} alt="A ridge of protected forest above a river valley" />}
+                href="/our-work/grown-close-to-home"
+                title="Grown Close to Home"
+                image={<img src={photo} alt="Raised beds on a hillside above a river valley" />}
               >
-                Protected land cleans our water, cools our towns and feeds our families.
+                Shared plots cool our streets, feed our families and bring neighbors out.
               </NavigationMenuPromo>
             }
           >
-            <NavigationMenuGroup heading="Land Conservation" href="/why-land-matters/land-conservation">
-              <NavigationMenuLink href="/why-land-matters/land-conservation/why-conserve">
-                Why conserve land
+            <NavigationMenuGroup heading="Stewardship" href="/our-work/stewardship">
+              <NavigationMenuLink href="/our-work/stewardship/why-grow">Why grow together</NavigationMenuLink>
+              <NavigationMenuLink href="/our-work/stewardship/agreements">
+                Garden land agreements
               </NavigationMenuLink>
-              <NavigationMenuLink href="/why-land-matters/land-conservation/easements">
-                Conservation easements
+              <NavigationMenuLink href="/our-work/stewardship/stewards">
+                What a garden steward does
               </NavigationMenuLink>
-              <NavigationMenuLink href="/why-land-matters/land-conservation/land-trusts">
-                What a land trust does
-              </NavigationMenuLink>
-              <NavigationMenuLink href="/why-land-matters/land-conservation/stewardship">
-                Caring for land forever
+              <NavigationMenuLink href="/our-work/stewardship/soil">
+                Caring for soil for good
               </NavigationMenuLink>
             </NavigationMenuGroup>
-            <NavigationMenuGroup heading="Conservation Priorities" href="/why-land-matters/priorities">
-              <NavigationMenuLink href="/why-land-matters/priorities/climate">Climate</NavigationMenuLink>
-              <NavigationMenuLink href="/why-land-matters/priorities/water">Clean water</NavigationMenuLink>
-              <NavigationMenuLink href="/why-land-matters/priorities/farms">Farms and food</NavigationMenuLink>
-              <NavigationMenuLink href="/why-land-matters/priorities/wildlife">Wildlife habitat</NavigationMenuLink>
-              <NavigationMenuLink href="/why-land-matters/priorities/communities">
-                Community-centered conservation
+            <NavigationMenuGroup heading="Priorities" href="/our-work/priorities">
+              <NavigationMenuLink href="/our-work/priorities/climate">Climate</NavigationMenuLink>
+              <NavigationMenuLink href="/our-work/priorities/water">Clean water</NavigationMenuLink>
+              <NavigationMenuLink href="/our-work/priorities/food">Local food</NavigationMenuLink>
+              <NavigationMenuLink href="/our-work/priorities/pollinators">Pollinator habitat</NavigationMenuLink>
+              <NavigationMenuLink href="/our-work/priorities/neighbors">
+                Neighbor-led stewardship
               </NavigationMenuLink>
             </NavigationMenuGroup>
           </NavigationMenuContent>
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuTrigger section="/what-we-do">What We Do</NavigationMenuTrigger>
+          <NavigationMenuTrigger section="/programs">Programs</NavigationMenuTrigger>
           <NavigationMenuContent
             kind="overview"
             featured={
               <NavigationMenuFeatured
-                href="/what-we-do"
-                description="We help permanently protect the land that you need and love."
+                href="/programs"
+                description="We help neighbors start, tend and keep the gardens they love."
               >
-                What We Do
+                Programs
               </NavigationMenuFeatured>
             }
             promo={
               <NavigationMenuPromo
-                href="/what-we-do/gaining-ground"
-                title="Together, Let's Keep Gaining Ground"
+                href="/programs/every-block"
+                title="Together, Let's Grow Every Block"
                 image={<img src={photo} alt="Volunteers planting along a creek" />}
               >
-                See how land trusts are protecting more land, in every state, every year.
+                See how new plots opened this year, from school yards to church lots.
               </NavigationMenuPromo>
             }
           >
-            <NavigationMenuGroup heading="Our Programs" href="/what-we-do/our-programs">
-              <NavigationMenuLink href="/what-we-do/our-programs/accreditation">Accreditation</NavigationMenuLink>
-              <NavigationMenuLink href="/what-we-do/our-programs/conservation-defense">
-                Conservation defense
-              </NavigationMenuLink>
-              <NavigationMenuLink href="/what-we-do/our-programs/policy">Policy and advocacy</NavigationMenuLink>
-              <NavigationMenuLink href="/what-we-do/our-programs/grants">Grants</NavigationMenuLink>
-              <NavigationMenuLink href="/what-we-do/our-programs/training">Training and events</NavigationMenuLink>
+            <NavigationMenuGroup heading="Garden Programs" href="/programs/gardens">
+              <NavigationMenuLink href="/programs/gardens/plot-matching">Plot matching</NavigationMenuLink>
+              <NavigationMenuLink href="/programs/gardens/seed-library">Seed library</NavigationMenuLink>
+              <NavigationMenuLink href="/programs/gardens/tool-share">Tool share</NavigationMenuLink>
+              <NavigationMenuLink href="/programs/gardens/grants">Grants</NavigationMenuLink>
+              <NavigationMenuLink href="/programs/gardens/training">Training and events</NavigationMenuLink>
             </NavigationMenuGroup>
-            <NavigationMenuGroup heading="Our Collective Impact" href="/what-we-do/impact">
-              <NavigationMenuLink href="/what-we-do/impact/census">National land trust census</NavigationMenuLink>
-              <NavigationMenuLink href="/what-we-do/impact/stories">Success stories</NavigationMenuLink>
-              <NavigationMenuLink href="/what-we-do/impact/annual-report">Annual report</NavigationMenuLink>
+            <NavigationMenuGroup heading="Our Impact" href="/programs/impact">
+              <NavigationMenuLink href="/programs/impact/harvest">Annual harvest count</NavigationMenuLink>
+              <NavigationMenuLink href="/programs/impact/stories">Garden stories</NavigationMenuLink>
+              <NavigationMenuLink href="/programs/impact/annual-report">Annual report</NavigationMenuLink>
             </NavigationMenuGroup>
           </NavigationMenuContent>
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuTrigger section="/take-action">Take Action</NavigationMenuTrigger>
+          <NavigationMenuTrigger section="/get-involved">Get Involved</NavigationMenuTrigger>
           <NavigationMenuContent
             kind="overview"
             featured={
-              <NavigationMenuFeatured href="/take-action" description="How you can make an impact.">
-                Take Action
+              <NavigationMenuFeatured href="/get-involved" description="Ways to pitch in this season.">
+                Get Involved
               </NavigationMenuFeatured>
             }
-            search={<Search label="Find a land trust near you" placeholder="Search by name or town…" />}
+            search={<Search label="Find a garden near you" placeholder="Search by street or town…" />}
             promo={
               <NavigationMenuPromo
-                href="/take-action/give/stewards"
-                title="Join Stewards of the Land"
-                image={<img src={photo} alt="A farmer walking a hayfield at dusk" />}
+                href="/get-involved/give/keepers"
+                title="Join the Garden Keepers"
+                image={<img src={photo} alt="A gardener watering raised beds at dusk" />}
               >
-                Monthly gifts keep conserved land cared for, season after season.
+                Monthly gifts keep shared gardens tended, season after season.
               </NavigationMenuPromo>
             }
           >
-            <NavigationMenuGroup heading="Get Involved" href="/take-action/get-involved">
-              <NavigationMenuLink href="/take-action/get-involved/volunteer">Volunteer</NavigationMenuLink>
-              <NavigationMenuLink href="/take-action/get-involved/events">Find an event</NavigationMenuLink>
-              <NavigationMenuLink href="/take-action/get-involved/story">Share your story</NavigationMenuLink>
+            <NavigationMenuGroup heading="Volunteer" href="/get-involved/volunteer">
+              <NavigationMenuLink href="/get-involved/volunteer/work-days">Join a work day</NavigationMenuLink>
+              <NavigationMenuLink href="/get-involved/volunteer/events">Find an event</NavigationMenuLink>
+              <NavigationMenuLink href="/get-involved/volunteer/story">Share your story</NavigationMenuLink>
             </NavigationMenuGroup>
-            <NavigationMenuGroup heading="Conserve Your Land" href="/take-action/conserve">
-              <NavigationMenuLink href="/take-action/conserve/options">Conservation options</NavigationMenuLink>
-              <NavigationMenuLink href="/take-action/conserve/tax">Tax benefits</NavigationMenuLink>
-              <NavigationMenuLink href="/take-action/conserve/talk">Talk to a land trust</NavigationMenuLink>
+            <NavigationMenuGroup heading="Share Your Land" href="/get-involved/share-land">
+              <NavigationMenuLink href="/get-involved/share-land/options">Lending options</NavigationMenuLink>
+              <NavigationMenuLink href="/get-involved/share-land/tax">Tax benefits</NavigationMenuLink>
+              <NavigationMenuLink href="/get-involved/share-land/talk">Talk to our team</NavigationMenuLink>
             </NavigationMenuGroup>
-            <NavigationMenuGroup heading="Give" href="/take-action/give">
-              <NavigationMenuLink href="/take-action/give/donate">Donate</NavigationMenuLink>
-              <NavigationMenuLink href="/take-action/give/monthly">Give monthly</NavigationMenuLink>
-              <NavigationMenuLink href="/take-action/give/legacy">Leave a legacy</NavigationMenuLink>
+            <NavigationMenuGroup heading="Give" href="/get-involved/give">
+              <NavigationMenuLink href="/get-involved/give/donate">Donate</NavigationMenuLink>
+              <NavigationMenuLink href="/get-involved/give/monthly">Give monthly</NavigationMenuLink>
+              <NavigationMenuLink href="/get-involved/give/legacy">Leave a legacy</NavigationMenuLink>
             </NavigationMenuGroup>
-            <NavigationMenuGroup heading="Partner" href="/take-action/partner">
-              <NavigationMenuLink href="/take-action/partner/business">Business partnerships</NavigationMenuLink>
+            <NavigationMenuGroup heading="Partner" href="/get-involved/partner">
+              <NavigationMenuLink href="/get-involved/partner/business">Business partnerships</NavigationMenuLink>
             </NavigationMenuGroup>
           </NavigationMenuContent>
         </NavigationMenuItem>

@@ -125,7 +125,7 @@
     block-size: 100%;
   }
 
-  /* The close control sits exactly where the menu Button was (Matic). */
+  /* The close control sits exactly where the menu Button was. */
   .close {
     margin-inline-start: auto;
   }

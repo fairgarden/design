@@ -19,7 +19,7 @@ const languages = [
 
 /**
  * The drawer on its own (in a header it sits in the Navigation Bar's
- * `drawer` slot). The page is in What We Do › Our Programs, so that group
+ * `drawer` slot). The page is in Programs › Garden programs, so that group
  * opens with its row and link marked current.
  */
 export function NavDrawerBasic() {
@@ -28,7 +28,7 @@ export function NavDrawerBasic() {
       <NavDrawer
         logo={<Lockup />}
         logoLabel="FairGarden home"
-        currentPath="/what-we-do/our-programs"
+        currentPath="/programs/gardens"
         footer={
           <NavDrawerFooter
             action={
@@ -44,22 +44,22 @@ export function NavDrawerBasic() {
           </NavDrawerFooter>
         }
       >
-        <NavDrawerGroup label="Why Land Matters">
-          <NavDrawerLink href="/why-land-matters">Why land matters</NavDrawerLink>
-          <NavDrawerLink href="/why-land-matters/land-conservation">Land conservation</NavDrawerLink>
-          <NavDrawerLink href="/why-land-matters/priorities">Conservation priorities</NavDrawerLink>
+        <NavDrawerGroup label="Our Work">
+          <NavDrawerLink href="/our-work">Our work</NavDrawerLink>
+          <NavDrawerLink href="/our-work/stewardship">Stewardship</NavDrawerLink>
+          <NavDrawerLink href="/our-work/priorities">Priorities</NavDrawerLink>
         </NavDrawerGroup>
-        <NavDrawerGroup label="What We Do">
-          <NavDrawerLink href="/what-we-do">What we do</NavDrawerLink>
-          <NavDrawerLink href="/what-we-do/our-programs">Our programs</NavDrawerLink>
-          <NavDrawerLink href="/what-we-do/impact">Our collective impact</NavDrawerLink>
+        <NavDrawerGroup label="Programs">
+          <NavDrawerLink href="/programs">Programs</NavDrawerLink>
+          <NavDrawerLink href="/programs/gardens">Garden programs</NavDrawerLink>
+          <NavDrawerLink href="/programs/impact">Our impact</NavDrawerLink>
         </NavDrawerGroup>
-        <NavDrawerGroup label="Take Action">
-          <NavDrawerLink href="/take-action/get-involved">Get involved</NavDrawerLink>
-          <NavDrawerLink href="/take-action/conserve">Conserve your land</NavDrawerLink>
-          <NavDrawerLink href="/take-action/give">Give</NavDrawerLink>
+        <NavDrawerGroup label="Get Involved">
+          <NavDrawerLink href="/get-involved/volunteer">Volunteer</NavDrawerLink>
+          <NavDrawerLink href="/get-involved/share-land">Share your land</NavDrawerLink>
+          <NavDrawerLink href="/get-involved/give">Give</NavDrawerLink>
         </NavDrawerGroup>
-        <NavDrawerLink href="/find-a-land-trust">Find a Land Trust</NavDrawerLink>
+        <NavDrawerLink href="/find-a-garden">Find a Garden</NavDrawerLink>
         <NavDrawerLink href="/news">News</NavDrawerLink>
       </NavDrawer>
     </div>

@@ -232,7 +232,7 @@ type ChartSteps<Key extends string = string> = {
   key: Key;
   /** The step's name, for the tooltip and the data-table column head. */
   name: string;
-  /** End labels of the stepped legend, e.g. `['0/5', '5/5 available']`. */
+  /** End labels of the stepped legend, e.g. `['0/8', '8/8 planted']`. */
   labels?: [React.ReactNode, React.ReactNode];
 };
 ```

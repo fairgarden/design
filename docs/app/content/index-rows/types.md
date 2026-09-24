@@ -30,7 +30,7 @@ An optional one- or two-line dek under an article title: `type-body-ui` in `--pr
 ### IndexRowDisclosure
 
 An expandable event row (§10.13): the title is the trigger, inside an
-`h3`, with the LTA disclosure glyph; the details (body, "Host" /
+`h3`, with the disclosure glyph; the details (body, "Host" /
 "Entrance" pairs, a sm Button) sit in the panel. Collapsed titles are
 `--role-muted` and grow to `type-h2` in `--primary12` when open. Rows
 print expanded, glyphs hidden.

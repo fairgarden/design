@@ -81,7 +81,7 @@
     display: block;
   }
 
-  /* The row: --ds-space-12 sides (LTA's tight gutters), capped at the content container from --lg-n-above. */
+  /* The row: --ds-space-12 sides (tight gutters), capped at the content container from --lg-n-above. */
   .toolbar {
     box-sizing: border-box;
     display: flex;
@@ -141,7 +141,7 @@
     min-inline-size: 0;
   }
 
-  /* Jump to: ≤ 30% of the bar (LTA 240 px), type-body-ui plus expand_more. */
+  /* Jump to: ≤ 30% of the bar (240 px), type-body-ui plus expand_more. */
   .jumpTrigger {
     position: relative;
     display: flex;

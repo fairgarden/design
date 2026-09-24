@@ -113,7 +113,7 @@ type SectionHeaderCommonProps = Omit<useRender.ComponentProps<'div'>, 'children'
 type SectionHeaderKindProps =
   | {
       /**
-       * `editorial` (default): eyebrow, hairline, content (Audubon). With an
+       * `editorial` (default): eyebrow, hairline, content. With an
        * eyebrow the header opens with its rule, so the band needs no
        * page-seam hairline above it [D179].
        */
@@ -126,7 +126,7 @@ type SectionHeaderKindProps =
       topic?: never
     }
   | {
-      /** `trailed`: a display-serif kicker threaded by the dashed trail; the heading centred below it (LTA). */
+      /** `trailed`: a display-serif kicker threaded by the dashed trail; the heading centred below it. */
       kind: 'trailed'
       /** The kicker: `type-kicker` in `--role-heading`, a section head. */
       kicker: React.ReactNode
@@ -136,7 +136,7 @@ type SectionHeaderKindProps =
       topic?: never
     }
   | {
-      /** `scene`: heading, lede and pill, all centred (Bareburger). */
+      /** `scene`: heading, lede and pill, all centred. */
       kind: 'scene'
       eyebrow?: never
       kicker?: never
@@ -145,7 +145,7 @@ type SectionHeaderKindProps =
       topic?: never
     }
   | {
-      /** `anchored`: a sticker drawing sitting on the heading, then an action (Bareburger). */
+      /** `anchored`: a sticker drawing sitting on the heading, then an action. */
       kind: 'anchored'
       /** The sticker (§6.14) at `--ds-size-art-s`; its halo touches the heading's cap tops. */
       art: React.ReactNode
@@ -166,7 +166,7 @@ type SectionHeaderKindProps =
       topic?: never
     }
   | {
-      /** `topic`: an icon and caps topic tag above the heading (LTA). */
+      /** `topic`: an icon and caps topic tag above the heading. */
       kind: 'topic'
       /** The topic tag: a §10 Tag with its icon, which keeps its own module. */
       topic: React.ReactNode

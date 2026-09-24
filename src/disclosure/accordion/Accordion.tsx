@@ -16,7 +16,7 @@ import styles from './accordion.module.css'
  *
  * Implementation (CSS Modules + CVA)
  * - Module: accordion.module.css; CVA function `accordion`.
- * - Axes: `glyph` → disclosure | plusminus (the LTA glyph at the row's end,
+ * - Axes: `glyph` → disclosure | plusminus (the disclosure glyph at the row's end,
  *   or the outline circle holding + / −, the documented alternate);
  *   `headed` → `headed` (a --border-size-2 --primary12 rule above the first
  *   item, when the accordion follows a heading); `primary`, `secondary` →
@@ -63,7 +63,7 @@ const AccordionGlyphContext = React.createContext<AccordionGlyph>('disclosure')
 /** Props for Accordion: Base UI Accordion Root props plus the glyph, headed and color axes. */
 export type AccordionProps<Value = unknown> = BaseAccordion.Root.Props<Value> & {
   /**
-   * `disclosure` (default): the LTA expand/collapse glyph at the row's end
+   * `disclosure` (default): the expand/collapse glyph at the row's end
    * [D109]. `plusminus`: the outline circle holding + or −, the documented
    * alternate for product UI. Never mix the two on one page.
    */

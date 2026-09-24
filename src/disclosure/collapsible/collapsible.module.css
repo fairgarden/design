@@ -1,5 +1,5 @@
 /*
- * Collapsible (§10.13) and the LTA disclosure glyph [D109]. Parts: `base`
+ * Collapsible (§10.13) and the disclosure glyph [D109]. Parts: `base`
  * (the root), `trigger`, `glyph` (the shared disclosure glyph, drawn as
  * inline SVG: `glyphOut` collapsed, `glyphIn` expanded), `label`, `panel`
  * and its padded inner `content`. Pure type and line, so it resolves on any

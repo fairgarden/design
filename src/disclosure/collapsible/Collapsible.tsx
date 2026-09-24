@@ -28,7 +28,7 @@ import styles from './collapsible.module.css'
  * - Parts: base, trigger, glyph, label, panel (+ `content`, the padded inner box).
  * - Scope: none. Container: none; inherits its context.
  *
- * The disclosure glyph (DisclosureGlyph) is the custom LTA glyph, the one
+ * The disclosure glyph (DisclosureGlyph) is a custom glyph, the one
  * indicator for anything that expands in place [D109]; it is a §1.5.12 /
  * §6.10 exception to Material Symbols and is never `expand_more`.
  */
@@ -75,7 +75,7 @@ export type DisclosureGlyphProps = Omit<React.ComponentPropsWithRef<'svg'>, 'chi
 }
 
 /**
- * LTA's expand/collapse glyph [D109]: two thin arrows pointing outward from
+ * The expand/collapse glyph [D109]: two thin arrows pointing outward from
  * a short center hairline when collapsed, inward when expanded (§6.10). It
  * reads the state from the nearest Base UI trigger's `data-panel-open`, so
  * place it inside an Accordion or Collapsible trigger. The direction swaps

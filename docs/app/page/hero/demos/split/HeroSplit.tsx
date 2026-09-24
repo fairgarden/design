@@ -31,7 +31,7 @@ export function HeroSplit() {
             Enlarge the Photo
           </Button>
         }
-        rail={{ href: '#split', label: 'Explore the land' }}
+        rail={{ href: '#split', label: 'Explore the garden' }}
       />
       <Ground kind="band" preset="paper" className={styles.band}>
         <div className={styles.container}>

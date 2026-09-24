@@ -55,7 +55,7 @@
 
   /*
    * Rule-bounded: no box; the field sits between two --border-size-2
-   * --primary12 rules the width of the container (Sofar Sounds).
+   * --primary12 rules the width of the container.
    */
   .rules {
     position: relative;
@@ -187,7 +187,7 @@
     font-weight: var(--font-weight-7);
   }
 
-  /* The secondary name: italic type-caption in --role-muted (Audubon's Latin names). */
+  /* The secondary name: italic type-caption in --role-muted. */
   .secondaryName {
     font-style: italic;
   }

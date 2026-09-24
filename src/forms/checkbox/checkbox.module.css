@@ -254,7 +254,7 @@
     }
   }
 
-  /* Ledger: label, dotted leader, optional value, then the box (Inciardi Prints). */
+  /* Ledger: label, dotted leader, optional value, then the box. */
   .ledger {
     grid-template-columns: auto minmax(var(--size-px-5), 1fr) auto auto;
     grid-template-areas:

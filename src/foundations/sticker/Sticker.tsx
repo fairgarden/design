@@ -16,7 +16,7 @@ import { useScopeAttributes } from '../../utils/scope'
 import styles from './sticker.module.css'
 
 /*
- * Sticker (§6.5, §6.12, §6.14): Bareburger's die-cut halo. Hand art with an
+ * Sticker (§6.5, §6.12, §6.14): the die-cut halo. Hand art with an
  * 8 px `--primary1` halo around its merged silhouette, which separates the
  * art from any ground without shadow, alpha or blur. Decorative
  * (`aria-hidden`); at most one per scene; sizes S and L only; never on a

@@ -12,7 +12,7 @@
 }
 
 @layer base {
-  /* No container: icon, --ds-space-12, label (LTA 11–12 px). */
+  /* No container: icon, --ds-space-12, label. */
   .base {
     display: inline-flex;
     align-items: center;

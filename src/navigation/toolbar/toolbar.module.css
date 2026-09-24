@@ -90,18 +90,18 @@
 }
 
 @layer variants {
-  /* List: the count at the start, its actions at the end (UN-MS Research). */
+  /* List: the count at the start, its actions at the end. */
   .list .count {
     margin-inline-end: auto;
   }
 
   /* Format: groups of icon toggles and buttons, start-aligned, divided by
-     vertical rules (Notetaking App, rebuilt). */
+     vertical rules. */
   .format {
     justify-content: flex-start;
   }
 
-  /* Context: tools at the start, the breadcrumb centered, a toggle at the end (Audubon). */
+  /* Context: tools at the start, the breadcrumb centered, a toggle at the end. */
   .context {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);

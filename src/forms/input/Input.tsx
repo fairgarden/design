@@ -169,7 +169,7 @@ interface MultilineProps {
 
 type LabelInsideProps =
   | {
-      /** The `--ds-size-control-xl` box with the label inside (Audubon). Default `false`. */
+      /** The `--ds-size-control-xl` box with the label inside. Default `false`. */
       labelInside: true
       /** The label drawn inside the box, title case [D160]. Required with `labelInside`. */
       label: React.ReactNode

@@ -2,7 +2,7 @@
  * FAQ (§12.5): the §10.13 Ruled accordion with the Strong top rule, set as a
  * content module. Parts: `base` (the section), `header`, `title`, `intro`,
  * `list` (Accordion Root), `item`, `heading` (the h3), `trigger` (the row),
- * `icon` (keyed only), `question`, `glyph` (the LTA disclosure glyph, drawn
+ * `icon` (keyed only), `question`, `glyph` (the disclosure glyph, drawn
  * by the Collapsible module), `openBar`, `panel`, `answer`, `contact`.
  * Dense module: line semantics only, never a fill on the open item. Colors
  * are role variables only; local custom properties carry dimensions only.

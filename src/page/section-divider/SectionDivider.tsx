@@ -101,7 +101,7 @@ type SectionDividerKindProps =
        * change is the seam. `seam`: the same-ground `--role-rule` seam.
        * `page-seam`: the hairline between two different page grounds, in
        * the lower band's `--role-hairline`, in both modes [D179]. `hill`:
-       * the Audubon hill on the night media hero's lower seam, light mode
+       * the hill on the night media hero's lower seam, light mode
        * only [D189]. `fringe`: the hatched fringe on the night band's edge,
        * light mode only [D172]. `chrome`: a header or footer chrome rule.
        * `pause`: an ornamental pause inside one band.

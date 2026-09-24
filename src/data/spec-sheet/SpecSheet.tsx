@@ -51,7 +51,7 @@ export { SpecListItem, type SpecListItemProps } from '../spec-list'
  *   on viewport media (--lg-n-above); its baseline is the lead stacked above
  *   the grid [D163, D188].
  *
- * Audubon's sticky scroll-spy rail and its sticky aside cards are rejected
+ * A sticky scroll-spy rail and sticky aside cards are rejected
  * [D188]: nothing in the sheet is sticky, and the identity block heads the
  * reading column in the flow.
  */
@@ -118,8 +118,8 @@ interface SpecSheetCommonProps extends Omit<React.ComponentPropsWithRef<'section
   /** The lead, `type-lead` (§3.5 Recipe C). Beside the grid with `split`. */
   lead?: React.ReactNode
   /**
-   * The provenance line, `type-small`: "Text adapted from *Lives of North
-   * American Birds*". Set book titles in `<cite>`; a linked title takes the
+   * The provenance line, `type-small`: "Text adapted from *The Hedgerow
+   * Bird Almanac*". Set book titles in `<cite>`; a linked title takes the
    * body link's underline.
    */
   provenance?: React.ReactNode

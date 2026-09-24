@@ -264,7 +264,7 @@
     padding-block-start: 0;
   }
 
-  /* Date block (Sofar Sounds): a fixed key column at every width, no spine. */
+  /* Date block: a fixed key column at every width, no spine. */
   .dateBlock .rail {
     display: none;
   }
@@ -293,7 +293,7 @@
   }
 
   /*
-   * Agenda (LTA): date head → scope caption → sessions, each led by the »
+   * Agenda: date head → scope caption → sessions, each led by the »
    * marker. Rhythm: marker → 24 → title → 40 → description → 56 → next.
    */
   .day + .day {

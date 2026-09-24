@@ -127,7 +127,7 @@
     --avatar-initials: var(--font-size-1);
   }
 
-  /* …64 / 128 px a --border-size-2 --primary12 ring (Brad Frost). */
+  /* …64 / 128 px a --border-size-2 --primary12 ring. */
   .lg {
     --avatar-size: var(--size-px-9);
     --avatar-ring: var(--border-size-2);

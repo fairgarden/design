@@ -397,7 +397,7 @@ export type AnnouncementBarAccentProps = React.ComponentPropsWithRef<'span'>
 
 /**
  * The dual voice's one serif caps phrase, set inside the message at the
- * run's cap height (Rocco's two-voice bar). Use it once, with `voice="dual"`.
+ * run's cap height. Use it once, with `voice="dual"`.
  */
 export function AnnouncementBarAccent(props: AnnouncementBarAccentProps) {
   const { className, ...rest } = props
