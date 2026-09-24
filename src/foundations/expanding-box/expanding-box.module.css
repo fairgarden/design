@@ -1,0 +1,415 @@
+/*
+ * Expanding box: a behavior-free 9-slice frame whose pieces morph between
+ * two boxes through View Transitions (the search trigger into its dialog,
+ * §9.10 [D194]). CVA function `expandingBox` in ExpandingBox.tsx, applied to
+ * each of the three rows. Parts: host (exported: the owner's element that
+ * holds the rows), row, head / content / foot (the rows), corner and edge
+ * (the head and foot cells), inner (the content wrapper), face, left and
+ * right (the face and the side edges), main, extra, extraFallback, end
+ * (exported: the piece that rides the right edge), landing (the trigger box
+ * landing from a close).
+ *
+ * Geometry: head and foot are rows of --xb-cell cells (corner, edge,
+ * corner); the content row is pulled over both by --xb-cell, and its face,
+ * left and right pieces, absolute against the host, draw the face and the
+ * side edges under the corners. Radius, edge and cell are the same in every
+ * state, so the corner pieces are identical in both snapshots and only
+ * translate; the four edges stretch only along their length, keeping their
+ * weight, and the borderless face stretches freely.
+ *
+ * View Transitions: each piece reads its view-transition-name from a
+ * custom property the rows set inline per instance (`--xb-tl` … `--xb-focus`,
+ * `none` while the box is not active), so no name is ever written here and
+ * two boxes never collide. Every piece carries a view-transition-class
+ * (`fgd-xb` plus its kind, read from --xb-class so CSS Modules never hash
+ * it); utils/view-transitions.css styles the groups and images by class.
+ * While <html data-fgd-expanding="close"> is set, every piece also carries
+ * `closing`, so the close runs on the faster duration.
+ *
+ * Frame: one radius, --xb-radius (--radius-2-25, published on the host),
+ * and one edge, --xb-edge (--border-size-2), collapsed and expanded alike;
+ * only the color is per state: --role-rule collapsed (the field-like
+ * trigger), --primary12 expanded. Opening switches at the snapshot swap;
+ * closing keeps the landing trigger's frame --primary12 until the morph has
+ * finished (`landing`), so the color changes on the landed box. The
+ * focus ring follows the radius. The dialog's sheet keeps the same frame:
+ * its owner insets the host by the page margin. Face --primary1. Hover
+ * (collapsed) steps the edge --role-rule → --primary12 at the same weight
+ * [D140]; never a transform [D181]. Local custom properties carry dimensions
+ * and transition names and classes only; colors are role variables.
+ */
+
+@layer base {
+  /*
+   * The owner's element (trigger button, dialog popup): the positioned box
+   * the face, the side edges and the focus ring measure against. Zero
+   * specificity, so the owner's own position (a fixed popup) and sizing
+   * win. It publishes
+   * the frame radius, the same collapsed and expanded, for the rows and for
+   * any ring the owner draws on the host itself.
+   */
+  :where(.host) {
+    --xb-radius: var(--radius-2-25);
+
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+
+  /*
+   * The edge, and the corner cell: the radius plus a size-px-1 straight run
+   * (8 + 4 = 12 px), which holds the radius and the edge (8 + 2).
+   */
+  .row {
+    --xb-edge: var(--border-size-2);
+    --xb-cell: calc(var(--xb-radius) + var(--size-px-1));
+  }
+
+  .head,
+  .foot {
+    display: flex;
+    flex: none;
+  }
+
+  /* Above the face and the side edges (same layer, later), below the content. */
+  .foot {
+    position: relative;
+    z-index: -1;
+  }
+
+  .corner,
+  .edge {
+    box-sizing: border-box;
+    block-size: var(--xb-cell);
+    border: 0 solid var(--primary12);
+    background-color: var(--primary1);
+  }
+
+  .corner {
+    flex: none;
+    inline-size: var(--xb-cell);
+  }
+
+  /* Edges tuck under the corners, so no seam opens between them. */
+  .edge {
+    flex: 1 1 auto;
+    margin-inline: calc(-1 * var(--border-size-2));
+  }
+
+  .head > .corner,
+  .head > .edge {
+    border-block-start-width: var(--xb-edge);
+  }
+
+  .foot > .corner,
+  .foot > .edge {
+    border-block-end-width: var(--xb-edge);
+  }
+
+  .tl,
+  .bl {
+    border-inline-start-width: var(--xb-edge);
+  }
+
+  .tr,
+  .br {
+    border-inline-end-width: var(--xb-edge);
+  }
+
+  .tl {
+    border-start-start-radius: var(--xb-radius);
+  }
+
+  .tr {
+    border-start-end-radius: var(--xb-radius);
+  }
+
+  .bl {
+    border-end-start-radius: var(--xb-radius);
+  }
+
+  .br {
+    border-end-end-radius: var(--xb-radius);
+  }
+
+  /*
+   * View-transition classes travel in --xb-class and are read through var():
+   * CSS Modules would hash a literal view-transition-class ident, and the
+   * global rules select these exact names.
+   */
+  .tl,
+  .tr,
+  .bl,
+  .br {
+    --xb-class: fgd-xb fgd-xb-corner;
+  }
+
+  .t,
+  .b {
+    --xb-class: fgd-xb fgd-xb-edge;
+  }
+
+  .corner,
+  .edge,
+  .content,
+  .face,
+  .left,
+  .right,
+  .main,
+  .main .end,
+  .extra,
+  .extraFallback {
+    view-transition-class: var(--xb-class);
+  }
+
+  .tl {
+    view-transition-name: var(--xb-tl);
+  }
+
+  .t {
+    view-transition-name: var(--xb-t);
+  }
+
+  .tr {
+    view-transition-name: var(--xb-tr);
+  }
+
+  .bl {
+    view-transition-name: var(--xb-bl);
+  }
+
+  .b {
+    view-transition-name: var(--xb-b);
+  }
+
+  .br {
+    view-transition-name: var(--xb-br);
+  }
+
+  /*
+   * Pulled over the head and foot rows; the pieces inside carry their own
+   * names. Inset by the frame's edge, so content never covers the frame.
+   */
+  .content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-block-size: 0;
+    margin-block: calc(-1 * var(--xb-cell));
+    padding: var(--xb-edge);
+    border-radius: var(--xb-radius);
+    view-transition-name: var(--xb-content);
+    --xb-class: fgd-xb fgd-xb-content;
+  }
+
+  /*
+   * The face and the two side edges, starting where the corner curves end,
+   * so they overlap the corners' size-px-1 straight run, under both rows.
+   * The face has no border; each side edge is a strip one edge wide, so in
+   * the morph it stretches only along its length.
+   */
+  .face,
+  .left,
+  .right {
+    position: absolute;
+    inset-block: var(--xb-radius);
+    z-index: -1;
+    box-sizing: border-box;
+  }
+
+  .face {
+    inset-inline: 0;
+    background-color: var(--primary1);
+    view-transition-name: var(--xb-face);
+    --xb-class: fgd-xb fgd-xb-face;
+  }
+
+  .left,
+  .right {
+    inline-size: var(--xb-edge);
+    border: 0 solid var(--primary12);
+    --xb-class: fgd-xb fgd-xb-edge;
+  }
+
+  .left {
+    inset-inline-start: 0;
+    border-inline-start-width: var(--xb-edge);
+    view-transition-name: var(--xb-l);
+  }
+
+  .right {
+    inset-inline-end: 0;
+    border-inline-end-width: var(--xb-edge);
+    view-transition-name: var(--xb-r);
+  }
+
+  /* The content wrapper (the `className` prop): main, extra, then the rest. */
+  .inner {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-block-size: 0;
+  }
+
+  /* Rides the left edge. */
+  .main {
+    view-transition-name: var(--xb-main);
+    --xb-class: fgd-xb fgd-xb-main;
+  }
+
+  /* Rides the right edge: one element inside main. */
+  .main .end {
+    view-transition-name: var(--xb-end);
+    --xb-class: fgd-xb fgd-xb-end;
+  }
+
+  .extra,
+  .extraFallback {
+    view-transition-name: var(--xb-extra);
+    --xb-class: fgd-xb fgd-xb-extra;
+  }
+
+  /* The empty extra a box without ExpandingBoxExtra grows from (the trigger's). */
+  .extraFallback {
+    inline-size: 100%;
+  }
+
+  .inner:has(.extra) > .extraFallback {
+    display: none;
+    view-transition-name: none;
+  }
+
+  @media (--motionOK) {
+    .corner,
+    .edge,
+    .left,
+    .right {
+      transition-property: border-color;
+      transition-duration: var(--fgd-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer variants {
+  /* Trigger-sized: the field edge's color; radius and weight are shared. */
+  .collapsed > .corner,
+  .collapsed > .edge,
+  .collapsed > .left,
+  .collapsed > .right {
+    border-color: var(--role-rule);
+  }
+
+  /*
+   * The focus ring's own piece, covering the whole box: it stays on the
+   * always-mounted trigger in both snapshots, so the ring hands off (it
+   * shows once the frame lands) rather than morphing with the frame.
+   */
+  .collapsed > .face::after {
+    content: '';
+    position: absolute;
+    inset-block: calc(-1 * var(--xb-radius));
+    inset-inline: 0;
+    border-radius: var(--xb-radius);
+    view-transition-name: var(--xb-focus);
+    view-transition-class: var(--xb-class);
+    --xb-class: fgd-xb fgd-xb-focus;
+  }
+}
+
+@layer states {
+  /* The host hands its focus ring to the box, which draws it round the whole frame. */
+  .host:focus-visible:has(> .collapsed) {
+    outline: none;
+  }
+
+  .host:focus-visible > .collapsed > .face::after {
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: var(--fgd-focus-offset);
+  }
+
+  /* Hover: the field edge step at the same weight [D140]; the ring suppresses it. */
+  .host:hover:not(:focus-visible) > .collapsed > .corner,
+  .host:hover:not(:focus-visible) > .collapsed > .edge,
+  .host:hover:not(:focus-visible) > .collapsed > .left,
+  .host:hover:not(:focus-visible) > .collapsed > .right {
+    border-color: var(--primary12);
+  }
+
+  /*
+   * Landing from a close: the trigger's frame stays --primary12 in the new
+   * snapshot and while the morph runs, then eases to --role-rule on the
+   * landed box once the flag clears (--fgd-duration-quick).
+   */
+  .landing > .corner,
+  .landing > .edge,
+  .landing > .left,
+  .landing > .right {
+    border-color: var(--primary12);
+    transition: none;
+  }
+
+  /* Closing: every piece's group runs the faster close (startExpandingTransition sets the flag). */
+  :root[data-fgd-expanding='close'] .tl,
+  :root[data-fgd-expanding='close'] .tr,
+  :root[data-fgd-expanding='close'] .bl,
+  :root[data-fgd-expanding='close'] .br {
+    --xb-class: fgd-xb fgd-xb-corner closing;
+  }
+
+  :root[data-fgd-expanding='close'] .t,
+  :root[data-fgd-expanding='close'] .b,
+  :root[data-fgd-expanding='close'] .left,
+  :root[data-fgd-expanding='close'] .right {
+    --xb-class: fgd-xb fgd-xb-edge closing;
+  }
+
+  :root[data-fgd-expanding='close'] .content {
+    --xb-class: fgd-xb fgd-xb-content closing;
+  }
+
+  :root[data-fgd-expanding='close'] .face {
+    --xb-class: fgd-xb fgd-xb-face closing;
+  }
+
+  :root[data-fgd-expanding='close'] .collapsed > .face::after {
+    --xb-class: fgd-xb fgd-xb-focus closing;
+  }
+
+  :root[data-fgd-expanding='close'] .main {
+    --xb-class: fgd-xb fgd-xb-main closing;
+  }
+
+  :root[data-fgd-expanding='close'] .main .end {
+    --xb-class: fgd-xb fgd-xb-end closing;
+  }
+
+  :root[data-fgd-expanding='close'] .extra,
+  :root[data-fgd-expanding='close'] .extraFallback {
+    --xb-class: fgd-xb fgd-xb-extra closing;
+  }
+}
+
+@layer print {
+  @media print {
+    /* The box prints as its content in one black --border-size-1 frame (the remap turns --primary12 black). */
+    .head,
+    .foot,
+    .face,
+    .left,
+    .right {
+      display: none;
+    }
+
+    .content {
+      margin-block: 0;
+      padding: 0;
+      border: var(--border-size-1) solid var(--primary12);
+    }
+  }
+}

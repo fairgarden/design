@@ -13,16 +13,16 @@ Values a form submits use Radio or Checkbox Group; panels use Tabs.
 
 **Toggle Props:**
 
-| Prop        | Type                                                                                                                                                                                                                                                                                                                                               | Default | Description                                                                                                                                                                                                                             |
-| :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| icon        | `'menu' \| 'search' \| 'circle' \| 'arrow_forward' \| 'arrow_upward' \| 'expand_more' \| 'close' \| 'remove' \| 'add' \| 'check' \| 'chevron_right' \| 'chevron_left' \| 'more_horiz' \| 'play_arrow' \| 'pause' \| 'download' \| 'zoom_in' \| 'zoom_out' \| 'recenter' \| 'help' \| 'mail'`                                                       | -       | One optional leading glyph (§6.10), inline tier, FILL 0.                                                                                                                                                                                |
-| iconOnly    | `boolean \| null`                                                                                                                                                                                                                                                                                                                                  | -       | `true` shows only the icon; see the icon toggle. Default `false`.                                                                                                                                                                       |
-| pressedIcon | `'menu' \| 'search' \| 'circle' \| 'arrow_forward' \| 'arrow_upward' \| 'expand_more' \| 'close' \| 'remove' \| 'add' \| 'check' \| 'chevron_right' \| 'chevron_left' \| 'more_horiz' \| 'play_arrow' \| 'pause' \| 'download' \| 'zoom_in' \| 'zoom_out' \| 'recenter' \| 'help' \| 'mail'`                                                       | -       | Not used on a labelled toggle: it shows ✓ or ● when pressed.                                                                                                                                                                            |
-| primary     | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| null`                                                                                                                               | -       | Primary Radix scale: edges, label, the inverse pair and the ring. Never defaulted \[D133].                                                                                                                                              |
-| secondary   | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| 'amber' \| 'blue' \| 'cyan' \| 'grass' \| 'green' \| 'jade' \| 'lime' \| 'mint' \| 'orange' \| 'sky' \| 'teal' \| 'yellow' \| null` | -       | Secondary Radix scale: drives only the selected chip (--role-select). Never defaulted.                                                                                                                                                  |
-| size        | `'sm' \| 'md' \| null`                                                                                                                                                                                                                                                                                                                             | -       | Height: `sm` 32 px (chips, toolbars; hit area extended to 44) or `md`&#xA;40 px (segments, standalone; default, chips default to `sm`).                                                                                                 |
-| variant     | `'outline' \| 'segment' \| 'chip' \| null`                                                                                                                                                                                                                                                                                                         | -       | `outline` (default): a pill like the outline Button, selected by the&#xA;inverse pair. `segment`: a joined cell of a segmented group. `chip`: a&#xA;filter chip, selected by --role-select. Inside a ToggleGroup the group&#xA;sets it. |
-| children    | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | The label, authored in title case ("Grid View") \[D160].                                                                                                                                                                                |
+| Prop        | Type                                                                                                                                                                                                                                                                                                                                                                                                                                      | Default | Description                                                                                                                                                                                                                             |
+| :---------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| icon        | `'link' \| 'menu' \| 'search' \| 'circle' \| 'arrow_forward' \| 'arrow_upward' \| 'expand_more' \| 'close' \| 'remove' \| 'add' \| 'check' \| 'chevron_right' \| 'chevron_left' \| 'more_horiz' \| 'play_arrow' \| 'pause' \| 'download' \| 'zoom_in' \| 'zoom_out' \| 'recenter' \| 'help' \| 'mail' \| 'content_copy' \| 'open_in_new' \| 'restart_alt' \| 'description' \| 'widgets' \| 'deployed_code' \| 'format_h2' \| 'format_h3'` | -       | One optional leading glyph (§6.10), inline tier, FILL 0.                                                                                                                                                                                |
+| iconOnly    | `boolean \| null`                                                                                                                                                                                                                                                                                                                                                                                                                         | -       | `true` shows only the icon; see the icon toggle. Default `false`.                                                                                                                                                                       |
+| pressedIcon | `'link' \| 'menu' \| 'search' \| 'circle' \| 'arrow_forward' \| 'arrow_upward' \| 'expand_more' \| 'close' \| 'remove' \| 'add' \| 'check' \| 'chevron_right' \| 'chevron_left' \| 'more_horiz' \| 'play_arrow' \| 'pause' \| 'download' \| 'zoom_in' \| 'zoom_out' \| 'recenter' \| 'help' \| 'mail' \| 'content_copy' \| 'open_in_new' \| 'restart_alt' \| 'description' \| 'widgets' \| 'deployed_code' \| 'format_h2' \| 'format_h3'` | -       | Not used on a labelled toggle: it shows ✓ or ● when pressed.                                                                                                                                                                            |
+| primary     | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| null`                                                                                                                                                                                                                      | -       | Primary Radix scale: edges, label, the inverse pair and the ring. Never defaulted \[D133].                                                                                                                                              |
+| secondary   | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| 'amber' \| 'blue' \| 'cyan' \| 'grass' \| 'green' \| 'jade' \| 'lime' \| 'mint' \| 'orange' \| 'sky' \| 'teal' \| 'yellow' \| null`                                                                                        | -       | Secondary Radix scale: drives only the selected chip (--role-select). Never defaulted.                                                                                                                                                  |
+| size        | `'sm' \| 'md' \| null`                                                                                                                                                                                                                                                                                                                                                                                                                    | -       | Height: `sm` 32 px (chips, toolbars; hit area extended to 44) or `md`&#xA;40 px (segments, standalone; default, chips default to `sm`).                                                                                                 |
+| variant     | `'outline' \| 'segment' \| 'chip' \| null`                                                                                                                                                                                                                                                                                                                                                                                                | -       | `outline` (default): a pill like the outline Button, selected by the&#xA;inverse pair. `segment`: a joined cell of a segmented group. `chip`: a&#xA;filter chip, selected by --role-select. Inside a ToggleGroup the group&#xA;sets it. |
+| children    | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                                                                                                         | -       | The label, authored in title case ("Grid View") \[D160].                                                                                                                                                                                |
 
 ### ToggleGroup
 
@@ -88,6 +88,7 @@ type ToggleProps = (
   | {
       iconOnly?: false | null;
       icon?:
+        | 'link'
         | 'menu'
         | 'search'
         | 'circle'
@@ -108,13 +109,22 @@ type ToggleProps = (
         | 'zoom_out'
         | 'recenter'
         | 'help'
-        | 'mail';
+        | 'mail'
+        | 'content_copy'
+        | 'open_in_new'
+        | 'restart_alt'
+        | 'description'
+        | 'widgets'
+        | 'deployed_code'
+        | 'format_h2'
+        | 'format_h3';
       pressedIcon?: undefined;
       children?: React.ReactNode;
     }
   | {
       iconOnly: true;
       icon:
+        | 'link'
         | 'menu'
         | 'search'
         | 'circle'
@@ -135,8 +145,17 @@ type ToggleProps = (
         | 'zoom_out'
         | 'recenter'
         | 'help'
-        | 'mail';
+        | 'mail'
+        | 'content_copy'
+        | 'open_in_new'
+        | 'restart_alt'
+        | 'description'
+        | 'widgets'
+        | 'deployed_code'
+        | 'format_h2'
+        | 'format_h3';
       pressedIcon:
+        | 'link'
         | 'menu'
         | 'search'
         | 'circle'
@@ -157,7 +176,15 @@ type ToggleProps = (
         | 'zoom_out'
         | 'recenter'
         | 'help'
-        | 'mail';
+        | 'mail'
+        | 'content_copy'
+        | 'open_in_new'
+        | 'restart_alt'
+        | 'description'
+        | 'widgets'
+        | 'deployed_code'
+        | 'format_h2'
+        | 'format_h3';
       children: React.ReactNode;
     }
 ) & {

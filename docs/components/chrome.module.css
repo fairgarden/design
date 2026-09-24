@@ -54,6 +54,19 @@
 }
 
 /*
+ * From --md-n-above the column keeps a --fgd-size-hit gutter at its inline
+ * end: the room a code block's or demo's "More actions" trigger hangs into,
+ * outside its frame. Nothing between the column and the viewport clips
+ * sideways, so the trigger measures the gutter plus the page margin. Below,
+ * the trigger sits inside the frame.
+ */
+@media (--md-n-above) {
+  .main {
+    padding-inline-end: var(--fgd-size-hit);
+  }
+}
+
+/*
  * Navigation: caps for wayfinding [D165]; current page marked by a bar.
  * Below --md-n-above the list follows the page, under a rule, so a phone
  * opens on the content rather than on 80 links (the header keeps Search).
@@ -117,77 +130,6 @@
   }
 }
 
-/* Search */
-.search {
-  position: relative;
-  inline-size: min(100%, 320px);
-}
-
-.searchInput {
-  composes: typeBodyUi from '../../src/utils/type.module.css';
-  inline-size: 100%;
-  min-block-size: var(--fgd-size-control-md);
-  padding-inline: var(--size-px-2-5);
-  border: var(--border-size-1) solid var(--role-rule);
-  border-radius: var(--radius-1);
-  background-color: var(--primary1);
-  color: var(--primary12);
-
-  &:hover {
-    border-color: var(--primary12);
-  }
-
-  /* Text entry shows the ring on any focus [D90]. */
-  &:focus {
-    outline: var(--fgd-focus-width) solid var(--primary12);
-    outline-offset: var(--fgd-focus-offset);
-  }
-}
-
-/* Anchored panel: a white-style face with the --border-size-2 ink frame [D92]. */
-.results {
-  position: absolute;
-  inset-inline: 0;
-  inset-block-start: calc(100% + var(--size-px-1));
-  z-index: var(--layer-3);
-  max-block-size: 60dvh;
-  margin: 0;
-  padding: var(--size-px-2) 0;
-  overflow-y: auto;
-  border: var(--border-size-2) solid var(--primary12);
-  border-radius: var(--radius-2-25);
-  background-color: var(--primary1);
-  list-style: none;
-}
-
-.resultGroup {
-  composes: typeLabel from '../../src/utils/type.module.css';
-  padding: var(--size-px-2) var(--size-px-2-5) var(--size-px-1);
-  color: var(--role-muted);
-}
-
-.resultLink {
-  composes: typeBodyUi from '../../src/utils/type.module.css';
-  display: flex;
-  align-items: center;
-  min-block-size: var(--fgd-size-hit);
-  padding-inline: var(--size-px-2-5);
-  color: var(--primary12);
-  text-decoration: none;
-
-  &:hover {
-    background-color: var(--primary3);
-    text-decoration: underline;
-    text-decoration-color: var(--role-accent);
-  }
-}
-
-.noResults {
-  composes: typeCaption from '../../src/utils/type.module.css';
-  padding: var(--size-px-2) var(--size-px-2-5);
-  color: var(--role-muted);
-}
-
 /* Section index cards: every face has an edge [D12]. */
 .index {
   display: grid;
@@ -227,17 +169,7 @@
   composes: typeCaption typeMuted from '../../src/utils/type.module.css';
 }
 
-.demoTitle {
-  composes: typeSubhead from '../../src/utils/type.module.css';
-  margin-block: var(--size-px-7-5) var(--size-px-3);
-
-  & a {
-    color: inherit;
-    text-decoration: none;
-  }
-}
-
-/* Print (§7): the page prints alone; the sidebar and Search are screen wayfinding. */
+/* Print (§7): the page prints alone; the sidebar is screen wayfinding (Search hides itself). */
 @media print {
   .frame {
     display: block;
@@ -245,12 +177,12 @@
     padding-inline: 0;
   }
 
-  .nav,
-  .search {
+  .nav {
     display: none;
   }
 
   .main {
     padding-block: 0;
+    padding-inline-end: 0;
   }
 }

@@ -1,0 +1,130 @@
+# Docs Utilities
+
+Factories for a documentation site built on `@fairgarden/docs`: demos, API tables and the MDX component map, pre-wired with the design system's Code Block, Demo and Types Table.
+
+```ts
+import {
+  createDemo,
+  createDemoWithVariants,
+  createTypes,
+  createMultipleTypes,
+  createMdxComponents,
+} from '@fairgarden/design/utils/docs'
+```
+
+Each is a thin wrapper over the engine's own factory with the design system's components plugged in, and every option passes through, so an app can replace any of them. They're server-safe and hold no framework code: pass your router's link in. `@fairgarden/docs` is an optional peer dependency; install it to use these. Each factory also has its own path (`@fairgarden/design/utils/docs/createDemo`, `…/createTypes`, `…/createMdxComponents`), so an app imports only what it uses. This site is built with them.
+
+## createDemo
+
+`createDemo` and `createDemoWithVariants` are the engine's demo factories with `DemoLazy` as the demo content (the [Demo](../../content/demo/page.mdx) in its own chunk), `DemoLoading` until it loads, `DemoTitle` for `<DemoX.Title />`, and the source links `withDeploymentConfig` sets up (`SOURCE_CODE_ROOT_DIR`, `SOURCE_CODE_ROOT_URL`). Code highlights at `init`, so the server HTML carries it. `createDemoWithVariants` also passes `fallbackUsesAllVariants`, so the loading state has every variant: it draws the variant Select, and every variant's files have their `#slug` targets. The page loads the Demo's chunk only after the loading state has painted.
+
+```ts filename=demos/variants/index.ts
+import { createDemoWithVariants } from '@fairgarden/design/utils/docs'
+import { SeedlingCounter as CssModules } from './css-modules/SeedlingCounter'
+import { SeedlingCounter as Tag } from './tag/SeedlingCounter'
+
+export const DemoVariants = createDemoWithVariants(import.meta.url, { CssModules, Tag }, { name: 'Variants' })
+```
+
+To change a default, build your own pair with `createDemoFactory(options)` and `createDemoWithVariantsFactory(options)`. This site passes its own content and loading state, which wrap the Demo's with its page-frame and staged modes:
+
+```ts filename=functions/createDemo.ts
+import { createDemoFactory, createDemoWithVariantsFactory } from '@fairgarden/design/utils/docs/createDemo'
+import { DemoContent } from '@/components/DemoContent'
+import { DemoLoading } from '@/components/DemoLoading'
+
+const options = { DemoContent, DemoContentLoading: DemoLoading }
+
+export const createDemo = createDemoFactory(options)
+export const createDemoWithVariants = createDemoWithVariantsFactory(options)
+```
+
+## createTypes
+
+`createTypes` and `createMultipleTypes` are the engine's types factories with the [Types Table](../../content/types-table/page.mdx) and `TypePre`. They extract an export's API from TypeScript at build time. Pass your MDX map as `components`, so the descriptions render in the same components as your pages; without it they render as plain elements.
+
+```ts filename=functions/createTypes.ts
+import { createMultipleTypesFactory, createTypesFactory } from '@fairgarden/design/utils/docs/createTypes'
+import { mdxComponents } from '@/mdx-components'
+
+export const createTypes = createTypesFactory({ components: mdxComponents })
+export const createMultipleTypes = createMultipleTypesFactory({ components: mdxComponents })
+```
+
+```ts filename=app/actions/button/types.ts
+import { createTypes } from '@/functions/createTypes'
+import { Button } from '@fairgarden/design/actions/button'
+
+export const TypesButton = createTypes(import.meta.url, Button)
+```
+
+## createMdxComponents
+
+`createMdxComponents(options)` returns the MDX component map. `pre` renders every fenced code block as a [Code Block](../../content/code-block/page.mdx) through `CodeHighlighter`, code-split, with `CodeBlockLoading` until its chunk loads. `code` sets inline code in the Code Block's syntax tiers. `h1` to `h4` take the type roles, and the headings with ids (rehype-slug gives each one) link to themselves. `a` is the design system's [Link](../../actions/link/page.mdx), with the external mark on absolute URLs. `p`, the lists, `table`, `blockquote` and `hr` follow the design system's prose.
+
+The options:
+
+- `Link`: renders links to internal paths (`/…`), such as next/link, as the Link's element. Default: a plain `a`.
+- `Image`: renders `img`, such as next/image. Default: the plain element.
+- `Content`, `ContentLoading` and `highlightAfter`: the fenced blocks' `CodeHighlighter` slots. Defaults: `CodeBlockLazy`, `CodeBlockLoading` and `'init'`.
+- `components`: more components, or replacements for any in the map, merged last.
+
+```tsx filename=mdx-components.tsx
+import NextLink from 'next/link'
+import { createMdxComponents } from '@fairgarden/design/utils/docs/createMdxComponents'
+import { PagesIndex } from './components/PagesIndex'
+
+export const mdxComponents = createMdxComponents({ Link: NextLink, components: { PagesIndex } })
+
+export function useMDXComponents(components) {
+  return { ...components, ...mdxComponents }
+}
+```
+
+The map's `pre` is also exported alone as `Pre`, and the demo heading as `DemoTitle`.
+
+## The engine's client side
+
+Code Block and Demo highlight from the engine's precomputed output. Code the browser produces, such as an edited demo, needs the engine's client parser: put `CodeProviderLazy` from `@fairgarden/docs/CodeProvider` in the root layout, as this site does. It loads the parser, the grammars and the transform tools only when a block needs them.
+
+## Print
+
+The prose prints black on white: headings stay with what follows, tables and callouts never split, and a callout drops its fill and keeps its edge.
+
+## API Reference
+
+import { TypesDocsUtilities, TypesDocsUtilitiesAdditional } from './types'
+
+### createDemoFactory
+
+<TypesDocsUtilities.createDemoFactory />
+
+### createDemoWithVariantsFactory
+
+<TypesDocsUtilities.createDemoWithVariantsFactory />
+
+### createTypesFactory
+
+<TypesDocsUtilities.createTypesFactory />
+
+### createMultipleTypesFactory
+
+<TypesDocsUtilities.createMultipleTypesFactory />
+
+### createMdxComponents
+
+<TypesDocsUtilities.createMdxComponents />
+
+### DemoTitle
+
+<TypesDocsUtilities.DemoTitle />
+
+### Pre
+
+<TypesDocsUtilities.Pre />
+
+### Additional types
+
+<TypesDocsUtilitiesAdditional />
+
+[See Types](./types.md)

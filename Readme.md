@@ -43,6 +43,8 @@ carries no promise; it is there so main can be tried without a checkout.
 pnpm add @fairgarden/design @base-ui/react
 # only for Map:
 pnpm add maplibre-gl pmtiles @protomaps/basemaps
+# only for Code Block, Demo, Types Table, Search Dialog and utils/docs:
+pnpm add @fairgarden/docs
 ```
 
 ```tsx
@@ -65,18 +67,32 @@ Each component is imported from its own path, `@fairgarden/design/<category>/<na
 
 | Category | Components (import path `@fairgarden/design/<category>/…`) |
 | --- | --- |
-| `foundations` | Ground (`ground`), Icon (`icon`), Separator (`separator`), Sticker (`sticker`) |
+| `foundations` | Ground (`ground`), Icon (`icon`), Separator (`separator`), Sticker (`sticker`), Expanding Box (`expanding-box`) |
 | `actions` | Button (`button`), Link (`link`), Toggle (`toggle`), Toggle Group (`toggle-group`), Chip (`chip`) |
-| `navigation` | Navigation Menu (`navigation-menu`), Navigation Bar (`navigation-bar`), Nav Drawer (`nav-drawer`), Breadcrumb (`breadcrumb`), Pagination (`pagination`), Tabs (`tabs`), Toolbar (`toolbar`) |
+| `navigation` | Navigation Menu (`navigation-menu`), Navigation Bar (`navigation-bar`), Nav Drawer (`nav-drawer`), Breadcrumb (`breadcrumb`), Pagination (`pagination`), Tabs (`tabs`), File Tabs (`file-tabs`: the folder-tab header Code Block and Demo use, with optional `controls` at its end and a busy `status`; no docs engine needed), Toolbar (`toolbar`) |
 | `forms` | Field (`field`), Fieldset (`fieldset`), Form (`form`), Input (`input`), Number Field (`number-field`), Select (`select`), Combobox (`combobox`), Autocomplete (`autocomplete`), Search (`search`), Checkbox (`checkbox`), Checkbox Group (`checkbox-group`), Radio (`radio`), Radio Group (`radio-group`), Switch (`switch`), Slider (`slider`) |
 | `feedback` | Alert (`alert`), Badge (`badge`), Tag (`tag`), Avatar (`avatar`), Progress (`progress`), Meter (`meter`), Toast (`toast`) |
-| `overlays` | Dialog (`dialog`), Alert Dialog (`alert-dialog`), Popover (`popover`), Preview Card (`preview-card`), Menu (`menu`), Context Menu (`context-menu`), Menubar (`menubar`), Tooltip (`tooltip`) |
+| `overlays` | Dialog (`dialog`), Alert Dialog (`alert-dialog`), Popover (`popover`), Preview Card (`preview-card`), Menu (`menu`), Context Menu (`context-menu`), Menubar (`menubar`), Tooltip (`tooltip`), Search Dialog (`search-dialog`) |
 | `disclosure` | Accordion (`accordion`), Collapsible (`collapsible`), FAQ (`faq`) |
 | `page` | Hero (`hero`), Footer (`footer`), Section Bar (`section-bar`), Section Divider (`section-divider`), Section Header (`section-header`), CTA Block (`cta-block`), Newsletter (`newsletter`), Marquee (`marquee`), Announcement Bar (`announcement-bar`) |
-| `content` | Card (`card`), Card Grid (`card-grid`), Feature Grid (`feature-grid`), Carousel (`carousel`), Quote (`quote`), Index Rows (`index-rows`), Profile (`profile`), Pricing (`pricing`), Timeline (`timeline`), Empty State (`empty-state`) |
+| `content` | Card (`card`), Card Grid (`card-grid`), Feature Grid (`feature-grid`), Carousel (`carousel`), Quote (`quote`), Index Rows (`index-rows`), Profile (`profile`), Pricing (`pricing`), Timeline (`timeline`), Empty State (`empty-state`), Code Block (`code-block`), Demo (`demo`), Types Table (`types-table`) |
 | `data` | Table (`table`), Scroll Area (`scroll-area`), Spec Grid (`spec-grid`), Spec List (`spec-list`), Spec Sheet (`spec-sheet`), Figure (`figure`), Stat (`stat`), Chart (`chart`), Map (`map`) |
 
-**Utilities** (`@fairgarden/design/utils/…`): the global stylesheet (`global.css`), the fonts (`fonts`), `ClientProvider`, the pattern tiles (`pattern.module.css`), the type roles (`type.module.css`), the line styles (`line.module.css`), ornaments (`Ornament`) and the navigation data type (`navigation`).
+### With `@fairgarden/docs`
+
+`@fairgarden/docs` is an optional peer dependency (`^0.13.3`). Four components and one utility are built on the docs engine and import it directly; no other module does, so install it only if you use them:
+
+| Import path | Exports |
+| --- | --- |
+| `@fairgarden/design/content/code-block` | `CodeBlock`: a Content component for `CodeHighlighter`. It calls `useCode(props)` and renders the engine's highlighted files, variants, TS \| JS transform, copy, swap and window. `CodeBlockLazy` is the same in its own chunk, and `CodeBlockLoading` its light loading state (the precomputed fallback in the same frame). Copies confirm with a toast through a `ToastProvider` (`feedback/toast`) in the app shell; without one they're silent. |
+| `@fairgarden/design/content/demo` | `DemoContent`: the demo factories' content. It calls `useDemo(props)` and renders the live component above the Code Block's code section. `DemoLazy` and `DemoLoading` as above; `renderPreview` wraps the preview (an iframe, say). |
+| `@fairgarden/design/content/types-table` | `TypesTable` and `TypePre`: the types factories' API table (through `useTypes`) and type signatures. |
+| `@fairgarden/design/overlays/search-dialog` | `SearchDialog`: the header search. It calls `useSearch` over your `sitemap` loader and renders the engine's results; a chosen row calls `onNavigate(href, result)` with `buildResultUrl(result)`, so pass your router: `<SearchDialog sitemap={() => import('./sitemap')} onNavigate={(href) => router.push(href)} keyboardShortcut />`. |
+| `@fairgarden/design/utils/docs` | `createDemo`, `createDemoWithVariants`, `createTypes`, `createMultipleTypes` (the engine's factories pre-wired with the components above; `createDemoFactory`, `createDemoWithVariantsFactory`, `createTypesFactory` and `createMultipleTypesFactory` take overrides) and `createMdxComponents({ Link, Image, components, … })` (the MDX map: fenced blocks as Code Blocks, headings, links, prose). Each also has its own path: `…/utils/docs/createDemo`, `…/createTypes`, `…/createMdxComponents`. |
+
+None of them contains framework code: pass navigation in (`onNavigate`, `Link`). Put the engine's `CodeProviderLazy` (`@fairgarden/docs/CodeProvider`) in your root layout, so code the browser produces is highlighted too.
+
+**Utilities** (`@fairgarden/design/utils/…`): the global stylesheet (`global.css`), the fonts (`fonts`), `ClientProvider`, the pattern tiles (`pattern.module.css`), the type roles (`type.module.css`), the syntax tiers for code outside a Code Block (`syntax.module.css`), the line styles (`line.module.css`), ornaments (`Ornament`), the navigation data type (`navigation`) and the docs factories (`docs`, above).
 
 ## Development
 

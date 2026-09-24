@@ -66,5 +66,8 @@ export default withDeploymentConfig(
     // `pnpm validate` writes a page.tsx beside each demo, so the
     // "[See Demo](./demos/x/)" links resolve.
     requireDemoPage: true,
+    // Demo loaders also emit a JavaScript version of each TypeScript file,
+    // so demos offer the TS | JS switch.
+    transformTypescriptToJavascript: true,
   })(withMDX(nextConfig)),
 )

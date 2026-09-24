@@ -41,11 +41,11 @@ disabled.
 
 **FAQItem Props:**
 
-| Prop       | Type                                                                                                                                                                                                                                                                                         | Default | Description                                                                                                                              |
-| :--------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :--------------------------------------------------------------------------------------------------------------------------------------- |
-| icon       | `'menu' \| 'search' \| 'circle' \| 'arrow_forward' \| 'arrow_upward' \| 'expand_more' \| 'close' \| 'remove' \| 'add' \| 'check' \| 'chevron_right' \| 'chevron_left' \| 'more_horiz' \| 'play_arrow' \| 'pause' \| 'download' \| 'zoom_in' \| 'zoom_out' \| 'recenter' \| 'help' \| 'mail'` | -       | The leading block icon of the `keyed` kind (§6.10 subject symbol,&#xA;Material Symbols Rounded, block tier). Ignored by the other kinds. |
-| panelProps | `Omit<AccordionPanelProps, 'children'>`                                                                                                                                                                                                                                                      | -       | Props for the answer panel, such as `keepMounted`.                                                                                       |
-| question   | `React.ReactNode`                                                                                                                                                                                                                                                                            | -       | The question: `type-itemhead` in `--primary12`, inside an `h3`.                                                                          |
+| Prop       | Type                                                                                                                                                                                                                                                                                                                                                                                                                                      | Default | Description                                                                                                                              |
+| :--------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :--------------------------------------------------------------------------------------------------------------------------------------- |
+| icon       | `'link' \| 'menu' \| 'search' \| 'circle' \| 'arrow_forward' \| 'arrow_upward' \| 'expand_more' \| 'close' \| 'remove' \| 'add' \| 'check' \| 'chevron_right' \| 'chevron_left' \| 'more_horiz' \| 'play_arrow' \| 'pause' \| 'download' \| 'zoom_in' \| 'zoom_out' \| 'recenter' \| 'help' \| 'mail' \| 'content_copy' \| 'open_in_new' \| 'restart_alt' \| 'description' \| 'widgets' \| 'deployed_code' \| 'format_h2' \| 'format_h3'` | -       | The leading block icon of the `keyed` kind (§6.10 subject symbol,&#xA;Material Symbols Rounded, block tier). Ignored by the other kinds. |
+| panelProps | `Omit<AccordionPanelProps, 'children'>`                                                                                                                                                                                                                                                                                                                                                                                                   | -       | Props for the answer panel, such as `keepMounted`.                                                                                       |
+| question   | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                                                                                                         | -       | The question: `type-itemhead` in `--primary12`, inside an `h3`.                                                                          |
 
 ### FAQList
 
@@ -103,6 +103,7 @@ type FAQItemProps = {
    * Material Symbols Rounded, block tier). Ignored by the other kinds.
    */
   icon?:
+    | 'link'
     | 'menu'
     | 'search'
     | 'circle'
@@ -123,7 +124,15 @@ type FAQItemProps = {
     | 'zoom_out'
     | 'recenter'
     | 'help'
-    | 'mail';
+    | 'mail'
+    | 'content_copy'
+    | 'open_in_new'
+    | 'restart_alt'
+    | 'description'
+    | 'widgets'
+    | 'deployed_code'
+    | 'format_h2'
+    | 'format_h3';
   /** Props for the answer panel, such as `keepMounted`. */
   panelProps?: Omit<AccordionPanelProps, 'children'>;
 };

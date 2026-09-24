@@ -1,0 +1,179 @@
+# Code Block
+
+Highlighted source in a frame: the file tabs, the actions, the selected file's code and, for long code, a window with a toggle to show every line.
+
+```tsx
+import { CodeBlock } from '@fairgarden/design/content/code-block'
+```
+
+Code Block is a `@fairgarden/docs` Content component: pass it as `CodeHighlighter`'s `Content`. It calls the engine's `useCode(props)` and renders the result. The engine owns the highlighting, the file, variant and TS | JS state, the swap between them, the hash deep links, the stored preferences and copy; Code Block draws them in the design system's frame. Its header is [File Tabs](../../navigation/file-tabs/page.mdx), with the actions as its controls and the busy label as its status. `@fairgarden/docs` is an optional peer dependency; install it to use Code Block. Every fenced code block on this site is a Code Block.
+
+Code sets in mono at the caption size. Every syntax color is a role of the block's scales, so a block follows its ground and the page mode, and prints black on white.
+
+## Setup
+
+Three pieces wire a site. The MDX `pre` override hands every fenced block to `CodeHighlighter`; `createMdxComponents` from [`@fairgarden/design/utils/docs`](../../foundations/docs-utilities/page.mdx) builds it for you, code-split, with `CodeBlockLoading` until the block's chunk loads. `CodeProviderLazy` in the root layout gives the engine its client side, which highlights code the browser produces. And for code written in a component, `CodeHighlighter` takes Code Block directly.
+
+```tsx filename=mdx-components.tsx
+import NextLink from 'next/link'
+import { createMdxComponents } from '@fairgarden/design/utils/docs'
+
+export const mdxComponents = createMdxComponents({ Link: NextLink })
+
+export function useMDXComponents(components) {
+  return { ...components, ...mdxComponents }
+}
+```
+
+```tsx filename=app/layout.tsx
+import { CodeProviderLazy } from '@fairgarden/docs/CodeProvider'
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        <CodeProviderLazy>{children}</CodeProviderLazy>
+      </body>
+    </html>
+  )
+}
+```
+
+The loaded block, `CodeBlock`, is also exported code-split as `CodeBlockLazy`, the pair to `CodeBlockLoading`: the loading state renders the engine's precomputed fallback in the same frame, so the server HTML carries the highlighted code, the height holds at the swap, and every file's `#slug` target is there for a deep link before the block loads. It calls nothing from `useCode`, so it stays small.
+
+## One file
+
+import { DemoCodeBlockBasic } from './demos/basic'
+
+<DemoCodeBlockBasic.Title />
+
+One file shows its name in the header and its actions as a row of icon-only buttons, each named by a tooltip: copy the source, copy the file's deep link (the page URL with its `#slug`; every slug has a hidden scroll target, so the link lands on the block) and, for a file with a hosted URL, view the source. A fence without a file name shows no label.
+
+Every copy (the source, the link, or all files as Markdown) confirms with a [Toast](../../feedback/toast/page.mdx) in the page's toast bar: "VolunteerShift.tsx copied", "Link copied" or "Markdown copied", or a danger toast if the browser refuses the clipboard. The header and the buttons never change to say so. The toasts need the design system's `ToastProvider` in the app shell, as this site mounts it; without one, copying still works, silently.
+
+<DemoCodeBlockBasic />
+
+[See Demo](./demos/basic/)
+
+## Files
+
+import { DemoCodeBlockFiles } from './demos/files'
+import { CodeBlockFiles } from './demos/files/CodeBlockFiles'
+
+<DemoCodeBlockFiles.Title />
+
+Two or more files become folder tabs, and the actions move into the "More actions" menu: copy, copy link, view source, copy all files as Markdown, and the TS | JS option and variants when there are any. Tabs are links to each file's `#slug`: a plain click switches the file, a modifier click opens the link and leaves the selection. The tabs take the header's whole width and scroll when they overflow, passing under the frame's side edges.
+
+The menu's trigger hangs just outside the frame's end edge where the space beside the block holds its 44 px target. In the demo below it can't (the preview clips at its inset), so the trigger sits at the header's end in its own cell. In the page column, which keeps a 44 px end gutter, it hangs:
+
+<CodeBlockFiles slug="volunteer-shift-column" />
+
+<DemoCodeBlockFiles />
+
+[See Demo](./demos/files/)
+
+## Variants and TS | JS
+
+import { DemoCodeBlockVariants } from './demos/variants'
+
+<DemoCodeBlockVariants.Title />
+
+With one file, the variants show as a Select and the engine's JavaScript transform as a TS | JS segmented switch; with several files both move into the menu. The control changes at once; the code swaps 350 ms later while the changed lines grow or shrink, and the page holds still around the control. Under reduced motion the swap is instant. The engine stores the choice and applies it to every block on the page.
+
+<DemoCodeBlockVariants />
+
+[See Demo](./demos/variants/)
+
+## Highlighted lines
+
+Comments in the source mark emphasis, and the pipeline removes them from the rendered code: `// @highlight` on a line, `// @highlight-start` and `// @highlight-end` around a run, a quoted description after either, and `// @highlight-text "…"` for a phrase. A highlighted frame or line takes the step-3 fill and a 2 px start bar in the accent, so it still reads in print and forced colors; a phrase takes a fill and an underline.
+
+```tsx filename=SeedlingCounter.tsx
+'use client'
+
+import * as React from 'react'
+import { Button } from '@fairgarden/design/actions/button'
+
+export function SeedlingCounter() {
+  const [planted, setPlanted] = React.useState(0) // @highlight "State"
+
+  return (
+    // @highlight-start
+    <Button variant="solid" onClick={() => setPlanted((n) => n + 1)}>
+      Plant a Seedling ({planted})
+    </Button>
+    // @highlight-end
+  )
+}
+```
+
+## Collapsible window
+
+With `collapse` (a fence flag, a content prop or a demo prop), code that has a window shows only that window until the reader expands it with "Show all *n* lines". `// @focus-start` and `// @focus-end` set the window, `@padding n` its context lines, which sit in the muted ink until expanded, and a highlighted run is a window on its own. The toggle is a hidden checkbox and a label with the disclosure glyph, so it works before hydration; once loaded, the engine's `useCodeWindow` keeps the page still while the window opens or closes. A window that cuts a highlighted run ends on a 2 px rule. Frames reveal with a clip, never a fade, and print expanded.
+
+```tsx filename=seasonReport.ts collapse
+// Totals for the season's work days.
+type Plot = 'north' | 'south' | 'orchard'
+
+const plots: readonly Plot[] = ['north', 'south', 'orchard']
+
+const goals: Record<Plot, number> = {
+  north: 40,
+  south: 45,
+  orchard: 35,
+}
+
+export function seasonReport(planted: Partial<Record<Plot, number>>) {
+  // @focus-start @padding 1
+  let total = 0
+  for (const plot of plots) {
+    total += planted[plot] ?? 0 // @highlight
+  }
+  // @focus-end
+  const goal = plots.reduce((sum, plot) => sum + goals[plot], 0)
+  return {
+    total,
+    goal,
+    plots: plots.length,
+    done: total >= goal,
+  }
+}
+```
+
+## On grounds
+
+import { DemoCodeBlockGrounds } from './demos/grounds'
+
+<DemoCodeBlockGrounds.Title />
+
+The frame's face is always the scope's step 1, where only three steps are text-safe on every scope, so color sorts tokens into three tiers and weight and slant tell the rest apart. Keywords take the secondary step 12 at weight 700 and constants the same step at 400; strings are the ink, oblique; functions and entity names the ink at 700; comments the primary step 11, oblique; punctuation that step, upright. Every token holds 4.5:1 on each page ground, in both modes; in print they are all black, and weight and slant remain.
+
+<DemoCodeBlockGrounds />
+
+[See Demo](./demos/grounds/)
+
+## Busy
+
+When a TS | JS swap waits on slower blocks elsewhere on the page past the engine's grace window, the block the reader touched shows "Switching to JS…" over its header's end, from the engine's `pendingTransform`. The label is muted text inside a live region, laid over the header so it never moves or narrows the tabs, and the block takes `aria-busy`. There is no spinner.
+
+## Print
+
+A block never splits across pages. It prints every line, wrapped, with the window open and no controls, black on white: fills drop, and the start bars and underlines carry the emphasis.
+
+## API Reference
+
+import { TypesCodeBlock, TypesCodeBlockAdditional } from './types'
+
+### CodeBlock
+
+<TypesCodeBlock.CodeBlock />
+
+### CodeBlockLoading
+
+<TypesCodeBlock.CodeBlockLoading />
+
+### Additional types
+
+<TypesCodeBlockAdditional />
+
+[See Types](./types.md)

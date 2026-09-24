@@ -1,0 +1,40 @@
+/* One column no wider than the preview, whatever the tabs' width: they scroll instead. */
+.stack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--size-px-7);
+  inline-size: 100%;
+}
+
+/*
+ * The host of a `frame="joined"` header: a bordered box with no padding, a
+ * --primary1 face and nothing clipped, whose first part sits above the
+ * header.
+ */
+.frame {
+  border: var(--border-size-1) solid var(--role-rule);
+  border-radius: var(--radius-2-25);
+  background-color: var(--primary1);
+}
+
+/* The part above: the output, on the page ground, its corners inside the frame's. */
+.output {
+  display: block;
+  padding: var(--size-px-5);
+  border-start-start-radius: calc(var(--radius-2-25) - var(--border-size-1));
+  border-start-end-radius: calc(var(--radius-2-25) - var(--border-size-1));
+  background-color: var(--role-ground);
+  color: var(--primary12);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-body-ui);
+}
+
+.code {
+  margin: 0;
+  padding: var(--size-px-3);
+  overflow-x: auto;
+  color: var(--primary12);
+  font-family: var(--fgd-font-mono);
+  font-size: var(--fgd-font-size-caption);
+  line-height: var(--fgd-leading-compact);
+}

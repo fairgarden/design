@@ -186,7 +186,16 @@ type SearchSuggestion = {
     | 'zoom_out'
     | 'recenter'
     | 'help'
-    | 'mail';
+    | 'mail'
+    | 'content_copy'
+    | 'link'
+    | 'open_in_new'
+    | 'restart_alt'
+    | 'description'
+    | 'widgets'
+    | 'deployed_code'
+    | 'format_h2'
+    | 'format_h3';
   /** Makes the row a link to this page. */
   href?: string;
   disabled?: boolean;

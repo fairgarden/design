@@ -1,0 +1,8 @@
+/* The staged page's own inset: the frame runs edge to edge. */
+.banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--size-px-3);
+  align-items: center;
+  padding: var(--size-px-5);
+}

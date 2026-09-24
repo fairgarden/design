@@ -12,11 +12,11 @@ no-break space, metric in parentheses: "28–34 cm (11–13 in)".
 
 **SpecGridItem Props:**
 
-| Prop      | Type                                                                                                                                                                                                                                                                                         | Default | Description                                                                                                                 |
-| :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :-------------------------------------------------------------------------------------------------------------------------- |
-| label\*   | `React.ReactNode`                                                                                                                                                                                                                                                                            | -       | The caps label (`type-label`); author it in sentence case.                                                                  |
-| estimated | `boolean`                                                                                                                                                                                                                                                                                    | -       | An estimated value: dotted top rule and a leading "≈". Don't write the "≈" yourself.                                        |
-| icon      | `'menu' \| 'search' \| 'circle' \| 'arrow_forward' \| 'arrow_upward' \| 'expand_more' \| 'close' \| 'remove' \| 'add' \| 'check' \| 'chevron_right' \| 'chevron_left' \| 'more_horiz' \| 'play_arrow' \| 'pause' \| 'download' \| 'zoom_in' \| 'zoom_out' \| 'recenter' \| 'help' \| 'mail'` | -       | A decorative data icon before the label (Material Symbols Rounded,&#xA;inline tier, FILL 0). The label carries the meaning. |
+| Prop      | Type                                                                                                                                                                                                                                                                                                                                                                                                                                      | Default | Description                                                                                                                 |
+| :-------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :-------------------------------------------------------------------------------------------------------------------------- |
+| label\*   | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                                                                                                         | -       | The caps label (`type-label`); author it in sentence case.                                                                  |
+| estimated | `boolean`                                                                                                                                                                                                                                                                                                                                                                                                                                 | -       | An estimated value: dotted top rule and a leading "≈". Don't write the "≈" yourself.                                        |
+| icon      | `'link' \| 'menu' \| 'search' \| 'circle' \| 'arrow_forward' \| 'arrow_upward' \| 'expand_more' \| 'close' \| 'remove' \| 'add' \| 'check' \| 'chevron_right' \| 'chevron_left' \| 'more_horiz' \| 'play_arrow' \| 'pause' \| 'download' \| 'zoom_in' \| 'zoom_out' \| 'recenter' \| 'help' \| 'mail' \| 'content_copy' \| 'open_in_new' \| 'restart_alt' \| 'description' \| 'widgets' \| 'deployed_code' \| 'format_h2' \| 'format_h3'` | -       | A decorative data icon before the label (Material Symbols Rounded,&#xA;inline tier, FILL 0). The label carries the meaning. |
 
 ### SpecListItem
 
@@ -64,6 +64,7 @@ type SpecGridItemProps = React.ClassAttributes<HTMLDivElement> &
   React.HTMLAttributes<HTMLDivElement> & {
     label: React.ReactNode;
     icon?:
+      | 'link'
       | 'menu'
       | 'search'
       | 'circle'
@@ -84,7 +85,15 @@ type SpecGridItemProps = React.ClassAttributes<HTMLDivElement> &
       | 'zoom_out'
       | 'recenter'
       | 'help'
-      | 'mail';
+      | 'mail'
+      | 'content_copy'
+      | 'open_in_new'
+      | 'restart_alt'
+      | 'description'
+      | 'widgets'
+      | 'deployed_code'
+      | 'format_h2'
+      | 'format_h3';
     estimated?: boolean;
   };
 ```

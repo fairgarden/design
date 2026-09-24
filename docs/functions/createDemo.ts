@@ -3,13 +3,13 @@ import 'server-only'
 import {
   createDemoFactory,
   createDemoWithVariantsFactory,
-} from '@fairgarden/docs/abstractCreateDemo'
+} from '@fairgarden/design/utils/docs/createDemo'
 import { DemoContent } from '@/components/DemoContent'
-import { DemoTitle } from '@/components/DemoTitle'
+import { DemoLoading } from '@/components/DemoLoading'
 
-// Set by withDeploymentConfig: turns file:// source URLs into GitHub links.
-const projectDir = process.env.SOURCE_CODE_ROOT_DIR
-const projectUrl = process.env.SOURCE_CODE_ROOT_URL
+// The design system's pre-wired factories, with the site's page modes
+// (the staged page and the page-frame preview) around its Demo.
+const options = { DemoContent, DemoContentLoading: DemoLoading }
 
 /**
  * Creates a demo: the component rendered above its highlighted source.
@@ -17,12 +17,7 @@ const projectUrl = process.env.SOURCE_CODE_ROOT_URL
  * @param component The component to render.
  * @param meta Optional `name`, `slug` and display options.
  */
-export const createDemo = createDemoFactory({ DemoContent, DemoTitle, projectDir, projectUrl })
+export const createDemo = createDemoFactory(options)
 
 /** As `createDemo`, with switchable variants of the same demo. */
-export const createDemoWithVariants = createDemoWithVariantsFactory({
-  DemoContent,
-  DemoTitle,
-  projectDir,
-  projectUrl,
-})
+export const createDemoWithVariants = createDemoWithVariantsFactory(options)

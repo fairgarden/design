@@ -1,0 +1,104 @@
+# Demo
+
+A live component above its source: the preview on the page ground, with the variants in a Select in its corner, and the code beneath with the file tabs, the actions and, for long code, a window.
+
+```tsx
+import { DemoContent } from '@fairgarden/design/content/demo'
+```
+
+Demo is the `@fairgarden/docs` DemoContent component: the demo factories render it for every demo. It calls the engine's `useDemo(props)` and renders the result: the selected variant's component, and beneath it the same code section as a [Code Block](../code-block/page.mdx), joined to the preview by a 1 px rule. The engine owns the precomputed files, the variants and their live components, the TS | JS transform, the swap, the hash deep links, the stored preferences and copy. `@fairgarden/docs` is an optional peer dependency; install it to use Demo. Every demo on this site is one.
+
+## Setup
+
+`createDemo` and `createDemoWithVariants` from [`@fairgarden/design/utils/docs`](../../foundations/docs-utilities/page.mdx) are the engine's factories pre-wired with Demo: `DemoLazy` (DemoContent in its own chunk) and `DemoLoading` until it loads, and the demo heading. A demo is a folder with the component and an `index.ts`:
+
+```ts filename=demos/basic/index.ts
+import { createDemo } from '@fairgarden/design/utils/docs'
+import { JoinCrew } from './JoinCrew'
+
+export const DemoBasic = createDemo(import.meta.url, JoinCrew, { name: 'Basic', slug: 'basic' })
+```
+
+`DemoLoading` renders the live component at once and the engine's precomputed fallback in the code section, in the loaded demo's frame, so the server HTML carries the component and its highlighted code, the height holds at the swap, and the `#slug` targets are there before the demo loads. It calls nothing from `useDemo`, so it stays small; its controls are disabled until the swap.
+
+## Basic
+
+import { DemoDemoBasic } from './demos/basic'
+
+<DemoDemoBasic.Title />
+
+The preview sits on the page ground, inset 32 px, in a wrapping row with a 16 px gap. The code of a one-file demo shows its actions inline: the TS | JS switch (the engine's JavaScript transform of a TypeScript demo), copy and copy link. Every file's `#slug` has a hidden scroll target before the frame, so a copied link lands on the demo.
+
+<DemoDemoBasic />
+
+[See Demo](./demos/basic/)
+
+## Variants
+
+import { DemoDemoVariants } from './demos/variants'
+
+<DemoDemoVariants.Title />
+
+Two or more variants show as a compact Select in the preview's top-start corner. The Select changes at once; the preview and the code swap 350 ms later while the changed lines grow or shrink, and the page holds still around the Select. Under reduced motion the swap is instant. The engine stores the choice, keyed by the variant names, and applies it to every demo with the same variants. A demo with two or more files shows them as folder tabs, with the actions in the "More actions" menu, as a Code Block does.
+
+<DemoDemoVariants />
+
+[See Demo](./demos/variants/)
+
+## Collapsible code
+
+import { DemoDemoCollapsible } from './demos/collapsible'
+
+<DemoDemoCollapsible.Title />
+
+Pass `collapse` to a demo and its code shows only the window its source marks (`// @focus-start` and `// @focus-end`, or a highlighted run) until the reader expands it with "Show all *n* lines", as a [collapsible Code Block](../code-block/page.mdx#collapsible-window) does.
+
+<DemoDemoCollapsible collapse />
+
+[See Demo](./demos/collapsible/)
+
+## Runtime error
+
+import { DemoDemoError } from './demos/error'
+
+<DemoDemoError.Title />
+
+A runtime error is an alert laid across the preview's top edge, so showing it never moves the preview or the code. It takes the danger edge at 2 px and the danger text on the face, with no shadow. The message is the engine's `error` for the selected variant, reported through its `CodeControllerContext` the way a live runner reports one; this demo's `ClientProvider` reports it, and the button clears it.
+
+<DemoDemoError />
+
+[See Demo](./demos/error/)
+
+## Custom preview
+
+import { DemoDemoFramed } from './demos/framed'
+
+<DemoDemoFramed.Title />
+
+`renderPreview` wraps or replaces what renders in the surface; it's called with the selected variant's component. A rendered preview that runs edge to edge cancels the surface's inset with `margin: calc(-1 * var(--demo-inset))`. This site's page-frame demos work this way: with `frame`, the preview is an iframe of the demo's own page, so viewport media resolve against the frame. `renderPreview` is a function, so pass it from a client component that wraps `DemoLazy`, and give `DemoLoading` a stand-in the frame's size, so the frame mounts once, after the swap.
+
+<DemoDemoFramed frame />
+
+[See Demo](./demos/framed/)
+
+## Print
+
+The preview prints as rendered, never split across pages; components inside it carry their own print fallbacks. The variant bar prints the selected variant's name, a runtime error prints in flow above the preview, and the code prints in full with the window open, black on white.
+
+## API Reference
+
+import { TypesDemo, TypesDemoAdditional } from './types'
+
+### DemoContent
+
+<TypesDemo.DemoContent />
+
+### DemoLoading
+
+<TypesDemo.DemoLoading />
+
+### Additional types
+
+<TypesDemoAdditional />
+
+[See Types](./types.md)

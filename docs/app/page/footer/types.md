@@ -45,13 +45,13 @@ An action block: icon → heading (--size-px-3) → body (--size-px-7) → actio
 
 **FooterBlock Props:**
 
-| Prop         | Type                                                                                                                                                                                                                                                                                                         | Default | Description                                                                                                                                |
-| :----------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :----------------------------------------------------------------------------------------------------------------------------------------- |
-| action       | `React.ReactNode`                                                                                                                                                                                                                                                                                            | -       | The action: a §9.2 Button, links or the §11.11 inline form.                                                                                |
-| heading      | `React.ReactNode`                                                                                                                                                                                                                                                                                            | -       | The heading, `type-itemhead` (an item head, not a section head).                                                                           |
-| headingLevel | `HeadingLevel`                                                                                                                                                                                                                                                                                               | -       | The heading level. Default `2`.                                                                                                            |
-| icon         | `ReactElement \| 'menu' \| 'search' \| 'circle' \| 'arrow_forward' \| 'arrow_upward' \| 'expand_more' \| 'close' \| 'remove' \| 'add' \| 'check' \| 'chevron_right' \| 'chevron_left' \| 'more_horiz' \| 'play_arrow' \| 'pause' \| 'download' \| 'zoom_in' \| 'zoom_out' \| 'recenter' \| 'help' \| 'mail'` | -       | The block-tier icon (36 px, FILL 0): an inventory name, or a subject&#xA;symbol's SVG element in `currentColor`. It takes `--role-accent`. |
-| children     | `React.ReactNode`                                                                                                                                                                                                                                                                                            | -       | The body, `type-body-ui`.                                                                                                                  |
+| Prop         | Type                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Default | Description                                                                                                                                |
+| :----------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :----------------------------------------------------------------------------------------------------------------------------------------- |
+| action       | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                                                                                                                         | -       | The action: a §9.2 Button, links or the §11.11 inline form.                                                                                |
+| heading      | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                                                                                                                         | -       | The heading, `type-itemhead` (an item head, not a section head).                                                                           |
+| headingLevel | `HeadingLevel`                                                                                                                                                                                                                                                                                                                                                                                                                                            | -       | The heading level. Default `2`.                                                                                                            |
+| icon         | `ReactElement \| 'link' \| 'menu' \| 'search' \| 'circle' \| 'arrow_forward' \| 'arrow_upward' \| 'expand_more' \| 'close' \| 'remove' \| 'add' \| 'check' \| 'chevron_right' \| 'chevron_left' \| 'more_horiz' \| 'play_arrow' \| 'pause' \| 'download' \| 'zoom_in' \| 'zoom_out' \| 'recenter' \| 'help' \| 'mail' \| 'content_copy' \| 'open_in_new' \| 'restart_alt' \| 'description' \| 'widgets' \| 'deployed_code' \| 'format_h2' \| 'format_h3'` | -       | The block-tier icon (36 px, FILL 0): an inventory name, or a subject&#xA;symbol's SVG element in `currentColor`. It takes `--role-accent`. |
+| children     | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                                                                                                                         | -       | The body, `type-body-ui`.                                                                                                                  |
 
 ## Additional Types
 
@@ -86,6 +86,7 @@ type FooterBlockProps = {
    */
   icon?:
     | ReactElement
+    | 'link'
     | 'menu'
     | 'search'
     | 'circle'
@@ -106,7 +107,15 @@ type FooterBlockProps = {
     | 'zoom_out'
     | 'recenter'
     | 'help'
-    | 'mail';
+    | 'mail'
+    | 'content_copy'
+    | 'open_in_new'
+    | 'restart_alt'
+    | 'description'
+    | 'widgets'
+    | 'deployed_code'
+    | 'format_h2'
+    | 'format_h3';
   /** The heading, `type-itemhead` (an item head, not a section head). */
   heading: React.ReactNode;
   /** The heading level. Default `2`. */

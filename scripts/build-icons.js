@@ -47,6 +47,19 @@ const inventory = {
   recenter: 'recenter',
   help: 'help',
   mail: 'mail',
+  // Code block and demo actions: copy (also Markdown copy), copy link, view
+  // source (`open_in_new` with a "View source" label, never a brand mark),
+  // reset edits.
+  content_copy: 'content_copy',
+  link: 'link',
+  open_in_new: 'open_in_new',
+  restart_alt: 'restart_alt',
+  // Search dialog result types: page, part, export, section, subsection.
+  description: 'description',
+  widgets: 'widgets',
+  deployed_code: 'deployed_code',
+  format_h2: 'format_h2',
+  format_h3: 'format_h3',
 }
 
 // Tier → size (px) and target strokes (px): rest = the tier's stroke,

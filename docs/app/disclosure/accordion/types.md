@@ -29,12 +29,12 @@ whole row is the target. There is no fill change when it opens.
 
 **AccordionItem Props:**
 
-| Prop         | Type                                                                                                                                                                                                                                                                                         | Default | Description                                                                                                                                                                             |
-| :----------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| headingLevel | `HeadingLevel`                                                                                                                                                                                                                                                                               | -       | The heading level wrapping the trigger. Default `3`.                                                                                                                                    |
-| icon         | `'menu' \| 'search' \| 'circle' \| 'arrow_forward' \| 'arrow_upward' \| 'expand_more' \| 'close' \| 'remove' \| 'add' \| 'check' \| 'chevron_right' \| 'chevron_left' \| 'more_horiz' \| 'play_arrow' \| 'pause' \| 'download' \| 'zoom_in' \| 'zoom_out' \| 'recenter' \| 'help' \| 'mail'` | -       | An optional leading subject symbol (§6.10), Material Symbols Rounded at&#xA;the tag tier; the panel indents to the title column. Dropped below&#xA;360 px so the title keeps its width. |
-| panelProps   | `Omit<AccordionPanelProps, 'children'>`                                                                                                                                                                                                                                                      | -       | Props for the panel, such as `keepMounted`.                                                                                                                                             |
-| title        | `React.ReactNode`                                                                                                                                                                                                                                                                            | -       | The row's title, `type-subhead` in `--primary12`. Write it to stand&#xA;alone: it becomes the printed heading.                                                                          |
+| Prop         | Type                                                                                                                                                                                                                                                                                                                                                                                                                                      | Default | Description                                                                                                                                                                             |
+| :----------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| headingLevel | `HeadingLevel`                                                                                                                                                                                                                                                                                                                                                                                                                            | -       | The heading level wrapping the trigger. Default `3`.                                                                                                                                    |
+| icon         | `'link' \| 'menu' \| 'search' \| 'circle' \| 'arrow_forward' \| 'arrow_upward' \| 'expand_more' \| 'close' \| 'remove' \| 'add' \| 'check' \| 'chevron_right' \| 'chevron_left' \| 'more_horiz' \| 'play_arrow' \| 'pause' \| 'download' \| 'zoom_in' \| 'zoom_out' \| 'recenter' \| 'help' \| 'mail' \| 'content_copy' \| 'open_in_new' \| 'restart_alt' \| 'description' \| 'widgets' \| 'deployed_code' \| 'format_h2' \| 'format_h3'` | -       | An optional leading subject symbol (§6.10), Material Symbols Rounded at&#xA;the tag tier; the panel indents to the title column. Dropped below&#xA;360 px so the title keeps its width. |
+| panelProps   | `Omit<AccordionPanelProps, 'children'>`                                                                                                                                                                                                                                                                                                                                                                                                   | -       | Props for the panel, such as `keepMounted`.                                                                                                                                             |
+| title        | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                                                                                                         | -       | The row's title, `type-subhead` in `--primary12`. Write it to stand&#xA;alone: it becomes the printed heading.                                                                          |
 
 ## Additional Types
 
@@ -67,6 +67,7 @@ type AccordionItemProps = {
    * 360 px so the title keeps its width.
    */
   icon?:
+    | 'link'
     | 'menu'
     | 'search'
     | 'circle'
@@ -87,7 +88,15 @@ type AccordionItemProps = {
     | 'zoom_out'
     | 'recenter'
     | 'help'
-    | 'mail';
+    | 'mail'
+    | 'content_copy'
+    | 'open_in_new'
+    | 'restart_alt'
+    | 'description'
+    | 'widgets'
+    | 'deployed_code'
+    | 'format_h2'
+    | 'format_h3';
   /** The heading level wrapping the trigger. Default `3`. */
   headingLevel?: HeadingLevel;
   /** Props for the panel, such as `keepMounted`. */
