@@ -182,8 +182,12 @@
     block-size: var(--button-height);
   }
 
+  /* Visually hidden at 1 px (as Toggle's), so a long name never widens the page's scrollable area. */
   .iconOnly .label {
     position: absolute;
+    inline-size: var(--border-size-1);
+    block-size: var(--border-size-1);
+    margin: calc(var(--border-size-1) * -1);
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;

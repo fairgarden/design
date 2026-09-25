@@ -1,0 +1,484 @@
+/*
+ * Search dialog (§9.10 [D194]). CVA function `searchDialog` in
+ * SearchDialog.tsx, on the trigger and on the popup. Parts: base, trigger,
+ * triggerBox, triggerMain, magnifier, triggerLabel, kbd, backdrop,
+ * viewport, popup, box, inputRow, input, esc, escKey, closeIcon, results,
+ * scroll, list, group, groupLabel, item, itemHead, itemIcon, itemTitle,
+ * match, sectionTitle, score, description, empty, stats, statsText,
+ * visuallyHidden.
+ *
+ * The frame is the expanding box's: one radius (--xb-radius) and one
+ * --border-size-2 edge in both states, --role-rule on the trigger and
+ * --primary12 on the dialog. Below --md-n-above the dialog is the sheet:
+ * the same panel inset by the page margin and the safe areas; the face
+ * is --primary1. Rows, group labels, statuses and matches compose
+ * forms/search's parts; the dialog only adds its layout (full-bleed rows
+ * of two lines, sticky group labels). The backdrop is colorless: the frame,
+ * the inert page and the sheet carry the modal state [D24 → D121]. Motion
+ * is the morph, or the Dialog's clip reveal without it, never a fade [D91].
+ * No view-transition name or class is written here: the box sets them per
+ * instance. Colors are role variables only; local custom properties carry
+ * dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.trigger {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.triggerLabel {
+  composes: typeBodyUi typeMuted from '../../utils/type.module.css';
+}
+
+.kbd,
+.escKey {
+  composes: typeData typeMuted from '../../utils/type.module.css';
+}
+
+.input {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.groupLabel {
+  composes: groupLabel from '../../forms/search/search.module.css';
+}
+
+.item {
+  composes: item from '../../forms/search/search.module.css';
+}
+
+.itemIcon {
+  composes: itemIcon from '../../forms/search/search.module.css';
+}
+
+.match {
+  composes: match from '../../forms/search/search.module.css';
+}
+
+.sectionTitle,
+.description {
+  composes: typeCaption typeMuted from '../../utils/type.module.css';
+}
+
+.score {
+  composes: typeData typeMuted from '../../utils/type.module.css';
+}
+
+.empty,
+.stats {
+  composes: status from '../../forms/search/search.module.css';
+}
+
+.statsText {
+  composes: typeMuted from '../../utils/type.module.css';
+}
+
+@layer base {
+  /* Both roots: nothing of their own beyond the scale classes. */
+  .base {
+    box-sizing: border-box;
+  }
+
+  /*
+   * The field-like trigger: --fgd-size-control-md tall, its hit area
+   * extended to --fgd-size-hit; the width of the site search field. The
+   * box draws its frame, hover edge step and focus ring (the host hands
+   * them over).
+   */
+  .trigger {
+    justify-content: center;
+    inline-size: min(100%, var(--size-px-14));
+    min-block-size: var(--fgd-size-control-md);
+    margin: 0;
+    color: var(--primary12);
+    text-align: start;
+    appearance: none;
+  }
+
+  .trigger::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block: calc((var(--fgd-size-control-md) - var(--fgd-size-hit)) / 2);
+  }
+
+  .triggerBox {
+    justify-content: center;
+    padding-inline: var(--size-px-3);
+  }
+
+  /*
+   * The main piece: as tall as the trigger's content (inside the box's
+   * edge), so it rides into the input row at nearly one scale.
+   */
+  .triggerMain {
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-2);
+    min-block-size: calc(var(--fgd-size-control-md) - 2 * var(--xb-edge));
+  }
+
+  /* The magnifier: Material Symbols Rounded `search`, inline tier, decorative, --primary12 [D166]. */
+  .magnifier {
+    flex: none;
+    color: var(--primary12);
+  }
+
+  .triggerLabel {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* The shortcut hint: a mono key cap on the field rule, from --lg-n-above; it rides the right edge. */
+  .kbd {
+    display: none;
+    flex: none;
+    padding-inline: var(--size-px-1);
+    border: var(--border-size-1) solid var(--role-rule);
+    border-radius: var(--radius-1);
+    white-space: nowrap;
+  }
+
+  @media (--lg-n-above) {
+    .kbd {
+      display: inline-block;
+    }
+  }
+
+  /* Colorless: it only catches outside presses. */
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: var(--layer-4);
+  }
+
+  /* iOS Safari: a fixed backdrop leaves the bottom toolbar area uncovered. */
+  @supports (-webkit-touch-callout: none) {
+    .backdrop {
+      position: absolute;
+    }
+  }
+
+  /*
+   * The popup's frame of reference. At base, the whole screen less the page
+   * margin on every side, plus the safe areas; from --md-n-above,
+   * top-aligned.
+   */
+  .viewport {
+    position: fixed;
+    inset: 0;
+    z-index: var(--layer-4);
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    box-sizing: border-box;
+    padding: calc(var(--fgd-space-margin) + env(safe-area-inset-top, 0px))
+      calc(var(--fgd-space-margin) + env(safe-area-inset-right, 0px))
+      calc(var(--fgd-space-margin) + env(safe-area-inset-bottom, 0px))
+      calc(var(--fgd-space-margin) + env(safe-area-inset-left, 0px));
+    overflow: hidden;
+  }
+
+  @media (--md-n-above) {
+    .viewport {
+      align-items: flex-start;
+      padding-block: var(--size-px-5);
+      padding-inline: 0;
+    }
+  }
+
+  /*
+   * The popup hosts the expanded box. At base, the sheet: the inset panel,
+   * filling the viewport inside its padding and scrolling inside; from
+   * --md-n-above, the centered panel in the Dialog `wide` width, as tall as
+   * its results (it scrolls inside).
+   */
+  .popup {
+    --search-dialog-clip-from: inset(0 0 100% 0);
+
+    inline-size: 100%;
+    block-size: 100%;
+    max-block-size: 100%;
+    margin: 0;
+    color: var(--primary12);
+    clip-path: inset(0);
+    outline: 0;
+  }
+
+  @media (--md-n-above) {
+    .popup {
+      inline-size: min(var(--fgd-measure-reading), calc(100% - 2 * var(--size-px-7-5)));
+      block-size: auto;
+    }
+  }
+
+  /*
+   * The expanded box's content: the input row, the results, the stats row.
+   * The box insets it by its frame's edge.
+   */
+  .box {
+    min-block-size: 0;
+  }
+
+  /* The input row: the dialog's main piece; the ring shows round it on any focus of the input [D90]. */
+  .inputRow {
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-2);
+    box-sizing: border-box;
+    min-block-size: var(--fgd-size-hit);
+    margin: var(--size-px-2);
+    padding-inline: var(--size-px-2-5) var(--size-px-2);
+    border-radius: var(--radius-1);
+    cursor: text;
+  }
+
+  .input {
+    flex: 1 1 auto;
+    align-self: stretch;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--primary12);
+    outline: 0;
+    appearance: none;
+  }
+
+  .input::placeholder {
+    color: var(--role-muted);
+    opacity: 1;
+  }
+
+  /* "esc": a key cap that closes, from --lg-n-above with the shortcut; it rides the right edge. */
+  .esc {
+    display: none;
+    position: relative;
+    flex: none;
+    align-items: center;
+    box-sizing: border-box;
+    margin: 0;
+    padding: var(--size-px-1) var(--size-px-2);
+    border: var(--border-size-1) solid var(--role-rule);
+    border-radius: var(--radius-1);
+    background: none;
+    font: inherit;
+    cursor: default;
+  }
+
+  /* Every target reaches --fgd-size-hit (§9.1) [D43]. */
+  .esc::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    inline-size: var(--fgd-size-hit);
+    block-size: var(--fgd-size-hit);
+    min-inline-size: 100%;
+    min-block-size: 100%;
+    translate: -50% -50%;
+  }
+
+  @media (--lg-n-above) {
+    .esc {
+      display: inline-flex;
+    }
+  }
+
+  /* "Close search": an icon-only Button (its hit area reaches --fgd-size-hit); it rides the right edge. */
+  .closeIcon {
+    flex: none;
+  }
+
+  /* The results: the extra piece, under a --border-size-1 rule, full bleed; the list scrolls inside. */
+  .results {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-block-size: 0;
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  .scroll {
+    flex: 1 1 auto;
+    min-block-size: 0;
+  }
+
+  /* The keyboard highlight scrolls clear of the sticky group label. */
+  .scroll > :first-child {
+    scroll-padding-block: var(--size-px-7-5) var(--size-px-1);
+  }
+
+  .list {
+    padding: var(--size-px-1);
+    outline: 0;
+  }
+
+  .list:empty {
+    padding: 0;
+  }
+
+  .group {
+    display: block;
+  }
+
+  /* Group labels stick to the top while their rows scroll under them: the face, and a rule underneath. */
+  .list .groupLabel {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 1;
+    margin: 0;
+    background-color: var(--primary1);
+    border-block-end: var(--border-size-1) solid var(--role-rule);
+  }
+
+  /* Rows: a link of two lines (title row, then a page's description). */
+  .list .item {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: var(--size-px-1);
+    padding-block: var(--size-px-2);
+  }
+
+  .itemHead {
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-2);
+    min-inline-size: 0;
+  }
+
+  .itemTitle {
+    min-inline-size: 0;
+    color: var(--primary12);
+    overflow-wrap: anywhere;
+  }
+
+  .sectionTitle {
+    text-transform: capitalize;
+  }
+
+  .score {
+    margin-inline-start: auto;
+  }
+
+  /* "No results for '[query]'": a plain-word status, never a red error (P10). */
+  .scroll .empty:not(:empty) {
+    padding: var(--size-px-5) var(--size-px-3);
+    text-align: center;
+  }
+
+  /* The stats row: under a rule, end-aligned; hidden (its height kept) while there are no stats. */
+  .box .stats:not(:empty) {
+    display: flex;
+    justify-content: flex-end;
+    padding: var(--size-px-1) var(--size-px-3);
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  .visuallyHidden {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (--motionOK) {
+    /* The fallback without the morph: the Dialog's clip reveal from the top edge [D91]. */
+    .popup {
+      transition: clip-path var(--fgd-duration-disclosure) var(--ease-out-3);
+    }
+
+    .esc {
+      transition: border-color var(--fgd-duration-quick) var(--ease-out-3);
+    }
+  }
+}
+
+@layer variants {
+  /*
+   * One visible close at every width, riding the right edge: the "Close
+   * search" button (the sheet, the panel below --lg-n-above, and the panel
+   * without the shortcut), or from --lg-n-above with the shortcut the esc
+   * key cap in its place.
+   */
+  @media (--lg-n-above) {
+    .esc ~ .closeIcon {
+      display: none;
+    }
+  }
+}
+
+@layer states {
+  /* While the dialog is open the trigger keeps its place, hidden; its box keeps its names valid. */
+  .trigger[aria-expanded='true'] {
+    visibility: hidden;
+  }
+
+  .inputRow:has(.input:focus) {
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: 0;
+  }
+
+  .esc:hover:not(:focus-visible) {
+    border-color: var(--primary12);
+  }
+
+  .esc:focus-visible {
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: var(--fgd-focus-offset);
+  }
+
+  /* Focus parked on the popup itself: the ring sits inside the frame, on the box's radius (the host publishes --xb-radius). */
+  .popup:focus-visible {
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: calc(-2 * var(--fgd-focus-width));
+    border-radius: var(--xb-radius);
+  }
+
+  /* The clip reveal, instant under --motionNotOK. */
+  .popup[data-starting-style],
+  .popup[data-ending-style] {
+    clip-path: var(--search-dialog-clip-from);
+  }
+
+  /*
+   * The morph owns the motion while it runs: no clip reveal, and the
+   * closing popup hides at once, since the root snapshot does not crossfade.
+   */
+  :root[data-fgd-expanding] .popup {
+    clip-path: none;
+    transition: none;
+  }
+
+  :root[data-fgd-expanding] .popup[data-closed],
+  :root[data-fgd-expanding] .popup[data-ending-style] {
+    visibility: hidden;
+  }
+
+  .statsText[data-hidden] {
+    visibility: hidden;
+  }
+}
+
+@layer print {
+  @media print {
+    /* Interaction only: neither the trigger nor the dialog prints. */
+    .trigger,
+    .backdrop,
+    .viewport {
+      display: none;
+    }
+  }
+}

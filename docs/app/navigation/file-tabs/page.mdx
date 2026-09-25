@@ -1,0 +1,144 @@
+# File Tabs
+
+The folder-tab header that switches a code block between its files: mono file names, the selected tab filled with its neighbours tucked under it, optional controls and a busy status at its end, and one shared panel. Code Block and Demo render their headers with it.
+
+```tsx
+import {
+  FileTabs,
+  FileTabsControl,
+  FileTabsList,
+  FileTabsPanel,
+} from '@fairgarden/design/navigation/file-tabs'
+```
+
+`FileTabs` holds the selection and the header's settings (`frame`, `controls`, `status`). `FileTabsList` renders the header from them: 48 px on its rule, the tabs across its whole width, and the status and controls at its end. `FileTabsPanel` is the one tabpanel, labelled by the selected tab. The selected tab takes the text-bearing selection fill, edge and label, marked by weight too, and its radii grow while it's pressed. Hover underlines the other labels. File names are mono and never caps. It needs no docs engine, so it works anywhere. For peer panels of prose, use [Tabs](../tabs/) instead.
+
+The header opens a host: a bordered box with no padding, a `--primary1` face and no clip, such as a code block's frame, or the `FileTabs` root given a frame class, as in these demos. The tab strip runs out over the host's side edges by their width, so there's no gap between an end tab and the edge, and the edges are drawn again over the header, so scrolled tabs pass under them. `frame` says which host it is: `"top"` (the default) for the top of a box with rounded corners, `"joined"` for a part below another, and `"none"` for no box at all.
+
+In print the header hugs its labels: plain mono labels in a wrapping row, the selected one in bold, without the controls or status.
+
+## Files
+
+import { DemoFileTabsBasic } from './demos/basic'
+
+<DemoFileTabsBasic.Title />
+
+With two or more files the header shows tabs; with one it shows the file's name as a label, and the panel is a plain region. Arrow keys move between tabs and Enter or Space selects, so moving focus never swaps the code.
+
+<DemoFileTabsBasic />
+
+[See Demo](./demos/basic/)
+
+## Deep links
+
+import { DemoFileTabsLinks } from './demos/links'
+
+<DemoFileTabsLinks.Title />
+
+A tab with a `slug` is a link to `#slug`. A plain click selects the file without writing the hash or jumping the page; a modifier click (Ctrl, Cmd, Alt or Shift, from the keyboard too) opens the link elsewhere and leaves the selection alone. The scroll targets and the hash latch belong to the consumer, as the code block renders them.
+
+<DemoFileTabsLinks />
+
+[See Demo](./demos/links/)
+
+## Controls
+
+import { DemoFileTabsControls } from './demos/controls'
+
+<DemoFileTabsControls.Title />
+
+`controls` go at the header's end. A `FileTabsControl` is the one to use for a menu: render it as the Menu's trigger (`<Menu.Trigger render={<FileTabsControl />}>` from Base UI) with an `Icon` inside and an `aria-label`. With two or more files, the controls hang just outside the host's end edge and take no room from the tabs: the ⋮ shows as an ear 24 px wide, the header's height, and its 44 px hit area lies wholly outside the frame. They hang only where the space past the frame holds that 44 px, up to the viewport or the nearest ancestor that clips sideways (`overflow-clip-margin` counts), so they never make the page scroll sideways. Elsewhere, and until the page hydrates, they sit in a 44 px cell at the header's end, whose rule edge the tabs end on. The space is measured again on resize, and in right-to-left pages too.
+
+The first column below keeps a 44 px gutter at its end, so the trigger hangs; the second is narrow and clips at its edge, so the trigger sits in the header. A page column that holds code blocks keeps the same gutter where it can.
+
+<DemoFileTabsControls />
+
+[See Demo](./demos/controls/)
+
+## Many files
+
+import { DemoFileTabsOverflow } from './demos/overflow'
+
+<DemoFileTabsOverflow.Title />
+
+Any number of files fits. When the tabs overflow, the row scrolls sideways with its native scrollbar hidden, so it reserves no room and the tabs never lift off the rule. A thin line on the rule shows where the visible tabs are, darkening while pointed at or dragged; it sits under the tabs, never over them. At either end of the scroll the end tab sits flush with the frame's edge.
+
+<DemoFileTabsOverflow />
+
+[See Demo](./demos/overflow/)
+
+## One file
+
+import { DemoFileTabsSingle } from './demos/single'
+
+<DemoFileTabsSingle.Title />
+
+With one file, the label and the controls share the header: a row of small icon Buttons, each named by a Tooltip, as a code block shows them. They never hang, and they wrap onto a second row when they can't fit beside the label. A confirmation, such as a copy's, is a [Toast](../../feedback/toast/page.mdx) in the page's toast bar, never text in the header or a changed icon.
+
+<DemoFileTabsSingle />
+
+[See Demo](./demos/single/)
+
+## Status
+
+import { DemoFileTabsStatus } from './demos/status'
+
+<DemoFileTabsStatus.Title />
+
+`status` is the busy "-ing…" label while something the header started is under way, such as a code block's "Switching to JS…". It's laid over the header's end beside the controls, covering the end of the tabs on the frame's face rather than pushing them, so they never move. It's a live region, mounted whenever `status` is set: pass `''` while idle rather than leaving it out, so the change is announced. Confirmations don't go here: a copy, say, shows a toast.
+
+<DemoFileTabsStatus />
+
+[See Demo](./demos/status/)
+
+## Frames
+
+import { DemoFileTabsFrames } from './demos/frames'
+
+<DemoFileTabsFrames.Title />
+
+`frame="joined"` puts the header in a part of the host below another, as a demo's code sits under its preview: the header draws the rule that joins them, and the side edges run from it. `frame="none"` is for tabs with no box around them: the strip stays inside the header, the end tabs show their own edges, and the controls always sit in the header, since there's no frame to hang them from.
+
+<DemoFileTabsFrames />
+
+[See Demo](./demos/frames/)
+
+## Disabled
+
+import { DemoFileTabsDisabled } from './demos/disabled'
+
+<DemoFileTabsDisabled.Title />
+
+`disabled` holds every tab while the code loads: muted labels with a dotted underline, never dimmed. The selected tab keeps its shape and weight on a plain face, so its label still reads. A disabled `FileTabsControl` stands in for the menu until it loads, in the same place and size.
+
+<DemoFileTabsDisabled />
+
+[See Demo](./demos/disabled/)
+
+## API Reference
+
+import { TypesFileTabs, TypesFileTabsAdditional } from './types'
+
+### FileTabs
+
+<TypesFileTabs.FileTabs />
+
+### FileTabsList
+
+<TypesFileTabs.FileTabsList />
+
+### FileTabsControl
+
+<TypesFileTabs.FileTabsControl />
+
+### FileTabsPanel
+
+<TypesFileTabs.FileTabsPanel />
+
+### Additional types
+
+<TypesFileTabsAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §3.11 (mono file names) and §9.5 (tabs).

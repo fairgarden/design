@@ -14,11 +14,11 @@ shown by fill alone \[D166].
 
 **Icon Props:**
 
-| Prop   | Type                                                                                                                                                                                                                                                                                         | Default | Description                                                                                                                                                                                                                                                                                                                                                       |
-| :----- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| name   | `'menu' \| 'search' \| 'circle' \| 'arrow_forward' \| 'arrow_upward' \| 'expand_more' \| 'close' \| 'remove' \| 'add' \| 'check' \| 'chevron_right' \| 'chevron_left' \| 'more_horiz' \| 'play_arrow' \| 'pause' \| 'download' \| 'zoom_in' \| 'zoom_out' \| 'recenter' \| 'help' \| 'mail'` | -       | The §6.10 inventory name (Material Symbols Rounded).                                                                                                                                                                                                                                                                                                              |
-| label  | `string`                                                                                                                                                                                                                                                                                     | -       | Accessible name. Omit it for an icon beside a visible label or inside&#xA;a named control: the icon is then hidden from assistive technology.                                                                                                                                                                                                                     |
-| weight | `IconWeightState`                                                                                                                                                                                                                                                                            | -       | `rest` (default) draws the tier's calibrated weight. `emphasis` pins&#xA;the next stroke tier's weight at the same size, as the weight-change&#xA;cue of a pressed or selected state. `interactive` draws rest and swaps&#xA;to emphasis while an ancestor carrying `iconHost` is hovered or&#xA;pressed; it ships both paths, so use it only inside such a host. |
+| Prop   | Type                                                                                                                                                                                                                                                                                                                                                                                                                                      | Default | Description                                                                                                                                                                                                                                                                                                                                                       |
+| :----- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| name   | `'link' \| 'menu' \| 'search' \| 'circle' \| 'arrow_forward' \| 'arrow_upward' \| 'expand_more' \| 'close' \| 'remove' \| 'add' \| 'check' \| 'chevron_right' \| 'chevron_left' \| 'more_horiz' \| 'play_arrow' \| 'pause' \| 'download' \| 'zoom_in' \| 'zoom_out' \| 'recenter' \| 'help' \| 'mail' \| 'content_copy' \| 'open_in_new' \| 'restart_alt' \| 'description' \| 'widgets' \| 'deployed_code' \| 'format_h2' \| 'format_h3'` | -       | The §6.10 inventory name (Material Symbols Rounded).                                                                                                                                                                                                                                                                                                              |
+| label  | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                  | -       | Accessible name. Omit it for an icon beside a visible label or inside&#xA;a named control: the icon is then hidden from assistive technology.                                                                                                                                                                                                                     |
+| weight | `IconWeightState`                                                                                                                                                                                                                                                                                                                                                                                                                         | -       | `rest` (default) draws the tier's calibrated weight. `emphasis` pins&#xA;the next stroke tier's weight at the same size, as the weight-change&#xA;cue of a pressed or selected state. `interactive` draws rest and swaps&#xA;to emphasis while an ancestor carrying `iconHost` is hovered or&#xA;pressed; it ships both paths, so use it only inside such a host. |
 
 ## Additional Types
 
@@ -49,6 +49,7 @@ type iconHost = string;
 
 ```typescript
 type IconName =
+  | 'link'
   | 'menu'
   | 'search'
   | 'circle'
@@ -69,7 +70,15 @@ type IconName =
   | 'zoom_out'
   | 'recenter'
   | 'help'
-  | 'mail';
+  | 'mail'
+  | 'content_copy'
+  | 'open_in_new'
+  | 'restart_alt'
+  | 'description'
+  | 'widgets'
+  | 'deployed_code'
+  | 'format_h2'
+  | 'format_h3';
 ```
 
 ### IconProps
@@ -80,6 +89,7 @@ Props for Icon: SVG props (without `children`, `color`, `fill` and `size`), the 
 type IconProps = Omit<React.SVGProps<SVGSVGElement>, 'children' | 'color' | 'fill' | 'size'> &
   VariantProps<__type> & {
     name:
+      | 'link'
       | 'menu'
       | 'search'
       | 'circle'
@@ -100,7 +110,15 @@ type IconProps = Omit<React.SVGProps<SVGSVGElement>, 'children' | 'color' | 'fil
       | 'zoom_out'
       | 'recenter'
       | 'help'
-      | 'mail';
+      | 'mail'
+      | 'content_copy'
+      | 'open_in_new'
+      | 'restart_alt'
+      | 'description'
+      | 'widgets'
+      | 'deployed_code'
+      | 'format_h2'
+      | 'format_h3';
     label?: string;
     weight?: IconWeightState;
   };

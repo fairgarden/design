@@ -1,0 +1,38 @@
+/* One column no wider than the preview, whatever the tabs' width: they scroll instead. */
+.stack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--size-px-5);
+  inline-size: 100%;
+}
+
+/*
+ * The header's host (`frame="top"`, the default): a bordered box with no
+ * padding, a --primary1 face, and nothing clipped.
+ */
+.frame {
+  border: var(--border-size-1) solid var(--role-rule);
+  border-radius: var(--radius-2-25);
+  background-color: var(--primary1);
+}
+
+/* Room for the hung trigger: a --fgd-size-hit gutter past the frame's end, which nothing clips. */
+.gutter {
+  padding-inline-end: var(--fgd-size-hit);
+}
+
+/* Narrow, and clipped at its edge: no room outside, so the trigger sits in the header. */
+.narrow {
+  max-inline-size: var(--size-sm);
+  overflow: clip;
+}
+
+.code {
+  margin: 0;
+  padding: var(--size-px-3);
+  overflow-x: auto;
+  color: var(--primary12);
+  font-family: var(--fgd-font-mono);
+  font-size: var(--fgd-font-size-caption);
+  line-height: var(--fgd-leading-compact);
+}

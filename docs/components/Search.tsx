@@ -1,61 +1,20 @@
 'use client'
 
-import * as React from 'react'
-import Link from 'next/link'
-import { useSearch } from '@fairgarden/docs/useSearch'
-import styles from './chrome.module.css'
+import { useRouter } from 'next/navigation'
+import { SearchDialog } from '@fairgarden/design/overlays/search-dialog'
 
-const sitemap = () => import('../app/sitemap')
-
-/** Client-side search over the precomputed sitemap (Orama, built on mount). */
+/**
+ * The header search: the design system's Search Dialog, which indexes the
+ * precomputed sitemap with `useSearch` on mount, with ⌘K / Ctrl K. A chosen
+ * result navigates with the Next.js router.
+ */
 export function Search() {
-  const { isReady, search, results, buildResultUrl } = useSearch({ sitemap, limit: 12 })
-  const [query, setQuery] = React.useState('')
-  const listId = React.useId()
-
+  const router = useRouter()
   return (
-    <div role="search" className={styles.search}>
-      <input
-        type="search"
-        aria-label="Search the docs"
-        aria-controls={listId}
-        className={styles.searchInput}
-        placeholder={isReady ? 'Search' : 'Loading search…'}
-        disabled={!isReady}
-        value={query}
-        onChange={(event) => {
-          setQuery(event.target.value)
-          void search(event.target.value)
-        }}
-        onKeyDown={(event) => {
-          if (event.key === 'Escape') setQuery('')
-        }}
-      />
-      {query ? (
-        <ul id={listId} className={styles.results}>
-          {results.results.length === 0 ? (
-            <li className={styles.noResults}>No matches for “{query}”.</li>
-          ) : (
-            results.results.map((group) => (
-              <li key={group.group}>
-                <div className={styles.resultGroup}>{group.group}</div>
-                <ul className={styles.navPages}>
-                  {group.items.map((item) => {
-                    const href = buildResultUrl(item)
-                    return (
-                      <li key={href}>
-                        <Link href={href} className={styles.resultLink} onClick={() => setQuery('')}>
-                          {item.title}
-                        </Link>
-                      </li>
-                    )
-                  })}
-                </ul>
-              </li>
-            ))
-          )}
-        </ul>
-      ) : null}
-    </div>
+    <SearchDialog
+      sitemap={() => import('../app/sitemap')}
+      onNavigate={(href) => router.push(href)}
+      keyboardShortcut
+    />
   )
 }

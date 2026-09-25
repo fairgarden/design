@@ -249,7 +249,7 @@ function ToastViewport(
     <BaseToast.Portal container={container}>
       <BaseToast.Viewport
         {...overlayAttributes}
-        aria-label={label}
+        aria-label={label ?? 'Notifications'}
         className={cx(
           styles.viewport,
           primaryScaleVariants[scales.primary],

@@ -1,0 +1,37 @@
+declare const styles: {
+  readonly "backdrop": string;
+  readonly "base": string;
+  readonly "box": string;
+  readonly "closeIcon": string;
+  readonly "description": string;
+  readonly "empty": string;
+  readonly "esc": string;
+  readonly "escKey": string;
+  readonly "group": string;
+  readonly "groupLabel": string;
+  readonly "input": string;
+  readonly "inputRow": string;
+  readonly "item": string;
+  readonly "itemHead": string;
+  readonly "itemIcon": string;
+  readonly "itemTitle": string;
+  readonly "kbd": string;
+  readonly "list": string;
+  readonly "magnifier": string;
+  readonly "match": string;
+  readonly "popup": string;
+  readonly "results": string;
+  readonly "score": string;
+  readonly "scroll": string;
+  readonly "sectionTitle": string;
+  readonly "stats": string;
+  readonly "statsText": string;
+  readonly "trigger": string;
+  readonly "triggerBox": string;
+  readonly "triggerLabel": string;
+  readonly "triggerMain": string;
+  readonly "viewport": string;
+  readonly "visuallyHidden": string;
+};
+export = styles;
+

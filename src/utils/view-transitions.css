@@ -1,0 +1,120 @@
+/*
+ * View Transitions: the expanding box's morph (foundations/expanding-box),
+ * a field-like trigger growing into its dialog and back. The
+ * `::view-transition-*` pseudo-elements carry no local class, so their rules
+ * cannot live in a CSS Module; they live here, imported once by global.css.
+ *
+ * ExpandingBox sets each piece's view-transition-name per instance (never
+ * in CSS) and gives every piece the class `fgd-xb` plus its kind
+ * (`fgd-xb-corner`, `-edge`, `-face`, `-content`, `-main`, `-end`,
+ * `-extra`, `-focus`), so these rules select by class only.
+ * startExpandingTransition marks the running morph on the root element,
+ * <html data-fgd-expanding="open|close">, and the pieces add `closing`
+ * while it reads `close`.
+ *
+ * Only group geometry animates, never opacity: the pieces' images take no
+ * animation and their old images are hidden, so each piece shows its new
+ * state from the first frame while its group travels; while the flag is
+ * set, no image in the transition (the root snapshot included) crossfades.
+ * Timing: --fgd-duration-expand on --fgd-ease-expand to open,
+ * --fgd-duration-disclosure to close, so the close stays the faster. The
+ * focus ring's new image is held hidden for --fgd-duration-disclosure (a
+ * discrete visibility hold, not a fade), so the ring shows once the frame
+ * has landed. Under reduced motion the morph never starts.
+ */
+@layer base {
+  /*
+   * Groups: geometry only, stacked as the box paints: the face (and the
+   * ring's piece) lowest, the corners and the four edges over it, the
+   * content on top. Left to document order, the face would paint over the
+   * head corners' straight run.
+   */
+  ::view-transition-group(*.fgd-xb) {
+    z-index: var(--layer-1);
+    animation-duration: var(--fgd-duration-expand);
+    animation-timing-function: var(--fgd-ease-expand);
+  }
+
+  ::view-transition-group(*.fgd-xb-corner),
+  ::view-transition-group(*.fgd-xb-edge) {
+    z-index: var(--layer-2);
+  }
+
+  ::view-transition-group(*.fgd-xb-content),
+  ::view-transition-group(*.fgd-xb-main),
+  ::view-transition-group(*.fgd-xb-end),
+  ::view-transition-group(*.fgd-xb-extra) {
+    z-index: var(--layer-3);
+  }
+
+  ::view-transition-group(*.fgd-xb.closing) {
+    animation-duration: var(--fgd-duration-disclosure);
+  }
+
+  /* Images: no crossfade. The old image is hidden; the new one shows at once. */
+  ::view-transition-old(*.fgd-xb),
+  ::view-transition-new(*.fgd-xb) {
+    animation: none;
+  }
+
+  ::view-transition-old(*.fgd-xb) {
+    display: none;
+  }
+
+  /* Content and main keep their proportions and hug the left edge. */
+  ::view-transition-new(*.fgd-xb-content),
+  ::view-transition-new(*.fgd-xb-main) {
+    block-size: 100%;
+    inline-size: fit-content;
+    object-position: left;
+  }
+
+  /* The end piece keeps its size and rides the right edge. */
+  ::view-transition-new(*.fgd-xb-end) {
+    inline-size: fit-content;
+    object-position: right;
+  }
+
+  /* The extra grows from the main piece's foot. */
+  ::view-transition-new(*.fgd-xb-extra) {
+    block-size: 100%;
+    object-position: left;
+  }
+
+  /*
+   * The four edges fill their groups, which change only in length (an edge
+   * strip keeps its thickness), so they stretch along it at a constant
+   * weight; the borderless face fills freely; corners keep their size.
+   */
+  ::view-transition-new(*.fgd-xb-face),
+  ::view-transition-new(*.fgd-xb-edge) {
+    block-size: 100%;
+  }
+
+  /* While the morph runs, nothing else crossfades either: not the root snapshot, not a stray name. */
+  :root[data-fgd-expanding]::view-transition-old(*),
+  :root[data-fgd-expanding]::view-transition-new(*) {
+    animation: none;
+  }
+
+  :root[data-fgd-expanding]::view-transition-old(*) {
+    display: none;
+  }
+
+  /* The root does not move; its group adds no time to the morph. */
+  :root[data-fgd-expanding]::view-transition-group(root) {
+    animation: none;
+  }
+
+  /* The ring hand-off: hidden while the frame travels, then shown (after the rules above, and as specific). */
+  :root[data-fgd-expanding]::view-transition-new(*.fgd-xb-focus) {
+    animation: fgd-xb-hold var(--fgd-duration-disclosure) linear;
+  }
+}
+
+@keyframes fgd-xb-hold {
+  from,
+  to {
+    visibility: hidden;
+  }
+}

@@ -1,0 +1,76 @@
+/* The trigger and the panel share one grid cell, anchored top-start; the
+   stage keeps room for the open panel, so the page below never jumps. */
+.stage {
+  display: grid;
+  flex: 1 1 var(--size-px-13);
+  align-items: start;
+  justify-items: start;
+  min-block-size: var(--size-px-13);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-body-ui);
+}
+
+.stage > * {
+  grid-area: 1 / 1;
+}
+
+/* The field-like trigger. While the panel is open it keeps its place, hidden. */
+.trigger {
+  min-block-size: var(--fgd-size-hit);
+  inline-size: min(100%, var(--size-px-13));
+  color: var(--role-muted);
+  font: inherit;
+  text-align: start;
+}
+
+.trigger[aria-expanded='true'] {
+  visibility: hidden;
+}
+
+.triggerInner {
+  justify-content: center;
+  padding-inline: var(--size-px-3);
+}
+
+.triggerMain {
+  display: flex;
+  align-items: center;
+  gap: var(--size-px-2);
+}
+
+.triggerLabel {
+  flex: 1 1 auto;
+}
+
+.panel {
+  inline-size: min(100%, var(--size-px-15));
+  color: var(--primary12);
+}
+
+.panelInner {
+  padding: var(--size-px-2) var(--size-px-3) var(--size-px-3) var(--size-px-5);
+}
+
+.panelMain {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--size-px-3);
+}
+
+.panelTitle {
+  margin: 0;
+  font-size: var(--fgd-font-size-body-ui);
+  font-weight: var(--font-weight-7);
+}
+
+.panelBody {
+  display: grid;
+  gap: var(--size-px-2);
+  padding-block-start: var(--size-px-2);
+  padding-inline-end: var(--size-px-2);
+}
+
+.panelBody > p {
+  margin: 0;
+}

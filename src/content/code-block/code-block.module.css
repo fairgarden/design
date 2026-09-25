@@ -1,0 +1,851 @@
+/*
+ * Code Block. Parts: `base` (the frame), `target` (a hidden `#slug` scroll
+ * target), `variantSelect` and `transformSwitch` (the one-file actions'
+ * scroll anchors), `source`, `pre` (useCode's `preClassName`: the engine's
+ * `<pre>`), `checkbox` and `toggle` (the window's control). The header is
+ * File Tabs (`navigation/file-tabs`), which owns its geometry: the folder
+ * tabs, the frame's side edges over them, the scroll line, the hanging
+ * "More actions" trigger (a FileTabsControl) and the status.
+ *
+ * The docs engine's own hooks are styled as global classes: frames and lines
+ * (`.frame`, `.line`, `[data-frame-*]`, `[data-hl*]`, `mark`), the swap
+ * (`[data-transforming]`, `.collapse`, `[data-expanding]`), the window
+ * (`code[data-collapsible]`, `[data-scrollbar-gutter]`), the editable
+ * prompt, and the syntax tokens (starry-night `pl-*`, pipeline `fgd-*`).
+ * Colors are role variables and scale steps only, so the block follows its
+ * ground and the page mode with no mode-specific rule; nothing is
+ * transparent, faded, shadowed or graded [D12, D91]. Local custom
+ * properties carry dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.toggle {
+  composes: typeButton from '../../utils/type.module.css';
+}
+
+/* The swap's line grow and shrink run as keyframes, not transitions: React
+ * reuses the span when a line becomes a bridge, so @starting-style would
+ * never fire. */
+@keyframes code-block-grow {
+  from {
+    block-size: 0;
+  }
+  to {
+    block-size: var(--code-block-line);
+  }
+}
+
+@keyframes code-block-shrink {
+  from {
+    block-size: var(--code-block-line);
+  }
+  to {
+    block-size: 0;
+  }
+}
+
+@layer base {
+  /*
+   * The frame: every fill has an edge [D12]. It clips nothing, as in the
+   * source: the header's "More actions" trigger hangs past its inline-end
+   * edge, and its parts keep inside it on their own (the code scrolls in
+   * the `pre`, the tabs in their row). No min-content floor as a flex or
+   * grid item. File Tabs' header sits at its top (`frame="top"`, or
+   * `"joined"` embedded).
+   */
+  .base {
+    min-inline-size: 0;
+    margin-block: var(--size-px-5);
+    border: var(--border-size-1) solid var(--role-rule);
+    border-radius: var(--radius-2-25);
+    background-color: var(--primary1);
+    color: var(--primary12);
+  }
+
+  /* A hidden target for native `#slug` links: in flow, so the browser can
+   * scroll to it, and zero tall. */
+  .target {
+    display: block;
+    block-size: 0;
+    scroll-margin-block-start: var(--size-px-3);
+  }
+
+  /* The one-file actions' scroll anchors for a swap: real boxes, so they can be measured. */
+  .variantSelect,
+  .transformSwitch {
+    display: inline-flex;
+    flex: none;
+  }
+
+  .variantSelect {
+    flex: 0 1 auto;
+    min-inline-size: var(--size-px-10);
+  }
+
+  .source {
+    position: relative;
+  }
+
+  /* The code: mono at the caption size, reading leading; the line height is
+   * also the height a swap's bridge line grows to. */
+  .pre {
+    --code-block-line: calc(var(--fgd-font-size-caption) * var(--fgd-leading-reading));
+    /* A classic scrollbar's height: the window swaps the real scrollbar for
+     * this much margin while it collapses (a platform metric, not a token). */
+    --code-block-gutter: 15px;
+
+    margin: 0;
+    padding-block: var(--size-px-3);
+    overflow-x: auto;
+    tab-size: 2;
+    font-family: var(--fgd-font-mono);
+    font-size: var(--fgd-font-size-caption);
+    line-height: var(--code-block-line);
+    color: var(--primary12);
+  }
+
+  /* Block, so frames stretch to the widest line. */
+  .pre > :global(code) {
+    display: block;
+    min-inline-size: fit-content;
+    font: inherit;
+  }
+
+  .pre :global(.frame) {
+    display: block;
+    padding-inline: var(--size-px-2-5);
+  }
+
+  /* A lined frame: the newlines between its line spans take no space. */
+  .pre :global(.frame[data-lined]) {
+    white-space: normal;
+    line-height: 0;
+  }
+
+  .pre :global(.frame[data-lined] .line) {
+    display: block;
+    position: relative;
+    white-space: pre;
+    line-height: var(--code-block-line);
+  }
+
+  /*
+   * A blank line keeps its height, as it does in an unlined frame (the
+   * loading fallback, or a frame the engine hasn't lined yet), so the two
+   * render alike and nothing shifts when a frame is lined. Not a line a
+   * swap inserts, which grows from nothing.
+   */
+  .pre :global(.frame[data-lined] .line:not([data-expanding])) {
+    min-block-size: var(--code-block-line);
+  }
+
+  /*
+   * Emphasis: a highlighted frame or line takes the --primary3 fill and a
+   * --border-size-2 start bar in --role-accent, so it still reads in print
+   * and forced colors where fills drop; a strong line steps to --primary4.
+   */
+  .pre :global(.frame[data-frame-type='highlighted']),
+  .pre :global(.frame[data-frame-type='highlighted-unfocused']) {
+    padding-inline-start: calc(var(--size-px-2-5) - var(--border-size-2));
+    border-inline-start: var(--border-size-2) solid var(--role-accent);
+    background-color: var(--primary3);
+  }
+
+  /* A highlighted line in an unhighlighted frame: its own fill and bar, edge to edge. */
+  .pre :global(.line[data-hl]) {
+    margin-inline: calc(-1 * var(--size-px-2-5));
+    padding-inline: calc(var(--size-px-2-5) - var(--border-size-2)) var(--size-px-2-5);
+    border-inline-start: var(--border-size-2) solid var(--role-accent);
+    background-color: var(--primary3);
+  }
+
+  .pre :global(.line[data-hl='strong']) {
+    background-color: var(--primary4);
+  }
+
+  /* Inside a highlighted frame the frame carries the bar and fill; only a strong line adds its step. */
+  .pre :global(.frame[data-frame-type^='highlighted'] .line[data-hl]) {
+    margin-inline: calc(var(--border-size-2) - var(--size-px-2-5)) calc(-1 * var(--size-px-2-5));
+    padding-inline: calc(var(--size-px-2-5) - var(--border-size-2)) var(--size-px-2-5);
+    border-inline-start: 0;
+    background: none;
+  }
+
+  .pre :global(.frame[data-frame-type^='highlighted'] .line[data-hl='strong']) {
+    background-color: var(--primary4);
+  }
+
+  /* Inline highlights: a fill tier plus an underline, so a mark survives print. */
+  .pre :global(mark) {
+    background-color: var(--primary3);
+    color: inherit;
+    text-decoration-line: underline;
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-1);
+    text-underline-offset: 0.2em;
+  }
+
+  .pre :global(mark[data-hl]) {
+    background-color: var(--primary4);
+  }
+
+  /* Strong: the heavier underline carries it; the fill stays --primary4, where every token ink holds 4.5:1. */
+  .pre :global(mark[data-hl='strong']) {
+    text-decoration-thickness: var(--border-size-2);
+  }
+
+  /* Range and frame descriptions: an inverse badge at the line's end. */
+  .pre :global(.line[data-hl-description])::after,
+  .pre :global(.frame[data-frame-description])::before {
+    float: inline-end;
+    padding-inline: var(--size-px-1);
+    border-radius: var(--radius-1);
+    background-color: var(--primary12);
+    color: var(--primary1);
+    line-height: var(--fgd-leading-compact);
+  }
+
+  .pre :global(.line[data-hl-description])::after {
+    content: attr(data-hl-description);
+  }
+
+  .pre :global(.frame[data-frame-description])::before {
+    content: attr(data-frame-description);
+  }
+
+  /*
+   * The swap (useCode's `transformDelay` / `variantSwapDelay`): a bridge
+   * (`.collapse`, one empty span per line) and inserted lines
+   * (`[data-expanding]`) grow or shrink one line height each over
+   * --fgd-duration-swap while the `pre` carries `data-transforming`. The
+   * duration must equal the JS delay; both are instant under --motionNotOK.
+   */
+  .pre :global(.frame .collapse) {
+    display: block;
+    overflow: hidden;
+  }
+
+  .pre :global(.frame .collapse > span) {
+    display: block;
+    block-size: 0;
+    overflow: hidden;
+  }
+
+  .pre :global(.frame .line[data-expanding]) {
+    display: block;
+    overflow: hidden;
+  }
+
+  /*
+   * Editable code (only with the docs engine's editor): the wrapper is the
+   * keyboard stop and shows the ring; the "Press Enter to start editing"
+   * prompt is an inverse chip, shown with visibility, never faded.
+   */
+  .source :global(pre):focus-visible {
+    outline: none;
+  }
+
+  .source :global(.editable-code-wrapper) {
+    display: block;
+    position: relative;
+  }
+
+  .source :global(.editable-code-wrapper):focus-visible {
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: calc(-1 * var(--fgd-focus-width));
+  }
+
+  .source :global(.editable-code-wrapper) :global(.editable-code-overlay[hidden]) {
+    display: block;
+  }
+
+  .source :global(.editable-code-wrapper) :global(.editable-code-overlay) {
+    position: absolute;
+    z-index: 1;
+    inset-block-start: var(--size-px-2);
+    inset-inline: 0;
+    inline-size: fit-content;
+    margin-inline: auto;
+    padding: var(--size-px-1) var(--size-px-2-5);
+    border: var(--border-size-2) solid var(--primary12);
+    border-radius: var(--radius-2-25);
+    background-color: var(--primary12);
+    color: var(--primary1);
+    font-family: var(--fgd-font-mono);
+    font-size: var(--fgd-font-size-caption);
+    line-height: var(--fgd-leading-compact);
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .source :global(.editable-code-wrapper)[data-editable-prompt] :global(.editable-code-overlay) {
+    visibility: visible;
+  }
+
+  .source :global(.editable-code-wrapper) :global(.editable-code-overlay) :global(kbd) {
+    display: inline-block;
+    margin-inline: var(--size-px-1);
+    padding-inline: var(--size-px-1);
+    border: var(--border-size-1) solid var(--primary1);
+    border-radius: var(--radius-1);
+    font: inherit;
+  }
+
+  /*
+   * Syntax tokens. The frame's face is always --primary1, where only three
+   * steps are text-safe on every scope: --primary12 (11.7:1 or more),
+   * --secondary12 (10.7:1 or more) and --primary11 (4.9:1 or more), whatever
+   * the primary and secondary. So color sorts tokens into three tiers and
+   * weight (700, the heavier Plex Mono cut) and slant tell the rest apart:
+   *
+   *   text        --primary12    400
+   *   functions   --primary12    700            (entity names, JSX variables)
+   *   strings     --primary12    400 oblique    (delimiters, regex, attribute values)
+   *   keywords    --secondary12  700            (and tags)
+   *   constants   --secondary12  400            (numbers, booleans, null, types, CSS values)
+   *   comments    --primary11    400 oblique
+   *   punctuation --primary11    400
+   *
+   * Keywords and strings never share a color. Steps, not --role-muted or
+   * --role-heading: those follow the ground (--role-heading is
+   * --secondary12 on page grounds, --role-muted is --primary12 on the
+   * fields), while the face these tokens sit on does not. Print turns every
+   * step black; weight and slant still carry keywords, names, strings and
+   * comments.
+   */
+  .source :global(.pl-c) {
+    color: var(--primary11);
+    font-style: italic;
+  }
+
+  .source :global(.pl-ba),
+  .source :global(.pl-sg),
+  .source :global(.fgd-pu),
+  .source :global(.fgd-ae),
+  .source :global(.fgd-td) {
+    color: var(--primary11);
+    font-style: normal;
+  }
+
+  /* Keywords and tags. */
+  .source :global(.pl-k),
+  .source :global(.pl-ent),
+  .source :global(.fgd-jt),
+  .source :global(.fgd-ht),
+  .source :global(.fgd-this) {
+    color: var(--secondary12);
+    font-weight: var(--font-weight-7);
+  }
+
+  /* Constants: numbers, booleans, null, built-in types, CSS values. */
+  .source :global(.pl-c1),
+  .source :global(.pl-s .pl-v),
+  .source :global(.fgd-num),
+  .source :global(.fgd-bool),
+  .source :global(.fgd-n),
+  .source :global(.fgd-cv),
+  .source :global(.fgd-bt) {
+    color: var(--secondary12);
+    font-weight: var(--font-weight-4);
+    font-style: normal;
+  }
+
+  /* Strings: the ink, oblique. */
+  .source :global(.pl-s),
+  .source :global(.pl-pds),
+  .source :global(.pl-sr),
+  .source :global(.fgd-av),
+  .source :global(.fgd-ps) {
+    color: var(--primary12);
+    font-style: italic;
+  }
+
+  /* Functions and entity names: the ink, heavy. */
+  .source :global(.pl-e),
+  .source :global(.pl-en),
+  .source :global(.pl-v),
+  .source :global(.pl-smw),
+  .source :global(.fgd-jv) {
+    color: var(--primary12);
+    font-weight: var(--font-weight-7);
+  }
+
+  /* Code inside a string (a template expression) resets to plain text. */
+  .source :global(.pl-smi),
+  .source :global(.pl-s .pl-s1),
+  .source :global(.fgd-op),
+  .source :global(.fgd-ak),
+  .source :global(.fgd-da),
+  .source :global(.fgd-cp),
+  .source :global(.fgd-te),
+  .source :global(.fgd-jsx) {
+    color: var(--primary12);
+    font-style: normal;
+  }
+
+  .source :global(.pl-mh),
+  .source :global(.pl-mb),
+  .source :global(.pl-ms) {
+    font-weight: var(--font-weight-7);
+  }
+
+  .source :global(.pl-mi) {
+    font-style: italic;
+  }
+
+  /*
+   * The window's control: a visually hidden checkbox (the state, which
+   * works before hydration) and its label, a full-width row styled like
+   * CollapsibleTrigger with the disclosure glyph [D109].
+   */
+  .checkbox {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .toggle {
+    display: flex;
+    gap: var(--size-px-2);
+    align-items: center;
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: var(--fgd-size-hit);
+    padding-inline: var(--size-px-2-5);
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+    color: var(--primary12);
+    cursor: pointer;
+  }
+
+  /* The bare-text hover underline's color, weight and offset [D181]. */
+  .toggleLabel {
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  .showFewer {
+    display: none;
+  }
+
+  /*
+   * The truncation edge: where the window cuts a highlighted run, a
+   * --border-size-2 --role-rule rule across the window's foot, in place of
+   * a gradient fade [D21]. It overlays the toggle's rule, so nothing shifts.
+   */
+  .source::after {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: calc(-1 * var(--border-size-1));
+    border-block-end: var(--border-size-2) solid var(--role-rule);
+    visibility: hidden;
+    pointer-events: none;
+    content: '';
+  }
+
+  @media (--forcedColors) {
+    .pre :global(.frame[data-frame-type='highlighted']),
+    .pre :global(.frame[data-frame-type='highlighted-unfocused']),
+    .pre :global(.line[data-hl]) {
+      border-inline-start-color: CanvasText;
+    }
+  }
+
+  @media (--motionOK) {
+    .toggleLabel {
+      transition-property: text-decoration-color;
+      transition-duration: var(--fgd-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer variants {
+  /* Part of a composite that frames it (Demo): no outer frame; the header (`frame="joined"`) joins the part above. */
+  .embedded {
+    margin-block: 0;
+    border: 0;
+    border-radius: 0;
+  }
+}
+
+@layer states {
+  /* The swap's phases on the `pre`. */
+  .pre[data-transforming='expanded'] :global(.frame .collapse > span) {
+    block-size: var(--code-block-line);
+  }
+
+  .pre[data-transforming='collapsing'] :global(.frame .collapse > span) {
+    animation: code-block-shrink var(--fgd-duration-swap) var(--ease-out-3) both;
+  }
+
+  .pre[data-transforming='expanding'] :global(.frame .collapse > span) {
+    animation: code-block-grow var(--fgd-duration-swap) var(--ease-out-3) forwards;
+  }
+
+  .pre[data-transforming='expanded'] :global(.frame .line[data-expanding]) {
+    block-size: 0;
+  }
+
+  .pre[data-transforming='collapsing'] :global(.frame .line[data-expanding]) {
+    animation: code-block-grow var(--fgd-duration-swap) var(--ease-out-3) both;
+  }
+
+  .pre[data-transforming='expanding'] :global(.frame .line[data-expanding]) {
+    animation: code-block-shrink var(--fgd-duration-swap) var(--ease-out-3) forwards;
+  }
+
+  /*
+   * The window (`collapsible`, only where the code has one): frames outside
+   * it are clipped to no height and hidden (out of the accessibility tree,
+   * the focus order and the caret) until the checkbox is checked. A clip
+   * reveal, never opacity [D91]: --fgd-duration-disclosure on --ease-out-3,
+   * frames bordering the window first and the far ones after a third.
+   */
+  .base[data-collapsible]
+    .pre
+    :global(
+      code[data-collapsible]
+        > .frame:is(
+          :not([data-frame-type]),
+          [data-frame-type='highlighted-unfocused'],
+          [data-frame-type='focus-unfocused']
+        )
+    ) {
+    max-block-size: 0;
+    overflow: hidden;
+    overflow-anchor: none;
+    visibility: hidden;
+  }
+
+  .base[data-collapsible]:has(> .checkbox:checked)
+    .pre
+    :global(
+      code[data-collapsible]
+        > .frame:is(
+          :not([data-frame-type]),
+          [data-frame-type='highlighted-unfocused'],
+          [data-frame-type='focus-unfocused']
+        )
+    ) {
+    /* A frame holds at most 120 lines. */
+    max-block-size: calc(120 * var(--code-block-line));
+    visibility: visible;
+  }
+
+  @supports (interpolate-size: allow-keywords) {
+    .base[data-collapsible]
+      .pre
+      :global(
+        code[data-collapsible]
+          > .frame:is(
+            :not([data-frame-type]),
+            [data-frame-type='highlighted-unfocused'],
+            [data-frame-type='focus-unfocused']
+          )
+      ) {
+      interpolate-size: allow-keywords;
+      max-block-size: none;
+      block-size: 0;
+      overflow: clip;
+    }
+
+    .base[data-collapsible]:has(> .checkbox:checked)
+      .pre
+      :global(
+        code[data-collapsible]
+          > .frame:is(
+            :not([data-frame-type]),
+            [data-frame-type='highlighted-unfocused'],
+            [data-frame-type='focus-unfocused']
+          )
+      ) {
+      max-block-size: none;
+      block-size: auto;
+    }
+  }
+
+  /* The window's context lines sit a solid ink step lighter until expanded (no opacity). */
+  .base[data-collapsible]:not(:has(> .checkbox:checked))
+    .pre
+    :global(
+      code[data-collapsible]
+        > .frame:is([data-frame-type='padding-top'], [data-frame-type='padding-bottom'])
+    ),
+  .base[data-collapsible]:not(:has(> .checkbox:checked))
+    .pre
+    :global(
+      code[data-collapsible]
+        > .frame:is([data-frame-type='padding-top'], [data-frame-type='padding-bottom'])
+        *
+    ) {
+    color: var(--role-muted);
+  }
+
+  /* The toggle follows a windowed block, so its foot tightens (the source's 6 px). */
+  .base[data-collapsible]:has(.source :global(code[data-collapsible])) .pre {
+    padding-block-end: var(--size-px-2);
+  }
+
+  /* Collapsed: no horizontal scroll, so the window clips cleanly. */
+  .base[data-collapsible] .pre:has(> :global(code[data-collapsible])) {
+    overflow-x: hidden;
+  }
+
+  .base[data-collapsible]:has(> .checkbox:checked) .pre:not([data-scrollbar-gutter]) {
+    overflow-x: auto;
+  }
+
+  /* A window cut through a highlighted run: no foot padding, and the truncation edge shows. */
+  .base[data-collapsible]:not(:has(> .checkbox:checked))
+    .pre:has(> :global(code > .frame[data-frame-truncated='visible'])) {
+    padding-block-end: 0;
+  }
+
+  .base[data-collapsible]:not(:has(> .checkbox:checked))
+    .source:has(:global(code > .frame[data-frame-truncated='visible']))::after {
+    visibility: visible;
+  }
+
+  /* An empty window (`data-focused-lines="0"`) takes no height while collapsed, and drops the toggle's rule. */
+  .base[data-collapsible]:not(:has(> .checkbox:checked))
+    .pre:has(> :global(code[data-collapsible][data-focused-lines='0'])) {
+    padding-block: 0;
+  }
+
+  .base[data-collapsible]:not(:has(> .checkbox:checked)):has(
+      .source :global(code[data-collapsible][data-focused-lines='0'])
+    )
+    > .toggle {
+    border-block-start-width: 0;
+  }
+
+  /*
+   * The scrollbar swap useCodeWindow drives on the `pre`: while the window
+   * moves, the real horizontal scrollbar gives way to an equal margin, so
+   * nothing jumps.
+   */
+  .pre[data-scrollbar-gutter] {
+    overflow-x: hidden;
+  }
+
+  .pre[data-scrollbar-gutter='collapse-from'] > :global(code),
+  .pre[data-scrollbar-gutter='expand-to'] > :global(code) {
+    margin-block-end: var(--code-block-gutter);
+  }
+
+  .pre[data-scrollbar-gutter='collapse-to'] > :global(code),
+  .pre[data-scrollbar-gutter='expand-from'] > :global(code) {
+    margin-block-end: 0;
+  }
+
+  /* The toggle: shown (with its checkbox) only where the code has a window. */
+  .base:not(:has(.source :global(code[data-collapsible]))) > .checkbox,
+  .base:not(:has(.source :global(code[data-collapsible]))) > .toggle {
+    display: none;
+  }
+
+  .checkbox:checked ~ .toggle .showAll {
+    display: none;
+  }
+
+  .checkbox:checked ~ .toggle .showFewer {
+    display: inline;
+  }
+
+  .checkbox:not(:disabled) ~ .toggle:hover .toggleLabel {
+    text-decoration-line: underline;
+  }
+
+  /* Focus: the ring on the row, inside the frame's clip, keyboard only [D45]. */
+  .checkbox:focus-visible ~ .toggle {
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: calc(-1 * var(--fgd-focus-width));
+  }
+
+  /* Disabled (a fallback carrying only the window): --role-muted, no opacity [D85]. */
+  .checkbox:disabled ~ .toggle {
+    color: var(--role-muted);
+    cursor: default;
+  }
+
+  @media (--motionOK) {
+    .base[data-collapsible]
+      .pre
+      :global(
+        code[data-collapsible]
+          > .frame:is(
+            :not([data-frame-type]),
+            [data-frame-type='highlighted-unfocused'],
+            [data-frame-type='focus-unfocused']
+          )
+      ) {
+      transition:
+        max-block-size var(--fgd-duration-disclosure) var(--ease-out-3),
+        visibility var(--fgd-duration-disclosure);
+    }
+
+    /* Without `interpolate-size`, the capped max-block-size runs five times as long, as in the source. */
+    .base[data-collapsible]:has(> .checkbox:checked)
+      .pre
+      :global(
+        code[data-collapsible]
+          > .frame:is(
+            :not([data-frame-type]),
+            [data-frame-type='highlighted-unfocused'],
+            [data-frame-type='focus-unfocused']
+          )
+      ) {
+      transition:
+        max-block-size calc(5 * var(--fgd-duration-disclosure)) var(--ease-out-3),
+        visibility 0s;
+    }
+
+    @supports (interpolate-size: allow-keywords) {
+      .base[data-collapsible]
+        .pre
+        :global(
+          code[data-collapsible]
+            > .frame:is(
+              :not([data-frame-type]),
+              [data-frame-type='highlighted-unfocused'],
+              [data-frame-type='focus-unfocused']
+            )
+        ) {
+        transition:
+          block-size var(--fgd-duration-disclosure) var(--ease-out-3),
+          visibility var(--fgd-duration-disclosure);
+      }
+
+      /* Far frames wait a third, then grow in the remaining two thirds. */
+      .base[data-collapsible]:has(> .checkbox:checked)
+        .pre
+        :global(
+          code[data-collapsible]
+            > .frame:is(
+              :not([data-frame-type]),
+              [data-frame-type='highlighted-unfocused'],
+              [data-frame-type='focus-unfocused']
+            )
+        ) {
+        transition:
+          block-size calc(var(--fgd-duration-disclosure) * 2 / 3) var(--ease-out-3)
+            calc(var(--fgd-duration-disclosure) / 3),
+          visibility 0s;
+      }
+
+      /* Frames bordering the window grow at once, over the whole duration. */
+      .base[data-collapsible]:has(> .checkbox:checked)
+        .pre
+        :global(
+          code[data-collapsible]
+            > .frame:is(
+              :not([data-frame-type]),
+              [data-frame-type='highlighted-unfocused'],
+              [data-frame-type='focus-unfocused']
+            ):has(
+              + .frame[data-frame-type]:not(
+                  [data-frame-type='highlighted-unfocused'],
+                  [data-frame-type='focus-unfocused']
+                )
+            )
+        ),
+      .base[data-collapsible]:has(> .checkbox:checked)
+        .pre
+        :global(
+          code[data-collapsible]
+            > .frame[data-frame-type]:not(
+              [data-frame-type='highlighted-unfocused'],
+              [data-frame-type='focus-unfocused']
+            )
+            + .frame:is(
+              :not([data-frame-type]),
+              [data-frame-type='highlighted-unfocused'],
+              [data-frame-type='focus-unfocused']
+            )
+        ) {
+        transition:
+          block-size var(--fgd-duration-disclosure) var(--ease-out-3),
+          visibility 0s;
+      }
+    }
+
+    .base[data-collapsible] .pre:has(> :global(code[data-collapsible][data-focused-lines='0'])) {
+      transition: padding-block var(--fgd-duration-disclosure) var(--ease-out-3);
+    }
+
+    .base[data-collapsible]:has(.source :global(code[data-collapsible][data-focused-lines='0']))
+      > .toggle {
+      transition: border-block-start-width var(--fgd-duration-disclosure) var(--ease-out-3);
+    }
+
+    .pre[data-scrollbar-gutter='collapse-to'] > :global(code),
+    .pre[data-scrollbar-gutter='expand-to'] > :global(code) {
+      transition: margin-block-end var(--fgd-duration-disclosure) var(--ease-out-3);
+    }
+  }
+}
+
+@layer print {
+  @media print {
+    /* A code block never splits across pages (§7). */
+    .base {
+      break-inside: avoid;
+    }
+
+    /* Screen-only controls (File Tabs hides the header's own); the file label stays. */
+    .checkbox,
+    .toggle,
+    .source::after {
+      display: none;
+    }
+
+    /* Paper cannot scroll: long lines wrap inside the frame. */
+    .pre,
+    .base[data-collapsible] .pre {
+      padding-block: var(--size-px-3);
+      overflow: visible;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .pre > :global(code) {
+      min-inline-size: 0;
+      margin-block-end: 0;
+    }
+
+    .pre :global(.frame[data-lined] .line) {
+      white-space: pre-wrap;
+    }
+
+    /* Disclosures print open: every frame of the window's block shows, in the ink. */
+    .pre :global(code > .frame),
+    .pre :global(code > .frame *) {
+      max-block-size: none;
+      block-size: auto;
+      overflow: visible;
+      visibility: visible;
+    }
+
+    .pre :global(code > .frame[data-frame-type^='padding']),
+    .pre :global(code > .frame[data-frame-type^='padding'] *) {
+      color: inherit;
+    }
+
+    /* Badges drop their fill on paper: an outlined tag in the ink instead. */
+    .pre :global(.line[data-hl-description])::after,
+    .pre :global(.frame[data-frame-description])::before {
+      border: var(--border-size-1) solid var(--primary12);
+      background: none;
+      color: var(--primary12);
+    }
+  }
+}

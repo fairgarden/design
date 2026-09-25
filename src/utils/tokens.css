@@ -195,6 +195,48 @@
     --fgd-duration-disclosure: 200ms;
     --fgd-delay-tooltip: 500ms;
     --fgd-duration-toast: 6s;
+    /*
+     * The expanding box's View Transitions morph (a field-like trigger into
+     * its dialog). Open runs --fgd-duration-expand on --fgd-ease-expand;
+     * close runs --fgd-duration-disclosure, so it stays the faster. The ease
+     * is a critically damped spring (stiffness 0.3, damping 1) sampled as
+     * linear() stops, its one undershoot stop clipped to 0 so the curve
+     * never leaves [0, 1]: no overshoot. JS mirror: utils/tokens.ts.
+     */
+    --fgd-duration-expand: 333ms;
+    --fgd-ease-expand: linear(
+      0,
+      0,
+      0.294,
+      0.401,
+      0.58,
+      0.706,
+      0.75,
+      0.825,
+      0.878,
+      0.896,
+      0.927,
+      0.949,
+      0.957,
+      0.97,
+      0.979,
+      0.982,
+      0.987,
+      0.991,
+      0.992,
+      0.995,
+      0.996,
+      0.998,
+      0.999,
+      0.999,
+      1
+    );
+    /*
+     * The code block's variant and JS/TS swap: the rendered code swaps after
+     * this delay while its changed lines grow or shrink over it. JS mirror
+     * (useCode's transformDelay / variantSwapDelay): utils/tokens.ts.
+     */
+    --fgd-duration-swap: 350ms;
     /* Desktop Navigation Menu hover intent [D182]; JS mirror: utils/tokens.ts. */
     --fgd-delay-nav-open: 150ms;
     --fgd-delay-nav-close: 300ms;
@@ -247,6 +289,8 @@
     :root {
       --fgd-duration-quick: var(--fgd-duration-instant);
       --fgd-duration-disclosure: var(--fgd-duration-instant);
+      --fgd-duration-expand: var(--fgd-duration-instant);
+      --fgd-duration-swap: var(--fgd-duration-instant);
     }
   }
 

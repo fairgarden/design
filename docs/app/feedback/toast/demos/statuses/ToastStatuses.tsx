@@ -2,10 +2,14 @@
 
 import * as React from 'react'
 import { Button } from '@fairgarden/design/actions/button'
-import { ToastProvider, useToastManager } from '@fairgarden/design/feedback/toast'
+import { useToastManager } from '@fairgarden/design/feedback/toast'
 import styles from './statuses.module.css'
 
-function ToastButtons() {
+/**
+ * The toasts go to the app's one ToastProvider, which this site mounts in its
+ * layout: an app has a single toast bar, so a demo never wraps its own.
+ */
+export function ToastStatuses() {
   const toasts = useToastManager()
   const [items, setItems] = React.useState(3)
 
@@ -74,13 +78,5 @@ function ToastButtons() {
         {`Trip list: ${items} items. Neutral, info and success toasts close after 6 s, paused on hover, focus or a hidden tab; warning, error and action toasts stay.`}
       </p>
     </div>
-  )
-}
-
-export function ToastStatuses() {
-  return (
-    <ToastProvider>
-      <ToastButtons />
-    </ToastProvider>
   )
 }

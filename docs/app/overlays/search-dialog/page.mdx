@@ -1,0 +1,68 @@
+# Search Dialog
+
+The header search for a site with a search index: a field-like trigger that grows into a modal search dialog and shrinks back. It's built on `@fairgarden/docs`: it calls the engine's `useSearch` over your sitemap and shows its results. Where a site has no index, use the Search `trigger` kind instead.
+
+```tsx
+import { SearchDialog } from '@fairgarden/design/overlays/search-dialog'
+```
+
+Install `@fairgarden/docs` to use it. It's an optional peer dependency, and only Search Dialog, Code Block and Demo import it.
+
+The trigger looks like a field: a magnifier, the label in `--role-muted` and, with `keyboardShortcut`, a ⌘K or Ctrl K key cap from 1024 px. Pressing it runs the expanding box's morph into the dialog. Below 768 px the dialog is the full-screen sheet, square and frameless. From 768 px it is the centered panel in the Dialog's `wide` width. Both have a "Close search" button at the end of the input row; from 1024 px, with `keyboardShortcut`, an esc key cap that closes takes its place. The page stays visible, inert and scroll-locked, with no tint.
+
+SearchDialog takes the sitemap loader `useSearch` takes and builds the index when it mounts, so it's ready by the time someone opens the dialog. Each change to the input runs the engine's search, with at most five results per group. The results show under sticky group labels, with one icon per result type, matches marked by weight, and a stats row. A row is a link to the engine's URL for it (`buildResultUrl`). Choosing one closes the dialog and calls `onNavigate`, so a framework router can take over. Without `onNavigate` the link navigates natively.
+
+```tsx
+'use client'
+import { useRouter } from 'next/navigation'
+import { SearchDialog } from '@fairgarden/design/overlays/search-dialog'
+
+export function HeaderSearch() {
+  const router = useRouter()
+  return (
+    <SearchDialog
+      sitemap={() => import('./sitemap')}
+      onNavigate={(href) => router.push(href)}
+      keyboardShortcut
+    />
+  )
+}
+```
+
+## Searching these docs
+
+import { DemoSearchDialogBasic } from './demos/basic'
+
+<DemoSearchDialogBasic.Title />
+
+This one searches these docs. Press the trigger. Focus lands in the input. Arrow keys move the highlight, which starts on the first result, and Enter goes to that page. Escape, the "Close search" button or a press outside the panel closes the dialog, and focus returns to the trigger. Type "button" to see groups and the stats row, or a word with no match to see the empty status. This demo leaves `keyboardShortcut` off, because a page has one ⌘K listener, and here it belongs to the header's search.
+
+<DemoSearchDialogBasic />
+
+[See Demo](./demos/basic/)
+
+## Results and timing
+
+Before typing, the list shows the engine's default results, the site's first ten pages. Results for a new query replace the list as soon as they arrive. An empty result waits `emptyDelay` (400 ms) first, so "No results" never flashes while someone is still typing. After the dialog closes, the list goes back to the default results. The stats row reads "Found 12 in 0.4ms" and keeps its height while hidden. The empty message and the stats row are live regions, so screen readers announce them. Outside production builds, each row also shows its score (`showScores`).
+
+`searchOptions` passes options to `useSearch` over the defaults (`maxDefaultResults: 10`, `tolerance: 1`, `limit: 20`, `enableStemming: true`). Its `searchBy` replaces the options each query runs with, `{ groupBy: { properties: ['group'], maxResult: 5 } }`.
+
+Opening takes 333 ms and closing 200 ms. Only the frame moves, and nothing fades. A second open or close within 100 ms is ignored. Under reduced motion, or in a browser without View Transitions, the dialog opens at once, or with the Dialog's clip reveal where motion is allowed.
+
+In print, neither the trigger nor the dialog shows.
+
+## API Reference
+
+import { TypesSearchDialog, TypesSearchDialogAdditional } from './types'
+
+### SearchDialog
+
+<TypesSearchDialog.SearchDialog />
+
+### Additional types
+
+<TypesSearchDialogAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §9.10 (search) [D194], with the expanding box and the Dialog's sheet (§10.14).

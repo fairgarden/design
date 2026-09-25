@@ -8,9 +8,11 @@ import { ToastProvider, useToastManager } from '@fairgarden/design/feedback/toas
 
 `ToastProvider` wraps the app and renders the bar: full width at the bottom viewport edge, a `white` scope that follows the page mode, with a `--border-size-2` `--primary12` rule on its top edge and content aligned to the page container. It never floats or stacks, and the page reserves no space for it. One toast shows at a time; while more wait, a count reads "1 of 3". It enters and leaves with a clip reveal from the bottom edge, never a fade, and is hidden in print.
 
+Mount it once, in the app shell: an app has one toast bar, so a feature or a demo never wraps its own provider, which would dock a second bar over the first. This site mounts it in its layout; the demo below and every [Code Block](../../content/code-block/page.mdx) copy confirmation use that one bar.
+
 `useToastManager()` adds, updates and closes toasts with the rules applied. Neutral, info and success toasts close after at least 6 s, paused on hover, on focus and while the tab is hidden. Warning, danger and any toast with actions persist until acted on or dismissed, and danger is announced assertively. F6 moves focus to the bar and Esc dismisses the toast.
 
-Offer Undo instead of a confirmation dialog for reversible actions. Errors that need fixing go inline, not in a toast.
+Offer Undo instead of a confirmation dialog for reversible actions. Transient confirmations, such as a copy, go in a toast, never as inline text by the control. Errors that need fixing go inline, not in a toast.
 
 ## Neutral, status and action toasts
 
@@ -42,4 +44,4 @@ import { TypesToast, TypesToastAdditional } from './types'
 
 [See Types](./types.md)
 
-Specification: `DESIGN-SYSTEM.md` §10.17 (toast), §1.3.1 (docked bars, D25) and §1.5.15 (toast timing).
+Specification: `DESIGN-SYSTEM.md` §10.17 (toast; transient confirmations, D200), §1.3.1 (docked bars, D25) and §1.5.15 (toast timing).

@@ -1,0 +1,9 @@
+.row {
+  display: flex;
+  gap: var(--size-px-3);
+  align-items: center;
+}
+
+.count {
+  font-variant-numeric: tabular-nums;
+}

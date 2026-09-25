@@ -1,0 +1,163 @@
+/*
+ * Demo. Parts: `base` (the root: the scroll targets, then the frame),
+ * `target` (a hidden `#slug` scroll target), `frame` (the one edge around
+ * preview and code), `bar` (the variant bar), `variantSelect` (its Select
+ * trigger, in the top-start corner), `stage` (holds the error and the
+ * surface), `error`, `preview` (the surface), `code` (the embedded Code
+ * Block's root).
+ *
+ * The frame never clips: the error hangs across the preview's top edge and
+ * the Code Block's actions may hang past the frame's inline end. Each part
+ * rounds its own corners to the frame's inner radius instead. Colors are role
+ * variables and scale steps only; nothing is transparent, shadowed or graded
+ * [D12]. Local custom properties carry dimensions only.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.error {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base {
+    min-inline-size: 0;
+    margin-block: var(--size-px-5);
+  }
+
+  /* A hidden target for native `#slug` links: in flow, so the browser can
+   * scroll to it, and zero tall. */
+  .target {
+    display: block;
+    block-size: 0;
+    scroll-margin-block-start: var(--size-px-3);
+  }
+
+  /* The frame: every fill has an edge [D12]. */
+  .frame {
+    /* The parts' corner radius, inside the frame's edge. */
+    --demo-radius: calc(var(--radius-2-25) - var(--border-size-1));
+
+    min-inline-size: 0;
+    border: var(--border-size-1) solid var(--role-rule);
+    border-radius: var(--radius-2-25);
+    background-color: var(--primary1);
+    color: var(--primary12);
+  }
+
+  /* The variant bar: the preview's ground, with the Select in its corner. */
+  .bar {
+    display: flex;
+    border-start-start-radius: var(--demo-radius);
+    border-start-end-radius: var(--demo-radius);
+    background-color: var(--role-ground);
+  }
+
+  /* The error's containing block: it hangs across the surface's top edge
+   * from here, outside the surface's clip. */
+  .stage {
+    position: relative;
+  }
+
+  /*
+   * The surface: the page ground, inset --size-px-7, a wrapping row with a
+   * --size-px-3 gap. It clips its content without a scroll container, so a
+   * sticky demo docks against the page. `--demo-inset` is the inset a
+   * rendered preview cancels to run edge to edge.
+   */
+  .preview {
+    --demo-inset: var(--size-px-7);
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--size-px-3);
+    align-items: center;
+    min-inline-size: 0;
+    padding: var(--demo-inset);
+    background-color: var(--role-ground);
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  /* Without a variant bar, the surface takes the frame's top corners. */
+  .stage:first-child > .preview {
+    border-start-start-radius: var(--demo-radius);
+    border-start-end-radius: var(--demo-radius);
+  }
+
+  /*
+   * The runtime error: laid across the surface's top edge, so showing it
+   * never shifts layout. The danger edge at --border-size-2 and the danger
+   * text on the face; no shadow.
+   */
+  .error {
+    position: absolute;
+    z-index: 1;
+    inset-block-start: 0;
+    inset-inline: var(--size-px-2-5);
+    translate: 0 -50%;
+    padding: var(--size-px-1) var(--size-px-2-5);
+    border: var(--border-size-2) solid var(--role-danger-edge);
+    border-radius: var(--radius-2-25);
+    background-color: var(--primary1);
+    color: var(--role-danger-text);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}
+
+@layer variants {
+  /*
+   * The variant Select, compact, in the top-start corner: the frame's edge
+   * doubles as its top and start edges, its outer corner follows the
+   * frame's, and its inner corner rounds so it reads as its own chip.
+   */
+  .bar > .variantSelect {
+    inline-size: auto;
+    min-inline-size: var(--size-px-11);
+    max-inline-size: 100%;
+    block-size: var(--fgd-size-hit);
+    border-block-start-width: 0;
+    border-inline-start-width: 0;
+    border-radius: 0;
+    border-start-start-radius: var(--demo-radius);
+    border-end-end-radius: var(--radius-2-25);
+  }
+
+  /* The embedded Code Block's foot follows the frame's inner radius. */
+  .frame > .code {
+    border-end-start-radius: var(--demo-radius);
+    border-end-end-radius: var(--demo-radius);
+  }
+}
+
+@layer states {
+  /* The corner Select's ring sits inside it, off the frame's edge [D45]. */
+  .bar > .variantSelect:focus-visible {
+    outline-offset: calc(-1 * var(--border-size-2));
+  }
+}
+
+@layer print {
+  @media print {
+    /* The preview never splits across pages; the code block keeps its own rule. */
+    .stage {
+      break-inside: avoid;
+    }
+
+    /* The variant bar prints the selected variant's name as text. */
+    .bar > .variantSelect {
+      border-width: 0;
+    }
+
+    /* A runtime error prints in flow above the preview, not over it; the
+     * print remap turns the danger roles black, and its 2 px edge still
+     * marks it. */
+    .error {
+      position: static;
+      translate: none;
+      margin: var(--size-px-2) var(--size-px-2-5) 0;
+    }
+  }
+}

@@ -57,9 +57,9 @@ Prefer removing a tab to disabling it.
 
 **TabsTab Props:**
 
-| Prop | Type                                                                                                                                                                                                                                                                                         | Default | Description                                                                                         |
-| :--- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :-------------------------------------------------------------------------------------------------- |
-| icon | `'menu' \| 'search' \| 'circle' \| 'arrow_forward' \| 'arrow_upward' \| 'expand_more' \| 'close' \| 'remove' \| 'add' \| 'check' \| 'chevron_right' \| 'chevron_left' \| 'more_horiz' \| 'play_arrow' \| 'pause' \| 'download' \| 'zoom_in' \| 'zoom_out' \| 'recenter' \| 'help' \| 'mail'` | -       | An optional leading icon, Material Symbols Rounded at the inline tier,&#xA;FILL 0. Never icon-only. |
+| Prop | Type                                                                                                                                                                                                                                                                                                                                                                                                                                      | Default | Description                                                                                         |
+| :--- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :-------------------------------------------------------------------------------------------------- |
+| icon | `'link' \| 'menu' \| 'search' \| 'circle' \| 'arrow_forward' \| 'arrow_upward' \| 'expand_more' \| 'close' \| 'remove' \| 'add' \| 'check' \| 'chevron_right' \| 'chevron_left' \| 'more_horiz' \| 'play_arrow' \| 'pause' \| 'download' \| 'zoom_in' \| 'zoom_out' \| 'recenter' \| 'help' \| 'mail' \| 'content_copy' \| 'open_in_new' \| 'restart_alt' \| 'description' \| 'widgets' \| 'deployed_code' \| 'format_h2' \| 'format_h3'` | -       | An optional leading icon, Material Symbols Rounded at the inline tier,&#xA;FILL 0. Never icon-only. |
 
 ## Additional Types
 
@@ -167,6 +167,7 @@ Props for TabsTab: Base UI Tab props plus an optional leading icon.
 ```typescript
 type TabsTabProps = TabsTabProps & {
   icon?:
+    | 'link'
     | 'menu'
     | 'search'
     | 'circle'
@@ -187,7 +188,15 @@ type TabsTabProps = TabsTabProps & {
     | 'zoom_out'
     | 'recenter'
     | 'help'
-    | 'mail';
+    | 'mail'
+    | 'content_copy'
+    | 'open_in_new'
+    | 'restart_alt'
+    | 'description'
+    | 'widgets'
+    | 'deployed_code'
+    | 'format_h2'
+    | 'format_h3';
 };
 ```
 
