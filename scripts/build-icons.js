@@ -39,6 +39,8 @@ const inventory = {
   chevron_left: 'chevron_left',
   menu: 'menu',
   more_horiz: 'more_horiz',
+  // The code block and demo header's vertical ⋮ "More actions" trigger.
+  more_vert: 'more_vert',
   play_arrow: 'play_arrow',
   pause: 'pause',
   download: 'download',

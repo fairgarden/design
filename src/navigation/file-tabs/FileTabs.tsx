@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import { mergeProps } from '@base-ui/react/merge-props'
-import { ScrollArea as BaseScrollArea } from '@base-ui/react/scroll-area'
 import { Tabs as BaseTabs } from '@base-ui/react/tabs'
 import { useRender } from '@base-ui/react/use-render'
 import { cva } from 'class-variance-authority'
@@ -18,12 +17,14 @@ import { useScopeAttributes } from '../../utils/scope'
 import styles from './file-tabs.module.css'
 
 /*
- * File tabs: the folder-tab header that switches a code block between its
- * files (mono file names, §3.11), with optional controls and a busy status
- * at its end. Code Block and Demo render their header through it. It is
- * presentational and needs no docs engine. Tabs (§9.5) is for peer panels
- * of prose; these take any number of files, can be deep links, and share
- * one panel.
+ * File tabs: paper-style folder tabs over a package of static documents
+ * kept together (a grant packet, a lease, a year of minutes), each tab a
+ * standalone document sharing one panel, with optional controls and a busy
+ * status at the header's end. Tabs (§9.5) switch views or sections of one
+ * thing; these take any number of documents, can be deep links, and label
+ * them in the UI face (`mono` for file names). Code Block and Demo render
+ * their headers through it for code files, with `mono`. It is
+ * presentational and needs no docs engine.
  *
  * Implementation (CSS Modules + CVA)
  * - Module: file-tabs.module.css; CVA functions `fileTabs` (the Root) and
@@ -35,7 +36,8 @@ import styles from './file-tabs.module.css'
  * - Color fallback: inherits the scope.
  * - States: the selected tab (`data-active`) → the folder tab: filled
  *   --role-select-text with a --role-select-text-edge edge and
- *   --radius-2-25 top radii, a --role-select-text-label label at
+ *   --radius-2-75 top radii (the paper-tab radius, as the first and last
+ *   tabs' outer corners), a --role-select-text-label label at
  *   --font-weight-7, its neighbours tucked under it; `:active` on it → the
  *   radii grow (motion OK only); `:hover` on the others → the bare-text
  *   underline (--role-accent at --border-size-2, offset --size-px-1)
@@ -43,21 +45,24 @@ import styles from './file-tabs.module.css'
  *   under the label; `:focus-visible` → the ring inside the hit area;
  *   `data-disabled` → --role-muted label and a `line-dotted-fine` underline,
  *   the selected tab keeping its shape on a --primary1 face [D16, D85].
- *   The scroll line → --primary12 while pointed at or dragged. The header:
- *   `data-tablist` (two or more files) → the controls' cell takes a
- *   --role-rule start edge; `data-hang` (measured) → the controls hang
- *   outside the host's inline-end edge. FileTabsControl: `data-popup-open`
- *   → the open bar (in the header) or the drawn ear (hung); disabled →
- *   --role-muted.
- * - Parts: base, header, lead (the tabs or the one file's label), scroller
- *   / viewport (the row the list scrolls in), scrollbar and thumb (the
- *   scroll line on the header's rule), list, tab, label, edge / edgeLine
- *   (the disabled underline), single (the lone file's label), side (the
- *   header's end), status, controls (their cell), control
- *   (FileTabsControl), panel.
+ *   The header: `data-tablist` (two or more documents) → the bar leaves the
+ *   flow and the tablist becomes the tabs' native scroll row (and small
+ *   controls' cell takes a --role-rule start edge). A FileTabsControl in
+ *   `controls` → the header's end always hangs outside the host's
+ *   inline-end edge (CSS `:has()`, nothing measured). FileTabsControl:
+ *   `:hover` / `:focus-visible` → at once, the ear drawn in --primary12 on
+ *   the --role-soft-hover fill [D181]; `aria-expanded="true"` (its menu
+ *   open; never its tooltip's `data-popup-open`) → the ear on the
+ *   --primary1 face; disabled → --role-muted.
+ * - Parts: base, header, bar (the row inside it, which draws the host's
+ *   side edges), lead (the tabs or the one document's label), list (the
+ *   tabs' native scroll row), tab, label, edge / edgeLine (the disabled
+ *   underline), single (the lone document's label), side (the header's end),
+ *   status, controls (their cell), control (FileTabsControl), panel.
  * - Scope: none.
- * - Container: none; the list scrolls sideways when the tabs overflow, and
- *   the hang is measured against the viewport and the nearest clip.
+ * - Container: none; the tabs scroll sideways in their native scroll row
+ *   when they overflow. The host leaves --fgd-size-file-tabs-control free
+ *   past its inline-end edge, unclipped, for the hanging ⋮.
  */
 export const fileTabs = cva(styles.base, {
   variants: {
@@ -84,11 +89,11 @@ const fileTabsHeader = cva(styles.header, {
 /** Where the header sits on its host: see `FileTabsProps['frame']`. */
 export type FileTabsFrame = 'top' | 'joined' | 'none'
 
-/** One file tab. */
+/** One tab: a document in the package. */
 export type FileTab = {
-  /** The tab's value, unique within `tabs`. The code block passes the file name. */
+  /** The tab's value, unique within `tabs`. A code block passes the file name. */
   id: string
-  /** The label, in mono (`typeData`, not caps): usually the file name. */
+  /** The label: the document's short title (a file name in a code block). UI face at the caption size, not caps; mono with `mono`. */
   name: string
   /**
    * Deep-link slug. The tab renders as `<a href="#slug">` (`nativeButton={false}`).
@@ -99,7 +104,7 @@ export type FileTab = {
   slug?: string
 }
 
-/** Props for FileTabs: Base UI Tabs Root props (without its value props and `orientation`) plus the files, the header's frame, controls and status, and the color axes. */
+/** Props for FileTabs: Base UI Tabs Root props (without its value props and `orientation`) plus the documents, the header's frame, controls, status and label face, and the color axes. */
 export type FileTabsProps = Omit<
   BaseTabs.Root.Props,
   'value' | 'defaultValue' | 'onValueChange' | 'orientation'
@@ -118,34 +123,46 @@ export type FileTabsProps = Omit<
   /** Disables every tab: `--role-muted` label plus a `line-dotted-fine` underline, no opacity. Default `false`. */
   disabled?: boolean
   /**
+   * Labels in mono (`type-data`, §3.11) instead of the UI face: for file
+   * names, e.g. code. Code Block and Demo set it. Default `false`.
+   */
+  mono?: boolean
+  /**
    * Where the header sits. Its host is the bordered box it opens: a
    * `--border-size-1` edge, no padding, a `--primary1` face and no clip,
    * such as Code Block's frame, or the Root itself given a frame class.
    * `'top'`: at the top of the host, whose top corners take
-   * `--radius-2-25`. The tab strip runs out over the host's side edges by
-   * their width, so an end tab's edge is the host's edge; the side edges
-   * are drawn again over the header from below the corner radius, so
-   * scrolled tabs pass under them; `controls` may hang outside.
+   * `--radius-2-25` (a host with another radius sets `--file-tabs-host-radius`
+   * on the Root). The tab strip runs out over the host's side edges by
+   * their width, so an end tab's edge is the host's edge, its paper-tab
+   * corner leaving that line below the host's corner; the side edges are
+   * drawn again over the header from below the host's corner radius, so
+   * scrolled tabs and the ends of the strip's native scrollbar pass under
+   * them; a `FileTabsControl` hangs outside.
    * `'joined'`: the same, in a part of the host below another (Demo's
    * code); the header draws the `--role-rule` that joins the part above,
    * and the side edges run from it. `'none'`: no host frame (tabs over
    * their panel on the page); the strip stays inside the header, the end
-   * tabs show their own edges, and `controls` always sit in the header.
-   * Default `'top'`.
+   * tabs show their own edges, and a `FileTabsControl` hangs past the
+   * header's own end. Default `'top'`.
    */
   frame?: FileTabsFrame
   /**
    * Controls at the header's end: a `FileTabsControl` (a Menu's ⋮ trigger)
-   * or a few small icon Buttons. With two or more tabs in a framed header
-   * they hang outside the host's inline-end edge and take no header width,
-   * wherever the free space there holds their hit area (`--fgd-size-hit`,
-   * or their width if wider) past the host's edge, up to the viewport or the
-   * nearest ancestor that clips sideways (`overflow-clip-margin` counts).
-   * The space is measured again on resize. Otherwise, and before
-   * hydration, they sit in a `--fgd-size-hit` cell at the header's end with
-   * a `--role-rule` start edge, where the tabs end. With one file they sit
-   * beside its label, wrapping onto a second row when they can't. Hidden in
-   * print.
+   * or a few small icon Buttons.
+   * - A `FileTabsControl` always hangs just outside the host's inline-end
+   *   edge (past the header's own end with `frame="none"`) with zero layout
+   *   width, whatever the tab count, so the tabs keep the whole header. Its
+   *   hit area, `--fgd-size-hit`, extends outward into the gutter, never
+   *   over the tabs. **The host must leave `--fgd-size-file-tabs-control`
+   *   (24 px) free past its edge, unclipped** (or inside an
+   *   `overflow-clip-margin`); where the page ends sooner, clip it sideways
+   *   (`overflow-x: clip`) so the rest of the hit area can't scroll it.
+   * - Small icon Buttons sit in the header: beside the one document's label,
+   *   wrapping onto a second row when they can't share its line; with
+   *   several documents, in a `--fgd-size-hit` cell at the header's end with a
+   *   `--role-rule` start edge, where the tabs end.
+   * Hidden in print.
    */
   controls?: React.ReactNode
   /**
@@ -170,6 +187,7 @@ interface FileTabsContextValue {
   /** The selected tab's id; `undefined` only when there are no tabs. */
   selected: string | undefined
   disabled: boolean
+  mono: boolean
   frame: FileTabsFrame
   controls: React.ReactNode
   status: React.ReactNode
@@ -204,9 +222,9 @@ function handleLinkClick(event: React.MouseEvent<HTMLAnchorElement>) {
 
 /**
  * The root of a set of file tabs: it holds the selection and the header's
- * `frame`, `controls` and `status`, and wraps both the header
+ * `frame`, `controls`, `status` and `mono`, and wraps both the header
  * (`FileTabsList`) and `FileTabsPanel`. Tabs with a `slug` are deep links:
- * a plain click selects the file, a modifier click opens the link and
+ * a plain click selects the document, a modifier click opens the link and
  * leaves the selection.
  */
 export function FileTabs(props: FileTabsProps) {
@@ -216,6 +234,7 @@ export function FileTabs(props: FileTabsProps) {
     defaultValue,
     onValueChange,
     disabled = false,
+    mono = false,
     frame = 'top',
     controls,
     status,
@@ -245,8 +264,8 @@ export function FileTabs(props: FileTabsProps) {
   }
 
   const context = React.useMemo(
-    () => ({ tabs, selected, disabled, frame, controls, status }),
-    [tabs, selected, disabled, frame, controls, status],
+    () => ({ tabs, selected, disabled, mono, frame, controls, status }),
+    [tabs, selected, disabled, mono, frame, controls, status],
   )
 
   return (
@@ -264,107 +283,33 @@ export function FileTabs(props: FileTabsProps) {
   )
 }
 
-/**
- * The hung controls' room past the header's edge (the host's inner edge):
- * their hit area, `--fgd-size-hit` (44 px), or their own width if wider,
- * plus the host's `--border-size-1` edge. For a FileTabsControl, 45 px.
- */
-const HIT_PX = 44
-const HOST_EDGE_PX = 1
-
-function lengthPx(value: string) {
-  const match = /(-?[\d.]+)px/.exec(value)
-  return match ? parseFloat(match[1]) : 0
-}
-
-/**
- * The free space past an element's inline-end edge before anything clips
- * it: the viewport, or the nearest ancestor that clips or scrolls
- * horizontally (at its padding edge, grown by `overflow-clip-margin` for
- * `overflow: clip`). Hanging only into that space keeps the page from
- * scrolling sideways.
- */
-function roomAtInlineEnd(element: HTMLElement) {
-  const rtl = getComputedStyle(element).direction === 'rtl'
-  const rect = element.getBoundingClientRect()
-  let limit = rtl ? 0 : document.documentElement.clientWidth
-  for (let node = element.parentElement; node && node !== document.documentElement; node = node.parentElement) {
-    const style = getComputedStyle(node)
-    if (style.overflowX === 'visible') continue
-    const box = node.getBoundingClientRect()
-    const margin = style.overflowX === 'clip' ? lengthPx(style.overflowClipMargin) : 0
-    limit = rtl
-      ? Math.max(limit, box.left + lengthPx(style.borderLeftWidth) - margin)
-      : Math.min(limit, box.right - lengthPx(style.borderRightWidth) + margin)
-  }
-  return rtl ? rect.left - limit : limit - rect.right
-}
-
-/**
- * Whether the header's controls hang outside the host: only where enabled
- * (two or more tabs, controls, a framed header) and the space past the
- * host's edge holds them. Elsewhere, and before hydration, they sit in the
- * header. Measured again whenever the header, the controls or the window
- * resize.
- */
-function useHang(
-  headerRef: React.RefObject<HTMLDivElement | null>,
-  controlsRef: React.RefObject<HTMLDivElement | null>,
-  enabled: boolean,
-) {
-  const [hang, setHang] = React.useState(false)
-  React.useLayoutEffect(() => {
-    const header = headerRef.current
-    const controls = controlsRef.current
-    if (!enabled || header == null || controls == null) {
-      setHang(false)
-      return undefined
-    }
-    // `clientWidth` leaves out the cell's start edge, so the header's cell
-    // and the hung ear measure alike (a FileTabsControl: 43 or 24 px, so 45).
-    const measure = () =>
-      setHang(roomAtInlineEnd(header) >= Math.max(HIT_PX, controls.clientWidth) + HOST_EDGE_PX)
-    measure()
-    const observer = new ResizeObserver(measure)
-    observer.observe(header)
-    observer.observe(controls)
-    window.addEventListener('resize', measure)
-    return () => {
-      observer.disconnect()
-      window.removeEventListener('resize', measure)
-    }
-  }, [headerRef, controlsRef, enabled])
-  return hang
-}
-
 /** Props for FileTabsList: Base UI Tabs List props; the tabs, controls and status come from the Root. */
 export type FileTabsListProps = Omit<BaseTabs.List.Props, 'children'> & {
-  /** The tablist's accessible name. Default `"Files"`. */
+  /** The tablist's accessible name. Default `"Documents"` (Code Block passes `"Files"`). */
   'aria-label'?: string
 }
 
 const staticListState: BaseTabs.List.State = { orientation: 'horizontal', tabActivationDirection: 'none' }
 
 /**
- * The header: 48 px on its `--role-rule`, the folder tabs across its full
- * width, and the Root's `status` and `controls` at its end. The tabs are
- * mono and bottom-aligned, the selected one filled with its neighbours
- * tucked under it. When they overflow, the row scrolls sideways with a thin
- * scroll line on the rule. With one tab it shows that name as a mono label
- * (no tablist); with none, only the controls and status, or nothing. Its
- * own props (`aria-label`, `className` …) go to the tablist, or to the one
- * file's label.
+ * The header: 56 px with its `--role-rule`, the folder tabs across its full
+ * width under 12 px of room, running over the rule, and the Root's
+ * `status` and `controls` at its end. The labels take the UI face (mono
+ * with `mono`), the selected tab filled with its neighbours tucked under it. When they overflow, their
+ * row scrolls sideways with its native scrollbar, which hangs just below
+ * the header (or overlays the strip's foot, where scrollbars overlay), so
+ * the tabs never lift off the rule. With one tab it shows that name as a
+ * label (no tablist); with none, only the controls and status, or
+ * nothing. Its own props (`aria-label`, `className` …) go to the tablist,
+ * or to the one document's label.
  */
 export function FileTabsList(props: FileTabsListProps) {
-  const { 'aria-label': ariaLabel = 'Files', className, style, ...rest } = props
-  const { tabs, disabled, frame, controls, status } = useFileTabsContext('FileTabsList')
-  const headerRef = React.useRef<HTMLDivElement | null>(null)
-  const controlsRef = React.useRef<HTMLDivElement | null>(null)
+  const { 'aria-label': ariaLabel = 'Documents', className, style, ...rest } = props
+  const { tabs, disabled, mono, frame, controls, status } = useFileTabsContext('FileTabsList')
 
   const hasControls = controls != null && typeof controls !== 'boolean'
   const hasStatus = status !== undefined
   const tablist = tabs.length > 1
-  const hang = useHang(headerRef, controlsRef, tablist && hasControls && frame !== 'none')
 
   if (tabs.length === 0 && !hasControls && !hasStatus) return null
 
@@ -373,68 +318,61 @@ export function FileTabsList(props: FileTabsListProps) {
     const labelClass = typeof className === 'function' ? className(staticListState) : className
     const labelStyle = typeof style === 'function' ? style(staticListState) : style
     lead = (
-      <span className={cx(styles.single, labelClass)} style={labelStyle}>
+      <span className={cx(styles.single, mono ? styles.singleMono : styles.singleUi, labelClass)} style={labelStyle}>
         {tabs[0].name}
       </span>
     )
   } else if (tablist) {
+    // The tablist is the tabs' native scroll row (the header's
+    // `data-tablist` styles it): Base UI scrolls it to bring each tab into
+    // view as arrow keys move focus.
     lead = (
-      // The row scrolls natively with its scrollbar hidden: nothing is
-      // reserved for it, so the tabs stay on the rule when they overflow.
-      <BaseScrollArea.Root className={styles.scroller}>
-        {/* The tabs are the row's focus stops, so the viewport takes none (§10.19). */}
-        <BaseScrollArea.Viewport className={styles.viewport} tabIndex={-1}>
-          <BaseTabs.List
-            {...rest}
-            aria-label={ariaLabel}
-            style={style}
-            className={resolveClassName(className, (extra) => cx(styles.list, extra))}
-          >
-            {tabs.map((tab) => (
-              <FileTabsTab key={tab.id} tab={tab} disabled={disabled} />
-            ))}
-          </BaseTabs.List>
-        </BaseScrollArea.Viewport>
-        <BaseScrollArea.Scrollbar orientation="horizontal" className={styles.scrollbar}>
-          <BaseScrollArea.Thumb className={styles.thumb} />
-        </BaseScrollArea.Scrollbar>
-      </BaseScrollArea.Root>
+      <BaseTabs.List
+        {...rest}
+        aria-label={ariaLabel}
+        style={style}
+        className={resolveClassName(className, (extra) => cx(styles.list, extra))}
+      >
+        {tabs.map((tab) => (
+          <FileTabsTab key={tab.id} tab={tab} disabled={disabled} mono={mono} />
+        ))}
+      </BaseTabs.List>
     )
   }
 
   return (
     <div
-      ref={headerRef}
       className={fileTabsHeader({ frame })}
       data-tablist={tablist ? '' : undefined}
-      data-hang={hang ? '' : undefined}
     >
-      <div className={styles.lead}>{lead}</div>
-      {hasControls || hasStatus ? (
-        <div className={styles.side}>
-          {/* Laid over the header's end, so its words never move the tabs.
-              Mounted whenever `status` is set: it's the live region. */}
-          {hasStatus ? (
-            <span role="status" className={styles.status}>
-              {status}
-            </span>
-          ) : null}
-          {hasControls ? (
-            <div ref={controlsRef} className={styles.controls}>
-              {controls}
-            </div>
-          ) : null}
-        </div>
-      ) : null}
+      <div className={styles.bar}>
+        <div className={styles.lead}>{lead}</div>
+        {hasControls || hasStatus ? (
+          <div className={styles.side}>
+            {/* Laid over the header's end, so its words never move the tabs.
+                Mounted whenever `status` is set: it's the live region. */}
+            {hasStatus ? (
+              <span role="status" className={styles.status}>
+                {status}
+              </span>
+            ) : null}
+            {hasControls ? (
+              <div className={styles.controls}>
+                {controls}
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+      </div>
     </div>
   )
 }
 
-/** One folder tab: a link when the file has a slug, else a button. */
-function FileTabsTab(props: { tab: FileTab; disabled: boolean }) {
-  const { tab, disabled } = props
+/** One folder tab: a link when the document has a slug, else a button. */
+function FileTabsTab(props: { tab: FileTab; disabled: boolean; mono: boolean }) {
+  const { tab, disabled, mono } = props
   const content = (
-    <span className={styles.label}>
+    <span className={cx(styles.label, mono ? styles.labelMono : styles.labelUi)} data-label={tab.name}>
       {tab.name}
       {disabled ? (
         <svg className={styles.edge} aria-hidden="true" focusable="false">
@@ -472,13 +410,17 @@ export type FileTabsControlProps = Omit<useRender.ComponentProps<'button'>, 'cla
 
 /**
  * One header control for the Root's `controls`: a `<button>` holding an
- * icon (an `Icon` with `weight="interactive"` takes its hover weight here).
- * In the header it is a `--fgd-size-hit` cell, the header's full height.
- * Hung, it is an ear `--size-px-5` wide just outside the host's edge, with
- * its `--fgd-size-hit` hit area all past that edge and none over the tabs.
- * While its popup is open (`data-popup-open`) it shows a
- * `--border-size-2-25` bar along its foot, or, hung, the ear's own edge on
- * the `--primary1` face. As a Menu's trigger:
+ * icon (an `Icon` with `weight="interactive"` takes its hover weight here;
+ * the ⋮ is `more_vert` at the tag tier, `size="tag"`, 20 px).
+ * It always hangs outside the host's inline-end edge: an ear `--size-px-4`
+ * wide from the host's edge line, from the host's top edge to the header
+ * rule's foot, with its `--fgd-size-hit` hit area past that edge and none
+ * over the tabs; the host leaves `--fgd-size-file-tabs-control` free there.
+ * Hovered or focused, the ear shows at once, drawn in `--primary12` on the
+ * `--role-soft-hover` fill (at the top of a rounded host, wrapping the
+ * host's top-end corner, so the outline runs unbroken round both); while its popup is open (`aria-expanded="true"`;
+ * a tooltip's `data-popup-open` changes nothing), on the `--primary1` face.
+ * As a Menu's trigger:
  * `<Menu.Trigger render={<FileTabsControl />} aria-label="More actions">`.
  */
 export function FileTabsControl(props: FileTabsControlProps) {

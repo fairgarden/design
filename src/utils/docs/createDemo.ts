@@ -40,8 +40,6 @@ function demoOptions<T extends {}>(
     // Set by `withDeploymentConfig`: turns file:// source URLs into hosted links.
     projectDir: process.env.SOURCE_CODE_ROOT_DIR,
     projectUrl: process.env.SOURCE_CODE_ROOT_URL,
-    // The server HTML carries the highlighted code.
-    highlightAfter: 'init',
     ...defaults,
     ...options,
   }
@@ -51,7 +49,9 @@ function demoOptions<T extends {}>(
  * The engine's `createDemoFactory` with the design system's defaults
  * (`DemoContent: DemoLazy`, `DemoContentLoading: DemoLoading`, `DemoTitle`,
  * `projectDir` / `projectUrl` from `SOURCE_CODE_ROOT_DIR` /
- * `SOURCE_CODE_ROOT_URL`, `highlightAfter: 'init'`); `options` override any.
+ * `SOURCE_CODE_ROOT_URL`); `options` override any. `highlightAfter` is left
+ * to the engine's default (`'idle'`); pass `'init'` only where a demo shows
+ * server-side highlighting.
  */
 export function createDemoFactory<T extends {} = DemoOptions>(
   options: Partial<DemoFactoryOptions<T>> = {},

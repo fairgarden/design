@@ -34,12 +34,19 @@
   text-decoration: none;
 }
 
+/*
+ * The frame clips sideways at its padding edge (`clip`, so the sticky
+ * navigation still docks): past a code block's hanging "More actions"
+ * trigger, its hit area runs on into the page margin, and on a phone past
+ * the viewport, where it must not make the page scroll sideways.
+ */
 .frame {
   display: grid;
   gap: var(--size-px-7-5);
   max-inline-size: var(--fgd-container-wide);
   margin-inline: auto;
   padding-inline: var(--fgd-space-margin);
+  overflow-x: clip;
 }
 
 @media (--md-n-above) {
@@ -54,12 +61,15 @@
 }
 
 /*
- * From --md-n-above the column keeps a --fgd-size-hit gutter at its inline
- * end: the room a code block's or demo's "More actions" trigger hangs into,
- * outside its frame. Nothing between the column and the viewport clips
- * sideways, so the trigger measures the gutter plus the page margin. Below,
- * the trigger sits inside the frame.
+ * The column keeps a gutter at its inline end at every width: the room a
+ * code block's or demo's "More actions" trigger always hangs into, outside
+ * its frame (--fgd-size-file-tabs-control, 24 px; from --md-n-above
+ * --fgd-size-hit, so its whole 44 px hit area fits in the column).
  */
+.main {
+  padding-inline-end: var(--fgd-size-file-tabs-control);
+}
+
 @media (--md-n-above) {
   .main {
     padding-inline-end: var(--fgd-size-hit);

@@ -28,10 +28,10 @@ import styles from './code-block.module.css'
  * One file gets the inline row of icon-only Buttons (each named by a
  * Tooltip), with the variant Select and the TS | JS segmented switch in
  * front, in the controls' cell beside the file's label. Several files get
- * the "More actions" Menu, whose trigger is a FileTabsControl: File Tabs
- * hangs it outside the frame's inline-end edge where there's room (an
- * ear, its --fgd-size-hit hit area all in that gutter), and elsewhere sets
- * it in a --fgd-size-hit cell at the header's end. Every handler is
+ * the "More actions" Menu, whose trigger is a FileTabsControl holding the
+ * vertical ⋮ at the tag tier: File Tabs always hangs it outside the frame's
+ * inline-end edge (an ear, its --fgd-size-hit hit area in that gutter;
+ * the page leaves --fgd-size-file-tabs-control free there). Every handler is
  * useCode's (or useCopier's, for the link); a copy confirms with a toast,
  * never in the header or the menu (CodeBlockToasts).
  * Not exported from the index.
@@ -186,7 +186,7 @@ export function CodeActionsMenu(props: CodeActionsMenuProps) {
         <TooltipTrigger
           render={
             <BaseMenu.Trigger ref={triggerRef} aria-label={moreLabel} render={<FileTabsControl />}>
-              <Icon name="more_horiz" weight="interactive" />
+              <Icon name="more_vert" size="tag" weight="interactive" />
             </BaseMenu.Trigger>
           }
         />

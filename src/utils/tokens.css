@@ -97,6 +97,8 @@
     /* Radii (§1.5.11): Open Props --radius-1 (2 px) and --radius-round plus these steps. */
     --radius-0: 0;
     --radius-2-25: 8px;
+    /* File Tabs' folder tabs, shaped as paper tabs (the source's 12 px tab radius); frames keep --radius-2-25. */
+    --radius-2-75: 12px;
     --radius-3-25: 20px;
     /* ≈ 1/7 of the frame's width, max 64 px; the frame's parent is its container. */
     --fgd-radius-feature: min(calc(100cqi / 7), var(--size-px-9));
@@ -149,6 +151,8 @@
     --fgd-size-control-md: 40px;
     --fgd-size-control-xl: 56px;
     --fgd-size-hit: 44px;
+    /* The room a hanging File Tabs control (the code block's ⋮) needs past its host's edge: its 20 px ear and clearance; hosts leave it free and unclipped (§9.13). */
+    --fgd-size-file-tabs-control: var(--size-px-5);
     --fgd-size-icon-block: 36px;
     /* The logo mark in a lockup, a prominent mark sized to the header bar: 40 px, 48 px from --lg-n-above, 32 px below --xs-n-below (§1.5.12). */
     --fgd-size-logo: var(--fgd-size-control-md);

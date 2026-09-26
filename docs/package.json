@@ -14,7 +14,7 @@
   "dependencies": {
     "@base-ui/react": "^1.8.0",
     "@fairgarden/design": "workspace:*",
-    "@fairgarden/docs": "^0.13.3",
+    "@fairgarden/docs": "^0.13.4-canary.18",
     "@protomaps/basemaps": "^5.7.2",
     "maplibre-gl": "^6.11.1",
     "next": "^16.3.5",

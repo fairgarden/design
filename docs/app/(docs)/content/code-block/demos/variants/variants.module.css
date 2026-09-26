@@ -1,0 +1,5 @@
+/* The block takes the preview's full width. */
+.block {
+  flex: 1 1 100%;
+  min-inline-size: 0;
+}

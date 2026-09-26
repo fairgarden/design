@@ -1,14 +1,14 @@
 /*
- * The site's demo modes around the design system's Demo: the page-frame
- * preview (an iframe of the demo's staged page) and the staged page itself.
- * Tokens and role variables only: no shadow, opacity or gradient.
+ * The site's page-frame preview around the design system's Demo: an iframe
+ * of the demo's preview route (FramedPreview). Tokens and role variables
+ * only: no shadow, opacity or gradient.
  */
 
 /*
- * A page-frame demo: its own page in a frame that is its own viewport, so
- * the demo's viewport media resolve against the frame's width. It cancels
- * the preview's inset (`--demo-inset`) to run edge to edge inside the
- * demo's frame, with the "Full page" link in a foot under it.
+ * A page-frame demo: its preview route in a frame that is its own viewport,
+ * so the demo's viewport media resolve against the frame's width. It
+ * cancels the preview's inset (`--demo-inset`) to run edge to edge inside
+ * the demo's frame, with the "Full page" link in a foot under it.
  */
 .framed {
   display: flex;
@@ -18,7 +18,7 @@
   margin: calc(-1 * var(--demo-inset));
 }
 
-/* The frame stays hidden until the staged page reports its height (no opacity). */
+/* The frame stays hidden until its page reports its height (no opacity). */
 .frame {
   display: block;
   inline-size: 100%;
@@ -36,40 +36,12 @@
   block-size: min(var(--size-px-15), 70dvh);
 }
 
-/* "Full page": the staged demo at the browser's width. */
+/* "Full page": the preview route at the browser's width. */
 .frameFoot {
   display: flex;
   justify-content: flex-end;
   padding-inline: var(--size-px-3);
   border-block-start: var(--border-size-1) solid var(--role-hairline);
-}
-
-/*
- * The staged page (`?stage`): the demo alone at the top of the page, full
- * width, on the page ground. The docs chrome (the body's child that holds
- * the stage) stays laid out but hidden, which also takes it out of the tab
- * order, and is clipped to one viewport so the page scrolls only as far as
- * the demo runs. The stage's containing block is the initial one, so that
- * clip never reaches it; the demo's portaled popups are the body's other
- * children and stay visible.
- */
-:global(body):has(.stage) > :has(.stage) {
-  max-block-size: 100dvh;
-  overflow: clip;
-  visibility: hidden;
-}
-
-:global(body):has(.stage) :has(.stage) {
-  position: static;
-}
-
-.stage {
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline: 0;
-  min-block-size: 100dvh;
-  background-color: var(--role-ground);
-  visibility: visible;
 }
 
 /* Print: the frame prints as the page it holds would; the link is screen-only. */

@@ -61,8 +61,11 @@ export type CopyToasts = {
 /** The copy toasts for one block: pass `copyOpts` to useCode and the rest to CodeBlockSection. */
 export function useCopyToasts(): CopyToasts {
   const toastRef = React.useRef<AddToast | null>(null)
-  // useCode's copier reports the source and Markdown copies through the same
-  // callbacks, in the order they were made, so each click queues what it copies.
+  // useCode hands its one `copy` option to both copiers, so the source and
+  // Markdown copies report through the same callbacks, in the order they were
+  // made; each click queues what it copies. A copy with nothing to write
+  // reports neither outcome (and shows no toast), so its entry is dropped
+  // once the copy settles.
   const queue = React.useRef<CopyRequest[]>([])
 
   return React.useMemo<CopyToasts>(() => {
@@ -79,9 +82,15 @@ export function useCopyToasts(): CopyToasts {
         onCopied: () => show({ kind: 'link' }, true),
         onError: () => show({ kind: 'link' }, false),
       },
-      track: (kind, copy, name) => (event) => {
-        queue.current.push({ kind, name })
-        return copy(event)
+      track: (kind, copy, name) => async (event) => {
+        const request: CopyRequest = { kind, name }
+        queue.current.push(request)
+        try {
+          await copy(event)
+        } finally {
+          const index = queue.current.indexOf(request)
+          if (index !== -1) queue.current.splice(index, 1)
+        }
       },
     }
   }, [])

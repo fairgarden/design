@@ -4,8 +4,14 @@
  * scroll anchors), `source`, `pre` (useCode's `preClassName`: the engine's
  * `<pre>`), `checkbox` and `toggle` (the window's control). The header is
  * File Tabs (`navigation/file-tabs`), which owns its geometry: the folder
- * tabs, the frame's side edges over them, the scroll line, the hanging
- * "More actions" trigger (a FileTabsControl) and the status.
+ * tabs in their native scroll row, the frame's side edges over them, the
+ * hanging "More actions" trigger (a FileTabsControl) and the status.
+ *
+ * The code's spacing is the source's, to the pixel, because it places the
+ * native scrollbars: `source` pads 10 px above and below and the `pre` 6 px
+ * more, so the tab strip's classic scrollbar hangs over the source's top
+ * padding and the code's own sits 6 px under the last line and 10 px above
+ * the frame's foot, edge to edge.
  *
  * The docs engine's own hooks are styled as global classes: frames and lines
  * (`.frame`, `.line`, `[data-frame-*]`, `[data-hl*]`, `mark`), the swap
@@ -48,18 +54,22 @@
 
 @layer base {
   /*
-   * The frame: every fill has an edge [D12]. It clips nothing, as in the
-   * source: the header's "More actions" trigger hangs past its inline-end
-   * edge, and its parts keep inside it on their own (the code scrolls in
-   * the `pre`, the tabs in their row). No min-content floor as a flex or
+   * The frame: every fill has an edge [D12], at the page's standard panel
+   * radius (only the tabs take the paper-tab radius). It clips nothing, as
+   * in the source: the header's "More actions" trigger hangs past its
+   * inline-end edge, and its parts keep inside it on their own (the code
+   * scrolls in the `pre`, the tabs in their row). No min-content floor as a flex or
    * grid item. File Tabs' header sits at its top (`frame="top"`, or
    * `"joined"` embedded).
    */
   .base {
+    /* The frame's corner radius (the Demo's frame takes the same token, so the embedded code shares it). */
+    --code-block-radius: var(--radius-2-25);
+
     min-inline-size: 0;
     margin-block: var(--size-px-5);
     border: var(--border-size-1) solid var(--role-rule);
-    border-radius: var(--radius-2-25);
+    border-radius: var(--code-block-radius);
     background-color: var(--primary1);
     color: var(--primary12);
   }
@@ -84,8 +94,22 @@
     min-inline-size: var(--size-px-10);
   }
 
+  /*
+   * The code's wrapper: the source's 10 px above and below (the `pre`
+   * scrolls inside it). The foot keeps the `pre`, and so its native
+   * scrollbar, clear of the frame's rounded bottom corners: a rectangle is
+   * inside a corner of inner radius r when it sits r above the inner
+   * bottom edge (at any inline position, so the scrollbar and the
+   * highlighted lines can run edge to edge) or r(1 - 1/√2) in from both
+   * edges. The source's 10 px holds for our 7 px inner radius; the foot
+   * grows with the radius if it's ever larger.
+   */
   .source {
+    --code-block-inset: 10px; /* the source's code wrapper padding; no step */
+    --code-block-foot: max(var(--code-block-inset), calc(var(--code-block-radius) - var(--border-size-1)));
+
     position: relative;
+    padding-block: var(--code-block-inset) var(--code-block-foot);
   }
 
   /* The code: mono at the caption size, reading leading; the line height is
@@ -95,9 +119,10 @@
     /* A classic scrollbar's height: the window swaps the real scrollbar for
      * this much margin while it collapses (a platform metric, not a token). */
     --code-block-gutter: 15px;
+    --code-block-pad: 6px; /* the source's pre padding, above and below; no step */
 
     margin: 0;
-    padding-block: var(--size-px-3);
+    padding-block: var(--code-block-pad);
     overflow-x: auto;
     tab-size: 2;
     font-family: var(--fgd-font-mono);
@@ -590,9 +615,9 @@
     color: var(--role-muted);
   }
 
-  /* The toggle follows a windowed block, so its foot tightens (the source's 6 px). */
-  .base[data-collapsible]:has(.source :global(code[data-collapsible])) .pre {
-    padding-block-end: var(--size-px-2);
+  /* The toggle follows a windowed block: the wrapper drops its foot, leaving the pre's 6 px (the source's). */
+  .base[data-collapsible] .source:has(:global(code[data-collapsible])) {
+    padding-block-end: 0;
   }
 
   /* Collapsed: no horizontal scroll, so the window clips cleanly. */
@@ -616,6 +641,11 @@
   }
 
   /* An empty window (`data-focused-lines="0"`) takes no height while collapsed, and drops the toggle's rule. */
+  .base[data-collapsible]:not(:has(> .checkbox:checked))
+    .source:has(:global(code[data-collapsible][data-focused-lines='0'])) {
+    padding-block-start: 0;
+  }
+
   .base[data-collapsible]:not(:has(> .checkbox:checked))
     .pre:has(> :global(code[data-collapsible][data-focused-lines='0'])) {
     padding-block: 0;
@@ -778,7 +808,8 @@
       }
     }
 
-    .base[data-collapsible] .pre:has(> :global(code[data-collapsible][data-focused-lines='0'])) {
+    .base[data-collapsible] .pre:has(> :global(code[data-collapsible][data-focused-lines='0'])),
+    .base[data-collapsible] .source:has(:global(code[data-collapsible][data-focused-lines='0'])) {
       transition: padding-block var(--fgd-duration-disclosure) var(--ease-out-3);
     }
 
@@ -808,10 +839,15 @@
       display: none;
     }
 
-    /* Paper cannot scroll: long lines wrap inside the frame. */
+    /* Paper cannot scroll: long lines wrap inside the frame, with the screen's spacing. */
+    .source,
+    .base[data-collapsible] .source {
+      padding-block: var(--code-block-inset);
+    }
+
     .pre,
     .base[data-collapsible] .pre {
-      padding-block: var(--size-px-3);
+      padding-block: var(--code-block-pad);
       overflow: visible;
       white-space: pre-wrap;
       overflow-wrap: anywhere;

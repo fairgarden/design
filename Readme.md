@@ -44,7 +44,7 @@ pnpm add @fairgarden/design @base-ui/react
 # only for Map:
 pnpm add maplibre-gl pmtiles @protomaps/basemaps
 # only for Code Block, Demo, Types Table, Search Dialog and utils/docs:
-pnpm add @fairgarden/docs
+pnpm add @fairgarden/docs@^0.13.4-canary.18
 ```
 
 ```tsx
@@ -80,7 +80,7 @@ Each component is imported from its own path, `@fairgarden/design/<category>/<na
 
 ### With `@fairgarden/docs`
 
-`@fairgarden/docs` is an optional peer dependency (`^0.13.3`). Four components and one utility are built on the docs engine and import it directly; no other module does, so install it only if you use them:
+`@fairgarden/docs` is an optional peer dependency (`^0.13.4-canary.18`, the `canary` release; `latest` is still 0.13.3, outside the range). Four components and one utility are built on the docs engine and import it directly; no other module does, so install it only if you use them:
 
 | Import path | Exports |
 | --- | --- |

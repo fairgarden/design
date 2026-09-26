@@ -5,12 +5,14 @@ import { FileTabs, FileTabsList, FileTabsPanel, type FileTab } from '../../navig
 import type { PrimaryScale, RadixScale } from '../../utils/scales'
 
 /*
- * Internal to Code Block and Demo: the 48 px header, as fg-docs'
+ * Internal to Code Block and Demo: the 56 px header, as fg-docs'
  * CodeBlockHeader, and the panel it labels. It is File Tabs, which owns the
  * header's geometry: the folder tabs across the full width (or the one
- * file's name), the frame's side edges drawn over them, the scroll line,
- * the actions hanging outside the frame where there's room, and the status
- * laid over the tabs. This passes the actions as its `controls` and, as
+ * file's name), the frame's side edges drawn over them, the tabs' native
+ * scroll row, the ⋮ always hanging outside the frame (with one file, the
+ * inline icon Buttons sit beside the label), and the status laid over the
+ * tabs; its labels are mono (`mono`: file names). This passes the actions
+ * as its `controls` and, as
  * its `status`, the "-ing…" busy label while useCode's `pendingTransform`
  * is set [D84] (no spinner). Copies confirm with a toast instead, never
  * here. The loaded and loading sections both render it, so their headers
@@ -66,12 +68,13 @@ export function CodeBlockHeader(props: CodeBlockHeaderProps) {
       onValueChange={onValueChange}
       disabled={disabled}
       frame={embedded ? 'joined' : 'top'}
+      mono
       controls={actions}
       status={status}
       primary={primary}
       secondary={secondary}
     >
-      <FileTabsList />
+      <FileTabsList aria-label="Files" />
       <FileTabsPanel>{children}</FileTabsPanel>
     </FileTabs>
   )

@@ -35,7 +35,11 @@ export type CreateMdxComponentsOptions = {
   Content?: PreProps['Content']
   /** Fenced blocks' CodeHighlighter `ContentLoading`. Default: `CodeBlockLoading`. */
   ContentLoading?: PreProps['ContentLoading']
-  /** When fenced blocks highlight. Default: `'init'`, so the server HTML carries it. */
+  /**
+   * When fenced blocks highlight. Default: the engine's own (`'idle'`). Pass
+   * `'init'` only to show server-side highlighting, which costs server work
+   * and page weight.
+   */
   highlightAfter?: PreProps['highlightAfter']
   /** More components, or replacements for any of the map's, merged last. */
   components?: Record<string, React.ElementType>

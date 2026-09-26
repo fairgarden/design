@@ -7,7 +7,7 @@
  * Block's root).
  *
  * The frame never clips: the error hangs across the preview's top edge and
- * the Code Block's actions may hang past the frame's inline end. Each part
+ * the Code Block's ⋮ hangs past the frame's inline end. Each part
  * rounds its own corners to the frame's inner radius instead. Colors are role
  * variables and scale steps only; nothing is transparent, shadowed or graded
  * [D12]. Local custom properties carry dimensions only.

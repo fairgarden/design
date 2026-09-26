@@ -7,8 +7,8 @@ import {
 import { DemoContent } from '@/components/DemoContent'
 import { DemoLoading } from '@/components/DemoLoading'
 
-// The design system's pre-wired factories, with the site's page modes
-// (the staged page and the page-frame preview) around its Demo.
+// The design system's pre-wired factories, with the site's page-frame
+// preview (a `frame` demo's preview route in an iframe) around its Demo.
 const options = { DemoContent, DemoContentLoading: DemoLoading }
 
 /**

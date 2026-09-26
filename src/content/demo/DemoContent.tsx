@@ -50,7 +50,7 @@ import styles from './demo.module.css'
  * - Scope: none. Container: none; inherits its context.
  *
  * The frame never clips: the error hangs across the preview's top edge and
- * the code's actions may hang past the frame's inline end, so each part
+ * the code's ⋮ hangs past the frame's inline end, so each part
  * rounds its own corners to the frame's inner radius. The surface clips its
  * own content without a scroll container, so a sticky demo still docks. The
  * preview prints as rendered (components carry their own print fallbacks),

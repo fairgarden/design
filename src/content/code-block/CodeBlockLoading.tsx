@@ -99,7 +99,7 @@ export function CodeBlockSectionLoading(props: CodeBlockSectionLoadingProps) {
           // The loaded actions' stand-ins, the same size: the menu's trigger, or the copy Button.
           hasTabs ? (
             <FileTabsControl aria-label="More actions" disabled>
-              <Icon name="more_horiz" weight="interactive" />
+              <Icon name="more_vert" size="tag" weight="interactive" />
             </FileTabsControl>
           ) : (
             <Button iconOnly size="sm" icon="content_copy" disabled>

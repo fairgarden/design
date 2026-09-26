@@ -15,7 +15,12 @@ export type PreProps = {
   Content?: CodeHighlighterProps<object>['Content']
   /** CodeHighlighter's `ContentLoading`. Default: `CodeBlockLoading`. */
   ContentLoading?: CodeHighlighterProps<object>['ContentLoading']
-  /** When the code highlights. Default: `'init'`, so the server HTML carries it. */
+  /**
+   * When the code highlights. Default: the engine's own (`'idle'`: the server
+   * HTML carries the plain code, highlighted once the browser is idle). Pass
+   * `'init'` only to show server-side highlighting: the HTML then arrives
+   * highlighted, at the cost of server work and page weight.
+   */
   highlightAfter?: CodeHighlighterProps<object>['highlightAfter']
 }
 
@@ -28,11 +33,7 @@ export type PreProps = {
  * `data-content-props`.
  */
 export function Pre(props: PreProps) {
-  const {
-    Content = CodeBlockLazy,
-    ContentLoading = CodeBlockLoading,
-    highlightAfter = 'init',
-  } = props
+  const { Content = CodeBlockLazy, ContentLoading = CodeBlockLoading, highlightAfter } = props
 
   if (!props['data-precompute']) {
     return (

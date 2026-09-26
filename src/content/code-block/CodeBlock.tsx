@@ -36,8 +36,8 @@ export { codeBlock } from './CodeBlockFrame'
  *   `data-transforming` on the `pre` → the line grow and shrink of a swap at
  *   --fgd-duration-swap; `data-scrollbar-gutter` (useCodeWindow) → the
  *   scrollbar's margin swap; everything instant under --motionNotOK. The
- *   header's states (the hanging "More actions" trigger, the scroll line,
- *   the status) are File Tabs'.
+ *   header's states (the hanging "More actions" trigger, the tabs' native
+ *   scroll row, the status) are File Tabs'.
  * - Parts: base (the frame), target (a hidden `#slug` scroll target),
  *   variantSelect and transformSwitch (the one-file actions' scroll
  *   anchors), source, pre (useCode's `preClassName`), checkbox, toggle,
@@ -81,7 +81,9 @@ export type CodeBlockProps = ContentProps<CodeBlockOptions> & {
  * switching. Copy writes the selected file; "Copy link" its deep link. Each
  * copy confirms with a toast (a danger toast if the clipboard refuses)
  * through the design system's ToastProvider, where one is mounted above;
- * without one, copying is silent.
+ * without one, copying is silent. With several files the "More actions"
+ * ⋮ hangs outside the frame's inline-end edge: leave
+ * `--fgd-size-file-tabs-control` (24 px) free past the block, unclipped.
  */
 export function CodeBlock(props: CodeBlockProps) {
   const { primary, secondary, className, ...contentProps } = props
