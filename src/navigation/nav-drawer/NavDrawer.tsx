@@ -231,6 +231,7 @@ export function NavDrawer(props: NavDrawerProps) {
   const sheetRef = React.useRef<HTMLDivElement | null>(null)
   const listRef = React.useRef<HTMLUListElement | null>(null)
   const navHostRef = React.useRef<HTMLDivElement | null>(null)
+  const closeRef = React.useRef<HTMLButtonElement | null>(null)
   const returnTarget = React.useRef<HTMLElement | null>(null)
 
   // From the inline threshold the Navigation Bar hides the menu Button:
@@ -299,13 +300,13 @@ export function NavDrawer(props: NavDrawerProps) {
               />
             }
           >
-            <div className={styles.bar}>
+            <DrawerBar align={bar != null} triggerRef={triggerRef} closeRef={closeRef}>
               {logo != null ? logoLink : null}
-              <BaseDialog.Close className={styles.close}>
+              <BaseDialog.Close ref={closeRef} className={styles.close}>
                 <Icon name="close" size="tag" weight="interactive" className={styles.menuIcon} />
                 <span className={styles.closeLabel}>{closeLabel}</span>
               </BaseDialog.Close>
-            </div>
+            </DrawerBar>
             <ScrollArea className={styles.scroll}>
               {nav != null ? (
                 <div ref={navHostRef} className={styles.navHost}>
@@ -324,6 +325,55 @@ export function NavDrawer(props: NavDrawerProps) {
         </BaseDialog.Portal>
       </Dialog>
     </DrawerContext.Provider>
+  )
+}
+
+/**
+ * The sheet's bar. In a Navigation Bar's drawer slot it sits where the
+ * header's bar is, so its close control covers the menu Button's box
+ * exactly (the header's seams, brand strip, a docked header or a banner
+ * above it included) and the morph starts and lands on that one box
+ * [§11.6, D206]. Measured as the sheet mounts, before it paints, and on
+ * resize; written as custom properties the module maps: the bar's block
+ * offset and the control's inline shift (physical px).
+ */
+function DrawerBar(props: {
+  align: boolean
+  triggerRef: React.RefObject<HTMLButtonElement | null>
+  closeRef: React.RefObject<HTMLButtonElement | null>
+  children: React.ReactNode
+}) {
+  const { align, triggerRef, closeRef, children } = props
+  const barRef = React.useRef<HTMLDivElement | null>(null)
+
+  React.useLayoutEffect(() => {
+    const barElement = barRef.current
+    const close = closeRef.current
+    if (!align || !barElement || !close) return undefined
+    const place = () => {
+      barElement.style.removeProperty('--nav-drawer-bar-offset')
+      close.style.removeProperty('--nav-drawer-close-shift')
+      const trigger = triggerRef.current
+      if (!trigger || trigger.getClientRects().length === 0) return
+      const from = trigger.getBoundingClientRect()
+      const to = close.getBoundingClientRect()
+      // Only a trigger in the viewport's top band moves the bar (a header scrolled away leaves it at the top).
+      const dy = from.top - to.top
+      if (dy > 0 && dy < window.innerHeight / 3) {
+        barElement.style.setProperty('--nav-drawer-bar-offset', `${dy}px`)
+      }
+      const dx = from.left - to.left
+      if (Math.abs(dx) >= 0.5) close.style.setProperty('--nav-drawer-close-shift', `${dx}px`)
+    }
+    place()
+    window.addEventListener('resize', place)
+    return () => window.removeEventListener('resize', place)
+  }, [align, triggerRef, closeRef])
+
+  return (
+    <div ref={barRef} className={styles.bar}>
+      {children}
+    </div>
   )
 }
 

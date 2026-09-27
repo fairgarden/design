@@ -110,6 +110,8 @@
     gap: var(--size-px-3);
     box-sizing: content-box;
     block-size: var(--fgd-size-control-xl);
+    /* In a Navigation Bar's slot: down to the header's bar, so the close control covers the menu Button (NavDrawer measures it). */
+    margin-block-start: var(--nav-drawer-bar-offset, 0px);
     padding-inline: var(--fgd-space-margin);
     border-block-end: var(--border-size-1) solid var(--role-rule);
   }
@@ -140,10 +142,15 @@
     block-size: 100%;
   }
 
-  /* The close control sits exactly where the menu Button was, never shrunk. */
+  /*
+   * The close control sits exactly where the menu Button was, never shrunk;
+   * in a Navigation Bar's slot NavDrawer measures any inline difference
+   * left (a capped header box) and shifts it onto the Button.
+   */
   .close {
     flex: none;
     margin-inline-start: auto;
+    translate: var(--nav-drawer-close-shift, 0px) 0;
   }
 
   /* ── The list ──────────────────────────────────────────────────────── */

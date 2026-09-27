@@ -438,6 +438,17 @@
     outline-offset: 0;
   }
 
+  /*
+   * While the expanding box opens, the input row's ring waits and appears
+   * in place as the box lands [D196, D205]. The row is the box's main
+   * piece, whose image keeps its proportions and hugs the left edge, so
+   * while the box is narrower the image runs past its right edge: a ring
+   * drawn on it would travel in from the side, outside the frame.
+   */
+  :global(:root[data-fgd-expanding]) .inputRow:has(.input:focus) {
+    outline-style: none;
+  }
+
   .esc:hover:not(:focus-visible) {
     border-color: var(--primary12);
   }
