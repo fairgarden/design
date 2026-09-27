@@ -44,6 +44,10 @@ The box and its chips follow their ground; the popup renders in a portal as the 
 
 [See Demo](./demos/grounds/)
 
+## Outline morph
+
+On by default: the box's focus ring, which shows on any focus, grows into the popup's frame as it opens and shrinks back onto the ring as it closes. Explicit opens morph (a click, the chevron, the arrow keys), and so does the first open after focus arrives, even when typing caused it. After that, opens and closes caused by typing are instant, so the list keeps up with the keys, and a list that resizes as results filter does so on its own. Typing is never delayed. `morph={false}` opens and closes the popup at once; see [Outline Morph](../../foundations/outline-morph/page.mdx).
+
 ## API Reference
 
 import { TypesCombobox } from './types'

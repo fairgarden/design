@@ -11,8 +11,8 @@ import {
  * The docs layout's table-of-contents slot: a placeholder until the page
  * headings come from the docs engine (§11.15, "Wiring plan"). Only the
  * Docs Layout page feeds it, with its own headings written out by hand, so
- * the column (from 1440 px) and the "On this page" disclosure (below) can
- * be seen on a real page. Every other page passes nothing, and the layout
+ * the column (from 1440 px) and the compact bar (below) can be seen on a
+ * real page. Every other page passes nothing, and the layout
  * shows neither.
  */
 const staticContents: Record<string, readonly TableOfContentsItem[]> = {

@@ -3,14 +3,12 @@
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 
-import {
-  Collapsible,
-  CollapsiblePanel,
-  CollapsibleTrigger,
-} from '../../disclosure/collapsible'
 import { Ground } from '../../foundations/ground'
 import { NavDrawer, type NavDrawerProps } from '../../navigation/nav-drawer'
-import { TableOfContentsContext } from '../../navigation/table-of-contents'
+import {
+  TableOfContentsContext,
+  type TableOfContentsContextValue,
+} from '../../navigation/table-of-contents'
 import { cx } from '../../utils/className'
 import { SkipLinkContext } from '../../utils/frame'
 import { primaryScaleVariants, secondaryScaleVariants } from '../../utils/scales'
@@ -36,8 +34,9 @@ import styles from './docs-layout.module.css'
  *   the server HTML paints the final frame: nothing is measured and
  *   nothing moves at hydration [D201].
  * - Parts: base (the page), skipLink, frame (the columns), sidebar (its
- *   sticky column), main, tocDisclosure (the "On this page" Collapsible
- *   below --xl-n-above), tocTrigger, tocPanel, toc (its sticky column),
+ *   sticky column), main, tocBar (the strip below --xl-n-above that pins
+ *   the Table of Contents' compact bar under the header), toc (its sticky
+ *   column),
  *   drawerTrigger (the menu Button of a DocsLayoutDrawer outside a
  *   Navigation Bar).
  * - Scope: the root re-declares the page ground as a `kind="band"` Ground.
@@ -65,8 +64,7 @@ export const DocsLayoutContext = React.createContext<DocsLayoutContextValue | nu
 DocsLayoutContext.displayName = 'DocsLayoutContext'
 
 /** Props for DocsLayout: `div` props, the frame's slots, the page ground and the color axes. */
-export type DocsLayoutProps = Omit<React.ComponentPropsWithRef<'div'>, 'children'> &
-  DocsLayoutVariants & {
+export type DocsLayoutProps = Omit<React.ComponentPropsWithRef<'div'>, 'children'> & {
     /**
      * The site header: a `NavigationBar` with `wide` (so its content box
      * meets the columns), whose `drawer` is a `DocsLayoutDrawer`.
@@ -80,8 +78,10 @@ export type DocsLayoutProps = Omit<React.ComponentPropsWithRef<'div'>, 'children
     sidebar?: React.ReactNode
     /**
      * The page's contents: a `TableOfContents`. It fills the sticky end
-     * column from --xl-n-above and, below it, an "On this page" disclosure
-     * at the top of the page. Omitted, neither appears.
+     * column from --xl-n-above; below it, the same element draws as its
+     * compact bar (`kind="bar"`, set through `TableOfContentsContext`),
+     * pinned at the top of the page under the header. Omitted, or with no
+     * items, neither appears.
      */
     toc?: React.ReactNode
     /** The page. */
@@ -94,8 +94,6 @@ export type DocsLayoutProps = Omit<React.ComponentPropsWithRef<'div'>, 'children
     mainId?: string
     /** The skip link's words. Default "Skip to main content". */
     skipLabel?: string
-    /** The contents disclosure's label below --xl-n-above. Default "On this page". */
-    tocLabel?: string
     /** Override the page ground's primary. Never defaulted [D133]. */
     primary?: DocsLayoutVariants['primary']
     /** Override the page ground's secondary. Never defaulted. */
@@ -110,9 +108,11 @@ export type DocsLayoutProps = Omit<React.ComponentPropsWithRef<'div'>, 'children
  * below it the header's menu Button opens the same navigation in the
  * drawer), the `main` page with its end gutter for the code blocks'
  * hanging ⋮, and the table of contents (a sticky 240 px column from
- * --xl-n-above; below it an "On this page" disclosure at the top of the
- * page, closed). Every placement is viewport media, so the first paint is
- * the final frame. Print keeps the page alone.
+ * --xl-n-above; below it the contents' compact bar, pinned under the
+ * header while the page scrolls, naming the section in view and opening
+ * the list in a panel). Every placement is viewport media and the bar has
+ * one fixed height, so the first paint is the final frame. Print keeps the
+ * page alone.
  */
 export function DocsLayout(props: DocsLayoutProps) {
   const {
@@ -124,7 +124,6 @@ export function DocsLayout(props: DocsLayoutProps) {
     preset: presetProp,
     mainId = 'main',
     skipLabel = 'Skip to main content',
-    tocLabel = 'On this page',
     primary,
     secondary,
     className,
@@ -163,12 +162,9 @@ export function DocsLayout(props: DocsLayoutProps) {
             ) : null}
             <main id={mainId} className={styles.main}>
               {hasToc ? (
-                <Collapsible className={styles.tocDisclosure}>
-                  <CollapsibleTrigger className={styles.tocTrigger}>{tocLabel}</CollapsibleTrigger>
-                  <CollapsiblePanel className={styles.tocPanel}>
-                    <TableOfContentsContext.Provider value={LABEL_HIDDEN}>{toc}</TableOfContentsContext.Provider>
-                  </CollapsiblePanel>
-                </Collapsible>
+                <div className={styles.tocBar}>
+                  <TableOfContentsContext.Provider value={BAR}>{toc}</TableOfContentsContext.Provider>
+                </div>
               ) : null}
               {children}
             </main>
@@ -181,7 +177,8 @@ export function DocsLayout(props: DocsLayoutProps) {
   )
 }
 
-const LABEL_HIDDEN = { labelHidden: true }
+/** Below --xl-n-above the one `toc` draws as the compact bar. */
+const BAR: TableOfContentsContextValue = { kind: 'bar' }
 
 /** Props for DocsLayoutDrawer: NavDrawer's, less the list it builds itself. */
 export type DocsLayoutDrawerProps = Omit<NavDrawerProps, 'nav' | 'sections' | 'children' | 'navLabel'>

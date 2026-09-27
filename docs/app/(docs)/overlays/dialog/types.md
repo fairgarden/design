@@ -9,6 +9,12 @@
 Groups the parts of a dialog (Base UI Dialog.Root). Modal by default: the
 page stays visible, inert and scroll-locked, never dimmed \[D24 → D121].
 
+**Dialog Props:**
+
+| Prop  | Type      | Default | Description                                                                                                                                                                                                                                                                                                                                   |
+| :---- | :-------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| morph | `boolean` | -       | The outline morph (§9.17) \[D206]: the trigger's focus ring (or edge)&#xA;grows into the panel as it opens and shrinks back onto the trigger as&#xA;it closes. Default `true`. `false`, like `--fgd-outline-morph: none`&#xA;on an ancestor, opens and closes at once; so does an open with no&#xA;rendered trigger, or with the solid cover. |
+
 ### DialogActions
 
 The action bar: a `solid` Button first, then its outline twin, each
@@ -49,8 +55,8 @@ An optional eyebrow above the title, in tracked caps (`type-eyebrow`); dropped b
 The modal panel, rendered in its Base UI Portal as a nested `white` scope
 with the --border-size-2-25 --primary12 frame. Below --md-n-above it is a
 full-screen opaque sheet; from --md-n-above it is centered, at least
-\--size-px-7-5 from every edge. It opens instantly or with a clip reveal,
-never a fade. Compose `DialogTopBar` (eyebrow, title, close), `DialogBody`
+\--size-px-7-5 from every edge. It grows out of its trigger by the outline
+morph, or opens at once; never a fade. Compose `DialogTopBar` (eyebrow, title, close), `DialogBody`
 and `DialogActions` inside it.
 
 Focus moves to the first field in the body, else to Base UI's default
@@ -80,7 +86,9 @@ The titled top bar: an optional `DialogEyebrow`, the `DialogTitle` and the
 
 ### DialogTrigger
 
-Opens the dialog. Renders a Button (§9.2); author its label in title case \[D160].
+Opens the dialog. Renders a Button (§9.2); author its label in title case
+\[D160]. The panel morphs out of it; a detached trigger (`handle`) sits
+outside the root's morph, so its dialog opens at once.
 
 **DialogTrigger Props:**
 
@@ -226,10 +234,10 @@ type DialogPopupProps = DialogPopupProps & {
 
 ### DialogProps
 
-Props for Dialog: Base UI Dialog.Root props (`open`, `onOpenChange`, `modal` …).
+Props for Dialog: Base UI Dialog.Root props (`open`, `onOpenChange`, `modal` …) plus `morph`.
 
 ```typescript
-type DialogProps<Payload = unknown> = DialogRoot.Props<Payload>;
+type DialogProps<Payload = unknown> = DialogRoot.Props<Payload> & { morph?: boolean };
 ```
 
 ### DialogTitleProps

@@ -1,0 +1,61 @@
+/* The page: a fixed-height box it scrolls in, as a phone's viewport would. */
+.page {
+  box-sizing: border-box;
+  inline-size: min(100%, var(--size-sm));
+  block-size: var(--size-px-15);
+  padding-inline: var(--size-px-3);
+  padding-block-end: var(--size-px-14);
+  border: var(--border-size-1) solid var(--role-rule);
+  border-radius: var(--radius-2-25);
+  overflow-y: auto;
+  color: var(--primary12);
+}
+
+.page:focus-visible {
+  outline: var(--border-size-2) solid var(--primary12);
+  outline-offset: var(--border-size-2);
+}
+
+/* The bar's strip, sticky at the box's top, on the page ground, ruled under. */
+.bar {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  block-size: var(--fgd-size-control-xl);
+  margin-inline: calc(-1 * var(--size-px-3));
+  padding-inline: var(--size-px-3);
+  border-block-end: var(--border-size-1) solid var(--role-hairline);
+  background-color: var(--role-ground);
+}
+
+/* Headings land clear of the bar. */
+.h2,
+.h3 {
+  scroll-margin-block-start: calc(var(--fgd-size-control-xl) + var(--size-px-3));
+}
+
+.h2 {
+  margin-block: var(--size-px-7) var(--size-px-2);
+  font-family: var(--fgd-font-display);
+  font-variation-settings: var(--fgd-font-display-settings);
+  font-weight: var(--font-weight-7);
+  font-size: var(--fgd-font-size-kicker);
+  line-height: var(--font-lineheight-0);
+  color: var(--role-heading);
+}
+
+.h3 {
+  margin-block: var(--size-px-5) var(--size-px-2);
+  font-family: var(--fgd-font-ui);
+  font-weight: var(--font-weight-6);
+  font-size: var(--fgd-font-size-body-ui);
+}
+
+.p {
+  margin: 0;
+  font-family: var(--fgd-font-text);
+  font-size: var(--fgd-font-size-body);
+  line-height: var(--fgd-leading-reading);
+}

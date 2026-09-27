@@ -169,9 +169,9 @@
       transition-timing-function: var(--ease-out-3);
     }
 
-    /* Hover and press transitions [D181]: --fgd-duration-quick, --ease-out-3. */
+    /* Hover transitions [D181]: --fgd-duration-quick, --ease-out-3, for the ink and underline. */
     .action {
-      transition-property: color, background-color, text-decoration-color;
+      transition-property: color, text-decoration-color;
       transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
@@ -253,7 +253,18 @@
     }
   }
 
-  /* Pressed: the inverse pair [D84]. */
+  /*
+   * Pressed: the inverse pair [D84]. Its fill rests at none, so fill and
+   * ink swap together at once, and so does the release (marked
+   * `data-released` for two frames, since a release and a hover-in both end
+   * on :hover): the ink never fades over a fill of its own tone. Only the
+   * underline keeps its fade; the hover's ink change still fades [D205].
+   */
+  .action:not([data-disabled], [aria-busy='true']):active,
+  .action[data-released] {
+    transition-property: text-decoration-color;
+  }
+
   .action:not([data-disabled], [aria-busy='true']):active {
     background-color: var(--primary12);
     color: var(--role-inverse);

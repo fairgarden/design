@@ -143,7 +143,8 @@ export type TableProps = Omit<React.ComponentPropsWithRef<'table'>, 'className'>
   secondary?: TableVariants['secondary']
   /**
    * A text cue above a table that scrolls, e.g. "Scroll for 3 more columns
-   * →". Shown only while the table overflows.
+   * →". Shown only while the table overflows; its line is reserved either
+   * way, so the table never moves when overflow is detected after mount.
    */
   scrollCue?: React.ReactNode
   /** `prioritize` only: the toggle label while optional columns are hidden. Default "Show All n Columns". */

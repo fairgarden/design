@@ -123,7 +123,7 @@ Single-line text, email, password, telephone and URL, plus multi-line text: Base
   - API Reference
 - Exports:
   - Input
-    - Props: action, butted, className, icon, label, labelInside, limit, multiline, plate, prefix, primary, reveal, revealLabels, rows, secondary, style, suffix, variant
+    - Props: action, butted, chars, className, icon, label, labelInside, limit, multiline, plate, prefix, primary, reveal, revealLabels, rows, secondary, style, suffix, variant
 - Types: InputAction, InputProps, input, inputParts
 
 </details>
@@ -164,13 +164,14 @@ One choice from a known list of about 5–15 options: Base UI's Select, inside a
   - Variants and states
   - Primary and secondary
   - On grounds
+  - Outline morph
   - API Reference
     - Select
     - SelectItem, SelectGroup and SelectSeparator
     - Additional types
 - Exports:
   - Select
-    - Props: aria-label, children, className, items, placeholder, plate, primary, secondary, variant
+    - Props: aria-label, children, className, items, morph, placeholder, plate, primary, secondary, variant
   - SelectGroup
     - Props: className, label
   - SelectItem
@@ -195,10 +196,11 @@ A value chosen from a filtered list, such as countries, species or members, with
   - Single, multiple and states
   - Primary and secondary
   - On grounds
+  - Outline morph
   - API Reference
 - Exports:
   - Combobox
-    - Props: aria-label, className, clearLabel, createText, defaultValue, emptyText, error, icon, items, loading, loadingText, multiple, onCreate, onValueChange, placeholder, plate, primary, removeLabel, secondary, triggerLabel, value
+    - Props: aria-label, className, clearLabel, createText, defaultValue, emptyText, error, icon, items, loading, loadingText, morph, multiple, onCreate, onValueChange, placeholder, plate, primary, removeLabel, secondary, triggerLabel, value
 - Types: ComboboxOption, ComboboxOptionGroup, ComboboxProps, combobox
 
 </details>
@@ -217,10 +219,11 @@ Free text with suggestions, where any value is valid and suggestions help, such 
   - Suggestions and states
   - Primary and secondary
   - On grounds
+  - Outline morph
   - API Reference
 - Exports:
   - Autocomplete
-    - Props: aria-label, className, clearLabel, emptyText, error, icon, items, loading, loadingText, placeholder, plate, primary, secondary, showTrigger, triggerLabel
+    - Props: aria-label, className, clearLabel, emptyText, error, icon, items, loading, loadingText, morph, placeholder, plate, primary, secondary, showTrigger, triggerLabel
 - Types: AutocompleteOption, AutocompleteOptionGroup, AutocompleteProps, autocomplete
 
 </details>
@@ -239,10 +242,11 @@ Where typing beats browsing: site and collection search on Base UI's Autocomplet
   - Kinds and states
   - Primary and secondary
   - On grounds
+  - Outline morph
   - API Reference
 - Exports:
   - Search
-    - Props: action, className, defaultValue, disabled, emptyText, filter, hideSubmit, items, kind, label, labelVisible, loading, name, onClick, onSubmit, onValueChange, placeholder, primary, render, secondary, seeAllHref, seeAllText, status, submitLabel, submitLabelled, submitOnItemClick, value
+    - Props: action, className, defaultValue, disabled, emptyText, filter, hideSubmit, items, kind, label, labelVisible, loading, morph, name, onClick, onSubmit, onValueChange, placeholder, primary, render, secondary, seeAllHref, seeAllText, status, submitLabel, submitLabelled, submitOnItemClick, value
 - Types: SearchProps, SearchSuggestion, SearchSuggestionGroup, search
 
 </details>

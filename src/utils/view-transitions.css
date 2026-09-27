@@ -17,7 +17,9 @@
  * state from the first frame while its group travels; while the flag is
  * set, no image in the transition (the root snapshot included) crossfades.
  * Timing: --fgd-duration-expand on --fgd-ease-expand to open,
- * --fgd-duration-disclosure to close, so the close stays the faster. The
+ * --fgd-duration-collapse (an alias of --fgd-duration-disclosure) to close,
+ * so the close stays the faster; startExpandingTransition reads the same
+ * tokens on the trigger, and a 0 duration there applies the change at once. The
  * focus ring's new image is held hidden for --fgd-duration-disclosure (a
  * discrete visibility hold, not a fade), so the ring shows once the frame
  * has landed. Under reduced motion the morph never starts.
@@ -48,7 +50,7 @@
   }
 
   ::view-transition-group(*.fgd-xb.closing) {
-    animation-duration: var(--fgd-duration-disclosure);
+    animation-duration: var(--fgd-duration-collapse);
   }
 
   /* Images: no crossfade. The old image is hidden; the new one shows at once. */

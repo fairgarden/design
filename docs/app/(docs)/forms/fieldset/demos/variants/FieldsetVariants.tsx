@@ -35,12 +35,12 @@ export function FieldsetVariants() {
         <Field className={styles.ledgerRow}>
           <FieldLabel>Heron Print</FieldLabel>
           <FieldsetLeader />
-          <Input defaultValue="1" style={{ inlineSize: '8ch' }} />
+          <Input defaultValue="1" chars={5} />
         </Field>
         <Field className={styles.ledgerRow}>
           <FieldLabel>Egret Print</FieldLabel>
           <FieldsetLeader />
-          <Input defaultValue="0" style={{ inlineSize: '8ch' }} />
+          <Input defaultValue="0" chars={5} />
         </Field>
       </Fieldset>
       <Fieldset disabled>

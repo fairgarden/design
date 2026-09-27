@@ -73,10 +73,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    ".next-docslayout-dev/types/**/*.ts",
-    ".next-docslayout-dev/dev/types/**/*.ts",
-    ".next-docslayout/types/**/*.ts",
-    ".next-docslayout/dev/types/**/*.ts"
+    ".next-morphfix/types/**/*.ts",
+    ".next-morphfix/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

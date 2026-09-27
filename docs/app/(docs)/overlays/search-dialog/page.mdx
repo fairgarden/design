@@ -47,7 +47,7 @@ Before typing, the list shows the engine's default results, the site's first ten
 
 `searchOptions` passes options to `useSearch` over the defaults (`maxDefaultResults: 10`, `tolerance: 1`, `limit: 20`, `enableStemming: true`). Its `searchBy` replaces the options each query runs with, `{ groupBy: { properties: ['group'], maxResult: 5 } }`.
 
-Opening takes 333 ms and closing 200 ms. Only the frame moves, and nothing fades. A second open or close within 100 ms is ignored. Under reduced motion, or in a browser without View Transitions, the dialog opens at once, or with the Dialog's clip reveal where motion is allowed.
+Opening takes 333 ms and closing 200 ms. Only the frame moves, and nothing fades. A second open or close within 100 ms is ignored. Under reduced motion, in forced colors or print, in a browser without View Transitions, with `morph={false}`, or where `--fgd-outline-morph: none` applies to the trigger (the shared switch), the dialog opens and closes at once.
 
 In print, neither the trigger nor the dialog shows.
 

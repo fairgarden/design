@@ -1,0 +1,138 @@
+# Outline Morph
+
+A trigger's focus ring grows into its popup's frame as the popup opens, and shrinks back onto the ring as it closes. It is on by default in every component where a focusable trigger opens a framed surface: an anchored popup, a dialog or a drawer's sheet. The rule is simple: an overlay morphs from the control that opened it, or it appears at once.
+
+```tsx
+import {
+  OutlineMorphFrame,
+  OutlineMorphLayer,
+  OutlineMorphTail,
+  useOutlineMorph,
+} from '@fairgarden/design/foundations/outline-morph'
+```
+
+The components below wire it for you, so most apps never import it. Build on it only for a popup of your own.
+
+## Where it runs
+
+- **Select:** the trigger's ring or field edge grows into the list.
+- **Combobox, Autocomplete and Search** (the boxed, ruled and docked fields): the box's ring, which shows on any focus, grows into the suggestions. It stays drawn while you type, since focus never leaves the input.
+- **Menu:** `MenuTrigger`'s ring, or its outline, fill or box, grows into the popup. Every menu built on Menu takes it too: the Menubar's menus, the Toolbar's "…" overflow, the Breadcrumb's "…" and the Code Block's hanging ⋮, whose ear grows into the menu.
+- **Popover:** a panel or a definition. Its tail, if it has one, grows out of the frame's edge as the panel lands.
+- **Section Bar:** the Jump to panel.
+- **Table of Contents:** the contents bar's panel.
+- **Dialog and Alert Dialog:** the trigger's ring or edge grows into the panel, or into the full-screen sheet on phones. An Alert Dialog opened from inside a Dialog grows from its trigger there.
+- **Nav Drawer and the docs drawer:** the menu Button's ring grows into the side sheet, or into the full sheet on phones, whose close control sits where the menu Button was.
+
+## How the morph works
+
+import { DemoOutlineMorphComponents } from './demos/components'
+
+<DemoOutlineMorphComponents.Title />
+
+Opened from the keyboard, the morph starts on the ring the trigger draws. Opened by pointer, where no ring shows, it starts on the trigger's edge: a boxed trigger's edge in its own color, a solid Button's box in its fill, and, for a trigger with no edge of its own (a text Button, a bare glyph, a menubar item), the box its ring would draw, in its ink, so a pointer open and a keyboard open start and land on the same box. A frame grows from there to the popup's frame (`--border-size-2` `--primary12` on the anchored popups), changing radius and color on the way, and the popup's contents are revealed inside it by a clip on the same timing. Nothing fades, and the edge stays crisp in every frame: the frame moves and resizes in whole pixels and never scales. Where the start and the popup differ in weight, such as a 1 px field edge into a 2 px list, the weight steps once, 15% of the way along the eased travel while the frame moves fastest, and never passes through a fraction. When it lands, the frame hands off to the popup's own border in the same frame, so nothing changes on screen.
+
+The close runs the other way and lands where focus ends up: on the ring when focus comes back with one, which the trigger then draws in the frame the overlay goes, and on the edge otherwise, as after an outside press.
+
+<DemoOutlineMorphComponents />
+
+[See Demo](./demos/components/)
+
+Opening takes `--fgd-duration-expand` (333 ms) on `--fgd-ease-expand`; closing takes `--fgd-duration-collapse` (200 ms) on the same curve. The morph reads these tokens from the trigger at each open and close, so an app's override reaches it, and a duration of `0ms` turns it off. A morph reversed midway turns where it is and runs the share left, never less than 35%. The end it travels to is measured again every frame, so a popup that flips above its trigger, a scroll, a resize or a list that settles its size bends the path instead of leaving the frame behind. The frame is out of flow, so it never moves the page.
+
+Under reduced motion, in forced colors and in print the morph never runs, and the popup opens and closes at once; popups have no reveal of their own. While an open waits a frame for the popup's placement, the popup is held clipped away (it still takes focus), so it never shows before the morph starts. The trigger's resting, hover and focus styles are unchanged; the frame is an overlay on top of them.
+
+## Dialogs and sheets
+
+A dialog or a drawer's sheet has no positioner, so its frame sits in a fixed layer the size of the viewport, drawn above the panel. These surfaces travel further, so they take their own pair of tokens: `--fgd-duration-expand-surface` (400 ms) to open and `--fgd-duration-collapse-surface` (240 ms) to close, on the same curve. The panel's 3 px frame is heavier than the 2 px ring, so the frame steps from 2 to 3 px early in the open, and back early in the close.
+
+A sheet has no edge where it meets the viewport. There the frame lands one weight past the viewport's edge, so the edge leaves the screen instead of vanishing: the side sheet's frame ends on its 3 px inner edge, and a full-screen sheet's frame ends just outside all four edges. The close starts from there and lands on the ring focus returns to.
+
+A dialog with no trigger to grow from opens and closes at once: an Alert Dialog opened from a Menu item, a dialog whose trigger has left the page, or one opened through a detached `handle` trigger. So does a Dialog with the solid `cover` from 768 px, because the cover hides the trigger in the first frame. The Search Dialog keeps its own expanding morph (Expanding Box).
+
+## Tails
+
+A popup with a tail, such as a Popover with `PopoverArrow`, keeps it while it morphs. A copy of the tail sits above the growing frame and shows only on the trigger's side of the frame's edge, so as the edge travels toward the popup the tail grows out of it, tip first and always attached, and it is whole exactly as the frame lands. The popup's own tail takes over on the same pixels. On close it retracts into the edge as the edge leaves. It is a clip, so nothing fades.
+
+## Typing
+
+Combobox, Autocomplete and Search open as you type, so the morph follows a typing policy:
+
+- **Explicit opens morph:** a click in the field, the chevron, the arrow keys.
+- **The first open of a focus session morphs,** even when typing caused it.
+- **After that, typing is instant:** opens and closes that typing causes skip the morph and happen at once, so the list keeps up with the keys.
+- **Closes you ask for morph back onto the ring:** Escape, a choice, an outside press.
+- **Filtering doesn't morph:** an open popup that grows or shrinks as results change resizes on its own.
+
+The morph never touches the input, so typing is never delayed or dropped while it runs.
+
+## Turning it off
+
+Each adopting component takes `morph={false}`, which opens and closes the popup at once: Select, Combobox, Autocomplete, Search, Menu, Menubar (for all its menus, or one `MenubarMenu`), Popover, `ToolbarMore`, Breadcrumb, Section Bar, the Table of Contents bar, Dialog, Alert Dialog and Nav Drawer (and the docs drawer, which passes it on). The Search Dialog takes it too, for its own expanding morph.
+
+To turn it off everywhere, or for part of a page, set `--fgd-outline-morph: none`. The morph reads it on the trigger and on the popup at every open and close, and it inherits, so `:root` covers the whole app. The Search Dialog's expanding morph honours it too. Setting the duration tokens to `0ms` does the same; the dialogs and sheets read the surface pair. A component without a `morph` prop, such as the Code Block, takes it through its `className` or any ancestor.
+
+```css
+:root {
+  --fgd-outline-morph: none;
+}
+```
+
+import { DemoOutlineMorphOptOut } from './demos/opt-out'
+
+<DemoOutlineMorphOptOut.Title />
+
+The Select takes `morph={false}`; the Menu sits in a region that sets `--fgd-outline-morph: none`. Both open and close at once.
+
+<DemoOutlineMorphOptOut />
+
+[See Demo](./demos/opt-out/)
+
+## Where it doesn't run
+
+- **Tooltip and Preview Card:** they open on hover as the pointer passes, like hints, so a morph would be noise; they appear at once. A Preview Card's trigger is also an inline link, which can wrap across lines.
+- **Context Menu:** its trigger is a region with no outline, and the menu opens at the pointer, at once.
+- **Navigation Menu panels:** a panel meets the bar's rule with no top edge, and the overview spans the viewport, so the frame could not hand off to them. They open on hover intent, at once, and switch instantly between neighbours.
+- **Toasts:** no control opens them; they enter from their viewport edge.
+- **Dialogs with no trigger, or over the solid cover:** they open and close at once (see Dialogs and sheets).
+- **Submenus:** they open as the pointer passes over their row, at once, and the row has no outline to grow from.
+- **Hover opens and menubar switches:** a Menu or Popover opened on hover appears at once, and moving between a Menubar's open menus stays instant.
+
+## Build your own
+
+`useOutlineMorph({ open })` returns stable refs. Put `sourceRef` on the trigger and `targetRef` on the popup. Put `frameRef` on an `OutlineMorphFrame` rendered as the popup's sibling inside the element that positions it, such as Base UI's Positioner, so the frame is out of flow and moves with the popup. Pass the popup's open state as the root has it after each commit. For a field whose ring shows on any focus, pass `ring: 'focus-within'`.
+
+While the frame draws, the popup carries `data-outline-morph`. The popup's CSS must answer it: its border takes the face color, since the frame draws the edge, and its own transition steps aside.
+
+```css
+.popup[data-outline-morph] {
+  border-color: var(--primary1);
+  transition: none;
+}
+```
+
+For a surface with no positioner, such as a dialog, render the `OutlineMorphFrame` inside an `OutlineMorphLayer` after the popup in its portal, and pass `surface: true` for the surface durations. Each side of the popup without a border of its own must meet the viewport's edge, or the morph doesn't run.
+
+For a tail, put `tailSourceRef` on the popup's own tail element and `tailRef` on an `OutlineMorphTail` rendered after the frame, holding the same drawing. The engine places the cap on the tail and copies its `data-side`, so rotate the cap as you rotate the tail. Draw its stroke in `currentColor` and fill it with `var(--fgd-outline-morph-tail-fill)`, and hide the popup's own tail while `data-outline-morph` is set.
+
+## API Reference
+
+import { TypesOutlineMorph, TypesOutlineMorphAdditional } from './types'
+
+### useOutlineMorph
+
+<TypesOutlineMorph.useOutlineMorph />
+
+### OutlineMorphFrame, OutlineMorphTail, OutlineMorphLayer and canOutlineMorph
+
+<TypesOutlineMorph.OutlineMorphFrame />
+
+<TypesOutlineMorph.OutlineMorphTail />
+
+<TypesOutlineMorph.OutlineMorphLayer />
+
+<TypesOutlineMorph.canOutlineMorph />
+
+### Additional types
+
+<TypesOutlineMorphAdditional />

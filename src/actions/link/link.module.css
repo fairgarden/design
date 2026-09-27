@@ -76,14 +76,17 @@
     display: none;
   }
 
-  /* Hover transitions [D181]: --fgd-duration-quick, --ease-out-3; instant under --motionNotOK. */
+  /*
+   * Hover transitions [D181]: --fgd-duration-quick, --ease-out-3; instant
+   * under --motionNotOK. Ink and underline colors fade; the underline's
+   * thickening is a weight, so it steps at once [D205].
+   */
   @media (--motionOK) {
     .base,
     .text {
       transition:
         color var(--fgd-duration-quick) var(--ease-out-3),
-        text-decoration-color var(--fgd-duration-quick) var(--ease-out-3),
-        text-decoration-thickness var(--fgd-duration-quick) var(--ease-out-3);
+        text-decoration-color var(--fgd-duration-quick) var(--ease-out-3);
     }
   }
 

@@ -11,7 +11,7 @@ import {
 } from '@fairgarden/design/navigation/nav-drawer'
 ```
 
-The menu Button shows the `menu` icon and "Menu", which swap to × and "Close" while the drawer is open. Below 360 px the label drops to the icon, and it stays the accessible name. The sheet is full screen below `--md-n-above`. From there it is a 480 px side sheet docked to the end edge, with a `--border-size-2-25` inner edge, and the page beside it is left unpainted and inert. No backdrop or tint is painted. The sheet re-declares the header's preset, so a page-ground header gives a page-ground sheet and a `night` header a `night` one, never a `white` overlay.
+The menu Button shows the `menu` icon and "Menu", which swap to × and "Close" while the drawer is open. Below 360 px the label drops to the icon, and it stays the accessible name. The sheet is full screen below `--md-n-above`. From there it is a 480 px side sheet docked to the end edge, with a `--border-size-2-25` inner edge, and the page beside it is left unpainted and inert. No backdrop or tint is painted. The sheet grows out of the menu Button by the [Outline Morph](../../foundations/outline-morph/page.mdx): the Button's ring runs out to the sheet's inner edge and off the screen's other edges, and the close lands back on the Button. `morph={false}` opens and closes it at once. The sheet re-declares the header's preset, so a page-ground header gives a page-ground sheet and a `night` header a `night` one, never a `white` overlay.
 
 ## The drawer
 

@@ -12,9 +12,10 @@
  * menuTrigger, menuIcon, menuLabel.
  *
  * No backdrop or tint [D24 → D121]: the full sheet hides the page; the side
- * sheet leaves it unpainted and inert. Motion is a clip reveal, never a
- * fade [D91]. Colors are role variables only; local custom properties carry
- * dimensions only (--nav-drawer-clip-from, a clip shape).
+ * sheet leaves it unpainted and inert. The sheet grows out of the menu
+ * Button by the outline morph (§9.17), else opens and closes at once, never
+ * a fade [D91, D205, D206]. Colors are role variables only; local custom
+ * properties carry dimensions only.
  */
 
 /* Composition sits in top-level rules, outside the layers: Lightning CSS
@@ -319,11 +320,9 @@
   /*
    * The sheet. Written in the variants layer so it outranks the composed
    * Ground's own base-layer display. Base: full screen, opaque, no border
-   * [D24 → D121], revealed from the top.
+   * [D24 → D121].
    */
   .base {
-    --nav-drawer-clip-from: inset(0 0 100% 0);
-
     position: fixed;
     inset: 0;
     z-index: var(--layer-4);
@@ -331,29 +330,16 @@
     flex-direction: column;
     box-sizing: border-box;
     margin: 0;
-    clip-path: inset(0);
+    /* The band's seams would lie on the viewport's edges: a sheet has none there. */
+    border-block-width: 0;
   }
 
   /* From --md-n-above: a --size-sm side sheet docked at the trigger's (end) edge, --border-size-2-25 inner edge [D92]. */
   @media (--md-n-above) {
     .base {
-      --nav-drawer-clip-from: inset(0 0 0 100%);
-
       inset-inline-start: auto;
       inline-size: min(var(--size-sm), 100%);
       border-inline-start: var(--border-size-2-25) solid var(--primary12);
-    }
-
-    .base:dir(rtl) {
-      --nav-drawer-clip-from: inset(0 100% 0 0);
-    }
-  }
-
-  @media (--motionOK) {
-    .base {
-      transition-property: clip-path;
-      transition-duration: var(--fgd-duration-disclosure);
-      transition-timing-function: var(--ease-out-3);
     }
   }
 }
@@ -445,9 +431,17 @@
     block-size: 0;
   }
 
-  /* The sheet's clip reveal: from the top (full sheet) or the docked edge (side sheet). */
-  .base[data-starting-style] {
-    clip-path: var(--nav-drawer-clip-from);
+  /*
+   * While the outline morph draws the edge (§9.17) [D206], the side sheet's
+   * inner edge takes the ground and its transitions stay off. The frame
+   * lands on that 3 px edge (stepping once from the ring's 2 px) and one
+   * weight past the viewport on the three sides the sheet has no edge; on
+   * the full sheet, past all four. The band's seams keep their color: the
+   * clip reveals them as the frame passes the viewport's edge.
+   */
+  .base[data-outline-morph] {
+    border-inline-start-color: var(--role-ground);
+    transition: none;
   }
 
   /* Focus parked on the sheet itself (opened by touch): the ring sits inside. */

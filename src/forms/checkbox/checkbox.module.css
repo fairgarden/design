@@ -170,12 +170,16 @@
     }
   }
 
-  /* Hover transitions [D181]: --fgd-duration-quick, --ease-out-3. */
+  /*
+   * Hover transitions [D181]: --fgd-duration-quick, --ease-out-3, for edges
+   * and underlines. The box's fill rests at none, so its hover and checked
+   * fills step at once [D205].
+   */
   @media (--motionOK) {
     .box,
     .base,
     .label {
-      transition-property: border-color, background-color, text-decoration-color;
+      transition-property: border-color, text-decoration-color;
       transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }

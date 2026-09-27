@@ -84,13 +84,44 @@
     }
   }
 
-  /* Hover and press transitions [D181]: --fgd-duration-quick, --ease-out-3; instant under --motionNotOK. */
+  /*
+   * Hover and press transitions [D181]: --fgd-duration-quick, --ease-out-3;
+   * instant under --motionNotOK. Only opaque-to-opaque changes fade [D205]:
+   * ink, edge and underline colors everywhere, and the fill of `solid`,
+   * which is opaque at rest, on hover and pressed. An `outline` or media
+   * Button's fill and ink change only together, as the inverse pair on
+   * press (the outline's fill from none), so both step at once.
+   */
   @media (--motionOK) {
     .base,
     .label {
-      transition-property: color, background-color, border-color, text-decoration-color;
+      transition-property: color, border-color, text-decoration-color;
       transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
+    }
+
+    .solid {
+      transition-property: color, background-color, border-color, text-decoration-color;
+    }
+
+    /*
+     * A `solid` press swaps fill and ink as the inverse pair, so the press
+     * and its release (marked `data-released` for two frames, since both a
+     * release and a hover-in end on :hover) step both at once: no frame shows
+     * the ink over a fill of its own tone. Hover in and out still fade.
+     */
+    .solid:active,
+    .solid:active .label,
+    .solid[data-released],
+    .solid[data-released] .label {
+      transition-property: border-color, text-decoration-color;
+    }
+
+    .outline,
+    .outline .label,
+    .onMedia,
+    .onMedia .label {
+      transition-property: border-color, text-decoration-color;
     }
   }
 }
@@ -361,10 +392,33 @@
     text-decoration-thickness: var(--border-size-2);
   }
 
-  /* Focus: 2 px --primary12 ring at a 2 px offset, keyboard only [D45]. */
+  /*
+   * Focus: 2 px --primary12 ring at the ring offset (--fgd-focus-offset,
+   * 2 px), keyboard only [D45]. A text Button has no container, so its ring
+   * stands off a padded box as tall as its size's contained Button
+   * (--button-height, centred on the words) at that 2 px offset: it sits
+   * around the words at the height of the other Buttons' rings, never on the
+   * glyphs. It is the ring only, an outline: nothing moves, the hit area and
+   * the words stay put. The offset is the local ring token, so the outline
+   * morph starts and lands on the same box [D204]. Icon-only text Buttons
+   * keep the circle's own ring.
+   */
+  .text:not(.iconOnly) {
+    /* Whole pixels, as the browser draws an outline offset. */
+    --fgd-focus-offset: max(
+      var(--border-size-2),
+      round(down, calc((var(--button-height) - 1lh) / 2 + var(--border-size-2)), 1px)
+    );
+  }
+
+  /* In running text the ring keeps to the line: --size-px-1 around the words, so it barely reaches the lines above and below. */
+  :where(p, li, dd, dt, blockquote, figcaption, td, th) > .text:not(.iconOnly) {
+    --fgd-focus-offset: var(--size-px-1);
+  }
+
   .base:focus-visible {
     outline: var(--border-size-2) solid var(--primary12);
-    outline-offset: var(--border-size-2);
+    outline-offset: var(--fgd-focus-offset);
   }
 
   /*
@@ -377,6 +431,8 @@
     border-style: none;
     background: none;
     color: var(--role-muted);
+    /* The fill goes to none, so it steps [D205]. */
+    transition-property: color, border-color, text-decoration-color;
   }
 
   .base[data-disabled] .edge {

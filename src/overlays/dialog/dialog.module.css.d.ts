@@ -7,6 +7,7 @@ declare const styles: {
   readonly "covered": string;
   readonly "description": string;
   readonly "eyebrow": string;
+  readonly "overCover": string;
   readonly "title": string;
   readonly "topBar": string;
   readonly "wide": string;

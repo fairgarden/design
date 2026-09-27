@@ -10,6 +10,12 @@ Groups the parts of an alert dialog (Base UI AlertDialog.Root): always
 modal, and an outside press never dismisses it. It may open over a
 Dialog, never deeper; the Dialog stays visible, framed and inert.
 
+**AlertDialog Props:**
+
+| Prop  | Type      | Default | Description                                                                                                                                                                                                           |
+| :---- | :-------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| morph | `boolean` | -       | The outline morph (§9.17) from the trigger to the panel and back, as&#xA;Dialog's \[D206]. Default `true`; `false` opens and closes at once, as&#xA;does an alert opened with no rendered trigger (from a Menu item). |
+
 ### AlertDialogActions
 
 The action bar: the confirming `solid` Button first ("Delete 3 Photos",
@@ -75,7 +81,8 @@ The alert's title and accessible name, in `type-itemhead`: the question ("Delete
 
 ### AlertDialogTrigger
 
-Opens the alert dialog. Renders a Button (§9.2) whose label names the act ("Delete Photos").
+Opens the alert dialog. Renders a Button (§9.2) whose label names the act
+("Delete Photos"); the alert morphs out of it.
 
 **AlertDialogTrigger Props:**
 
@@ -228,10 +235,10 @@ type AlertDialogPopupProps = {
 
 ### AlertDialogProps
 
-Props for AlertDialog: Base UI AlertDialog.Root props (`open`, `onOpenChange` …).
+Props for AlertDialog: Base UI AlertDialog.Root props (`open`, `onOpenChange` …) plus `morph`.
 
 ```typescript
-type AlertDialogProps<Payload = unknown> = AlertDialogRoot.Props<Payload>;
+type AlertDialogProps<Payload = unknown> = AlertDialogRoot.Props<Payload> & { morph?: boolean };
 ```
 
 ### AlertDialogStatus

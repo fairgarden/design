@@ -15,7 +15,8 @@
  * forms/search's parts; the dialog only adds its layout (full-bleed rows
  * of two lines, sticky group labels). The backdrop is colorless: the frame,
  * the inert page and the sheet carry the modal state [D24 → D121]. Motion
- * is the morph, or the Dialog's clip reveal without it, never a fade [D91].
+ * is the morph, or none: without it the dialog opens and closes at once,
+ * never a fade [D91, D204].
  * No view-transition name or class is written here: the box sets them per
  * instance. Colors are role variables only; local custom properties carry
  * dimensions only.
@@ -213,14 +214,11 @@
    * its results (it scrolls inside).
    */
   .popup {
-    --search-dialog-clip-from: inset(0 0 100% 0);
-
     inline-size: 100%;
     block-size: 100%;
     max-block-size: 100%;
     margin: 0;
     color: var(--primary12);
-    clip-path: inset(0);
     outline: 0;
   }
 
@@ -409,11 +407,6 @@
   }
 
   @media (--motionOK) {
-    /* The fallback without the morph: the Dialog's clip reveal from the top edge [D91]. */
-    .popup {
-      transition: clip-path var(--fgd-duration-disclosure) var(--ease-out-3);
-    }
-
     .esc {
       transition: border-color var(--fgd-duration-quick) var(--ease-out-3);
     }
@@ -461,21 +454,11 @@
     border-radius: var(--xb-radius);
   }
 
-  /* The clip reveal, instant under --motionNotOK. */
-  .popup[data-starting-style],
-  .popup[data-ending-style] {
-    clip-path: var(--search-dialog-clip-from);
-  }
-
   /*
-   * The morph owns the motion while it runs: no clip reveal, and the
-   * closing popup hides at once, since the root snapshot does not crossfade.
+   * The morph owns the motion while it runs; without it the dialog opens and
+   * closes at once (no reveal of its own) [D204]. The closing popup hides at
+   * once, since the root snapshot does not crossfade.
    */
-  :root[data-fgd-expanding] .popup {
-    clip-path: none;
-    transition: none;
-  }
-
   :root[data-fgd-expanding] .popup[data-closed],
   :root[data-fgd-expanding] .popup[data-ending-style] {
     visibility: hidden;

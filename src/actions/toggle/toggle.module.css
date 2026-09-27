@@ -104,11 +104,15 @@
     }
   }
 
-  /* Hover and press transitions [D181]: --fgd-duration-quick, --ease-out-3. */
+  /*
+   * Hover and press transitions [D181]: --fgd-duration-quick, --ease-out-3,
+   * for edges and underlines only. The fill rests at none and the pressed
+   * ink swaps with it, so both step at once [D205].
+   */
   @media (--motionOK) {
     .base,
     .label {
-      transition-property: color, background-color, border-color, text-decoration-color;
+      transition-property: border-color, text-decoration-color;
       transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }

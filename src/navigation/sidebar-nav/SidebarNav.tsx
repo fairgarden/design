@@ -70,8 +70,7 @@ export interface SidebarNavItem {
 }
 
 /** Props for SidebarNav: `nav` props, the page tree, the current path and the color axes. */
-export type SidebarNavProps = Omit<React.ComponentPropsWithRef<'nav'>, 'children'> &
-  SidebarNavVariants & {
+export type SidebarNavProps = Omit<React.ComponentPropsWithRef<'nav'>, 'children'> & {
     /**
      * The page tree: groups (a caps heading over its pages) and, rarely,
      * top-level pages. Plain data, so the desktop column and the drawer

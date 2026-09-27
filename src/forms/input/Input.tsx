@@ -11,6 +11,7 @@ import { Ground } from '../../foundations/ground'
 import { Icon, type IconName } from '../../foundations/icon'
 import { StatusGlyph } from '../../utils/StatusGlyph'
 import { assignRef } from '../../utils/assignRef'
+import { cx } from '../../utils/className'
 import { primaryScaleVariants, secondaryScaleVariants } from '../../utils/scales'
 import { useScopeAttributes } from '../../utils/scope'
 import styles from './input.module.css'
@@ -24,6 +25,9 @@ import styles from './input.module.css'
  * - Axes: `variant` → outline (the field box), underline (a lone bottom
  *   rule); `labelInside` → labelInside; `multiline` → multiline; `plate` →
  *   plate; `butted` → end → buttedEnd; `primary`, `secondary` → scales.
+ *   `chars` (a number, not an axis) → the `chars` class plus the inline
+ *   --input-chars, the only property the component writes inline
+ *   (§1.11.1): the control is that many characters wide, the box fits it.
  * - Compound variants: none. Excluded in the types: underline with
  *   labelInside, plate or butted; multiline with labelInside or butted.
  * - Defaults: variant outline, labelInside false, multiline false, plate
@@ -119,8 +123,15 @@ type ControlProps = Omit<BaseInput.Props, 'className' | 'style' | 'render' | 'pr
 interface InputOwnProps {
   /** Class names for the box (the root), added after the module's own. */
   className?: string
-  /** Inline style for the box: set its width to the expected answer (postcode `8ch`). */
+  /** Inline style for the box, passed through. Size the box to the expected answer with `chars`. */
   style?: React.CSSProperties
+  /**
+   * The expected answer's length in characters (a 5-digit postcode: `5`).
+   * The control is that many characters of its own type wide; the box adds
+   * its padding, edge and any icon, affix or toggle on top, and never grows
+   * past its container. Omitted, the box fills its container.
+   */
+  chars?: number
   /**
    * Primary Radix scale: box edge, value, placeholder, icon and focus ring.
    * Never defaulted; omitted, it inherits the scope [D133].
@@ -261,6 +272,7 @@ export function Input(props: InputProps) {
     secondary,
     className,
     style,
+    chars,
     type,
     placeholder,
     readOnly,
@@ -308,8 +320,11 @@ export function Input(props: InputProps) {
     // A plate's scales go to its Ground, so the white scope can resolve them.
     primary: plate ? undefined : primary,
     secondary: plate ? undefined : resolvedSecondary,
-    className,
+    className: cx(chars != null && styles.chars, className),
   })
+  // `chars` travels as a custom property only; the module sizes the control from it.
+  const boxStyle =
+    chars != null ? ({ ...style, '--input-chars': chars } as React.CSSProperties) : style
 
   // A press on the box's padding focuses the control, as a click on a label would.
   const focusControl = (event: React.PointerEvent<HTMLElement>) => {
@@ -381,7 +396,7 @@ export function Input(props: InputProps) {
         secondary={resolvedSecondary ?? undefined}
         render={<div />}
         className={classes}
-        style={style}
+        style={boxStyle}
         onPointerDown={focusControl}
       >
         {content}
@@ -390,7 +405,7 @@ export function Input(props: InputProps) {
   }
 
   return (
-    <div {...scope} className={classes} style={style} onPointerDown={focusControl}>
+    <div {...scope} className={classes} style={boxStyle} onPointerDown={focusControl}>
       {content}
     </div>
   )

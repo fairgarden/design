@@ -784,7 +784,11 @@
         visibility var(--fgd-duration-disclosure);
     }
 
-    /* Without `interpolate-size`, the capped max-block-size runs five times as long, as in the source. */
+    /*
+     * Without `interpolate-size`, the capped max-block-size runs twice as
+     * long, so the visible growth keeps pace (the source ran it five times,
+     * 1000 ms; capped at 2 × --fgd-duration-disclosure, D205).
+     */
     .base[data-collapsible]:has(> .checkbox:checked)
       .pre
       :global(
@@ -796,7 +800,7 @@
           )
       ) {
       transition:
-        max-block-size calc(5 * var(--fgd-duration-disclosure)) var(--ease-out-3),
+        max-block-size calc(2 * var(--fgd-duration-disclosure)) var(--ease-out-3),
         visibility 0s;
     }
 
@@ -874,10 +878,7 @@
       transition: padding-block var(--fgd-duration-disclosure) var(--ease-out-3);
     }
 
-    .base[data-collapsible]:has(.source :global(code[data-collapsible][data-focused-lines='0']))
-      > .toggle {
-      transition: border-block-start-width var(--fgd-duration-disclosure) var(--ease-out-3);
-    }
+    /* The toggle's top rule is a weight: it steps at once as the window opens or closes [D205]. */
 
     .pre[data-scrollbar-gutter='collapse-to'] > :global(code),
     .pre[data-scrollbar-gutter='expand-to'] > :global(code) {

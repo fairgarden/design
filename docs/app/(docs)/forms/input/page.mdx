@@ -6,7 +6,7 @@ Single-line text, email, password, telephone and URL, plus multi-line text: Base
 import { Input } from '@fairgarden/design/forms/input'
 ```
 
-The box is open by default: a `--border-size-1` `--role-rule` edge that steps to `--primary12` on hover, at the same weight. The ring shows on any focus, pointer included. The placeholder is never the label and ends in "…". `className` and `style` go to the box, so set its width to the expected answer (`style={{ inlineSize: '8ch' }}` for a postcode). Stepped numbers use NumberField, choices use Select or Combobox, and site search is Search.
+The box is open by default: a `--border-size-1` `--role-rule` edge that steps to `--primary12` on hover, at the same weight. The ring shows on any focus, pointer included. The placeholder is never the label and ends in "…". `className` and `style` go to the box. Size it to the expected answer with `chars` (`chars={5}` for a five-digit postcode): the value gets room for that many characters, and the box adds its padding and edge on top. Stepped numbers use NumberField, choices use Select or Combobox, and site search is Search.
 
 ## Variants and states
 

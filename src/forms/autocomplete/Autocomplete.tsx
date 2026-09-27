@@ -7,6 +7,11 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { dangerScale, useFieldInvalid } from '../field'
 import { Ground } from '../../foundations/ground'
 import { Icon, iconHost, type IconName } from '../../foundations/icon'
+import { OutlineMorphFrame } from '../../foundations/outline-morph'
+import {
+  useOutlineMorphRoot,
+  useTypingMorphPolicy,
+} from '../../foundations/outline-morph/useOutlineMorphRoot'
 import { highlightMatch } from '../../utils/highlightMatch'
 import { StatusGlyph } from '../../utils/StatusGlyph'
 import { OverlayScope, overlayAttributes, overlayScaleClassName } from '../../utils/overlay'
@@ -30,13 +35,21 @@ import styles from './autocomplete.module.css'
  *   `data-popup-open` → edge --primary12, chevron rotated. Item
  *   `data-highlighted` → --primary4 plus the start bar [D145];
  *   `data-disabled` → --role-muted. No ✓: nothing stays selected. Popup
- *   `data-starting-style` / `data-ending-style` → the clip reveal [D91].
+ *   the outline morph or nothing: it opens and closes at once [D205].
  * - Parts: base (the box), input, icon, clear, trigger, popup, list, item,
  *   group, groupLabel, empty, status; plus match.
  * - Scope: `popup` renders in its Base UI Portal and declares a nested
  *   `white` page scope, writes no `data-theme`, and takes the [D92] frame
  *   [D139, D156]. `plate` → the box is a nested `white` Ground.
  * - Container: none; inherits its context.
+ * - Outline morph [D204]: on by default (`morph={false}` opts out). The
+ *   box's ring (drawn on any focus) grows into the popup's frame and back
+ *   onto it (foundations/outline-morph, ring `focus-within`); the frame
+ *   renders beside the popup in its Positioner, and the popup answers
+ *   `data-outline-morph`. Typing policy: explicit opens and the first open
+ *   of a focus session morph; later opens and closes caused by typing are
+ *   instant, as every open without the morph is [D205]. Filtering
+ *   resizes the open popup its own way. No box style changes.
  */
 export const autocomplete = cva(styles.base, {
   variants: {
@@ -113,6 +126,17 @@ export type AutocompleteProps = RootProps & {
   primary?: AutocompleteVariants['primary']
   /** Secondary Radix scale. Unused at rest; the danger scale while invalid. */
   secondary?: AutocompleteVariants['secondary']
+  /**
+   * The outline morph: the box's focus ring grows into the popup's frame as
+   * it opens and shrinks back onto the ring as it closes. Opens you ask for
+   * (the chevron with `showTrigger`, the arrow keys) and the first open
+   * after focus arrives morph; later opens and closes caused by typing are
+   * instant.
+   * Instant under reduced motion; off in forced colors and print, and
+   * wherever `--fgd-outline-morph: none` applies. Default `true`; `false`
+   * opens and closes the popup at once.
+   */
+  morph?: boolean
 }
 
 /**
@@ -140,12 +164,25 @@ export function Autocomplete(props: AutocompleteProps) {
     plate,
     primary,
     secondary,
+    morph = true,
+    onOpenChange,
     ...rootProps
   } = props
 
   const scope = useScopeAttributes()
   const invalid = useFieldInvalid()
   const resolvedSecondary = invalid ? dangerScale : secondary
+
+  // The outline morph follows the root's open state, with the typing policy [D204].
+  const typing = useTypingMorphPolicy()
+  const outline = useOutlineMorphRoot({
+    open: rootProps.open,
+    defaultOpen: rootProps.defaultOpen,
+    onOpenChange,
+    morph,
+    ring: 'focus-within',
+    instant: typing.instant,
+  })
 
   // The typed text, for match marking.
   const [innerQuery, setInnerQuery] = React.useState(String(defaultValue ?? ''))
@@ -204,6 +241,7 @@ export function Autocomplete(props: AutocompleteProps) {
   return (
     <BaseAutocomplete.Root<AutocompleteOption>
       {...rootProps}
+      onOpenChange={outline.onOpenChange}
       // Groups are accepted at runtime; the flat overload types the value.
       items={items as readonly AutocompleteOption[] | undefined}
       value={value}
@@ -213,6 +251,8 @@ export function Autocomplete(props: AutocompleteProps) {
     >
       {plate ? (
         <BaseAutocomplete.InputGroup
+          ref={outline.refs?.sourceRef}
+          onFocus={typing.onFocus}
           className={boxClassName}
           render={
             <Ground
@@ -227,7 +267,12 @@ export function Autocomplete(props: AutocompleteProps) {
           {boxChildren}
         </BaseAutocomplete.InputGroup>
       ) : (
-        <BaseAutocomplete.InputGroup {...scope} className={boxClassName}>
+        <BaseAutocomplete.InputGroup
+          {...scope}
+          ref={outline.refs?.sourceRef}
+          onFocus={typing.onFocus}
+          className={boxClassName}
+        >
           {boxChildren}
         </BaseAutocomplete.InputGroup>
       )}
@@ -239,6 +284,7 @@ export function Autocomplete(props: AutocompleteProps) {
           collisionPadding={16}
         >
           <BaseAutocomplete.Popup
+            ref={outline.refs?.targetRef}
             {...overlayAttributes}
             className={[styles.popup, overlayScaleClassName].join(' ')}
           >
@@ -268,6 +314,7 @@ export function Autocomplete(props: AutocompleteProps) {
               </BaseAutocomplete.List>
             </OverlayScope>
           </BaseAutocomplete.Popup>
+          {outline.refs ? <OutlineMorphFrame ref={outline.refs.frameRef} /> : null}
         </BaseAutocomplete.Positioner>
       </BaseAutocomplete.Portal>
     </BaseAutocomplete.Root>

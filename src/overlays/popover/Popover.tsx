@@ -7,6 +7,16 @@ import { mergeProps } from '@base-ui/react/merge-props'
 import { cva, type VariantProps } from 'class-variance-authority'
 
 import { Button, type ButtonProps } from '../../actions/button'
+import {
+  OutlineMorphFrame,
+  OutlineMorphTail,
+  type OutlineMorphRefs,
+} from '../../foundations/outline-morph'
+import {
+  HOVER_REASONS,
+  useOutlineMorphRoot,
+} from '../../foundations/outline-morph/useOutlineMorphRoot'
+import { useMergedRef } from '../../utils/assignRef'
 import { primaryScaleVariants, secondaryScaleVariants } from '../../utils/scales'
 import { cx, resolveClassName } from '../../utils/className'
 import {
@@ -31,9 +41,8 @@ import styles from './popover.module.css'
  * - Compound variants: none. Defaults: `kind: panel`; color axes: none.
  * - Color fallback: the popup takes the `white` preset's defaults; props
  *   apply inside it, and `secondary` drives only content accents.
- * - States: Popup data-starting-style / data-ending-style → the clip reveal
- *   from the trigger side (data-side), instant under --motionNotOK and on
- *   data-instant [D91]; Arrow data-side → which edge the tail sits on;
+ * - States: the popup opens and closes by the outline morph or at once, no
+ *   reveal of its own [D205]; Arrow data-side → which edge the tail sits on;
  *   Close is an icon-only Button (§9.2 states). The trigger's
  *   data-popup-open belongs to the trigger's own module (Button).
  * - Parts: positioner (the layer), base (the popup), arrow (the tail;
@@ -43,6 +52,15 @@ import styles from './popover.module.css'
  *   scope (`page` scheme, no data-theme) with the --border-size-2
  *   --primary12 frame [D92, D139, D156].
  * - Container: none; inherits its context.
+ * - Outline morph [D204]: on by default (`morph={false}` on Popover opts
+ *   out). The trigger's ring (keyboard) or edge (pointer) grows into the
+ *   panel's frame and back (foundations/outline-morph); PopoverTrigger
+ *   takes the source ref, the popup answers `data-outline-morph` and the
+ *   frame renders beside it. With a PopoverArrow, the tail rides the morph:
+ *   PopoverArrow is the tail source, and the tail cap (OutlineMorphTail,
+ *   `tailCap`) grows out of the frame's trigger-facing edge as it lands and
+ *   retracts into it on close, while the popup's own tail is held hidden.
+ *   Hover opens (`openOnHover`) are instant.
  */
 export const popover = cva(styles.base, {
   variants: {
@@ -64,12 +82,40 @@ export type PopoverKind = NonNullable<PopoverVariants['kind']>
 
 const KindContext = React.createContext<PopoverKind>('panel')
 
-/** Props for Popover: Base UI Popover.Root props (`open`, `onOpenChange`, `modal` …). */
-export type PopoverProps<Payload = unknown> = BasePopover.Root.Props<Payload>
+/** The popover's outline morph refs, or `null` with `morph={false}` [D204]. */
+const MorphContext = React.createContext<OutlineMorphRefs | null>(null)
 
-/** Groups the parts of a popover (Base UI Popover.Root). Esc or an outside press closes it. */
+/** Props for Popover: Base UI Popover.Root props (`open`, `onOpenChange`, `modal` …) plus the outline morph. */
+export type PopoverProps<Payload = unknown> = BasePopover.Root.Props<Payload> & {
+  /**
+   * The outline morph: the trigger's focus ring (or, opened by pointer, its
+   * edge) grows into the panel's frame as it opens and shrinks back as it
+   * closes; a tail (PopoverArrow) grows out of the frame's edge as it lands.
+   * A hover open is instant. Instant under reduced motion; off in forced colors and
+   * print, and wherever `--fgd-outline-morph: none` applies. Default
+   * `true`; `false` opens and closes the panel at once.
+   */
+  morph?: boolean
+}
+
+/**
+ * Groups the parts of a popover (Base UI Popover.Root) and wires its
+ * outline morph. Esc or an outside press closes it.
+ */
 export function Popover<Payload = unknown>(props: PopoverProps<Payload>) {
-  return <BasePopover.Root<Payload> {...props} />
+  const { morph = true, onOpenChange, ...rootProps } = props
+  const outline = useOutlineMorphRoot({
+    open: rootProps.open,
+    defaultOpen: rootProps.defaultOpen,
+    onOpenChange,
+    morph,
+    instant: (_open, details) => details.reason != null && HOVER_REASONS.has(details.reason),
+  })
+  return (
+    <MorphContext.Provider value={outline.refs}>
+      <BasePopover.Root<Payload> {...rootProps} onOpenChange={outline.onOpenChange} />
+    </MorphContext.Provider>
+  )
 }
 
 /** Props for PopoverTrigger: Button props plus Base UI's trigger options. */
@@ -86,8 +132,10 @@ export type PopoverTriggerProps = ButtonProps & {
  */
 export function PopoverTrigger(props: PopoverTriggerProps) {
   const { handle, payload, ...buttonProps } = props
+  const morph = React.useContext(MorphContext)
   return (
     <BasePopover.Trigger
+      ref={morph?.sourceRef}
       handle={handle}
       payload={payload}
       render={<Button {...(buttonProps as ButtonProps)} />}
@@ -125,7 +173,7 @@ export type PopoverPopupProps = BasePopover.Popup.Props & {
  * The anchored panel, rendered in its Base UI Portal as a nested `white`
  * scope: --primary1 face, --border-size-2 --primary12 frame, --radius-2-25,
  * 240–360 px wide from --md-n-above and the viewport less its margins
- * below. It opens instantly or with a clip reveal from the trigger side.
+ * below. It opens from its trigger by the outline morph, or at once.
  * Render `PopoverArrow` inside it for the tail.
  */
 export function PopoverPopup(props: PopoverPopupProps) {
@@ -142,10 +190,13 @@ export function PopoverPopup(props: PopoverPopupProps) {
     keepMounted,
     className,
     children,
+    ref,
     ...rest
   } = props
 
   const scales = overlayScales(primary, secondary)
+  const morph = React.useContext(MorphContext)
+  const popupRef = useMergedRef<HTMLDivElement>(ref, morph?.targetRef)
 
   return (
     <BasePopover.Portal container={container} keepMounted={keepMounted}>
@@ -159,6 +210,7 @@ export function PopoverPopup(props: PopoverPopupProps) {
       >
         <BasePopover.Popup
           {...rest}
+          ref={popupRef}
           {...overlayAttributes}
           className={resolveClassName(className, (extra) =>
             popover({
@@ -173,6 +225,12 @@ export function PopoverPopup(props: PopoverPopupProps) {
             <OverlayScope>{children}</OverlayScope>
           </KindContext.Provider>
         </BasePopover.Popup>
+        {morph ? <OutlineMorphFrame ref={morph.frameRef} /> : null}
+        {morph ? (
+          <OutlineMorphTail ref={morph.tailRef} className={styles.tailCap}>
+            <OverlayTail className={styles.tail} />
+          </OutlineMorphTail>
+        ) : null}
       </BasePopover.Positioner>
     </BasePopover.Portal>
   )
@@ -183,13 +241,18 @@ export type PopoverArrowProps = BasePopover.Arrow.Props
 
 /**
  * The tail: a --size-px-2-5 × 6 px triangle filled with the face, its
- * --border-size-2 --primary12 edge continuing the panel's frame.
+ * --border-size-2 --primary12 edge continuing the panel's frame. With the
+ * outline morph it grows out of the frame's edge as the panel lands.
  */
 export function PopoverArrow(props: PopoverArrowProps) {
-  const { className, ...rest } = props
+  const { className, ref, ...rest } = props
+  // The tail source of the outline morph's tail cap [D204].
+  const morph = React.useContext(MorphContext)
+  const arrowRef = useMergedRef<HTMLDivElement>(ref, morph?.tailSourceRef)
   return (
     <BasePopover.Arrow
       {...rest}
+      ref={arrowRef}
       className={resolveClassName(className, (extra) => cx(styles.arrow, extra))}
     >
       <OverlayTail className={styles.tail} />

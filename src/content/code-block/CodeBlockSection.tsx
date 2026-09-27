@@ -181,7 +181,10 @@ export function CodeBlockSection(props: CodeBlockSectionProps) {
           />
         }
       >
-        <div className={styles.source}>{code.selectedFile}</div>
+        {/* Code reads left to right on any page; the header around it still mirrors. */}
+        <div className={styles.source} dir="ltr">
+          {code.selectedFile}
+        </div>
       </CodeBlockHeader>
       {collapsible ? (
         // Controlled by the engine's `expanded`, so a keyboard expansion (the

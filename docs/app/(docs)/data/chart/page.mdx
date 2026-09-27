@@ -80,9 +80,21 @@ import { DemoChartHighlight } from './demos/highlight'
 
 [See Demo](./demos/highlight/)
 
+## Entry animation
+
+import { DemoChartAnimate } from './demos/animate'
+
+<DemoChartAnimate.Title />
+
+Charts are static by default. `animate` opts one into its entry animation: bars grow from the baseline and lines draw along their path over 200 ms (`--fgd-duration-disclosure`), never by opacity, and only when the reader's motion preference allows motion; otherwise the chart simply appears. It runs once, on entry, so the demo's Replay remounts the chart. The tooltip never animates: it moves to the active category at once.
+
+<DemoChartAnimate />
+
+[See Demo](./demos/animate/)
+
 ## Data table, motion and print
 
-Every chart ends with a "Show Data Table" Collapsible holding a §8.2 table with the same series names and units; the tooltip never shows a value the table lacks. Animation is off unless the reader's motion preference allows it, and then bars grow and lines draw by length, never by opacity. On screen the chart fills its container's width; in print it is drawn at a fixed 174 mm (`--fgd-print-live-width`) with animation off, and a chart whose values lived only in the tooltip (lines, areas, charts without labels) prints its data table too.
+Every chart ends with a "Show Data Table" Collapsible holding a §8.2 table with the same series names and units; the tooltip never shows a value the table lacks. Charts are static unless they opt into the entry animation above, and the tooltip never slides. On screen the chart fills its container's width; in print it is drawn at a fixed 174 mm (`--fgd-print-live-width`) with animation off, and a chart whose values lived only in the tooltip (lines, areas, charts without labels) prints its data table too.
 
 ## API Reference
 

@@ -3,18 +3,19 @@
  * root (`base`) is the page's `kind="band"` Ground.
  *
  * Parts: base, skipLink, frame (the columns), withSidebar, withToc, sidebar
- * (its sticky column), main, tocDisclosure, tocTrigger, tocPanel, toc (its
- * sticky column), drawerTrigger.
+ * (its sticky column), main, tocBar (the strip that pins the contents'
+ * compact bar), toc (its sticky column), drawerTrigger.
  *
  * Page frame [D163, D202]: placement answers to the viewport custom media
  * alone, the same steps as the rest of the frame (no new breakpoint):
  * - base: one column; the sidebar sits in the drawer (the header's menu
- *   Button), the contents in the "On this page" disclosure.
+ *   Button), the contents in their compact bar, sticky under the header.
  * - --fgd-nav-inline-n-above (1024 px by default): the sidebar column, the
  *   same threshold that swaps the header's drawer for inline navigation.
- * - --xl-n-above (1440 px): the contents column; the disclosure goes.
+ * - --xl-n-above (1440 px): the contents column; the bar goes.
  * Nothing is measured, so the server HTML paints the final frame [D201].
- * Colors are role variables only; there are no local custom properties.
+ * Colors are role variables only; one local custom property carries a
+ * dimension (--docs-layout-gutter, the page's end gutter).
  */
 
 /* Composition sits in top-level rules, outside the layers: Lightning CSS
@@ -22,10 +23,6 @@
  * The composed classes keep their own layers. */
 .skipLink {
   composes: typeButtonSm from '../../utils/type.module.css';
-}
-
-.tocTrigger {
-  composes: typeLabel from '../../utils/type.module.css';
 }
 
 @layer base {
@@ -85,32 +82,51 @@
    * area fits in the column [D197].
    */
   .main {
+    --docs-layout-gutter: var(--fgd-size-file-tabs-control);
+
     min-inline-size: 0;
     padding-block: var(--size-px-7-5) var(--fgd-space-section);
-    padding-inline-end: var(--fgd-size-file-tabs-control);
+    padding-inline-end: var(--docs-layout-gutter);
   }
 
   /*
-   * The contents below --xl-n-above: a closed disclosure at the top of the
-   * page, one --fgd-size-hit row between hairline rules. Closed in the
-   * server HTML, so it adds one fixed row and nothing opens by itself.
+   * The contents below --xl-n-above [D203]: a strip at the top of the page,
+   * straight under the header's rule, that sticks to the viewport top once
+   * the static header scrolls away, so the bar naming the section in view
+   * stays in reach; the page's one sticky bar [D89]. One fixed height (the
+   * bar's --fgd-size-control-md box in --size-px-2 of ground, the
+   * --fgd-size-control-xl header height) over a --border-size-1 hairline,
+   * opaque page ground across the column and its end gutter, so the page
+   * scrolls cleanly under it. Its panel is an overlay, so opening it moves
+   * nothing. With no items the bar renders nothing and the strip goes.
    */
-  .tocDisclosure {
-    margin-block-end: var(--size-px-7-5);
-    border-block: var(--border-size-1) solid var(--role-hairline);
+  .tocBar {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: var(--layer-2);
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    block-size: calc(var(--fgd-size-control-xl) + var(--border-size-1));
+    margin-block: calc(-1 * var(--size-px-7-5)) var(--size-px-7-5);
+    margin-inline-end: calc(-1 * var(--docs-layout-gutter));
+    padding-inline-end: var(--docs-layout-gutter);
+    border-block-end: var(--border-size-1) solid var(--role-hairline);
+    background-color: var(--role-ground);
   }
 
-  .tocTrigger {
-    inline-size: 100%;
+  .tocBar:empty {
+    display: none;
   }
 
-  .tocPanel > * {
-    padding-block-end: var(--size-px-3);
+  /* A heading a link lands on clears the sticky bar by --size-px-3. */
+  .withToc .main [id] {
+    scroll-margin-block-start: calc(var(--fgd-size-control-xl) + var(--border-size-1) + var(--size-px-3));
   }
 
   @media (--md-n-above) {
     .main {
-      padding-inline-end: var(--fgd-size-hit);
+      --docs-layout-gutter: var(--fgd-size-hit);
     }
   }
 
@@ -177,8 +193,25 @@
       scrollbar-gutter: stable;
     }
 
-    .tocDisclosure {
+    .toc:empty {
       display: none;
+    }
+
+    /* A `toc` with no items: no column. */
+    .withToc:has(> .toc:empty) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .withSidebar.withToc:has(> .toc:empty) {
+      grid-template-columns: var(--size-px-13) minmax(0, 1fr);
+    }
+
+    .tocBar {
+      display: none;
+    }
+
+    .withToc .main [id] {
+      scroll-margin-block-start: 0;
     }
   }
 }
@@ -213,7 +246,7 @@
     .skipLink,
     .sidebar,
     .toc,
-    .tocDisclosure,
+    .tocBar,
     .drawerTrigger {
       display: none;
     }

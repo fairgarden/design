@@ -17,7 +17,7 @@ import {
 } from '@fairgarden/design/overlays/dialog'
 ```
 
-The panel renders in a portal as a `white` scope that follows the page mode, whatever the trigger's ground. Its `--border-size-2-25` frame carries the boundary in both modes; there is no tinted backdrop, so the page stays visible, inert and scroll-locked. Below 768 px the panel is a full-screen sheet with the actions docked at its foot; from 768 px it is centered. It opens instantly, or with a clip reveal where motion is allowed. Focus moves to the first field in the body. An open dialog prints alone.
+The panel renders in a portal as a `white` scope that follows the page mode, whatever the trigger's ground. Its `--border-size-2-25` frame carries the boundary in both modes; there is no tinted backdrop, so the page stays visible, inert and scroll-locked. Below 768 px the panel is a full-screen sheet with the actions docked at its foot; from 768 px it is centered. The panel grows out of its trigger by the [Outline Morph](../../foundations/outline-morph/page.mdx) and shrinks back onto it on close: the trigger's ring or edge becomes the panel's frame, or, on phones, runs off the screen's edges as the sheet fills it. Without the morph (`morph={false}`, reduced motion, no trigger to grow from, or the solid cover from 768 px) it opens and closes at once. Focus moves to the first field in the body. An open dialog prints alone.
 
 Use a dialog for a short form or a detail view, never for marketing or exit-intent prompts. Put the `solid` action first, then its outline twin. A destructive action (Delete, Remove, Discard) takes Button `destructive` and is red.
 

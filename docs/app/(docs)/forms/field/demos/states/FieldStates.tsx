@@ -25,7 +25,7 @@ export function FieldStates() {
       </Field>
       <Field invalid>
         <FieldLabel>Postcode</FieldLabel>
-        <Input defaultValue="12" style={{ inlineSize: '8ch' }} />
+        <Input defaultValue="12" chars={5} />
         <FieldError match>Postcode is too short. Enter all 5 digits.</FieldError>
       </Field>
       <Field disabled>

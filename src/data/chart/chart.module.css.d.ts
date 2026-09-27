@@ -27,6 +27,7 @@ declare const styles: {
   readonly "plotBars": string;
   readonly "plotColumns": string;
   readonly "print": string;
+  readonly "printChart": string;
   readonly "printTable": string;
   readonly "stepBar": string;
   readonly "stepFill": string;

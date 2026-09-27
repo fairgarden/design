@@ -51,7 +51,9 @@ export { codeBlock } from './CodeBlockFrame'
  * - Scope: none. Container: none; inherits its context.
  *
  * Syntax colors are role variables, so a block follows its ground and the
- * page mode with no mode-specific rule, and prints black on white. A block
+ * page mode with no mode-specific rule, and prints black on white. The code
+ * (`source`, in the loading state too) and the file names are left to right
+ * (`dir="ltr"`, isolated) on any page; the header's layout mirrors in RTL. A block
  * never splits across pages and prints expanded, without its controls.
  */
 

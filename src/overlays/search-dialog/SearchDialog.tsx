@@ -39,14 +39,14 @@ import type { SearchDialogVariants } from './variants'
  *   each input change runs `search(value, searchBy)` once `isReady`; rows
  *   link to `buildResultUrl(result)`. Nothing of the engine is redone here.
  * - Mechanics: open and close run inside startExpandingTransition (the
- *   morph), each behind a 100 ms re-entry guard; without the morph the
- *   popup opens with the Dialog's clip reveal under --motionOK, else at
- *   once. ⌘K / Ctrl K is a capture-phase window listener. Non-empty results
+ *   morph), each behind a 100 ms re-entry guard; without the morph
+ *   (`morph={false}`, `--fgd-outline-morph: none` on the trigger, a 0
+ *   duration token, reduced motion, forced colors, print, or no View
+ *   Transitions) the dialog opens and closes at once [D204]. ⌘K / Ctrl K is a capture-phase window listener. Non-empty results
  *   apply at once, empty ones after `emptyDelay`; after a close completes
  *   the results reset to the engine's `defaultResults`.
  * - States: trigger aria-expanded="true" → visibility: hidden (its box
- *   keeps its names valid); popup data-starting-style / data-ending-style
- *   → the clip reveal, off while <html data-fgd-expanding> is set, when the
+ *   keeps its names valid); while <html data-fgd-expanding> is set the
  *   closing popup hides at once; row data-highlighted → --primary4 plus the
  *   start bar [D145]; the input's focus → the ring on the input row [D90].
  * - Parts: trigger, triggerBox, triggerMain, magnifier, triggerLabel, kbd,
@@ -133,6 +133,13 @@ export type SearchDialogProps = {
   secondary?: SearchDialogVariants['secondary']
   /** On the trigger. */
   className?: string
+  /**
+   * The expanding box's morph between the trigger and the dialog [D194].
+   * Default `true`; `false` opens and closes the dialog at once. It also
+   * honours the shared switch, `--fgd-outline-morph: none` on the trigger
+   * or an ancestor, and a 0 duration token (§9.14, §9.17) [D204].
+   */
+  morph?: boolean
 }
 
 type EngineResults = UseSearchResult<unknown>['results']
@@ -179,6 +186,7 @@ export function SearchDialog(props: SearchDialogProps): React.JSX.Element {
     primary,
     secondary,
     className,
+    morph = true,
   } = props
   const { searchBy = defaultSearchBy, ...engineOptions } = searchOptions
 
@@ -233,6 +241,7 @@ export function SearchDialog(props: SearchDialogProps): React.JSX.Element {
     query,
     search,
     searchBy,
+    morph,
   })
   React.useLayoutEffect(() => {
     openRef.current = open
@@ -244,6 +253,7 @@ export function SearchDialog(props: SearchDialogProps): React.JSX.Element {
       query,
       search,
       searchBy,
+      morph,
     }
   })
 
@@ -307,9 +317,11 @@ export function SearchDialog(props: SearchDialogProps): React.JSX.Element {
     if (openingRef.current || openRef.current) return
     openingRef.current = true
     completion.current = { open: true, pending: 2 }
-    void startExpandingTransition(() => setOpen(true), { direction: 'open' }).then(() =>
-      settle(true, 'morph')
-    )
+    void startExpandingTransition(() => setOpen(true), {
+      direction: 'open',
+      enabled: latest.current.morph,
+      source: triggerRef.current,
+    }).then(() => settle(true, 'morph'))
     releaseLater(openingRef)
   }, [releaseLater, setOpen, settle])
 
@@ -317,9 +329,11 @@ export function SearchDialog(props: SearchDialogProps): React.JSX.Element {
     if (closingRef.current || !openRef.current) return
     closingRef.current = true
     completion.current = { open: false, pending: 2 }
-    void startExpandingTransition(() => setOpen(false), { direction: 'close' }).then(() =>
-      settle(false, 'morph')
-    )
+    void startExpandingTransition(() => setOpen(false), {
+      direction: 'close',
+      enabled: latest.current.morph,
+      source: triggerRef.current,
+    }).then(() => settle(false, 'morph'))
     releaseLater(closingRef)
   }, [releaseLater, setOpen, settle])
 

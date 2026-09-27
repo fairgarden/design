@@ -11,6 +11,7 @@ import { Breadcrumb, breadcrumbStairRow, type BreadcrumbCrumb } from '../../navi
 import { DisclosureGlyph } from '../../disclosure/collapsible'
 import { Ground } from '../../foundations/ground'
 import { Icon, iconHost } from '../../foundations/icon'
+import { OutlineMorphFrame, useOutlineMorph } from '../../foundations/outline-morph'
 import { Link } from '../../actions/link'
 import { assignRef } from '../../utils/assignRef'
 import { cx } from '../../utils/className'
@@ -58,8 +59,9 @@ import styles from './section-bar.module.css'
  *   on a `tab` → the bare-text underline; on `listen` → the body-link hover
  *   (the Link's own). `aria-current="location"` on `jumpItem` → the
  *   --border-size-2-25 start bar; on `tab` → the --border-size-2-25 current bar plus
- *   --font-weight-7 [D15, D184]. Panels and the popup: the clip reveal on
- *   data-starting-style / data-ending-style. `docked` → the docked position,
+ *   --font-weight-7 [D15, D184]. Panels: the clip reveal on
+ *   data-starting-style / data-ending-style; the Jump panel: the outline
+ *   morph or at once [D205]. `docked` → the docked position,
  *   a --fgd-duration-quick cut. :focus-visible → the ring.
  * - Parts: base (the scoped `nav`: a toolbar role cannot sit on the
  *   landmark, and the sticky box is the band), topRule, toolbar (the Base UI
@@ -75,6 +77,11 @@ import styles from './section-bar.module.css'
  *   ground. `jumpPanel` is a portaled `white` scope (`page` scheme) framed
  *   by --border-size-2 --primary12 [D92, D156].
  * - Container: none; page frame on viewport media [D163].
+ * - Outline morph [D204]: on by default (`morph={false}` opts out). The
+ *   Jump trigger's ring (keyboard) or box (pointer) grows into
+ *   `jumpPanel`'s frame and back (foundations/outline-morph), and the
+ *   breadcrumb's "…" menu takes the Menu's; the panel answers
+ *   `data-outline-morph`.
  */
 export const sectionBar = cva(styles.base, {
   variants: {
@@ -165,6 +172,13 @@ type SectionBarCommonProps = Omit<React.ComponentPropsWithRef<'nav'>, 'children'
   share?: React.ReactNode
   /** Builds each crumb anchor, e.g. `(href) => <NextLink href={href} />`. */
   renderLink?: (href: string) => React.ReactElement
+  /**
+   * The outline morph for the Jump panel and the breadcrumb's "…" menu:
+   * the trigger's ring (or box) grows into the panel's frame as it opens
+   * and back as it closes [D204]. Default `true`; `false` opens and closes
+   * them at once.
+   */
+  morph?: boolean
 }
 
 type SectionBarKindProps =
@@ -325,6 +339,7 @@ export function SectionBar(props: SectionBarProps) {
     listen,
     toTop,
     renderLink,
+    morph = true,
     className,
     ref,
     ...rest
@@ -340,6 +355,8 @@ export function SectionBar(props: SectionBarProps) {
   const sentinelRef = React.useRef<HTMLSpanElement | null>(null)
   const pendingFocus = React.useRef<HTMLElement | null>(null)
   const [jumpOpen, setJumpOpen] = React.useState(false)
+  // The Jump trigger's ring (or box) grows into the panel's frame [D204].
+  const jumpMorph = useOutlineMorph({ open: jumpOpen, enabled: morph })
 
   const inView = useSectionInView(sections, barRef, activeSection === undefined)
   const activeId = activeSection ?? inView
@@ -401,6 +418,7 @@ export function SectionBar(props: SectionBarProps) {
       current={current}
       renderLink={renderLink}
       renderCrumb={(href) => <BaseToolbar.Link render={renderLink?.(href)} />}
+      morph={morph}
       className={styles.breadcrumb}
     />
   )
@@ -409,6 +427,7 @@ export function SectionBar(props: SectionBarProps) {
     sections.length > 0 ? (
       <BasePopover.Root open={jumpOpen} onOpenChange={setJumpOpen}>
         <BasePopover.Trigger
+          ref={morph ? jumpMorph.sourceRef : undefined}
           render={<BaseToolbar.Button />}
           className={cx(styles.jumpTrigger, iconHost)}
         >
@@ -431,6 +450,7 @@ export function SectionBar(props: SectionBarProps) {
             collisionPadding={OVERLAY_COLLISION_PADDING}
           >
             <BasePopover.Popup
+              ref={morph ? jumpMorph.targetRef : undefined}
               {...overlayAttributes}
               className={cx(styles.jumpPanel, overlayScaleClassName)}
               finalFocus={() => {
@@ -461,6 +481,7 @@ export function SectionBar(props: SectionBarProps) {
                 </nav>
               </OverlayScope>
             </BasePopover.Popup>
+            {morph ? <OutlineMorphFrame ref={jumpMorph.frameRef} /> : null}
           </BasePopover.Positioner>
         </BasePopover.Portal>
       </BasePopover.Root>

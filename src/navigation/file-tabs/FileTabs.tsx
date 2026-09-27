@@ -132,7 +132,9 @@ export type FileTabsProps = Omit<
   disabled?: boolean
   /**
    * Labels in mono (`type-data`, §3.11) instead of the UI face: for file
-   * names, e.g. code. Code Block and Demo set it. Default `false`.
+   * names, e.g. code. Mono labels are left to right (`dir="ltr"`) on any
+   * page, since file names are, while the tabs and header still mirror in
+   * RTL. Code Block and Demo set it. Default `false`.
    */
   mono?: boolean
   /**
@@ -335,7 +337,11 @@ export function FileTabsList(props: FileTabsListProps) {
     const labelClass = typeof className === 'function' ? className(staticListState) : className
     const labelStyle = typeof style === 'function' ? style(staticListState) : style
     lead = (
-      <span className={cx(styles.single, mono ? styles.singleMono : styles.singleUi, labelClass)} style={labelStyle}>
+      <span
+        className={cx(styles.single, mono ? styles.singleMono : styles.singleUi, labelClass)}
+        style={labelStyle}
+        dir={mono ? 'ltr' : undefined}
+      >
         {tabs[0].name}
       </span>
     )
@@ -390,7 +396,11 @@ export function FileTabsList(props: FileTabsListProps) {
 function FileTabsTab(props: { tab: FileTab; disabled: boolean; mono: boolean }) {
   const { tab, disabled, mono } = props
   const content = (
-    <span className={cx(styles.label, mono ? styles.labelMono : styles.labelUi)} data-label={tab.name}>
+    <span
+      className={cx(styles.label, mono ? styles.labelMono : styles.labelUi)}
+      data-label={tab.name}
+      dir={mono ? 'ltr' : undefined}
+    >
       {tab.name}
       {disabled ? (
         <svg className={styles.edge} aria-hidden="true" focusable="false">

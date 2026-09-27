@@ -21,8 +21,9 @@
   font-size: var(--fgd-font-size-body);
 }
 
+/* A band's own padding (--fgd-space-section), which the straddle card's rise cancels. */
 .lower {
-  padding: var(--size-px-8-5) var(--fgd-space-margin) var(--size-px-7-5);
+  padding: var(--fgd-space-section) var(--fgd-space-margin) var(--size-px-7-5);
 }
 
 .container {

@@ -111,7 +111,7 @@ Primary navigation below `--fgd-nav-inline-n-above`: a menu Button that opens a 
     - Additional types
 - Exports:
   - NavDrawer
-    - Props: children, className, closeLabel, currentPath, defaultOpen, footer, inlineTarget, label, logo, logoHref, logoLabel, nav, navLabel, onOpenChange, open, primary, renderLink, secondary, sections, triggerClassName
+    - Props: children, className, closeLabel, currentPath, defaultOpen, footer, inlineTarget, label, logo, logoHref, logoLabel, morph, nav, navLabel, onOpenChange, open, primary, renderLink, secondary, sections, triggerClassName
   - NavDrawerFooter
     - Props: action, children, locale
   - NavDrawerGroup
@@ -135,10 +135,11 @@ Where the page sits in the hierarchy: one line of caps crumbs, the staircase in 
 - Sections:
   - Kinds
   - On grounds
+  - Outline morph
   - API Reference
 - Exports:
   - Breadcrumb
-    - Props: current, domainGlyph, items, kind, overflowLabel, primary, printLine, renderCrumb, renderLink, secondary, toggleLabel, withStaircase
+    - Props: current, domainGlyph, items, kind, morph, overflowLabel, primary, printLine, renderCrumb, renderLink, secondary, toggleLabel, withStaircase
 - Types: BreadcrumbCrumb, BreadcrumbKind, BreadcrumbProps, BreadcrumbVariants, breadcrumb, breadcrumbStairRow
 
 </details>
@@ -209,6 +210,7 @@ A compact row of tools acting on one object or region: a list's count and action
 - Sections:
   - List and figure toolbars
   - On grounds
+  - Outline morph
   - API Reference
     - Toolbar
     - ToolbarButton
@@ -229,7 +231,7 @@ A compact row of tools acting on one object or region: a list's count and action
   - ToolbarLink
     - Props: className, external, index, kind, list, muted, primary, secondary
   - ToolbarMore
-    - Props: align, alignOffset, children, collisionPadding, container, keepMounted, label, primary, secondary, side, sideOffset
+    - Props: align, alignOffset, children, collisionPadding, container, keepMounted, label, morph, primary, secondary, side, sideOffset
   - ToolbarSeparator
 - Types: ToolbarBottomRuleProps, ToolbarButtonProps, ToolbarCountProps, ToolbarGroupProps, ToolbarItemProps, ToolbarLinkProps, ToolbarMoreProps, ToolbarProps, ToolbarSeparatorProps, ToolbarVariants, toolbar, toolbarBottomRule
 
@@ -302,7 +304,7 @@ The page tree of a documentation site: groups under caps headings, their pages o
 
 ## Table of Contents
 
-The page's "On this page" list: its headings as in-page links, with the section in view marked. It fills the docs layout's contents column, and its "On this page" disclosure on narrower screens.
+The page's "On this page" list: its headings as in-page links, with the section in view marked. It fills the docs layout's contents column on wide screens; below that, its compact bar names the section in view at the top of the page and opens the whole list.
 
 <details>
 
@@ -310,6 +312,7 @@ The page's "On this page" list: its headings as in-page links, with the section 
 
 - Sections:
   - On this page
+  - The compact bar
   - Scrollspy
   - API Reference
     - TableOfContents
@@ -317,10 +320,10 @@ The page's "On this page" list: its headings as in-page links, with the section 
     - Additional types
 - Exports:
   - TableOfContents
-    - Props: activeId, items, label, primary, renderLink, secondary
+    - Props: activeId, items, kind, label, morph, primary, renderLink, secondary
   - useActiveHeading
     - Parameters: ids, options
-- Types: TableOfContentsContext, TableOfContentsContextValue, TableOfContentsItem, TableOfContentsLevel, TableOfContentsProps, UseActiveHeadingOptions, tableOfContents
+- Types: TableOfContentsContext, TableOfContentsContextValue, TableOfContentsItem, TableOfContentsKind, TableOfContentsLevel, TableOfContentsProps, UseActiveHeadingOptions, tableOfContents
 
 </details>
 

@@ -2,7 +2,10 @@
  * Table of Contents (§9.16). CVA function `tableOfContents` in
  * TableOfContents.tsx.
  *
- * Parts: base (the nav), heading, list, item, link, label, labelText.
+ * Parts: base (the nav, or the bar's box; `kindList`, `kindBar`), heading,
+ * list, item, link, label, labelText; the bar's trigger, barLabel,
+ * barTitle, barChevron, positioner, panel (the Popover Popup),
+ * panelScroll, visuallyHidden.
  *
  * Line-based [D202]: the entries hang on a --border-size-1 --role-hairline
  * guide at the list's start edge, H3 and H4 one step in on their own
@@ -10,6 +13,16 @@
  * over it, the current-item grammar of the drawer, tab strip and Jump list.
  * No fills, no shadows. Colors are role variables only; there are no local
  * custom properties.
+ *
+ * The bar (`kind="bar"`) [D203]: one §10.1 field-box line, fixed at
+ * --fgd-size-control-md with a --fgd-size-hit target, whose words never
+ * change its size (the title truncates). Its panel is the anchored overlay
+ * surface (§10.1): a portaled `white` scope, --primary1 face, --border-size-2
+ * --primary12 frame at --radius-2-25, a third of the viewport tall (at
+ * least --size-px-13, at most the room below the bar), scrolling natively
+ * inside a --size-px-1 inset, which keeps the scrollbar clear of the
+ * rounded corners (≥ 0.293 × the 6 px inner radius). With the outline
+ * morph (the default) the panel answers `data-outline-morph` [D204].
  */
 
 /* Composition sits in top-level rules, outside the layers: Lightning CSS
@@ -23,10 +36,23 @@
   composes: typeCaption from '../../utils/type.module.css';
 }
 
+.barLabel {
+  composes: typeLabel typeMuted from '../../utils/type.module.css';
+}
+
+.barTitle {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
 @layer base {
   .base {
     display: block;
     min-inline-size: 0;
+  }
+
+  /* The list (`kind="list"`, the default): a block in its column. */
+  .kindList {
+    display: block;
   }
 
   /* The caps heading on a 44 px row, level with the sidebar's first group heading. */
@@ -99,6 +125,141 @@
   .labelText {
     grid-area: 1 / 1;
   }
+
+  /* ── The bar (`kind="bar"`) ───────────────────────────────────────── */
+
+  .kindBar {
+    inline-size: 100%;
+  }
+
+  /*
+   * The trigger: the §10.1 field box, one line, --fgd-size-control-md tall
+   * with a --fgd-size-hit target; the label, a hairline, the section in view
+   * (truncated) and the chevron. Its size never depends on its words.
+   */
+  .trigger {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-2);
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
+    block-size: var(--fgd-size-control-md);
+    margin: 0;
+    padding-block: 0;
+    padding-inline: var(--size-px-2-5) var(--size-px-2);
+    border: var(--border-size-1) solid var(--role-rule);
+    border-radius: var(--radius-1);
+    background: none;
+    color: var(--primary12);
+    text-align: start;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .trigger::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block: calc((var(--fgd-size-control-md) - var(--fgd-size-hit)) / 2);
+  }
+
+  .barLabel {
+    flex: none;
+    padding-inline-end: var(--size-px-2);
+    border-inline-end: var(--border-size-1) solid var(--role-hairline);
+    white-space: nowrap;
+  }
+
+  .barTitle {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow: hidden;
+    font-weight: var(--font-weight-6);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* The chevron: expand_more, inline tier; it turns while open, as the Select's [D166]. */
+  .barChevron {
+    flex: none;
+  }
+
+  .visuallyHidden {
+    position: absolute;
+    inline-size: var(--border-size-1);
+    block-size: var(--border-size-1);
+    margin: calc(-1 * var(--border-size-1));
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* Below 360 px the label drops from view to leave the title room; it stays in the name [D73]. */
+  @media (--xs-n-below) {
+    .barLabel {
+      position: absolute;
+      inline-size: var(--border-size-1);
+      block-size: var(--border-size-1);
+      margin: calc(-1 * var(--border-size-1));
+      padding: 0;
+      border: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+  }
+
+  /* The panel sits --fgd-popup-offset below the bar on --layer-3. */
+  .positioner {
+    z-index: var(--layer-3);
+    outline: 0;
+  }
+
+  /*
+   * The overlay face (§10.1): the bar's width, a third of the viewport tall
+   * with a --size-px-13 floor and the room below the bar as its ceiling
+   * (the fallback holds before the positioner measures, so the panel's
+   * height is final when it first paints and its list can be centered).
+   */
+  .panel {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    inline-size: min(var(--anchor-width, 100%), 100vw - 2 * var(--fgd-space-margin));
+    max-block-size: min(max(33svh, var(--size-px-13)), var(--available-height, 100dvh));
+    padding: var(--size-px-1);
+    border: var(--border-size-2) solid var(--primary12);
+    border-radius: var(--radius-2-25);
+    background-color: var(--primary1);
+    color: var(--primary12);
+    clip-path: inset(0);
+    outline: 0;
+  }
+
+  /* The native scrollbar, inset --size-px-1 from the frame's inner edge on every side. */
+  .panelScroll {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    padding-block: var(--size-px-1);
+    padding-inline: var(--size-px-2);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  @media (--motionOK) {
+    .trigger {
+      transition-property: border-color;
+      transition-duration: var(--fgd-duration-quick);
+      transition-timing-function: var(--ease-out-3);
+    }
+
+    .barChevron {
+      transition: rotate var(--fgd-duration-quick) var(--ease-out-3);
+    }
+  }
 }
 
 @layer compounds {
@@ -122,12 +283,39 @@
   .list .link[aria-current='location'] {
     font-weight: var(--font-weight-7);
   }
+
+  /* The bar: the field edge steps to --primary12 on hover and while open [D140]. */
+  .trigger:hover,
+  .trigger[data-popup-open] {
+    border-color: var(--primary12);
+  }
+
+  .trigger[data-popup-open] .barChevron {
+    rotate: 180deg;
+  }
+
+  /* Focus: keyboard only, the ring the outline morph grows from [D45, D204]. */
+  .trigger:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  /*
+   * Outline morph [D204] (`morph`, the default): while the overlay draws the
+   * frame, the panel's own edge takes its face. Without the morph the panel
+   * opens and closes at once [D205].
+   */
+  .panel[data-outline-morph] {
+    border-color: var(--primary1);
+    transition: none;
+  }
 }
 
 @layer print {
   @media print {
     /* Screen wayfinding: the document's own headings carry its structure (§7.7). */
-    .base {
+    .base,
+    .positioner {
       display: none;
     }
   }

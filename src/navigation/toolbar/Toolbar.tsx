@@ -276,6 +276,12 @@ export type ToolbarMoreProps = Omit<MenuPopupProps, 'children'> & {
   children?: React.ReactNode
   /** The trigger's accessible name and tooltip. Default "More". */
   label?: string
+  /**
+   * The outline morph: the "…" button's ring (or box) grows into the
+   * menu's frame as it opens and back as it closes [D204]. Default `true`;
+   * `false` opens and closes the menu at once.
+   */
+  morph?: boolean
 }
 
 /**
@@ -284,9 +290,9 @@ export type ToolbarMoreProps = Omit<MenuPopupProps, 'children'> & {
  * while the `lowPriority` items are hidden, so list those items here.
  */
 export function ToolbarMore(props: ToolbarMoreProps) {
-  const { label = 'More', align = 'end', children, ...popupProps } = props
+  const { label = 'More', align = 'end', morph = true, children, ...popupProps } = props
   return (
-    <Menu>
+    <Menu morph={morph}>
       <Tooltip>
         <TooltipTrigger
           render={

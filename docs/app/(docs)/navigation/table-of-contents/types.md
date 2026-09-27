@@ -6,26 +6,40 @@
 
 ### TableOfContents
 
-The page's "On this page" list \[D202]: a `nav` named by its caps heading
-(`type-label`) over an `ol` of in-page links in `type-caption`, H2s at
-the top level and H3 and H4 nested on the --role-hairline guide. The
-section in view (`activeId`) takes `aria-current="location"`, the
-\--border-size-2-25 start-edge bar and weight 700; every entry reserves
-that weight's box, so marking a section never moves the list.
+The page's contents \[D202, D203].
+
+`kind="list"` (default): a `nav` named by its caps heading (`type-label`)
+over an `ol` of in-page links in `type-caption`, H2s at the top level and
+H3 and H4 nested on the --role-hairline guide. The section in view
+(`activeId`) takes `aria-current="location"`, the --border-size-2-25
+start-edge bar and weight 700; every entry reserves that weight's box, so
+marking a section never moves the list.
+
+`kind="bar"`: one field-box line, "On this page" and the section in view
+(the first before scrollspy runs), truncated, with a chevron. It opens
+the same list in an anchored panel about a third of the viewport tall,
+scrolled inside so the section in view sits centered and marked, with
+focus on it; following an entry goes to its heading and closes the
+panel; Escape and an outside press close it and focus returns to the
+bar. The bar's ring or edge morphs into the panel's frame \[D204].
+
 Presentational: pair it with `useActiveHeading` for scrollspy. The docs
-layout shows it in a sticky column from --xl-n-above and in an "On this
-page" disclosure below. Hidden in print.
+layout shows the list in a sticky column from --xl-n-above and the bar,
+pinned under the header, below. With no items it renders nothing. Hidden
+in print.
 
 **TableOfContents Props:**
 
-| Prop       | Type                                                                                                                                                                                                                                                                                                                                               | Default | Description                                                                                                                                            |
-| :--------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| label      | `string`                                                                                                                                                                                                                                                                                                                                           | -       | The visible heading and the landmark's name. Default "On this page".                                                                                   |
-| activeId   | `string`                                                                                                                                                                                                                                                                                                                                           | -       | The id of the section in view: its entry takes `aria-current="location"`.&#xA;Pass `useActiveHeading(ids)` for scrollspy. Omitted, no entry is marked. |
-| items      | `TableOfContentsItem[]`                                                                                                                                                                                                                                                                                                                            | -       | The page's headings in order, levels 2–4 (a level-3 nests under the level-2 before it).                                                                |
-| primary    | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| null`                                                                                                                               | -       | -                                                                                                                                                      |
-| renderLink | `((href: string) => ReactElement)`                                                                                                                                                                                                                                                                                                                 | -       | Builds each anchor. Default: a plain `<a href="#id">`, which scrolls and writes the hash.                                                              |
-| secondary  | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| 'amber' \| 'blue' \| 'cyan' \| 'grass' \| 'green' \| 'jade' \| 'lime' \| 'mint' \| 'orange' \| 'sky' \| 'teal' \| 'yellow' \| null` | -       | -                                                                                                                                                      |
+| Prop       | Type                                                                                                                                                                                                                                                                                                                                               | Default | Description                                                                                                                                                                                                                  |
+| :--------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| label      | `string`                                                                                                                                                                                                                                                                                                                                           | -       | The visible heading (the bar's label) and the landmark's name. Default "On this page".                                                                                                                                       |
+| activeId   | `string`                                                                                                                                                                                                                                                                                                                                           | -       | The id of the section in view: its entry takes `aria-current="location"`,&#xA;and the bar names it. Pass `useActiveHeading(ids)` for scrollspy.&#xA;Omitted, no entry is marked and the bar names the first section.         |
+| items      | `TableOfContentsItem[]`                                                                                                                                                                                                                                                                                                                            | -       | The page's headings in order, levels 2–4 (a level-3 nests under the level-2 before it).                                                                                                                                      |
+| kind       | `'list' \| 'bar' \| null`                                                                                                                                                                                                                                                                                                                          | -       | `list` (default): the full list. `bar`: one line naming the section in&#xA;view, which opens the list in an anchored panel. Omitted, a host's&#xA;`TableOfContentsContext` may set it (the docs layout does).                |
+| morph      | `boolean`                                                                                                                                                                                                                                                                                                                                          | -       | With `kind="bar"`: the outline morph, the bar's ring or edge growing&#xA;into the panel's frame on open and back on close \[D204]. Default&#xA;`true`; it never runs under reduced motion, in forced colors or in&#xA;print. |
+| primary    | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| null`                                                                                                                               | -       | Override the scope's primary. Never defaulted \[D133].                                                                                                                                                                       |
+| renderLink | `((href: string) => ReactElement)`                                                                                                                                                                                                                                                                                                                 | -       | Builds each anchor. Default: a plain `<a href="#id">`, which scrolls and writes the hash.                                                                                                                                    |
+| secondary  | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| 'amber' \| 'blue' \| 'cyan' \| 'grass' \| 'green' \| 'jade' \| 'lime' \| 'mint' \| 'orange' \| 'sky' \| 'teal' \| 'yellow' \| null` | -       | Override the scope's secondary. Never defaulted.                                                                                                                                                                             |
 
 ### useActiveHeading
 
@@ -34,8 +48,10 @@ section is in view, for `TableOfContents`' `activeId`. An
 IntersectionObserver watches the headings against a band from the root's
 top edge down to `line`; each time one crosses the line the hook takes
 the last heading above it (the first while none has passed, the last
-once the root is scrolled to its end). A `scrollend` pass re-reads the
-positions after jumps that cross no line.
+once the root is scrolled to its end). The heading a link just landed on
+(the URL's hash) stays current while it sits above the line, so a short
+section chosen from the contents is the one marked. A `scrollend` pass
+re-reads the positions after jumps that cross no line.
 
 It only reads layout and returns an id: nothing it drives changes size
 (the list reserves each entry's current weight), so it causes no layout
@@ -65,7 +81,7 @@ type tableOfContents = tableOfContents;
 
 ### TableOfContentsContext
 
-Provided by a host of the list, such as the docs layout's disclosure.
+Provided by a host of the contents, such as the docs layout.
 
 ```typescript
 type TableOfContentsContext = React.Context<TableOfContentsContextValue>;
@@ -73,12 +89,15 @@ type TableOfContentsContext = React.Context<TableOfContentsContextValue>;
 
 ### TableOfContentsContextValue
 
-What a host tells the lists inside it. The docs layout sets `labelHidden`
-in its "On this page" disclosure, whose trigger already says it.
+What a host tells the contents inside it. The docs layout sets
+`kind: 'bar'` where it pins the compact bar (below --xl-n-above), so
+the one `toc` it is given draws as the column there and as the bar here.
 
 ```typescript
 type TableOfContentsContextValue = {
-  /** Hides the visible heading; it stays the landmark's name. */
+  /** The kind to draw when the component names none. */
+  kind?: TableOfContentsKind;
+  /** Hides the list's visible heading; it stays the landmark's name. */
   labelHidden?: boolean;
 };
 ```
@@ -98,6 +117,14 @@ type TableOfContentsItem = {
 };
 ```
 
+### TableOfContentsKind
+
+How the contents draw: the full list, or the compact bar that opens it.
+
+```typescript
+type TableOfContentsKind = NonNullable<'list' | 'bar' | null | undefined>;
+```
+
 ### TableOfContentsLevel
 
 Heading levels the list shows: H2 at its top level, H3 and H4 nested under it.
@@ -108,10 +135,35 @@ type TableOfContentsLevel = 2 | 3 | 4;
 
 ### TableOfContentsProps
 
-Props for TableOfContents: `nav` props, the headings, the section in view and the color axes.
+Props for TableOfContents: `nav` props, the headings, the section in view, the kind and the color axes.
 
 ```typescript
 type TableOfContentsProps = {
+  /** The page's headings in order, levels 2–4 (a level-3 nests under the level-2 before it). */
+  items: TableOfContentsItem[];
+  /**
+   * The id of the section in view: its entry takes `aria-current="location"`,
+   * and the bar names it. Pass `useActiveHeading(ids)` for scrollspy.
+   * Omitted, no entry is marked and the bar names the first section.
+   */
+  activeId?: string;
+  /** The visible heading (the bar's label) and the landmark's name. Default "On this page". */
+  label?: string;
+  /**
+   * `list` (default): the full list. `bar`: one line naming the section in
+   * view, which opens the list in an anchored panel. Omitted, a host's
+   * `TableOfContentsContext` may set it (the docs layout does).
+   */
+  kind?: 'list' | 'bar' | null;
+  /**
+   * With `kind="bar"`: the outline morph, the bar's ring or edge growing
+   * into the panel's frame on open and back on close [D204]. Default
+   * `true`; it never runs under reduced motion, in forced colors or in
+   * print.
+   */
+  morph?: boolean;
+  /** Builds each anchor. Default: a plain `<a href="#id">`, which scrolls and writes the hash. */
+  renderLink?: (href: string) => ReactElement;
   /** Override the scope's primary. Never defaulted [D133]. */
   primary?:
     | 'ruby'
@@ -168,17 +220,6 @@ type TableOfContentsProps = {
     | 'teal'
     | 'yellow'
     | null;
-  /** The page's headings in order, levels 2–4 (a level-3 nests under the level-2 before it). */
-  items: TableOfContentsItem[];
-  /**
-   * The id of the section in view: its entry takes `aria-current="location"`.
-   * Pass `useActiveHeading(ids)` for scrollspy. Omitted, no entry is marked.
-   */
-  activeId?: string;
-  /** The visible heading and the landmark's name. Default "On this page". */
-  label?: string;
-  /** Builds each anchor. Default: a plain `<a href="#id">`, which scrolls and writes the hash. */
-  renderLink?: (href: string) => ReactElement;
 };
 ```
 
@@ -206,7 +247,15 @@ type UseActiveHeadingOptions = {
 };
 ```
 
+## External Types
+
+### NonNullable
+
+```typescript
+type NonNullable = 'list' | 'bar';
+```
+
 ## Export Groups
 
-- `TableOfContents`: `TableOfContents`, `tableOfContents`, `TableOfContentsLevel`, `TableOfContentsItem`, `TableOfContentsContextValue`, `TableOfContentsContext`, `TableOfContentsProps`, `useActiveHeading`, `UseActiveHeadingOptions`
-- `useActiveHeading`: `TableOfContents`, `tableOfContents`, `TableOfContentsLevel`, `TableOfContentsItem`, `TableOfContentsContextValue`, `TableOfContentsContext`, `TableOfContentsProps`, `useActiveHeading`, `UseActiveHeadingOptions`
+- `TableOfContents`: `TableOfContents`, `tableOfContents`, `TableOfContentsKind`, `TableOfContentsLevel`, `TableOfContentsItem`, `TableOfContentsContextValue`, `TableOfContentsContext`, `TableOfContentsProps`, `useActiveHeading`, `UseActiveHeadingOptions`
+- `useActiveHeading`: `TableOfContents`, `tableOfContents`, `TableOfContentsKind`, `TableOfContentsLevel`, `TableOfContentsItem`, `TableOfContentsContextValue`, `TableOfContentsContext`, `TableOfContentsProps`, `useActiveHeading`, `UseActiveHeadingOptions`

@@ -9,7 +9,9 @@
  * the inverse pair); count --primary12; rail --role-hairline; railThumb
  * --primary12. Colors are role variables only; local custom properties
  * carry dimensions only (--carousel-slide, --carousel-bleed,
- * --carousel-ratio, a unitless ratio).
+ * --carousel-ratio, a unitless ratio). The component writes only custom
+ * properties inline (--carousel-bleed on the root, --carousel-ratio on a
+ * slide); these rules map them to real properties [D205].
  */
 
 /* Composition sits in top-level rules, outside the layers: Lightning CSS
@@ -92,6 +94,11 @@
   .photo {
     margin: 0;
   }
+
+  /* The photo at its own ratio, from the slide's --carousel-ratio, so the strip never crops it. */
+  .photo img {
+    aspect-ratio: var(--carousel-ratio);
+  }
 }
 
 @layer variants {
@@ -102,6 +109,9 @@
    * --carousel-bleed, which the component measures [D186].
    */
   .viewport {
+    /* A vertical wheel passes to the page: the track never holds vertical scroll chaining [D186]. */
+    --scroll-area-overscroll-y: auto;
+
     max-inline-size: none;
     margin-inline-end: calc(-1 * var(--carousel-bleed, 0px));
   }

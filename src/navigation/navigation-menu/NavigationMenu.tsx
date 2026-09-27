@@ -59,8 +59,8 @@ export { NAV_DELAY_MS }
  *   link, group headings and featured bar the chevron-link hover; `:active`
  *   → bar items a --border-size-2-25 --primary12 underline (derived; flagged),
  *   panel links a --border-size-2 --primary12 underline; `:focus-visible`
- *   → the ring on the hit area; popup `data-starting-style` → the
- *   first-open clip reveal only; switching and closing are instant, with no
+ *   → the ring on the hit area; the panel opens, switches and closes at
+ *   once (hover intent; no reveal of its own) [D205], with no
  *   --popup-width or --popup-height transition.
  * - Parts: base, list, item, trigger, hit, label, chevron, barLink, link
  *   (with Link's `nav` + `list` classes), positioner, popup, viewport (in a

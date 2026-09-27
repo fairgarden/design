@@ -154,8 +154,13 @@
     margin-block-start: calc((var(--fgd-size-hit) - var(--size-px-7)) / 2);
   }
 
+  /*
+   * The panel sits --size-px-5 below the tab row: the bar's Scroll Area
+   * always reserves its --size-px-2-5 scrollbar gutter [D201], so the panel
+   * adds the remaining --size-px-2 and the step stays 20 px.
+   */
   .panel {
-    margin-block-start: var(--size-px-5);
+    margin-block-start: var(--size-px-2);
   }
 
   .printLabel {
@@ -168,14 +173,12 @@
     }
   }
 
-  /* Hover transitions [D181]: --fgd-duration-quick, --ease-out-3. */
+  /*
+   * Hover transitions [D181]: --fgd-duration-quick, --ease-out-3, for the
+   * underline. A tab's fill (the filled kind's current cell) rests at none,
+   * so it steps at once [D205].
+   */
   @media (--motionOK) {
-    .tab {
-      transition-property: background-color;
-      transition-duration: var(--fgd-duration-quick);
-      transition-timing-function: var(--ease-out-3);
-    }
-
     .labelText {
       transition-property: text-decoration-color;
       transition-duration: var(--fgd-duration-quick);

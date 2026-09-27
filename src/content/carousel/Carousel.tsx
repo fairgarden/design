@@ -259,9 +259,6 @@ export function Carousel(props: CarouselProps) {
     const viewport = viewportRef.current
     const root = rootRef.current
     if (!viewport || !root) return undefined
-    // A vertical wheel passes to the page: the track scrolls on horizontal
-    // intent only, and never holds vertical scroll chaining [D186].
-    viewport.style.overscrollBehaviorY = 'auto'
 
     let frame = 0
     const schedule = () => {
@@ -480,14 +477,8 @@ export function CarouselPhoto(props: CarouselPhotoProps) {
     <CarouselSlide ratio={ratio}>
       <Figure kind="photo" className={styles.photo}>
         <FigureMedia>
-          <img
-            loading="lazy"
-            decoding="async"
-            {...imgProps}
-            src={src}
-            alt={alt}
-            style={{ ...imgProps?.style, aspectRatio: String(ratio) }}
-          />
+          {/* Its aspect ratio is the slide's --carousel-ratio, mapped in the module. */}
+          <img loading="lazy" decoding="async" {...imgProps} src={src} alt={alt} />
         </FigureMedia>
         {caption != null || credit != null ? (
           <FigureCaption credit={credit}>{caption}</FigureCaption>

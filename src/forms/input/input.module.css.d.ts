@@ -5,6 +5,7 @@ declare const styles: {
   readonly "affix": string;
   readonly "base": string;
   readonly "buttedEnd": string;
+  readonly "chars": string;
   readonly "control": string;
   readonly "count": string;
   readonly "countGlyph": string;

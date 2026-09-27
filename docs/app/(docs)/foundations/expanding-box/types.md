@@ -44,10 +44,11 @@ Runs `update` (the state change that swaps which box is active) as the
 morph. Resolves once the morph finishes, or on a microtask when it doesn't
 run. Never rejects.
 
-Without View Transitions, without `view-transition-class`, or under
-`prefers-reduced-motion: reduce` (read at call time), it calls `update()`
-directly; the owner's own fallback applies then (the Dialog's clip reveal
-where motion is allowed, else instant). Otherwise it sets
+Without View Transitions or `view-transition-class`, under
+`prefers-reduced-motion: reduce`, in forced colors or print, with
+`enabled: false`, where `--fgd-outline-morph: none` applies to the source,
+or with the direction's duration token at 0 (read at call time), it calls
+`update()` directly and the change is instant. Otherwise it sets
 `<html data-fgd-expanding="open|close">` and calls
 `document.startViewTransition(() => flushSync(update))`, removing the flag
 when the last running morph settles. Re-entry guards are the owner's.
@@ -219,6 +220,16 @@ Options for `startExpandingTransition`.
 type StartExpandingTransitionOptions = {
   /** `open` or `close`: sets `<html data-fgd-expanding>`, which picks the timing. */
   direction: ExpandingTransitionDirection;
+  /** The owner's `morph` prop. Default `true`; `false` applies the update at once, with no morph. */
+  enabled?: boolean;
+  /**
+   * The element the morph reads the shared switch and tokens on, usually the
+   * trigger (default: the root): `--fgd-outline-morph: none` there, or the
+   * direction's duration token (`--fgd-duration-expand` to open,
+   * `--fgd-duration-collapse` to close) resolving to 0, applies the update
+   * at once [D204].
+   */
+  source?: Element | null;
 };
 ```
 

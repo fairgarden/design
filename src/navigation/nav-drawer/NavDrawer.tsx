@@ -8,6 +8,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 
 import { DisclosureGlyph } from '../../disclosure/collapsible'
 import { Dialog } from '../../overlays/dialog'
+import { DialogMorphPopup, DialogMorphTrigger } from '../../overlays/dialog/morph'
 import { Ground } from '../../foundations/ground'
 import { Icon } from '../../foundations/icon'
 import { link } from '../../actions/link'
@@ -32,9 +33,12 @@ import styles from './nav-drawer.module.css'
  * - Color fallback: the header's scope through React context (the
  *   Navigation Bar's preset and overrides); the action is the §9.2 `solid`
  *   Button on that scope's action scale.
- * - States: Dialog Popup `data-starting-style` → the clip reveal from the
- *   top (full sheet) or the docked edge (side sheet), instant under
- *   --motionNotOK; Collapsible Panel the same from its top; menu Button
+ * - States: the sheet grows out of the menu Button by the outline morph
+ *   (§9.17) and shrinks back onto it (Popup `data-outline-morph` → its
+ *   edge takes the ground while the overlay frame draws it; the frame
+ *   lands one weight past the viewport's edges where the sheet has none),
+ *   else it opens and closes at once [D205, D206]; Collapsible Panel → the
+ *   clip reveal from its top, instant under --motionNotOK; menu Button
  *   `data-popup-open` → × plus "Close"; Collapsible Trigger
  *   `data-panel-open` → the D109 glyph turns inward in --primary12;
  *   `aria-current` → the --border-size-2-25 start-edge bar (weight 700 on
@@ -150,6 +154,12 @@ export type NavDrawerProps = {
   defaultOpen?: boolean
   /** Called when the drawer opens or closes. */
   onOpenChange?: (open: boolean) => void
+  /**
+   * The outline morph (§9.17) [D206]: the menu Button's ring (or its ink
+   * box) grows into the sheet as it opens and shrinks back onto it as it
+   * closes. Default `true`; `false` opens and closes at once.
+   */
+  morph?: boolean
   /** Override the header scope's primary. Never defaulted [D133]. */
   primary?: NavigationDrawerVariants['primary']
   /** Override the header scope's secondary. Never defaulted. */
@@ -191,6 +201,7 @@ export function NavDrawer(props: NavDrawerProps) {
     open: openProp,
     defaultOpen = false,
     onOpenChange,
+    morph = true,
     primary,
     secondary,
     className,
@@ -252,13 +263,13 @@ export function NavDrawer(props: NavDrawerProps) {
 
   return (
     <DrawerContext.Provider value={context}>
-      <Dialog open={open} onOpenChange={(next) => setOpen(next)}>
-        <BaseDialog.Trigger ref={triggerRef} className={cx(styles.menuTrigger, triggerClassName)}>
+      <Dialog open={open} onOpenChange={(next) => setOpen(next)} morph={morph}>
+        <DialogMorphTrigger ref={triggerRef} className={cx(styles.menuTrigger, triggerClassName)}>
           <Icon name={open ? 'close' : 'menu'} size="tag" weight="interactive" className={styles.menuIcon} />
           <span className={styles.menuLabel}>{open ? closeLabel : label}</span>
-        </BaseDialog.Trigger>
+        </DialogMorphTrigger>
         <BaseDialog.Portal>
-          <BaseDialog.Popup
+          <DialogMorphPopup
             ref={sheetRef}
             aria-label={label}
             initialFocus={() => {
@@ -309,7 +320,7 @@ export function NavDrawer(props: NavDrawerProps) {
               )}
             </ScrollArea>
             {footer}
-          </BaseDialog.Popup>
+          </DialogMorphPopup>
         </BaseDialog.Portal>
       </Dialog>
     </DrawerContext.Provider>

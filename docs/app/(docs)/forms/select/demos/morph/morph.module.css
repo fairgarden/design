@@ -1,0 +1,16 @@
+/*
+ * A tall stage: the last field sits at its foot, so with the demo near the
+ * top of the window its popup has no room below and opens upward.
+ */
+.stage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-px-5);
+  inline-size: 100%;
+  max-inline-size: var(--size-sm);
+  min-block-size: min(70vh, 560px);
+}
+
+.foot {
+  margin-block-start: auto;
+}

@@ -13,25 +13,26 @@ sticky 240 px column with its own scroll, from --fgd-nav-inline-n-above;
 below it the header's menu Button opens the same navigation in the
 drawer), the `main` page with its end gutter for the code blocks'
 hanging ⋮, and the table of contents (a sticky 240 px column from
-\--xl-n-above; below it an "On this page" disclosure at the top of the
-page, closed). Every placement is viewport media, so the first paint is
-the final frame. Print keeps the page alone.
+\--xl-n-above; below it the contents' compact bar, pinned under the
+header while the page scrolls, naming the section in view and opening
+the list in a panel). Every placement is viewport media and the bar has
+one fixed height, so the first paint is the final frame. Print keeps the
+page alone.
 
 **DocsLayout Props:**
 
-| Prop      | Type                                                                                                                                                                                                                                                                                                                                               | Default | Description                                                                                                                                                                                      |
-| :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| footer    | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | A full-width part under the columns, such as the site `Footer`.                                                                                                                                  |
-| header    | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | The site header: a `NavigationBar` with `wide` (so its content box&#xA;meets the columns), whose `drawer` is a `DocsLayoutDrawer`.                                                               |
-| mainId    | `string`                                                                                                                                                                                                                                                                                                                                           | -       | The `main` element's id, the skip link's target. Default "main".                                                                                                                                 |
-| preset    | `'paper' \| 'white' \| 'tide' \| 'meadow' \| 'pollen' \| 'apricot' \| 'rose' \| 'heather'`                                                                                                                                                                                                                                                         | -       | The page ground: `paper` (default), `white` or the page's one pastel.                                                                                                                            |
-| primary   | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| null`                                                                                                                               | -       | -                                                                                                                                                                                                |
-| secondary | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| 'amber' \| 'blue' \| 'cyan' \| 'grass' \| 'green' \| 'jade' \| 'lime' \| 'mint' \| 'orange' \| 'sky' \| 'teal' \| 'yellow' \| null` | -       | -                                                                                                                                                                                                |
-| sidebar   | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | The page tree: a `SidebarNav`. It fills the sticky start column from&#xA;--fgd-nav-inline-n-above and, below it, the drawer that&#xA;`DocsLayoutDrawer` opens from the header.                   |
-| skipLabel | `string`                                                                                                                                                                                                                                                                                                                                           | -       | The skip link's words. Default "Skip to main content".                                                                                                                                           |
-| toc       | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | The page's contents: a `TableOfContents`. It fills the sticky end&#xA;column from --xl-n-above and, below it, an "On this page" disclosure&#xA;at the top of the page. Omitted, neither appears. |
-| tocLabel  | `string`                                                                                                                                                                                                                                                                                                                                           | -       | The contents disclosure's label below --xl-n-above. Default "On this page".                                                                                                                      |
-| children  | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | The page.                                                                                                                                                                                        |
+| Prop      | Type                                                                                                                                                                                                                                                                                                                                               | Default | Description                                                                                                                                                                                                                                                                                                       |
+| :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| footer    | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | A full-width part under the columns, such as the site `Footer`.                                                                                                                                                                                                                                                   |
+| header    | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | The site header: a `NavigationBar` with `wide` (so its content box&#xA;meets the columns), whose `drawer` is a `DocsLayoutDrawer`.                                                                                                                                                                                |
+| mainId    | `string`                                                                                                                                                                                                                                                                                                                                           | -       | The `main` element's id, the skip link's target. Default "main".                                                                                                                                                                                                                                                  |
+| preset    | `'paper' \| 'white' \| 'tide' \| 'meadow' \| 'pollen' \| 'apricot' \| 'rose' \| 'heather'`                                                                                                                                                                                                                                                         | -       | The page ground: `paper` (default), `white` or the page's one pastel.                                                                                                                                                                                                                                             |
+| primary   | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| null`                                                                                                                               | -       | Override the page ground's primary. Never defaulted \[D133].                                                                                                                                                                                                                                                      |
+| secondary | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| 'amber' \| 'blue' \| 'cyan' \| 'grass' \| 'green' \| 'jade' \| 'lime' \| 'mint' \| 'orange' \| 'sky' \| 'teal' \| 'yellow' \| null` | -       | Override the page ground's secondary. Never defaulted.                                                                                                                                                                                                                                                            |
+| sidebar   | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | The page tree: a `SidebarNav`. It fills the sticky start column from&#xA;--fgd-nav-inline-n-above and, below it, the drawer that&#xA;`DocsLayoutDrawer` opens from the header.                                                                                                                                    |
+| skipLabel | `string`                                                                                                                                                                                                                                                                                                                                           | -       | The skip link's words. Default "Skip to main content".                                                                                                                                                                                                                                                            |
+| toc       | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | The page's contents: a `TableOfContents`. It fills the sticky end&#xA;column from --xl-n-above; below it, the same element draws as its&#xA;compact bar (`kind="bar"`, set through `TableOfContentsContext`),&#xA;pinned at the top of the page under the header. Omitted, or with no&#xA;items, neither appears. |
+| children  | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | The page.                                                                                                                                                                                                                                                                                                         |
 
 ### DocsLayoutDrawer
 
@@ -59,6 +60,7 @@ open, it closes and focus moves to the sidebar column's current link.
 | logo             | `React.ReactNode`                                                                                                                                                                                                                                                                                                                                  | -       | The logo repeated in the drawer's bar. Default: the Navigation Bar's.                                                                                                                                                                                       |
 | logoHref         | `string`                                                                                                                                                                                                                                                                                                                                           | -       | The logo link. Default: the Navigation Bar's, else "/".                                                                                                                                                                                                     |
 | logoLabel        | `string`                                                                                                                                                                                                                                                                                                                                           | -       | The logo link's accessible name. Default: the Navigation Bar's.                                                                                                                                                                                             |
+| morph            | `boolean`                                                                                                                                                                                                                                                                                                                                          | -       | The outline morph (§9.17) \[D206]: the menu Button's ring (or its ink&#xA;box) grows into the sheet as it opens and shrinks back onto it as it&#xA;closes. Default `true`; `false` opens and closes at once.                                                |
 | primary          | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| null`                                                                                                                               | -       | Override the header scope's primary. Never defaulted \[D133].                                                                                                                                                                                               |
 | renderLink       | `((href: string) => ReactElement)`                                                                                                                                                                                                                                                                                                                 | -       | Builds the logo link, e.g. `(href) => <NextLink href={href} />`.&#xA;Default: the Navigation Bar's, else a plain `<a href>`.                                                                                                                                |
 | secondary        | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| 'amber' \| 'blue' \| 'cyan' \| 'grass' \| 'green' \| 'jade' \| 'lime' \| 'mint' \| 'orange' \| 'sky' \| 'teal' \| 'yellow' \| null` | -       | Override the header scope's secondary. Never defaulted.                                                                                                                                                                                                     |
@@ -177,6 +179,12 @@ type DocsLayoutDrawerProps = {
   defaultOpen?: boolean;
   /** Called when the drawer opens or closes. */
   onOpenChange?: (open: boolean) => void;
+  /**
+   * The outline morph (§9.17) [D206]: the menu Button's ring (or its ink
+   * box) grows into the sheet as it opens and shrinks back onto it as it
+   * closes. Default `true`; `false` opens and closes at once.
+   */
+  morph?: boolean;
   /** Class names for the menu Button, added after its own. */
   triggerClassName?: string;
 };
@@ -188,6 +196,35 @@ Props for DocsLayout: `div` props, the frame's slots, the page ground and the co
 
 ```typescript
 type DocsLayoutProps = {
+  /**
+   * The site header: a `NavigationBar` with `wide` (so its content box
+   * meets the columns), whose `drawer` is a `DocsLayoutDrawer`.
+   */
+  header?: React.ReactNode;
+  /**
+   * The page tree: a `SidebarNav`. It fills the sticky start column from
+   * --fgd-nav-inline-n-above and, below it, the drawer that
+   * `DocsLayoutDrawer` opens from the header.
+   */
+  sidebar?: React.ReactNode;
+  /**
+   * The page's contents: a `TableOfContents`. It fills the sticky end
+   * column from --xl-n-above; below it, the same element draws as its
+   * compact bar (`kind="bar"`, set through `TableOfContentsContext`),
+   * pinned at the top of the page under the header. Omitted, or with no
+   * items, neither appears.
+   */
+  toc?: React.ReactNode;
+  /** The page. */
+  children?: React.ReactNode;
+  /** A full-width part under the columns, such as the site `Footer`. */
+  footer?: React.ReactNode;
+  /** The page ground: `paper` (default), `white` or the page's one pastel. */
+  preset?: 'paper' | 'white' | 'tide' | 'meadow' | 'pollen' | 'apricot' | 'rose' | 'heather';
+  /** The `main` element's id, the skip link's target. Default "main". */
+  mainId?: string;
+  /** The skip link's words. Default "Skip to main content". */
+  skipLabel?: string;
   /** Override the page ground's primary. Never defaulted [D133]. */
   primary?:
     | 'ruby'
@@ -244,35 +281,6 @@ type DocsLayoutProps = {
     | 'teal'
     | 'yellow'
     | null;
-  /**
-   * The site header: a `NavigationBar` with `wide` (so its content box
-   * meets the columns), whose `drawer` is a `DocsLayoutDrawer`.
-   */
-  header?: React.ReactNode;
-  /**
-   * The page tree: a `SidebarNav`. It fills the sticky start column from
-   * --fgd-nav-inline-n-above and, below it, the drawer that
-   * `DocsLayoutDrawer` opens from the header.
-   */
-  sidebar?: React.ReactNode;
-  /**
-   * The page's contents: a `TableOfContents`. It fills the sticky end
-   * column from --xl-n-above and, below it, an "On this page" disclosure
-   * at the top of the page. Omitted, neither appears.
-   */
-  toc?: React.ReactNode;
-  /** The page. */
-  children?: React.ReactNode;
-  /** A full-width part under the columns, such as the site `Footer`. */
-  footer?: React.ReactNode;
-  /** The page ground: `paper` (default), `white` or the page's one pastel. */
-  preset?: 'paper' | 'white' | 'tide' | 'meadow' | 'pollen' | 'apricot' | 'rose' | 'heather';
-  /** The `main` element's id, the skip link's target. Default "main". */
-  mainId?: string;
-  /** The skip link's words. Default "Skip to main content". */
-  skipLabel?: string;
-  /** The contents disclosure's label below --xl-n-above. Default "On this page". */
-  tocLabel?: string;
 };
 ```
 

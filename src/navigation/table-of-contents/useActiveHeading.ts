@@ -36,8 +36,10 @@ function atEnd(root: Element | null): boolean {
  * IntersectionObserver watches the headings against a band from the root's
  * top edge down to `line`; each time one crosses the line the hook takes
  * the last heading above it (the first while none has passed, the last
- * once the root is scrolled to its end). A `scrollend` pass re-reads the
- * positions after jumps that cross no line.
+ * once the root is scrolled to its end). The heading a link just landed on
+ * (the URL's hash) stays current while it sits above the line, so a short
+ * section chosen from the contents is the one marked. A `scrollend` pass
+ * re-reads the positions after jumps that cross no line.
  *
  * It only reads layout and returns an id: nothing it drives changes size
  * (the list reserves each entry's current weight), so it causes no layout
@@ -73,16 +75,27 @@ export function useActiveHeading(
 
     // The last heading whose top has passed the line; positions are read fresh.
     const update = () => {
-      if (atEnd(rootElement)) {
-        setActive(headings[headings.length - 1].id)
-        return
-      }
       const top = rootElement ? rootElement.getBoundingClientRect().top : 0
+      const bottom = rootElement ? rootElement.getBoundingClientRect().bottom : window.innerHeight
       const limit = top + lineDepth() + 1
+      const end = atEnd(rootElement)
       let current = headings[0].id
-      for (const heading of headings) {
-        if (heading.getBoundingClientRect().top <= limit) current = heading.id
-        else break
+      if (end) current = headings[headings.length - 1].id
+      else {
+        for (const heading of headings) {
+          if (heading.getBoundingClientRect().top <= limit) current = heading.id
+          else break
+        }
+      }
+      // The section a link just landed on (the URL's hash) stays current
+      // while its heading sits in the band above the line, or anywhere in
+      // view at the end of the page, even when a short section lets the
+      // next heading pass the line too.
+      const hash = decodeURIComponent(window.location.hash.slice(1))
+      const target = hash ? headings.find((heading) => heading.id === hash) : undefined
+      if (target != null) {
+        const at = target.getBoundingClientRect().top
+        if (at >= top - 1 && (at <= limit || (end && at < bottom))) current = target.id
       }
       setActive(current)
     }
@@ -110,10 +123,12 @@ export function useActiveHeading(
     const target: EventTarget = rootElement ?? window
     target.addEventListener('scrollend', update, { passive: true })
     window.addEventListener('resize', onResize, { passive: true })
+    window.addEventListener('hashchange', update)
     return () => {
       observer?.disconnect()
       target.removeEventListener('scrollend', update)
       window.removeEventListener('resize', onResize)
+      window.removeEventListener('hashchange', update)
     }
   }, [key, root, line, enabled])
 

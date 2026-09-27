@@ -37,9 +37,9 @@ import { DemoDocsLayoutHandbook } from './demos/handbook'
 
 <DemoDocsLayoutHandbook.Title />
 
-The columns sit inside `--fgd-container-wide`, which the frame reaches at a 1440 px window, with the grid gutter between them. The sidebar is a 240 px column, sticky at the top of the window with its own scroll and a hairline rule on its end edge; it opens scrolled to the current page. The page column keeps an end gutter at every width (24 px, then 44 px from 768 px) for the code blocks' hanging ⋮, and the frame clips sideways so that hit area never makes the page scroll. Prose inside keeps the reading measure. The contents column is 240 px, sticky and scrolling on its own when long. The layout renders the page's one skip link, aimed at its `main`, so the Navigation Bar in its header renders none. In print only the page remains: the skip link, the columns, the drawer and the contents disclosure are hidden, and the header prints as its masthead logo.
+The columns sit inside `--fgd-container-wide`, which the frame reaches at a 1440 px window, with the grid gutter between them. The sidebar is a 240 px column, sticky at the top of the window with its own scroll and a hairline rule on its end edge; it opens scrolled to the current page. The page column keeps an end gutter at every width (24 px, then 44 px from 768 px) for the code blocks' hanging ⋮, and the frame clips sideways so that hit area never makes the page scroll. Prose inside keeps the reading measure. The contents column is 240 px, sticky and scrolling on its own when long. The layout renders the page's one skip link, aimed at its `main`, so the Navigation Bar in its header renders none. In print only the page remains: the skip link, the columns, the drawer and the contents bar are hidden, and the header prints as its masthead logo.
 
-The demo runs in a frame that is its own viewport, so at this column's width it shows the drawer and the contents disclosure. Open the full page to see the columns.
+The demo runs in a frame that is its own viewport, so at this column's width it shows the drawer and the contents bar: scroll the page and the bar names the section in view; press it and the whole list opens, centered on that section. Open the full page to see the columns.
 
 <DemoDocsLayoutHandbook frame="scroll" />
 
@@ -49,11 +49,11 @@ The demo runs in a frame that is its own viewport, so at this column's width it 
 
 The layout adds no breakpoint. The sidebar column starts at `--fgd-nav-inline-n-above` (1024 px by default), the step where the header already swaps its drawer for inline navigation: below it, every navigation is in the drawer; from it, every navigation is inline. At 1024 px the page column still measures about 620 px after the sidebar, above the reading measure, while at 768 px it would fall to about 430 px, narrower than a phone held sideways. A site that sets the inline threshold to 1440 px moves the sidebar with it.
 
-The contents column starts at `--xl-n-above` (1440 px), where three columns fit: 240 px, the page at about 800 px, and 240 px. At 1024 px the page would drop below 400 px. Below 1440 px the contents move into an "On this page" disclosure at the top of the page, one closed row between hairlines, so a phone reader can still jump to a section without a floating control. A sticky "Jump to" bar was the other candidate; it would add a second sticky element and needs scrollspy wiring the site doesn't have yet.
+The contents column starts at `--xl-n-above` (1440 px), where three columns fit: 240 px, the page at about 800 px, and 240 px. At 1024 px the page would drop below 400 px. Below 1440 px the contents become their compact bar: one line at the top of the page, straight under the header, that sticks to the top of the window once the header scrolls away. It names the section in view, so a reader always knows where they are and can jump anywhere from there. It is the page's one sticky bar, since the header is static, and it sits in the page column, so it never covers the sidebar.
 
 ### Zero layout shift
 
-Every placement is viewport media in the layout's CSS: the columns, the menu Button, the disclosure. Nothing is measured and nothing waits for hydration, so the server HTML paints the final frame: no drawer flashes open, and a phone never paints the sidebar in the page flow for a frame. The disclosure is closed in the server HTML. The sidebar scrolls to the current page inside its own column (before first paint where `scroll-initial-target` is supported), which moves nothing around it. The sidebar and the contents reserve the bold width of every entry, so marking the current page or the section in view never rewraps a line.
+Every placement is viewport media in the layout's CSS: the columns, the menu Button, the contents bar. Nothing is measured and nothing waits for hydration, so the server HTML paints the final frame: no drawer flashes open, and a phone never paints the sidebar in the page flow for a frame. The contents bar has one fixed height and names the first section in the server HTML; naming another section later never changes its size, and its panel is an overlay that moves nothing. Headings in the page keep a `scroll-margin` so a link lands them clear of the bar. The sidebar scrolls to the current page inside its own column (before first paint where `scroll-initial-target` is supported), which moves nothing around it. The sidebar and the contents reserve the bold width of every entry, so marking the current page or the section in view never rewraps a line.
 
 ## The drawer
 
@@ -61,7 +61,7 @@ Every placement is viewport media in the layout's CSS: the columns, the menu But
 
 ## The table of contents
 
-The `toc` slot takes a `TableOfContents`. From 1440 px it fills the sticky end column; below, the layout puts the same list in the "On this page" disclosure and hides the list's own heading, since the trigger names it. Pass `useActiveHeading(ids)` as its `activeId` for scrollspy. On this site the slot is a placeholder: only this page feeds it, with its headings written out by hand, until the docs engine's page headings are wired (below).
+The `toc` slot takes a `TableOfContents`. From 1440 px it fills the sticky end column; below, the layout draws the same element as the contents' compact bar (`kind="bar"`, which it sets through `TableOfContentsContext`), pinned under the header. The bar names the section in view and opens the whole list in a panel about a third of the window tall, scrolled so that section sits centered and marked. Pass `useActiveHeading(ids)` as its `activeId` for scrollspy; with no items, neither the column nor the bar appears. On this site the slot is a placeholder: only this page feeds it, with its headings written out by hand, until the docs engine's page headings are wired (below).
 
 ## Wiring plan (planned)
 
@@ -71,7 +71,7 @@ This part is planned, not built. The sidebar is already fed from the docs engine
 - **Contents data (planned).** The engine already extracts every page's headings: the section index's outline lists them, and the sitemap carries them as each page's `sections`, which search indexes as "Sections". Some things are missing. The keys are slugs the engine makes itself, which can differ from the ids `rehype-slug` writes on the page: on this site 29 of 607 keys name no heading, because a repeated heading gets a `-1` suffix on the page and punctuation slugs differently. The level is implied by nesting, with H4s not recorded, and demo titles, which render as H3s, aren't listed. The engine should record each heading's rendered id and level.
 - **Helper (planned).** `toTableOfContents(page)` in `@fairgarden/design/utils/docs` will flatten those records into `TableOfContents` items (`id`, `title`, `level`), so the navigation components stay free of the engine, which remains an optional peer.
 - **Route (planned).** A layout can't see its route on the server, so a parallel route slot (`app/(docs)/@toc/[...slug]/page.tsx` with a `default.tsx`) will look the page up in the sitemap and render the contents with scrollspy, server-side, so the column is in the first paint. The static map in the site's `DocsToc` then goes.
-- **Checks (planned).** Every contents link resolves to a heading on its page; no layout shift at 1440, 1024 and 390 px; the disclosure closed in the server HTML.
+- **Checks (planned).** Every contents link resolves to a heading on its page; no layout shift at 1440, 1024 and 390 px; the bar naming the first section in the server HTML.
 
 ## API Reference
 

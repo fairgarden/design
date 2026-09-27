@@ -11,7 +11,8 @@
  * `line-dotted-fine` edge as true dots [D36, D68]. Colors are role
  * variables only; local custom properties carry dimensions only. The popup
  * is a portaled `white` page scope framed by --border-size-2 --primary12
- * [D92, D139, D156].
+ * [D92, D139, D156]. It opens and closes by the outline morph (the popup
+ * answers `data-outline-morph`, foundations/outline-morph) or at once [D205].
  */
 
 /* Composition sits in top-level rules, outside the layers: Lightning CSS
@@ -161,9 +162,6 @@
 
   /* The overlay face: the white scope's --primary1, the --border-size-2 --primary12 frame, --radius-2-25. */
   .popup {
-    /* The clip reveal starts from the trigger side. */
-    --combobox-reveal-from: inset(0 0 100% 0);
-
     box-sizing: border-box;
     inline-size: var(--anchor-width);
     max-inline-size: calc(100vw - 2 * var(--fgd-space-margin));
@@ -313,7 +311,7 @@
 
   @media (--motionOK) {
     .base {
-      transition-property: border-color, outline-color;
+      transition-property: border-color;
       transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
@@ -322,10 +320,6 @@
       transition: rotate var(--fgd-duration-quick) var(--ease-out-3);
     }
 
-    /* The clip reveal (the edge wipes open), never a fade [D91]. */
-    .popup {
-      transition: clip-path var(--fgd-duration-disclosure) var(--ease-out-3);
-    }
   }
 
   /* From --lg-n-above the popup may grow past the field, up to --size-sm. */
@@ -479,15 +473,14 @@
     display: none;
   }
 
-  /* Placement: a popup above the field reveals from its bottom edge. */
-  .popup[data-side='top'] {
-    --combobox-reveal-from: inset(100% 0 0 0);
-  }
-
-  /* The clip reveal from the trigger side [D91]; instant under --motionNotOK. */
-  .popup[data-starting-style],
-  .popup[data-ending-style] {
-    clip-path: var(--combobox-reveal-from);
+  /*
+   * Outline morph [D204]: while the overlay draws the frame, the popup's own
+   * edge takes its face and its own transitions stay off. Without the morph
+   * the popup opens and closes at once (no reveal of its own) [D205].
+   */
+  .popup[data-outline-morph] {
+    border-color: var(--primary1);
+    transition: none;
   }
 }
 

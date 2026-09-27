@@ -14,7 +14,7 @@ import { DemoButtonVariants } from './demos/variants'
 
 <DemoButtonVariants.Title />
 
-`outline` is the default; `solid` is the page's primary action; `text` carries a trailing glyph. Sizes run `sm` (32 px, hit area extended to 44), `md` (40 px, default), `lg` (48 px) and `xl` (56 px, the page's single transactional action). `icon` adds one functional glyph; `iconOnly` hides the label, which stays the accessible name. A disabled button draws a dotted edge.
+`outline` is the default; `solid` is the page's primary action; `text` carries a trailing glyph. Sizes run `sm` (32 px, hit area extended to 44), `md` (40 px, default), `lg` (48 px) and `xl` (56 px, the page's single transactional action). `icon` adds one functional glyph; `iconOnly` hides the label, which stays the accessible name. A disabled button draws a dotted edge. The keyboard focus ring is 2 px at a 2 px offset; a text button, which has no container, draws it around a box as tall as its size's other buttons, so its ring sits around the words at the same height as theirs (in running text it keeps to the line, 4 px out). Only the ring changes: the words and the hit area don't move.
 
 <DemoButtonVariants />
 

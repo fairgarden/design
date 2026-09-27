@@ -158,7 +158,6 @@
   }
 
   .popup {
-    --navigation-menu-clip-from: inset(0 0 100% 0);
     --navigation-menu-clip-rest: inset(calc(-1 * var(--size-px-2)));
 
     box-sizing: border-box;
@@ -450,13 +449,6 @@
       transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
-
-    /* First open only: the clip reveal from the top; switching and closing stay instant [D182]. */
-    .popup {
-      transition-property: clip-path;
-      transition-duration: var(--fgd-duration-disclosure);
-      transition-timing-function: var(--ease-out-3);
-    }
   }
 }
 
@@ -616,12 +608,6 @@
     .categoryTrigger:hover .categoryLabel {
       text-decoration-line: underline;
     }
-  }
-
-  /* ── Motion: the first open's clip reveal from the top [D91, D182] ─── */
-
-  .popup[data-starting-style] {
-    clip-path: var(--navigation-menu-clip-from);
   }
 }
 

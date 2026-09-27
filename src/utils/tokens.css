@@ -208,6 +208,23 @@
      * never leaves [0, 1]: no overshoot. JS mirror: utils/tokens.ts.
      */
     --fgd-duration-expand: 333ms;
+    /*
+     * The anchored morph's close (the outline morph, §9.17) [D204]: an alias
+     * of --fgd-duration-disclosure (200 ms), so the Morph tier owns its own
+     * name and a close is never slower than its open. The outline morph reads
+     * it, --fgd-duration-expand and --fgd-ease-expand from the trigger at each
+     * open and close; 0ms turns the morph off. JS mirror: utils/tokens.ts.
+     */
+    --fgd-duration-collapse: var(--fgd-duration-disclosure);
+    /*
+     * The modal morph (the outline morph on Dialog, Alert Dialog and the
+     * drawer's sheets, §9.17) [D206]: the same curve, stretched for the
+     * longer travel from a trigger to a panel or a full sheet; the close is
+     * 0.6 × the open, the ratio of 333 to 200. 0ms turns that morph off.
+     * JS mirror: SURFACE_DURATION_MS in utils/tokens.ts.
+     */
+    --fgd-duration-expand-surface: 400ms;
+    --fgd-duration-collapse-surface: 240ms;
     --fgd-ease-expand: linear(
       0,
       0,
@@ -294,6 +311,8 @@
       --fgd-duration-quick: var(--fgd-duration-instant);
       --fgd-duration-disclosure: var(--fgd-duration-instant);
       --fgd-duration-expand: var(--fgd-duration-instant);
+      --fgd-duration-expand-surface: var(--fgd-duration-instant);
+      --fgd-duration-collapse-surface: var(--fgd-duration-instant);
       --fgd-duration-swap: var(--fgd-duration-instant);
     }
   }

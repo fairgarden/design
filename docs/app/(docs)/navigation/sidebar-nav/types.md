@@ -25,9 +25,9 @@ nothing moves around it. Hidden in print.
 | collapsible | `boolean`                                                                                                                                                                                                                                                                                                                                          | -       | Groups become independent Collapsibles, each heading with the D109&#xA;glyph; the group holding the current page opens by default. Default&#xA;`false`: every group open, no toggles. |
 | currentPath | `string`                                                                                                                                                                                                                                                                                                                                           | -       | The current page's URL path; its link takes `aria-current="page"`.                                                                                                                    |
 | items       | `SidebarNavItem[]`                                                                                                                                                                                                                                                                                                                                 | -       | The page tree: groups (a caps heading over its pages) and, rarely,&#xA;top-level pages. Plain data, so the desktop column and the drawer&#xA;render the same object.                  |
-| primary     | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| null`                                                                                                                               | -       | -                                                                                                                                                                                     |
+| primary     | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| null`                                                                                                                               | -       | Override the scope's primary. Never defaulted \[D133].                                                                                                                                |
 | renderLink  | `((href: string) => ReactElement)`                                                                                                                                                                                                                                                                                                                 | -       | Builds each anchor, e.g. `(href) => <NextLink href={href} />`.&#xA;Default: a plain `<a href>`.                                                                                       |
-| secondary   | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| 'amber' \| 'blue' \| 'cyan' \| 'grass' \| 'green' \| 'jade' \| 'lime' \| 'mint' \| 'orange' \| 'sky' \| 'teal' \| 'yellow' \| null` | -       | -                                                                                                                                                                                     |
+| secondary   | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| 'amber' \| 'blue' \| 'cyan' \| 'grass' \| 'green' \| 'jade' \| 'lime' \| 'mint' \| 'orange' \| 'sky' \| 'teal' \| 'yellow' \| null` | -       | Override the scope's secondary. Never defaulted.                                                                                                                                      |
 | toggleLabel | `((title: string) => string)`                                                                                                                                                                                                                                                                                                                      | -       | The toggle's accessible name for a group. Default: "{title} pages".                                                                                                                   |
 
 ## Additional Types
@@ -69,6 +69,29 @@ Props for SidebarNav: `nav` props, the page tree, the current path and the color
 
 ```typescript
 type SidebarNavProps = {
+  /**
+   * The page tree: groups (a caps heading over its pages) and, rarely,
+   * top-level pages. Plain data, so the desktop column and the drawer
+   * render the same object.
+   */
+  items: SidebarNavItem[];
+  /** The current page's URL path; its link takes `aria-current="page"`. */
+  currentPath?: string;
+  /** The landmark's name. Default "Documentation". */
+  label?: string;
+  /**
+   * Groups become independent Collapsibles, each heading with the D109
+   * glyph; the group holding the current page opens by default. Default
+   * `false`: every group open, no toggles.
+   */
+  collapsible?: boolean;
+  /** The toggle's accessible name for a group. Default: "{title} pages". */
+  toggleLabel?: (title: string) => string;
+  /**
+   * Builds each anchor, e.g. `(href) => <NextLink href={href} />`.
+   * Default: a plain `<a href>`.
+   */
+  renderLink?: (href: string) => ReactElement;
   /** Override the scope's primary. Never defaulted [D133]. */
   primary?:
     | 'ruby'
@@ -125,29 +148,6 @@ type SidebarNavProps = {
     | 'teal'
     | 'yellow'
     | null;
-  /**
-   * The page tree: groups (a caps heading over its pages) and, rarely,
-   * top-level pages. Plain data, so the desktop column and the drawer
-   * render the same object.
-   */
-  items: SidebarNavItem[];
-  /** The current page's URL path; its link takes `aria-current="page"`. */
-  currentPath?: string;
-  /** The landmark's name. Default "Documentation". */
-  label?: string;
-  /**
-   * Groups become independent Collapsibles, each heading with the D109
-   * glyph; the group holding the current page opens by default. Default
-   * `false`: every group open, no toggles.
-   */
-  collapsible?: boolean;
-  /** The toggle's accessible name for a group. Default: "{title} pages". */
-  toggleLabel?: (title: string) => string;
-  /**
-   * Builds each anchor, e.g. `(href) => <NextLink href={href} />`.
-   * Default: a plain `<a href>`.
-   */
-  renderLink?: (href: string) => ReactElement;
 };
 ```
 

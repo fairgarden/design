@@ -1,0 +1,113 @@
+/*
+ * Outline morph [D204, D206]: the overlay frame a trigger's focus ring
+ * grows through into its popup's frame. Parts: `frame`, `tail` (the tail
+ * cap), `layer` (a modal surface's container). The frame's
+ * translation, size, radii, edge weight and edge color are all set by the
+ * running animation (useOutlineMorph), read from the ring and the popup at
+ * run time, so no color or dimension is restated here. It is absolutely
+ * positioned in the popup's positioned container, so it never takes part
+ * in layout.
+ */
+
+@layer base {
+  /*
+   * An empty frame: no face, so the field and the popup show through it.
+   * Anchored at the container's physical top-left corner: the engine
+   * measures in viewport coordinates and moves it by `translate`, so a
+   * logical inset would anchor it at the wrong corner in RTL.
+   */
+  .frame {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    /* The engine's registered offsets and size, rounded to whole pixels so the edge stays crisp. */
+    translate: round(var(--fgd-outline-morph-x, 0px), 1px) round(var(--fgd-outline-morph-y, 0px), 1px);
+    width: round(var(--fgd-outline-morph-w, 0px), 1px);
+    height: round(var(--fgd-outline-morph-h, 0px), 1px);
+    /* Its paint, from the engine's registered radii, edge color and weight. */
+    border-width: var(--fgd-outline-morph-weight, 0px);
+    border-color: var(--fgd-outline-morph-color, currentColor);
+    border-radius: var(--fgd-outline-morph-r1, 0px) var(--fgd-outline-morph-r2, 0px)
+      var(--fgd-outline-morph-r3, 0px) var(--fgd-outline-morph-r4, 0px);
+    margin: 0;
+    padding: 0;
+    border-style: solid;
+    background: none;
+    pointer-events: none;
+  }
+
+  .frame[data-running] {
+    display: block;
+  }
+
+  /*
+   * The tail cap: a copy of a popup's tail, above the frame, on the tail's
+   * own subpixels (the engine's placement, custom properties). Its size and
+   * rotation are the adopter's; its clip and stroke color animate with the
+   * frame.
+   */
+  .tail {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    translate: var(--fgd-outline-morph-tail-x, 0px) var(--fgd-outline-morph-tail-y, 0px);
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+  }
+
+  .tail[data-running] {
+    display: block;
+  }
+
+  /*
+   * A modal surface's layer [D206]: the full viewport, fixed, never hit
+   * tested; it clips a frame landing past the viewport's edge (a sheet's
+   * bleed), so the page never scrolls to it.
+   */
+  .layer {
+    position: fixed;
+    inset: 0;
+    z-index: var(--layer-4);
+    overflow: clip;
+    pointer-events: none;
+  }
+
+
+  /* The morph never starts in forced colors; the frame never shows there. */
+  @media (--forcedColors) {
+    .frame[data-running],
+    .tail[data-running] {
+      display: none;
+    }
+  }
+}
+
+/*
+ * An open waiting for its popup's placement holds the popup clipped away, a
+ * discrete hold [D196], so it never paints unclipped before the morph
+ * starts; the engine removes the attribute as the morph starts or gives up.
+ * A clip, not `visibility: hidden`: Base UI moves focus into the popup
+ * during that wait, and a hidden element can't take focus. In the states
+ * layer, over the popups' own starting clip and transition.
+ */
+@layer states {
+  :global([data-outline-morph-pending]) {
+    clip-path: inset(0 0 100% 0);
+    transition: none;
+  }
+}
+
+@layer print {
+  @media print {
+    .frame,
+    .frame[data-running],
+    .tail,
+    .tail[data-running] {
+      display: none;
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # Table of Contents
 
-The page's "On this page" list: its headings as in-page links, with the section in view marked. It fills the docs layout's contents column, and its "On this page" disclosure on narrower screens.
+The page's "On this page" list: its headings as in-page links, with the section in view marked. It fills the docs layout's contents column on wide screens; below that, its compact bar names the section in view at the top of the page and opens the whole list.
 
 ```tsx
 import {
@@ -17,11 +17,23 @@ import { DemoTableOfContentsBasic } from './demos/contents'
 
 <DemoTableOfContentsBasic.Title />
 
-A `nav` named by its caps heading, "On this page" unless you pass `label`, over an ordered list of `type-caption` links on 44 px rows. The entries hang on a hairline guide at the list's start edge, and nested levels step in on their own guide. The section in view takes `aria-current="location"`, the 3 px start-edge bar over the guide and weight 700: the same current-item marks as the sidebar, the drawer and the section bar's Jump list. Every entry reserves its bold width, so marking a section never rewraps a line. Hover follows the list-link rule. Inside the docs layout's disclosure the heading is hidden, since the trigger already says it, and it stays the landmark's name. In print the list is hidden; the document's own headings carry its structure.
+A `nav` named by its caps heading, "On this page" unless you pass `label`, over an ordered list of `type-caption` links on 44 px rows. The entries hang on a hairline guide at the list's start edge, and nested levels step in on their own guide. The section in view takes `aria-current="location"`, the 3 px start-edge bar over the guide and weight 700: the same current-item marks as the sidebar, the drawer and the section bar's Jump list. Every entry reserves its bold width, so marking a section never rewraps a line. Hover follows the list-link rule. Inside the compact bar's panel the heading is hidden, since the bar already says it, and it stays the landmark's name. In print the list is hidden; the document's own headings carry its structure.
 
 <DemoTableOfContentsBasic />
 
 [See Demo](./demos/contents/)
+
+## The compact bar
+
+import { DemoTableOfContentsBar } from './demos/bar'
+
+<DemoTableOfContentsBar.Title />
+
+With `kind="bar"` the contents shrink to one line for narrow screens: a field-like box holding "On this page" and the title of the section in view, truncated, with a chevron. Before scrollspy runs (and in the server HTML) it names the first section, and its height never changes, whichever section it names. Pressing it opens the whole list in a panel anchored under the bar, about a third of the viewport tall (at least 240 px, never more than the room below the bar), with the browser's own scrollbar kept clear of its rounded corners. The panel scrolls itself, never the page, so the section in view sits centered and marked, and focus lands on it. Following an entry goes to its heading (clear of a sticky bar, given a `scroll-margin`), closes the panel and moves focus to the heading; Escape or a press outside closes it and focus returns to the bar. The bar's ring, or its edge when pressed with a pointer, grows into the panel's frame as the panel opens and shrinks back as it closes, as the Select's does; pass `morph={false}`, or set `--fgd-outline-morph: none`, to turn that off, and under reduced motion the panel simply appears. The section in view is announced politely when it changes. With no items the component renders nothing. The docs layout draws the same `toc` element as this bar below 1440 px, pinned under its header, so you pass one contents element for both widths. In print the bar and the panel are hidden.
+
+<DemoTableOfContentsBar />
+
+[See Demo](./demos/bar/)
 
 ## Scrollspy
 

@@ -8,7 +8,7 @@ import { CodeBlock } from '@fairgarden/design/content/code-block'
 
 Code Block is a `@fairgarden/docs` Content component: pass it as `CodeHighlighter`'s `Content`. It calls the engine's `useCode(props)` and renders the result. The engine owns the highlighting, the file, variant and TS | JS state, the swap between them, the hash deep links, the stored preferences and copy; Code Block draws them in the design system's frame. Its header is [File Tabs](../../navigation/file-tabs/page.mdx), with the actions as its controls and the busy label as its status. `@fairgarden/docs` is an optional peer dependency; install it to use Code Block. Every fenced code block on this site is a Code Block.
 
-Code sets in mono at the caption size. Every syntax color is a role of the block's scales, so a block follows its ground and the page mode, and prints black on white.
+Code sets in mono at the caption size. Every syntax color is a role of the block's scales, so a block follows its ground and the page mode, and prints black on white. Code and file names always read left to right; on a right-to-left page the header's layout mirrors around them.
 
 ## Setup
 
@@ -68,7 +68,7 @@ import { CodeBlockFiles } from './demos/files/CodeBlockFiles'
 
 Two or more files become folder tabs, and the actions move into the "More actions" menu: copy, copy link, view source, copy all files as Markdown, and the TS | JS option and variants when there are any. Tabs are links to each file's `#slug`: a plain click switches the file, a modifier click opens the link and leaves the selection. The tabs take the header's whole width and scroll when they overflow, passing under the frame's side edges.
 
-The menu's trigger, a vertical ⋮, always hangs just outside the frame's end edge, never inside it. Leave `--fgd-size-file-tabs-control` (24 px) free past every code block's end, with nothing clipping it sideways: this site's column keeps that gutter at every width (44 px from the medium breakpoint, so the whole hit area fits), and a demo's preview keeps it inside its inset. The same block in the page column:
+The menu's trigger, a vertical ⋮, always hangs just outside the frame's end edge, never inside it. Opening the menu grows the ⋮'s ear (or, from the keyboard, its ring) into the menu's frame, the Menu's [outline morph](../../foundations/outline-morph/page.mdx); `--fgd-outline-morph: none` on the block turns it off. Leave `--fgd-size-file-tabs-control` (24 px) free past every code block's end, with nothing clipping it sideways: this site's column keeps that gutter at every width (44 px from the medium breakpoint, so the whole hit area fits), and a demo's preview keeps it inside its inset. The same block in the page column:
 
 <CodeBlockFiles slug="volunteer-shift-column" />
 

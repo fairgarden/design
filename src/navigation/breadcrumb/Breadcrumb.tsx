@@ -149,6 +149,12 @@ export interface BreadcrumbProps
    * page masthead prints the path instead. Default `true`.
    */
   printLine?: boolean
+  /**
+   * The "…" menu's outline morph: the button's ring (or box) grows into
+   * the menu's frame as it opens and back as it closes [D204]. Default
+   * `true`; `false` opens and closes the menu at once.
+   */
+  morph?: boolean
 }
 
 function anchor(href: string, renderLink?: (href: string) => React.ReactElement) {
@@ -198,15 +204,17 @@ function Overflow({
   crumbs,
   label,
   renderLink,
+  morph,
 }: {
   tier: string
   crumbs: readonly BreadcrumbCrumb[]
   label: string
   renderLink?: (href: string) => React.ReactElement
+  morph: boolean
 }) {
   return (
     <li className={cx(styles.item, tier)}>
-      <Menu>
+      <Menu morph={morph}>
         <Tooltip>
           <TooltipTrigger
             render={
@@ -244,6 +252,7 @@ function CrumbList({
   renderLink,
   renderCrumb,
   overflowLabel,
+  morph,
 }: {
   items: readonly BreadcrumbCrumb[]
   current: React.ReactNode
@@ -251,6 +260,7 @@ function CrumbList({
   renderLink?: (href: string) => React.ReactElement
   renderCrumb?: (href: string) => React.ReactElement
   overflowLabel: string
+  morph: boolean
 }) {
   const md = collapse(items.length, 4)
   const lg = collapse(items.length, 6)
@@ -279,6 +289,7 @@ function CrumbList({
           crumbs={md.hidden.map((hidden) => items[hidden])}
           label={overflowLabel}
           renderLink={renderLink}
+          morph={morph}
         />
       )
     }
@@ -290,6 +301,7 @@ function CrumbList({
           crumbs={lg.hidden.map((hidden) => items[hidden])}
           label={overflowLabel}
           renderLink={renderLink}
+          morph={morph}
         />
       )
     }
@@ -405,6 +417,7 @@ export function Breadcrumb(props: BreadcrumbProps) {
     toggleLabel = 'Page path',
     printLine = true,
     withStaircase = true,
+    morph = true,
     className,
     ...rest
   } = props
@@ -437,6 +450,7 @@ export function Breadcrumb(props: BreadcrumbProps) {
           renderLink={renderLink}
           renderCrumb={renderCrumb}
           overflowLabel={overflowLabel}
+          morph={morph}
         />
       )}
       {printLine && items.length > 0 ? (

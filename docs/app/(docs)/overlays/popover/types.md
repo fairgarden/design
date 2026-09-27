@@ -6,12 +6,20 @@
 
 ### Popover
 
-Groups the parts of a popover (Base UI Popover.Root). Esc or an outside press closes it.
+Groups the parts of a popover (Base UI Popover.Root) and wires its
+outline morph. Esc or an outside press closes it.
+
+**Popover Props:**
+
+| Prop  | Type      | Default | Description                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| :---- | :-------- | :------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| morph | `boolean` | -       | The outline morph: the trigger's focus ring (or, opened by pointer, its&#xA;edge) grows into the panel's frame as it opens and shrinks back as it&#xA;closes; a tail (PopoverArrow) grows out of the frame's edge as it lands.&#xA;A hover open is instant. Instant under reduced motion; off in forced colors and&#xA;print, and wherever `--fgd-outline-morph: none` applies. Default&#xA;`true`; `false` opens and closes the panel at once. |
 
 ### PopoverArrow
 
 The tail: a --size-px-2-5 × 6 px triangle filled with the face, its
-\--border-size-2 --primary12 edge continuing the panel's frame.
+\--border-size-2 --primary12 edge continuing the panel's frame. With the
+outline morph it grows out of the frame's edge as the panel lands.
 
 ### PopoverClose
 
@@ -34,7 +42,7 @@ The content or the definition (Base UI Popover.Description), in `type-body-ui` -
 The anchored panel, rendered in its Base UI Portal as a nested `white`
 scope: --primary1 face, --border-size-2 --primary12 frame, --radius-2-25,
 240–360 px wide from --md-n-above and the viewport less its margins
-below. It opens instantly or with a clip reveal from the trigger side.
+below. It opens from its trigger by the outline morph, or at once.
 Render `PopoverArrow` inside it for the tail.
 
 **PopoverPopup Props:**
@@ -197,10 +205,10 @@ type PopoverPopupProps = PopoverPopupProps & {
 
 ### PopoverProps
 
-Props for Popover: Base UI Popover.Root props (`open`, `onOpenChange`, `modal` …).
+Props for Popover: Base UI Popover.Root props (`open`, `onOpenChange`, `modal` …) plus the outline morph.
 
 ```typescript
-type PopoverProps<Payload = unknown> = PopoverRoot.Props<Payload>;
+type PopoverProps<Payload = unknown> = PopoverRoot.Props<Payload> & { morph?: boolean };
 ```
 
 ### PopoverSourceProps

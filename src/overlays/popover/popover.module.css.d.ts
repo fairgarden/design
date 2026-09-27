@@ -8,6 +8,7 @@ declare const styles: {
   readonly "positioner": string;
   readonly "source": string;
   readonly "tail": string;
+  readonly "tailCap": string;
   readonly "term": string;
   readonly "title": string;
 };

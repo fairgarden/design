@@ -6,7 +6,13 @@
 
 ### Menu
 
-Groups the parts of a menu (Base UI Menu.Root).
+Groups the parts of a menu (Base UI Menu.Root) and wires its outline morph.
+
+**Menu Props:**
+
+| Prop  | Type      | Default | Description                                                                                                                                                                                                                                                                                                                                                                                         |
+| :---- | :-------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| morph | `boolean` | -       | The outline morph: the trigger's focus ring (or, opened by pointer, its&#xA;edge) grows into the popup's frame as it opens and shrinks back as it&#xA;closes. Hover opens and submenus are instant \[D205]. Instant&#xA;under reduced motion; off in forced colors and print, and wherever&#xA;`--fgd-outline-morph: none` applies. Default `true`; `false` opens and&#xA;closes the popup at once. |
 
 ### MenuCheckboxItem
 
@@ -45,7 +51,7 @@ The popup, rendered through its Base UI Portal as a nested `white`
 scope: --primary1 face, --border-size-2 --primary12 edge, --radius-2-25,
 \--size-px-1 padding, 200 px to --size-px-14 wide and at least the
 trigger's width, --size-px-2 from the trigger, aligned to its start
-edge. It opens instantly or with a clip reveal from the trigger side.
+edge. It opens from its trigger by the outline morph, or at once \[D205].
 Inside a `MenuSubmenu` it flies out to the end side.
 
 **MenuPopup Props:**
@@ -80,7 +86,8 @@ A full-width --border-size-1 --role-rule between groups, --size-px-1 above and b
 
 Groups a submenu's trigger and popup (Base UI Menu.SubmenuRoot). The
 nested MenuPopup flies out to the end side at --size-px-2 and flips at
-the viewport edge.
+the viewport edge and opens at once: the outline morph stays
+with the top-level menu \[D204].
 
 ### MenuSubmenuTrigger
 
@@ -307,10 +314,10 @@ type MenuPopupProps = MenuPopupProps & {
 
 ### MenuProps
 
-Props for Menu: Base UI Menu.Root props (`open`, `onOpenChange`, `modal` …).
+Props for Menu: Base UI Menu.Root props (`open`, `onOpenChange`, `modal` …) plus the outline morph.
 
 ```typescript
-type MenuProps<Payload = unknown> = MenuRoot.Props<Payload>;
+type MenuProps<Payload = unknown> = MenuRoot.Props<Payload> & { morph?: boolean };
 ```
 
 ### MenuRadioGroupProps

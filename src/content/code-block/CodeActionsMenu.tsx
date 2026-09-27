@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import { Menu as BaseMenu } from '@base-ui/react/menu'
 import type { UseCodeResult } from '@fairgarden/docs/useCode'
 
 import { Button } from '../../actions/button'
@@ -17,6 +16,7 @@ import {
   MenuRadioItem,
   MenuSeparator,
 } from '../../overlays/menu'
+import { MenuMorphTrigger } from '../../overlays/menu/morph'
 import { Tooltip, TooltipPopup, TooltipProvider, TooltipTrigger } from '../../overlays/tooltip'
 import { Icon, type IconName } from '../../foundations/icon'
 import { FileTabsControl } from '../../navigation/file-tabs'
@@ -39,7 +39,9 @@ import styles from './code-block.module.css'
  * whose trigger is a FileTabsControl holding the vertical ⋮ at the tag
  * tier: File Tabs always hangs it outside the frame's inline-end edge (an
  * ear, its --fgd-size-hit hit area in that gutter; the page leaves
- * --fgd-size-file-tabs-control free there). A nameless file whose only
+ * --fgd-size-file-tabs-control free there); opening it grows the ear's
+ * outline (or, from the keyboard, its inset ring) into the menu's frame,
+ * the Menu's outline morph [D204]. A nameless file whose only
  * action is copy hangs that instead: a FileTabsControl holding
  * `content_copy` at the inline tier (16 px), "Copy code", in the ⋮'s slot. Every handler is useCode's (or
  * useCopier's, for the link); a copy confirms with a toast, never in the
@@ -225,9 +227,9 @@ export function CodeActionsMenu(props: CodeActionsMenuProps) {
       <Tooltip>
         <TooltipTrigger
           render={
-            <BaseMenu.Trigger ref={triggerRef} aria-label={moreLabel} render={<FileTabsControl />}>
+            <MenuMorphTrigger ref={triggerRef} aria-label={moreLabel} render={<FileTabsControl />}>
               <Icon name="more_vert" size="tag" weight="interactive" />
-            </BaseMenu.Trigger>
+            </MenuMorphTrigger>
           }
         />
         <TooltipPopup>{moreLabel}</TooltipPopup>

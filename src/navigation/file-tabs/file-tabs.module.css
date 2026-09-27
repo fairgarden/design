@@ -445,7 +445,13 @@
     }
   }
 
-  /* Face and radius changes: the source's 200 ms; both faces are opaque steps, so the fill never passes through transparent. */
+  /*
+   * Face and radius changes: the source's 200 ms (`transition: all 0.2s
+   * ease`, its curve mapped to --ease-out-3) [D195]. Both faces are opaque
+   * steps, so the fill never passes through transparent; the radii change
+   * on selection and on pressing the selected tab, never on hover alone: a
+   * control's own shape may change on a press or a selection [D181, D205].
+   */
   @media (--motionOK) {
     .tab {
       transition-property: background-color, border-color, border-radius;
@@ -743,10 +749,18 @@
     box-shadow: 0 0 0 var(--file-tabs-host-radius) var(--role-soft-hover);
   }
 
-  /* Focus: the ring on the control, keyboard only. */
+  /*
+   * Focus: the ring on the control, keyboard only, inset. Its offset is the
+   * local ring token, so the outline morph predicts the ring a closing
+   * menu lands on [D204].
+   */
+  .control {
+    --fgd-focus-offset: calc(-1 * var(--fgd-focus-width));
+  }
+
   .control:focus-visible {
     outline: var(--fgd-focus-width) solid var(--primary12);
-    outline-offset: calc(-1 * var(--fgd-focus-width));
+    outline-offset: var(--fgd-focus-offset);
   }
 
   /* Disabled (a loading state): --role-muted, the rest weight, no opacity [D85]. */

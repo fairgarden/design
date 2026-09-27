@@ -163,7 +163,8 @@ export function CodeBlockSectionLoading(props: CodeBlockSectionLoadingProps) {
           )
         }
       >
-        <div className={styles.source}>
+        {/* Code reads left to right on any page, as in the loaded block. */}
+        <div className={styles.source} dir="ltr">
           <pre className={styles.pre}>{code}</pre>
         </div>
       </CodeBlockHeader>

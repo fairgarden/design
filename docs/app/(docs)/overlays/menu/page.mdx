@@ -19,7 +19,7 @@ import {
 } from '@fairgarden/design/overlays/menu'
 ```
 
-The trigger is a Button: an `outline` or `text` Button with a title-case label ("Sort By"), or an icon-only "…". The popup renders in a portal as a `white` scope that follows the page mode, whatever the trigger's ground, with a `--border-size-2` `--primary12` edge. It sits 8 px from the trigger, aligned to its start edge, 200 to 320 px wide and at least as wide as the trigger. Rows are 44 px at every width, with a leading slot, a sentence-case label and an optional shortcut. It opens instantly, or with a clip reveal from the trigger side, and is hidden in print; the state it sets prints as a caption.
+The trigger is a Button: an `outline` or `text` Button with a title-case label ("Sort By"), or an icon-only "…". The popup renders in a portal as a `white` scope that follows the page mode, whatever the trigger's ground, with a `--border-size-2` `--primary12` edge. It sits 8 px from the trigger, aligned to its start edge, 200 to 320 px wide and at least as wide as the trigger. Rows are 44 px at every width, with a leading slot, a sentence-case label and an optional shortcut. It opens from its trigger by the outline morph, or at once, and is hidden in print; the state it sets prints as a caption.
 
 Use a menu for actions on the current object (more, sort, export, share, row actions), not for page navigation or form values.
 
@@ -46,6 +46,10 @@ A checked radio item shows a leading ●, and a checked checkbox item a leading 
 <DemoMenuOptions />
 
 [See Demo](./demos/options/)
+
+## Outline morph
+
+On by default: the trigger's focus ring grows into the popup's frame as it opens and shrinks back as it closes. Opened by pointer, where no ring shows, the trigger's own edge grows instead: an `outline` Button's edge, a `solid` Button's box in its fill, or, for a `text` Button, the box its focus ring draws, in its ink. A menu opened on hover opens at once, and so do submenus, which open as the pointer passes over their row, and context menus. `morph={false}` on Menu opens and closes it at once; see [Outline Morph](../../foundations/outline-morph/page.mdx).
 
 ## API Reference
 

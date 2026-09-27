@@ -8,8 +8,9 @@
  * --border-size-2-25 --primary12 in both modes, never --role-rule [D92, D156].
  * No tinted backdrop: the frame, the titled top bar, the inert page and the
  * full-screen sheet carry the modal state [D24 → D121]. Below --md-n-above
- * the panel is a full-screen opaque sheet; from it, centered. Motion is
- * instant or a clip reveal, never a fade [D91]. Colors are role variables
+ * the panel is a full-screen opaque sheet; from it, centered. Motion is the
+ * outline morph from the trigger (§9.17), else none: the panel opens and
+ * closes at once, never a fade [D91, D205, D206]. Colors are role variables
  * only; local custom properties carry dimensions only.
  */
 
@@ -36,7 +37,6 @@
   /* The sheet (base): full screen, opaque, square, no outer frame. */
   .base {
     --dialog-inset: var(--size-px-3);
-    --dialog-clip-from: inset(0 0 100% 0);
 
     position: fixed;
     inset: 0;
@@ -52,7 +52,6 @@
     border-radius: var(--radius-0);
     background-color: var(--primary1);
     color: var(--primary12);
-    clip-path: inset(0);
   }
 
   /* Centered panel: --size-sm wide, at least --size-px-7-5 from every edge, framed. */
@@ -167,15 +166,6 @@
     inset: 0;
     z-index: var(--layer-4);
   }
-
-  /* The clip reveal: the edge wipes open from the top [D91]. */
-  @media (--motionOK) {
-    .base {
-      transition-property: clip-path;
-      transition-duration: var(--fgd-duration-disclosure);
-      transition-timing-function: var(--ease-out-3);
-    }
-  }
 }
 
 @layer variants {
@@ -203,13 +193,25 @@
     .covered {
       display: block;
     }
+
+    /* Over the solid cover the trigger is hidden from the first frame: no morph from it [D206]. */
+    .overCover {
+      --fgd-outline-morph: none;
+    }
   }
 }
 
 @layer states {
-  .base[data-starting-style],
-  .base[data-ending-style] {
-    clip-path: var(--dialog-clip-from);
+  /*
+   * While the outline morph draws the edge (§9.17) [D206], the panel's own
+   * border takes its face and its transitions stay off. The overlay frame
+   * lands on the centered panel's 3 px edge (stepping once from the ring's
+   * 2 px); on the sheet, which has no edge, it lands one weight past the
+   * viewport's edges.
+   */
+  .base[data-outline-morph] {
+    border-color: var(--primary1);
+    transition: none;
   }
 
   /* Focus parked on the panel itself (opened by touch): the ring sits inside the frame. */
@@ -242,7 +244,6 @@
       block-size: auto;
       max-block-size: none;
       margin: 0;
-      clip-path: none;
     }
 
     .body {
