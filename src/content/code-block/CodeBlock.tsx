@@ -40,7 +40,9 @@ export { codeBlock } from './CodeBlockFrame'
  *   scroll row, the status) are File Tabs'.
  * - Parts: base (the frame), target (a hidden `#slug` scroll target),
  *   variantSelect and transformSwitch (the one-file actions' scroll
- *   anchors), source, pre (useCode's `preClassName`), checkbox, toggle,
+ *   anchors), transformGroup and transformToggle (the TS | JS switch,
+ *   lightened in the header: a --border-size-1 --role-rule edge, the
+ *   selected half by weight), source, pre (useCode's `preClassName`), checkbox, toggle,
  *   toggleLabel. The header is File Tabs (`frame="top"`, or `"joined"`
  *   embedded) with the actions as its `controls` and the busy label as its
  *   `status`. The engine's own hooks (frames, lines,

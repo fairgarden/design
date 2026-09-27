@@ -28,7 +28,9 @@ import styles from './code-block.module.css'
  * CodeActionsMenu lays them out, passed to File Tabs as its `controls`.
  * One named file gets the inline row of quiet icon-only Buttons (`text`:
  * no edge at rest, File Tabs draws it on hover and focus; each named by a
- * Tooltip), with the TS | JS segmented switch and the variant Select in
+ * Tooltip), with the TS | JS segmented switch (lightened here only: a
+ * --border-size-1 --role-rule edge, the selected half by weight, not a
+ * fill; `transformGroup` / `transformToggle`) and the variant Select in
  * front, in the controls' cell beside the file's label: the row is
  * end-aligned, and the controls that join after hydration (the TS | JS
  * switch, a code controller's Reset) come first, so they take their room
@@ -147,6 +149,7 @@ export function CodeActionsMenu(props: CodeActionsMenuProps) {
           <span ref={switchRef} className={styles.transformSwitch}>
             <ToggleGroup
               variant="segmented"
+              className={styles.transformGroup}
               aria-label={TRANSFORM_LABELS.menu}
               value={[jsTransform.enabled ? 'on' : 'off']}
               onValueChange={(value) => {
@@ -156,10 +159,10 @@ export function CodeActionsMenu(props: CodeActionsMenuProps) {
                 if (enabled !== jsTransform.enabled) jsTransform.onToggle(enabled, switchRef.current)
               }}
             >
-              <Toggle value="off" size="sm">
+              <Toggle value="off" size="sm" className={styles.transformToggle}>
                 {TRANSFORM_LABELS.off}
               </Toggle>
-              <Toggle value="on" size="sm">
+              <Toggle value="on" size="sm" className={styles.transformToggle}>
                 {TRANSFORM_LABELS.on}
               </Toggle>
             </ToggleGroup>

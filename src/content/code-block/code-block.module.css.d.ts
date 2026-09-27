@@ -11,7 +11,9 @@ declare const styles: {
   readonly "target": string;
   readonly "toggle": string;
   readonly "toggleLabel": string;
+  readonly "transformGroup": string;
   readonly "transformSwitch": string;
+  readonly "transformToggle": string;
   readonly "variantSelect": string;
 };
 export = styles;

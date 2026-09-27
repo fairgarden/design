@@ -1,7 +1,8 @@
 /*
  * Code Block. Parts: `base` (the frame), `target` (a hidden `#slug` scroll
  * target), `variantSelect` and `transformSwitch` (the one-file actions'
- * scroll anchors), `source`, `pre` (useCode's `preClassName`: the engine's
+ * scroll anchors), `transformGroup` and `transformToggle` (the TS | JS
+ * switch's group and halves, lightened in the header), `source`, `pre` (useCode's `preClassName`: the engine's
  * `<pre>`), `checkbox` and `toggle` (the window's control). The header is
  * File Tabs (`navigation/file-tabs`), which owns its geometry: the folder
  * tabs in their native scroll row, the frame's side edges over them, the
@@ -503,6 +504,66 @@
 }
 
 @layer states {
+  /*
+   * The TS | JS switch, lightened in the code header only, so it sits with
+   * the quiet header controls rather than outweighing them (user,
+   * 2026-09-27: "Ok let's try lightening it"). The segmented group
+   * (`transformGroup`) keeps its box: its edge drops from --border-size-2
+   * --primary12 to --border-size-1 --role-rule, the frame's rule, and a
+   * --border-size-1 padding makes up the difference, so the switch and the
+   * header keep their size. The divider between the halves always shows.
+   * The selected half (`transformToggle`, `data-pressed`) loses the inverse
+   * fill and its inside edge (its padding takes the edge's width back):
+   * the --primary12 ink at --font-weight-7 with its ● mark; the other half
+   * is --role-muted at --font-weight-4 (P11 on the P1 face: 5.77:1 or more
+   * in light mode, 8.98:1 in dark). Hover [D181, D140]: the group's edge
+   * steps to --primary12 and an off half's label to the ink, at once (the
+   * Toggle's own transition), with no fill or underline; the focus ring and
+   * the momentary pressed inverse pair are the Toggle's. The Toggle and
+   * Toggle Group components are unchanged everywhere else.
+   */
+  .transformSwitch > .transformGroup {
+    padding: calc(var(--border-size-2) - var(--border-size-1));
+    border-width: var(--border-size-1);
+    border-color: var(--role-rule);
+  }
+
+  .transformSwitch > .transformGroup:has(> .transformToggle:not([data-disabled]):hover) {
+    border-color: var(--primary12);
+  }
+
+  .transformSwitch > .transformGroup > span[aria-hidden='true'] {
+    visibility: visible;
+  }
+
+  .transformSwitch .transformToggle:not([data-pressed]) {
+    --type-weight: var(--font-weight-4);
+
+    color: var(--role-muted);
+  }
+
+  .transformSwitch .transformToggle[data-pressed] {
+    --toggle-edge: 0px;
+
+    background: none;
+    color: var(--primary12);
+  }
+
+  .transformSwitch .transformToggle[data-pressed]:not([data-disabled], :active):hover,
+  .transformSwitch .transformToggle:not([data-disabled], [data-pressed]):hover {
+    background: none;
+    color: var(--primary12);
+  }
+
+  .transformSwitch .transformToggle:not([data-disabled], [data-pressed]):hover > span {
+    text-decoration-line: none;
+  }
+
+  .transformSwitch .transformToggle:not([data-disabled]):active {
+    background-color: var(--primary12);
+    color: var(--role-inverse);
+  }
+
   /* The swap's phases on the `pre`. */
   .pre[data-transforming='expanded'] :global(.frame .collapse > span) {
     block-size: var(--code-block-line);
