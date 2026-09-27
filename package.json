@@ -41,7 +41,8 @@
     "canary": "fg-dist canary",
     "release": "fg-dist release",
     "release:check": "fg-dist release --check",
-    "generate": "node scripts/build-colors.js && node scripts/build-icons.js"
+    "generate": "node scripts/build-colors.js && node scripts/build-icons.js",
+    "changelog": "fg-dist changelog"
   },
   "keywords": [
     "design",
@@ -54,11 +55,11 @@
     "base-ui"
   ],
   "author": "FairGarden",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "devDependencies": {
     "@base-ui/react": "^1.8.0",
     "@csstools/postcss-global-data": "^4.0.0",
-    "@fairgarden/distribution": "^0.1.0-alpha.0",
+    "@fairgarden/distribution": "^0.1.0-alpha.4",
     "@material-symbols/svg-400": "^0.47.5",
     "@material-symbols/svg-500": "^0.47.5",
     "@material-symbols/svg-600": "^0.47.5",
