@@ -1,6 +1,7 @@
 import { CodeHighlighter } from '@fairgarden/docs/CodeHighlighter'
 import { createParseSource } from '@fairgarden/docs/pipeline/parseSource'
 import { CodeBlock } from '@fairgarden/design/content/code-block'
+import { serverSourceEnhancers } from '@fairgarden/design/utils/docs/serverSourceEnhancers'
 import styles from './basic.module.css'
 
 const sourceParser = createParseSource()
@@ -21,6 +22,7 @@ export function CodeBlockBasic() {
         slug="join-crew"
         Content={CodeBlock}
         sourceParser={sourceParser}
+        sourceEnhancers={serverSourceEnhancers}
       >
         {source}
       </CodeHighlighter>

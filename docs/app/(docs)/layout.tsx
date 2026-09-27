@@ -18,7 +18,10 @@ import { sitemap } from '../sitemap'
  * side: the parser that highlights code the client produces (a TS → JS swap,
  * an edit), the transform-delta computer and the loaders, each fetched on
  * demand. Its default source enhancer is the same emphasis pass the build
- * runs, so client-parsed code keeps its highlights and windows.
+ * runs, so client-parsed code keeps its highlights and windows. Code the
+ * build or the server already framed (fences and demos, and inline code
+ * through `serverSourceEnhancers`) records that pass, which then skips it:
+ * every window is in the server HTML, so nothing resizes after hydration.
  *
  * `ToastProvider` renders the docked toast bar every docs page shares: a
  * code block's or demo's copy actions confirm there ("Link copied"), and the

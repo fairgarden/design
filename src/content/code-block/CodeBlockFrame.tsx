@@ -40,6 +40,26 @@ export function variantItems(variants: readonly string[]) {
 }
 
 /**
+ * The one-file actions' names, shared by the loaded row (CodeActionsMenu)
+ * and the loading state's stand-ins, so both read the same.
+ */
+export function actionLabels(fileName: string | undefined) {
+  return {
+    copy: fileName ? `Copy ${fileName} source` : 'Copy source',
+    link: fileName ? `Copy ${fileName} link` : 'Copy link',
+    source: fileName ? `View ${fileName} source` : 'View source',
+  }
+}
+
+/**
+ * A source URL the browser can open, for "View source": not a `file://`
+ * URL, which means the build-time rewrite was skipped.
+ */
+export function openableUrl(url: string | undefined) {
+  return url && !url.startsWith('file://') ? url : undefined
+}
+
+/**
  * A content prop that arrives from JSON: `true`, or a fence's flag (the
  * pipeline passes a bare ` ```tsx collapse ` as the string `'true'`).
  */

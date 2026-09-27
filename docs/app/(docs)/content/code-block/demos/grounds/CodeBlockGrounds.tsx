@@ -1,6 +1,7 @@
 import { CodeHighlighter } from '@fairgarden/docs/CodeHighlighter'
 import { createParseSource } from '@fairgarden/docs/pipeline/parseSource'
 import { CodeBlock } from '@fairgarden/design/content/code-block'
+import { serverSourceEnhancers } from '@fairgarden/design/utils/docs/serverSourceEnhancers'
 import { PresetGround } from '@/components/PresetGround'
 import styles from './grounds.module.css'
 
@@ -28,6 +29,7 @@ export function CodeBlockGrounds() {
             slug={`season-report-${preset}`}
             Content={CodeBlock}
             sourceParser={sourceParser}
+            sourceEnhancers={serverSourceEnhancers}
           >
             {source}
           </CodeHighlighter>

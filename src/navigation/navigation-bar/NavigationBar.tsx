@@ -49,7 +49,9 @@ import styles from './navigation-bar.module.css'
  *   only over the night media hero) [D178]. Panels are portaled `white`
  *   scopes (§9.6).
  * - Container: none; page frame on the viewport custom media
- *   --fgd-nav-inline-n-above [D183].
+ *   --fgd-nav-inline-n-above [D183], with the action from --md-n-above.
+ *   Below the threshold the logo is the bar's one flexible item (the base
+ *   fit), so the bar never overflows.
  */
 export const navigationBar = cva(styles.base, {
   variants: {
@@ -118,7 +120,10 @@ export type NavigationBarProps = Omit<React.ComponentProps<'header'>, 'children'
   primary?: NavigationBarVariants['primary']
   /** Override the preset's secondary. Never defaulted. */
   secondary?: NavigationBarVariants['secondary']
-  /** The logo: an ink logo in `currentColor` (an `svg` or `img`), 28 px tall, 36 px from --lg-n-above. */
+  /**
+   * The logo: an ink logo in `currentColor` (an `svg` or `img`), 28 px tall, 36 px from --lg-n-above.
+   * On a narrow bar it gives way (clipped in its 44 px target); a lockup drops its wordmark.
+   */
   logo: React.ReactNode
   /** The home link's accessible name, e.g. "FairGarden home". */
   logoLabel: string
@@ -132,7 +137,7 @@ export type NavigationBarProps = Omit<React.ComponentProps<'header'>, 'children'
   children?: React.ReactNode
   /** Icon Buttons, e.g. `<Search kind="trigger" … />`, `--size-px-1` apart. */
   search?: React.ReactNode
-  /** The one primary action: a `solid` Button at `size="sm"`. Below 480 px it moves to the drawer footer, so repeat it there. */
+  /** The one primary action: a `solid` Button at `size="sm"`. Below --md-n-above (768 px) it moves to the drawer footer, so repeat it there. */
   action?: React.ReactNode
   /** The `NavDrawer` (menu Button and sheet), shown below --fgd-nav-inline-n-above. */
   drawer?: React.ReactNode

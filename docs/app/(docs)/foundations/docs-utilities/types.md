@@ -115,20 +115,21 @@ The MDX `pre` override, as fg-docs' own `Pre`: the docs pipeline
 (`transformHtmlCodeBlock`) replaces every fenced code block with
 `<pre data-precompute=…>`, which only CodeHighlighter can render. Each
 renders as a Code Block, code-split, with its loading state until the
-chunk loads. A fence's flags (` ```tsx collapse `) arrive in
-`data-content-props`.
+chunk loads, and its emphasis window in the server HTML. A fence's flags
+(` ```tsx collapse `) arrive in `data-content-props`.
 
 **Pre Props:**
 
-| Prop               | Type                                           | Default | Description                                                                                                                                                                                                                                                                                   |
-| :----------------- | :--------------------------------------------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Content            | `React.ComponentType<ContentProps<{}>>`        | -       | CodeHighlighter's `Content`. Default: `CodeBlockLazy`.                                                                                                                                                                                                                                        |
-| ContentLoading     | `React.ComponentType<ContentLoadingProps<{}>>` | -       | CodeHighlighter's `ContentLoading`. Default: `CodeBlockLoading`.                                                                                                                                                                                                                              |
-| data-content-props | `string`                                       | -       | -                                                                                                                                                                                                                                                                                             |
-| data-name          | `string`                                       | -       | -                                                                                                                                                                                                                                                                                             |
-| data-precompute    | `string`                                       | -       | -                                                                                                                                                                                                                                                                                             |
-| data-slug          | `string`                                       | -       | -                                                                                                                                                                                                                                                                                             |
-| highlightAfter     | `'init' \| 'stream' \| 'hydration' \| 'idle'`  | -       | When the code highlights. Default: the engine's own (`'idle'`: the server&#xA;HTML carries the plain code, highlighted once the browser is idle). Pass&#xA;`'init'` only to show server-side highlighting: the HTML then arrives&#xA;highlighted, at the cost of server work and page weight. |
+| Prop               | Type                                           | Default | Description                                                                                                                                                                                                                                                                                                                                                                                             |
+| :----------------- | :--------------------------------------------- | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Content            | `React.ComponentType<ContentProps<{}>>`        | -       | CodeHighlighter's `Content`. Default: `CodeBlockLazy`.                                                                                                                                                                                                                                                                                                                                                  |
+| ContentLoading     | `React.ComponentType<ContentLoadingProps<{}>>` | -       | CodeHighlighter's `ContentLoading`. Default: `CodeBlockLoading`.                                                                                                                                                                                                                                                                                                                                        |
+| data-content-props | `string`                                       | -       | -                                                                                                                                                                                                                                                                                                                                                                                                       |
+| data-name          | `string`                                       | -       | -                                                                                                                                                                                                                                                                                                                                                                                                       |
+| data-precompute    | `string`                                       | -       | -                                                                                                                                                                                                                                                                                                                                                                                                       |
+| data-slug          | `string`                                       | -       | -                                                                                                                                                                                                                                                                                                                                                                                                       |
+| highlightAfter     | `'init' \| 'stream' \| 'hydration' \| 'idle'`  | -       | When the code highlights. Default: the engine's own (`'idle'`: the server&#xA;HTML carries the plain code, highlighted once the browser is idle). Pass&#xA;`'init'` only to show server-side highlighting: the HTML then arrives&#xA;highlighted, at the cost of server work and page weight.                                                                                                           |
+| sourceEnhancers    | `SourceEnhancer[]`                             | -       | The source enhancers the server runs on code it parses. Default&#xA;`serverSourceEnhancers` (the engine's emphasis enhancer, with the&#xA;options demos get), so the emphasis window is in the server HTML and&#xA;nothing changes size after hydration \[D201]. A fence the build&#xA;precomputed already carries its window; this covers any code the server&#xA;still parses. Pass `[]` to run none. |
 
 ## Additional Types
 
@@ -367,6 +368,14 @@ type CreateMdxComponentsOptions = {
    * and page weight.
    */
   highlightAfter?: 'init' | 'stream' | 'hydration' | 'idle';
+  /**
+   * The source enhancers the server runs on fenced blocks' code. Default
+   * `serverSourceEnhancers`: the engine's emphasis enhancer with the options
+   * demos get, so every block's emphasis window is in the first paint and
+   * nothing changes size after hydration [D201]. Pass the enhancers your
+   * `demoEmphasisOptions` make, if you set them, or `[]` to run none.
+   */
+  sourceEnhancers?: SourceEnhancer[];
   /** More components, or replacements for any of the map's, merged last. */
   components?: Record<string, React.ElementType>;
 };
@@ -461,7 +470,44 @@ type PreProps = {
    * highlighted, at the cost of server work and page weight.
    */
   highlightAfter?: 'init' | 'stream' | 'hydration' | 'idle';
+  /**
+   * The source enhancers the server runs on code it parses. Default
+   * `serverSourceEnhancers` (the engine's emphasis enhancer, with the
+   * options demos get), so the emphasis window is in the server HTML and
+   * nothing changes size after hydration [D201]. A fence the build
+   * precomputed already carries its window; this covers any code the server
+   * still parses. Pass `[]` to run none.
+   */
+  sourceEnhancers?: SourceEnhancer[];
 };
+```
+
+### serverSourceEnhancers
+
+The source enhancers CodeHighlighter runs on the server: the engine's
+emphasis enhancer (`enhanceCodeEmphasis`) with its default options. Pass
+it as CodeHighlighter's `sourceEnhancers` wherever a page renders code
+the build didn't precompute, such as inline `code` or a string child;
+`Pre` and `createMdxComponents` default to it.
+
+On the server it frames the code and records its name on the tree, so
+the HTML arrives with the emphasis frames and the collapsed window, the
+loading state paints the same lines as the loaded block, and
+`CodeProviderLazy`'s own emphasis enhancer, which has the same name,
+skips the tree instead of windowing it after hydration. Nothing changes
+size once the page is interactive, and hydration never depends on which
+side has loaded the lazy enhancer. Highlighting stays at the engine's
+default `highlightAfter`.
+
+The options are the ones demos get from the build and
+`CodeProviderLazy` loads: the enhancer's defaults, which
+`withFairGardenDocs` uses when it has no `demoEmphasisOptions`. An app
+that sets `demoEmphasisOptions` passes
+`[createEnhanceCodeEmphasis(sameOptions)]` instead, so inline code and
+demos window alike.
+
+```typescript
+type serverSourceEnhancers = SourceEnhancer[];
 ```
 
 ### TypesFactoryOptions
@@ -474,10 +520,10 @@ type TypesFactoryOptions = AbstractCreateTypesOptions;
 
 ## Export Groups
 
-- `createDemoFactory`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`
-- `createDemoWithVariantsFactory`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`
-- `createTypesFactory`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`
-- `createMultipleTypesFactory`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`
-- `createMdxComponents`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`
-- `DemoTitle`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`
-- `Pre`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`
+- `createDemoFactory`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`
+- `createDemoWithVariantsFactory`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`
+- `createTypesFactory`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`
+- `createMultipleTypesFactory`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`
+- `createMdxComponents`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`
+- `DemoTitle`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`
+- `Pre`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`

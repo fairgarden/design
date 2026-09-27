@@ -3,6 +3,7 @@ import type { Code } from '@fairgarden/docs/CodeHighlighter/types'
 import { createParseSource } from '@fairgarden/docs/pipeline/parseSource'
 import { TypescriptToJavascriptTransformer } from '@fairgarden/docs/pipeline/transformTypescriptToJavascript'
 import { CodeBlock } from '@fairgarden/design/content/code-block'
+import { serverSourceEnhancers } from '@fairgarden/design/utils/docs/serverSourceEnhancers'
 import styles from './variants.module.css'
 
 const sourceParser = createParseSource()
@@ -36,6 +37,7 @@ export function CodeBlockVariants() {
         Content={CodeBlock}
         sourceParser={sourceParser}
         sourceTransformers={sourceTransformers}
+        sourceEnhancers={serverSourceEnhancers}
       />
     </div>
   )

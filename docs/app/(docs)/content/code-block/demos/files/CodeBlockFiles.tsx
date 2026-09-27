@@ -2,6 +2,7 @@ import { CodeHighlighter } from '@fairgarden/docs/CodeHighlighter'
 import type { Code } from '@fairgarden/docs/CodeHighlighter/types'
 import { createParseSource } from '@fairgarden/docs/pipeline/parseSource'
 import { CodeBlock } from '@fairgarden/design/content/code-block'
+import { serverSourceEnhancers } from '@fairgarden/design/utils/docs/serverSourceEnhancers'
 import styles from './files.module.css'
 
 const sourceParser = createParseSource()
@@ -81,6 +82,7 @@ export function CodeBlockFiles({ slug = 'volunteer-shift' }: { slug?: string }) 
         slug={slug}
         Content={CodeBlock}
         sourceParser={sourceParser}
+        sourceEnhancers={serverSourceEnhancers}
       />
     </div>
   )

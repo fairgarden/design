@@ -160,13 +160,22 @@
     margin-inline: auto;
   }
 
+  /*
+   * The bar's one flexible item (the base fit): below the inline threshold
+   * the logo gives way before any control, so the bar never overflows,
+   * whatever the logo's width. It keeps a --fgd-size-hit target; the logo
+   * shrinks inside it and is clipped, never the controls. A lockup should
+   * drop its wordmark whole as it narrows (wrapped onto a clipped second
+   * line), so the mark stands alone; the home link keeps its name.
+   */
   .logo {
     --navigation-bar-logo-size: var(--size-px-6);
 
     display: inline-flex;
-    flex: none;
+    flex: 0 1 auto;
     align-items: center;
     gap: var(--size-px-2);
+    min-inline-size: var(--fgd-size-hit);
     min-block-size: var(--fgd-size-hit);
     color: var(--primary12);
     text-decoration-line: none;
@@ -175,12 +184,15 @@
   .logoMark {
     display: inline-flex;
     align-items: center;
+    min-inline-size: 0;
     block-size: var(--navigation-bar-logo-size);
+    overflow-x: clip;
   }
 
   .logoMark > * {
     display: block;
     inline-size: auto;
+    min-inline-size: 0;
     block-size: 100%;
   }
 
@@ -207,8 +219,10 @@
     min-inline-size: 0;
   }
 
+  /* Never shrunk: the controls keep their --fgd-size-hit targets and nowrap labels. */
   .tools {
     display: flex;
+    flex: none;
     align-items: center;
     gap: var(--size-px-3);
     margin-inline-start: auto;
@@ -228,13 +242,16 @@
   }
 
   /*
-   * The base fit: logo, search, action and the "Menu" trigger need about
-   * 400 px, more than 360–479 px leaves, so below --sm-n-below (480 px) the
-   * action moves to the top of the drawer footer, extending the 360 px stack
-   * guard [D73] (derived; flagged for user review, §1.8). The "Menu" label
-   * still drops only below 360 px.
+   * The base fit (derived; flagged for user review, §1.8): a lockup
+   * (≈ 225 px), search (48), the action (≈ 95 for "Donate") and "Menu" (68),
+   * with their gaps (24 + 16 + 16), need about 490 px: more than the 432 px
+   * content box at --sm-n-above (480 px), so they fit from about 540 px. The
+   * action shows from the next step, --md-n-above, where §11.5 already
+   * shows it always; below it the action moves to the top of the drawer
+   * footer, extending the 360 px stack guard [D73]. The "Menu" label still
+   * drops only below 360 px, and the logo gives way last (above).
    */
-  @media (--sm-n-below) {
+  @media (--md-n-below) {
     .action {
       display: none;
     }
@@ -250,8 +267,16 @@
     }
   }
 
-  /* Inline from the threshold: utility row and menu shown, the menu Button removed [D183]. */
+  /*
+   * Inline from the threshold: utility row and menu shown, the menu Button
+   * removed [D183]. The logo holds its width again: the fit budget governs
+   * here, and the menu (min-inline-size 0) is what gives way.
+   */
   @media (--fgd-nav-inline-n-above) {
+    .logo {
+      flex-shrink: 0;
+    }
+
     .utility {
       display: block;
     }

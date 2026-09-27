@@ -104,10 +104,12 @@
     border-block-end: var(--border-size-1) solid var(--role-rule);
   }
 
+  /* As in the header's base fit: the logo gives way (clipped inside a --fgd-size-hit target), never the close control. */
   .logo {
     display: inline-flex;
-    flex: none;
+    flex: 0 1 auto;
     align-items: center;
+    min-inline-size: var(--fgd-size-hit);
     min-block-size: var(--fgd-size-hit);
     color: var(--primary12);
     text-decoration-line: none;
@@ -116,17 +118,21 @@
   .logoMark {
     display: inline-flex;
     align-items: center;
+    min-inline-size: 0;
     block-size: var(--size-px-6);
+    overflow-x: clip;
   }
 
   .logoMark > * {
     display: block;
     inline-size: auto;
+    min-inline-size: 0;
     block-size: 100%;
   }
 
-  /* The close control sits exactly where the menu Button was. */
+  /* The close control sits exactly where the menu Button was, never shrunk. */
   .close {
+    flex: none;
     margin-inline-start: auto;
   }
 

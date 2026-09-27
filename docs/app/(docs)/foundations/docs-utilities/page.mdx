@@ -12,7 +12,7 @@ import {
 } from '@fairgarden/design/utils/docs'
 ```
 
-Each is a thin wrapper over the engine's own factory with the design system's components plugged in, and every option passes through, so an app can replace any of them. They're server-safe and hold no framework code: pass your router's link in. `@fairgarden/docs` is an optional peer dependency; install it to use these. Each factory also has its own path (`@fairgarden/design/utils/docs/createDemo`, `…/createTypes`, `…/createMdxComponents`), so an app imports only what it uses. This site is built with them.
+Each is a thin wrapper over the engine's own factory with the design system's components plugged in, and every option passes through, so an app can replace any of them. They're server-safe and hold no framework code: pass your router's link in. `@fairgarden/docs` is an optional peer dependency; install it to use these. Each factory also has its own path (`@fairgarden/design/utils/docs/createDemo`, `…/createTypes`, `…/createMdxComponents`, `…/serverSourceEnhancers`), so an app imports only what it uses. This site is built with them.
 
 ## createDemo
 
@@ -67,6 +67,7 @@ The options:
 - `Link`: renders links to internal paths (`/…`), such as next/link, as the Link's element. Default: a plain `a`.
 - `Image`: renders `img`, such as next/image. Default: the plain element.
 - `Content`, `ContentLoading` and `highlightAfter`: the fenced blocks' `CodeHighlighter` slots. Defaults: `CodeBlockLazy`, `CodeBlockLoading` and the engine's own (`'idle'`).
+- `sourceEnhancers`: the enhancers the server runs on the blocks' code. Default: [`serverSourceEnhancers`](#serversourceenhancers), so each block's emphasis window is in the server HTML. Pass `[]` to run none.
 - `components`: more components, or replacements for any in the map, merged last.
 
 ```tsx filename=mdx-components.tsx
@@ -82,6 +83,36 @@ export function useMDXComponents(components) {
 ```
 
 The map's `pre` is also exported alone as `Pre`, and the demo heading as `DemoTitle`.
+
+## serverSourceEnhancers
+
+`serverSourceEnhancers` is the list of source enhancers `CodeHighlighter` runs on the server: the engine's emphasis enhancer, `enhanceCodeEmphasis`, with its default options. `Pre` and `createMdxComponents` pass it by default; pass it yourself wherever a page renders `CodeHighlighter` directly with code the build didn't precompute, such as inline `code` or a string child, as the [Code Block](../../content/code-block/page.mdx) examples do.
+
+It's the default because it keeps the layout still. On the server the enhancer draws the emphasis frames and the collapsed window, so the server HTML has the block's final height, and the loading state and the loaded block paint the same lines. It records its name on the code, so `CodeProviderLazy`'s own emphasis pass, which has the same name, skips the block. Without it, that pass would window the code after hydration, and the block would shrink in front of the reader. Highlighting still waits for the engine's default, `'idle'`: only the colors arrive late.
+
+Its options are the ones demos get from the build, the enhancer's defaults, which `withFairGardenDocs` uses when it has no `demoEmphasisOptions`, so inline code and demos window alike. If you set `demoEmphasisOptions`, pass `[createEnhanceCodeEmphasis(sameOptions)]` instead, to `createMdxComponents` and your own `CodeHighlighter`s.
+
+```tsx filename=SeedPacketCode.tsx
+import { CodeHighlighter } from '@fairgarden/docs/CodeHighlighter'
+import { createParseSource } from '@fairgarden/docs/pipeline/parseSource'
+import { CodeBlock } from '@fairgarden/design/content/code-block'
+import { serverSourceEnhancers } from '@fairgarden/design/utils/docs/serverSourceEnhancers'
+
+const sourceParser = createParseSource()
+
+export function SeedPacketCode({ source }: { source: string }) {
+  return (
+    <CodeHighlighter
+      fileName="SeedPacket.tsx"
+      Content={CodeBlock}
+      sourceParser={sourceParser}
+      sourceEnhancers={serverSourceEnhancers}
+    >
+      {source}
+    </CodeHighlighter>
+  )
+}
+```
 
 ## The engine's client side
 

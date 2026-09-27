@@ -7,12 +7,20 @@ import { generateFileSlug } from '@fairgarden/docs/pipeline/loaderUtils'
 
 import { Button } from '../../actions/button'
 import { Icon } from '../../foundations/icon'
+import { Select } from '../../forms/select'
 import { FileTabsControl } from '../../navigation/file-tabs'
 import type { PrimaryScale, RadixScale } from '../../utils/scales'
 import { useScopeAttributes } from '../../utils/scope'
 import type { CodeBlockOptions } from './CodeBlock'
 import { CodeBlockHeader } from './CodeBlockHeader'
-import { codeBlock, CodeBlockToggle, isOn } from './CodeBlockFrame'
+import {
+  actionLabels,
+  codeBlock,
+  CodeBlockToggle,
+  isOn,
+  openableUrl,
+  variantItems,
+} from './CodeBlockFrame'
 import styles from './code-block.module.css'
 
 /*
@@ -24,7 +32,8 @@ import styles from './code-block.module.css'
  * the hook the engine asks a ContentLoading to call (it decodes the compact
  * fallback and hoists the files' dictionaries); nothing from `useCode`, so
  * the loading path stays light. The controls render disabled until the
- * content swaps in.
+ * content swaps in: the same controls the loaded block shows, as far as the
+ * fallback tells, so the header keeps its size at the swap [D201].
  */
 
 /** Props for CodeBlockLoading: what CodeHighlighter hands its `ContentLoading`, plus the block's scales. */
@@ -75,6 +84,13 @@ export function CodeBlockSectionLoading(props: CodeBlockSectionLoadingProps) {
     .filter(Boolean)
     .map((name) => ({ id: name, name, slug: generateFileSlug(fallback.slug ?? '', name, mainVariant) }))
   const hasTabs = tabs.length > 1
+  const fileName = fallback.initialFilename ?? tabs[0]?.id
+  const labels = actionLabels(fileName)
+  // The variants the loaded block's Select lists (a Demo's are in its bar),
+  // known when the fallback carries every variant (`fallbackUsesAllVariants`).
+  const variants = embedded
+    ? []
+    : [...new Set([mainVariant, ...Object.keys(fallback.extraVariants ?? {})])]
 
   return (
     <div
@@ -96,15 +112,41 @@ export function CodeBlockSectionLoading(props: CodeBlockSectionLoadingProps) {
         primary={primary}
         secondary={secondary}
         actions={
-          // The loaded actions' stand-ins, the same size: the menu's trigger, or the copy Button.
+          // The loaded actions' stand-ins, the same size and in the same order:
+          // the menu's trigger, or the one file's row. A named file has a deep
+          // link, and a hosted URL a "View source". The fallback doesn't say
+          // whether the file has a TS | JS switch or a code controller's
+          // "Reset edits", so those join the row at the swap (an engine gap).
           hasTabs ? (
             <FileTabsControl aria-label="More actions" disabled>
               <Icon name="more_vert" size="tag" weight="interactive" />
             </FileTabsControl>
           ) : (
-            <Button iconOnly size="sm" icon="content_copy" disabled>
-              Copy source
-            </Button>
+            <>
+              {variants.length > 1 ? (
+                <span className={styles.variantSelect}>
+                  <Select
+                    aria-label="Variant"
+                    items={variantItems(variants)}
+                    value={mainVariant}
+                    disabled
+                  />
+                </span>
+              ) : null}
+              <Button iconOnly size="sm" icon="content_copy" disabled>
+                {labels.copy}
+              </Button>
+              {fileName ? (
+                <Button iconOnly size="sm" icon="link" disabled>
+                  {labels.link}
+                </Button>
+              ) : null}
+              {openableUrl(fallback.url) ? (
+                <Button iconOnly size="sm" icon="open_in_new" disabled>
+                  {labels.source}
+                </Button>
+              ) : null}
+            </>
           )
         }
       >

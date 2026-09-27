@@ -20,6 +20,7 @@ import {
 import { Tooltip, TooltipPopup, TooltipProvider, TooltipTrigger } from '../../overlays/tooltip'
 import { Icon, type IconName } from '../../foundations/icon'
 import { FileTabsControl } from '../../navigation/file-tabs'
+import { actionLabels, openableUrl } from './CodeBlockFrame'
 import styles from './code-block.module.css'
 
 /*
@@ -120,10 +121,8 @@ export function CodeActionsMenu(props: CodeActionsMenuProps) {
   const triggerRef = React.useRef<HTMLButtonElement | null>(null)
 
   // A `file://` URL means the build-time rewrite was skipped; it wouldn't open from the browser.
-  const sourceUrl = fileUrl && !fileUrl.startsWith('file://') ? fileUrl : undefined
-  const copyLabel = fileName ? `Copy ${fileName} source` : 'Copy source'
-  const linkLabel = fileName ? `Copy ${fileName} link` : 'Copy link'
-  const sourceLabel = fileName ? `View ${fileName} source` : 'View source'
+  const sourceUrl = openableUrl(fileUrl)
+  const { copy: copyLabel, link: linkLabel, source: sourceLabel } = actionLabels(fileName)
   const markdownLabel = 'Copy all files as Markdown'
   const resetLabel = 'Reset edits'
 

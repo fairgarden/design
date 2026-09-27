@@ -9,8 +9,9 @@ import styles from './mdx.module.css'
  * createMdxComponents: the MDX component map for a docs site built on
  * `@fairgarden/docs`, in the design system's type roles and components.
  * `pre` is the Code Block, through CodeHighlighter (code-split, with its
- * loading state); headings link to themselves; links are the design
- * system's Link. No framework code: pass your router's link as `Link`.
+ * loading state, its emphasis window in the server HTML); headings link to
+ * themselves; links are the design system's Link. No framework code: pass
+ * your router's link as `Link`.
  */
 
 type ElementProps<T extends keyof React.JSX.IntrinsicElements> = React.ComponentProps<T>
@@ -41,6 +42,14 @@ export type CreateMdxComponentsOptions = {
    * and page weight.
    */
   highlightAfter?: PreProps['highlightAfter']
+  /**
+   * The source enhancers the server runs on fenced blocks' code. Default
+   * `serverSourceEnhancers`: the engine's emphasis enhancer with the options
+   * demos get, so every block's emphasis window is in the first paint and
+   * nothing changes size after hydration [D201]. Pass the enhancers your
+   * `demoEmphasisOptions` make, if you set them, or `[]` to run none.
+   */
+  sourceEnhancers?: PreProps['sourceEnhancers']
   /** More components, or replacements for any of the map's, merged last. */
   components?: Record<string, React.ElementType>
 }
@@ -77,7 +86,8 @@ function heading<T extends 'h2' | 'h3' | 'h4'>(Tag: T, className: string) {
  * `components`.
  */
 export function createMdxComponents(options: CreateMdxComponentsOptions = {}): MdxComponents {
-  const { Link, Image, Content, ContentLoading, highlightAfter, components } = options
+  const { Link, Image, Content, ContentLoading, highlightAfter, sourceEnhancers, components } =
+    options
 
   function MdxPre(props: PreProps) {
     return (
@@ -85,6 +95,7 @@ export function createMdxComponents(options: CreateMdxComponentsOptions = {}): M
         Content={Content}
         ContentLoading={ContentLoading}
         highlightAfter={highlightAfter}
+        sourceEnhancers={sourceEnhancers}
         {...props}
       />
     )

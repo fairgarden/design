@@ -12,7 +12,9 @@ Code sets in mono at the caption size. Every syntax color is a role of the block
 
 ## Setup
 
-Three pieces wire a site. The MDX `pre` override hands every fenced block to `CodeHighlighter`; `createMdxComponents` from [`@fairgarden/design/utils/docs`](../../foundations/docs-utilities/page.mdx) builds it for you, code-split, with `CodeBlockLoading` until the block's chunk loads. `CodeProviderLazy` in the root layout gives the engine its client side, which highlights the code in the browser. And for code written in a component, `CodeHighlighter` takes Code Block directly. Keep the engine's default `highlightAfter` (`'idle'`) everywhere: the server HTML carries the plain code, which highlights once the browser is idle. `highlightAfter="init"` is an opt-in for showing server-side highlighting, as [one example below](#highlighted-on-the-server) does, not a site-wide setting.
+Three pieces wire a site. The MDX `pre` override hands every fenced block to `CodeHighlighter`; `createMdxComponents` from [`@fairgarden/design/utils/docs`](../../foundations/docs-utilities/page.mdx) builds it for you, code-split, with `CodeBlockLoading` until the block's chunk loads. `CodeProviderLazy` in the root layout gives the engine its client side, which highlights the code in the browser. And for code written in a component, `CodeHighlighter` takes Code Block directly, with `sourceEnhancers={serverSourceEnhancers}` from `@fairgarden/design/utils/docs`, as every example below passes. Keep the engine's default `highlightAfter` (`'idle'`) everywhere: the server HTML carries the plain code, which highlights once the browser is idle. `highlightAfter="init"` is an opt-in for showing server-side highlighting, as [one example below](#highlighted-on-the-server) does, not a site-wide setting.
+
+What sets a block's size is always in the server HTML, so nothing moves when the page hydrates, the block's chunk swaps in or the code highlights; only the colors arrive later. The emphasis frames and the collapsed window come from the server: the build frames fenced blocks and demos, and `serverSourceEnhancers`, the engine's emphasis enhancer with the options demos get, frames any code the server parses. `createMdxComponents` passes it by default. The enhancer records its name on the code, so `CodeProviderLazy`'s own emphasis pass skips the block rather than windowing it after hydration.
 
 ```tsx filename=mdx-components.tsx
 import NextLink from 'next/link'
@@ -39,7 +41,7 @@ export default function RootLayout({ children }) {
 }
 ```
 
-The loaded block, `CodeBlock`, is also exported code-split as `CodeBlockLazy`, the pair to `CodeBlockLoading`: the loading state renders the engine's precomputed fallback in the same frame, so the server HTML carries the code, the height holds at the swap, and every file's `#slug` target is there for a deep link before the block loads. It calls nothing from `useCode`, so it stays small.
+The loaded block, `CodeBlock`, is also exported code-split as `CodeBlockLazy`, the pair to `CodeBlockLoading`: the loading state renders the engine's precomputed fallback in the same frame, with its window and the loaded block's controls, disabled, in their places, so the server HTML carries the code, the height holds at the swap, and every file's `#slug` target is there for a deep link before the block loads. It calls nothing from `useCode`, so it stays small.
 
 ## One file
 
