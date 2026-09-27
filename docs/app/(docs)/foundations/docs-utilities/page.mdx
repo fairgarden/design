@@ -12,7 +12,7 @@ import {
 } from '@fairgarden/design/utils/docs'
 ```
 
-Each is a thin wrapper over the engine's own factory with the design system's components plugged in, and every option passes through, so an app can replace any of them. They're server-safe and hold no framework code: pass your router's link in. `@fairgarden/docs` is an optional peer dependency; install it to use these. Each factory also has its own path (`@fairgarden/design/utils/docs/createDemo`, `…/createTypes`, `…/createMdxComponents`, `…/serverSourceEnhancers`), so an app imports only what it uses. This site is built with them.
+Each is a thin wrapper over the engine's own factory with the design system's components plugged in, and every option passes through, so an app can replace any of them. They're server-safe and hold no framework code: pass your router's link in. `@fairgarden/docs` is an optional peer dependency; install it to use these. Each factory also has its own path (`@fairgarden/design/utils/docs/createDemo`, `…/createTypes`, `…/createMdxComponents`, `…/serverSourceEnhancers`, `…/toSidebarItems`), so an app imports only what it uses. This site is built with them.
 
 ## createDemo
 
@@ -114,6 +114,17 @@ export function SeedPacketCode({ source }: { source: string }) {
 }
 ```
 
+## toSidebarItems
+
+`toSidebarItems(sitemap)` turns the engine's sitemap, the object that also feeds search, into the [Sidebar Nav](../../navigation/sidebar-nav/page.mdx)'s page tree for the [Docs Layout](../../page/docs-layout/page.mdx): each section's title over its pages, in the section index's order, the heading linking to the section's index page. It returns plain data, so build it on the server where the sitemap is imported and hand it to the client `SidebarNav`, as this site's layout does. `sitemapHref(prefix, path)` is the route it gives each page (`/actions/button` for `./button/page.mdx` under `/actions/`); pass `toHref` to build routes another way, or `groupLinks: false` for plain group headings. A `toTableOfContents(page)` beside it is planned, for the contents column, once the engine records each heading's rendered id and level (see the Docs Layout's wiring plan).
+
+```tsx filename=layout.tsx
+import { toSidebarItems } from '@fairgarden/design/utils/docs/toSidebarItems'
+import { sitemap } from '../sitemap'
+
+const sidebarItems = toSidebarItems(sitemap)
+```
+
 ## The engine's client side
 
 Code Block and Demo highlight from the engine's precomputed output. Code the browser produces, such as an edited demo, needs the engine's client parser: put `CodeProviderLazy` from `@fairgarden/docs/CodeProvider` in the root layout, as this site does. It loads the parser, the grammars and the transform tools only when a block needs them.
@@ -153,6 +164,12 @@ import { TypesDocsUtilities, TypesDocsUtilitiesAdditional } from './types'
 ### Pre
 
 <TypesDocsUtilities.Pre />
+
+### toSidebarItems and sitemapHref
+
+<TypesDocsUtilities.toSidebarItems />
+
+<TypesDocsUtilities.sitemapHref />
 
 ### Additional types
 

@@ -34,26 +34,34 @@ import styles from './file-tabs.module.css'
  * - Compound variants: none.
  * - Defaults: frame `top`; color axes are never defaulted [D133].
  * - Color fallback: inherits the scope.
- * - States: the selected tab (`data-active`) → the folder tab: filled
- *   --role-select-text with a --role-select-text-edge edge and
- *   --radius-2-75 top radii (the paper-tab radius, as the first and last
- *   tabs' outer corners), a --role-select-text-label label at
- *   --font-weight-7, its neighbours tucked under it; `:active` on it → the
- *   radii grow (motion OK only); `:hover` on the others → the bare-text
- *   underline (--role-accent at --border-size-2, offset --size-px-1)
- *   [D181]; `:active` on the others → a --border-size-2 --primary12 line
- *   under the label; `:focus-visible` → the ring inside the hit area;
- *   `data-disabled` → --role-muted label and a `line-dotted-fine` underline,
- *   the selected tab keeping its shape on a --primary1 face [D16, D85].
- *   The header: `data-tablist` (two or more documents) → the bar leaves the
- *   flow and the tablist becomes the tabs' native scroll row (and small
- *   controls' cell takes a --role-rule start edge). A FileTabsControl in
- *   `controls` → the header's end always hangs outside the host's
- *   inline-end edge (CSS `:has()`, nothing measured). FileTabsControl:
- *   `:hover` / `:focus-visible` → at once, the ear drawn in --primary12 on
- *   the --role-soft-hover fill [D181]; `aria-expanded="true"` (its menu
- *   open; never its tooltip's `data-popup-open`) → the ear on the
- *   --primary1 face; disabled → --role-muted.
+ * - States: at rest a tab is recessed paper, --primary3 in a --role-rule
+ *   edge, standing on the header's rule; the selected tab (`data-active`)
+ *   → the front sheet: its panel's own face (the host's --primary1; the
+ *   ground with `frame="none"`) in the same edge with --radius-2-75 top
+ *   radii (the paper-tab radius, as the first and last tabs' outer
+ *   corners), open at its foot into the panel with no rule between, a
+ *   --primary12 label at --font-weight-7 (weight and the joined edge carry
+ *   the state, not color alone), its neighbours tucked under it; `:active`
+ *   on it → the radii grow (motion OK only); `:hover` on the others → the
+ *   bare-text underline (--role-accent at --border-size-2, offset
+ *   --size-px-1) [D181]; `:active` on the others → a --border-size-2
+ *   --primary12 line under the label; `:focus-visible` → the ring inside
+ *   the hit area; `data-disabled` → --role-muted label and a
+ *   `line-dotted-fine` underline, the selected tab keeping its face and
+ *   shape [D16, D85]. The header: one fixed 56 px row that never wraps (a
+ *   lone label truncates); `data-tablist` (two or more documents) → the
+ *   bar leaves the flow and the tablist becomes the tabs' native scroll
+ *   row (and small controls' cell takes a --role-rule start edge);
+ *   `data-labelless` (no document) with a FileTabsControl → no header row.
+ *   A FileTabsControl in `controls` → the header's end always hangs outside
+ *   the host's inline-end edge (CSS `:has()`, nothing measured).
+ *   FileTabsControl: `:hover` / `:focus-visible` → at once, the ear drawn
+ *   in --primary12 on the --role-soft-hover fill [D181];
+ *   `aria-expanded="true"` (its menu open; never its tooltip's
+ *   `data-popup-open`) → the ear on the --primary1 face; disabled →
+ *   --role-muted. Small icon Buttons in `controls` (`text` icon-only) →
+ *   quiet at rest; `:hover` / `:focus-visible` → at once, their circle
+ *   drawn in --primary12 at --border-size-1 on the --role-soft-hover fill.
  * - Parts: base, header, bar (the row inside it, which draws the host's
  *   side edges), lead (the tabs or the one document's label), list (the
  *   tabs' native scroll row), tab, label, edge / edgeLine (the disabled
@@ -158,10 +166,16 @@ export type FileTabsProps = Omit<
    *   (24 px) free past its edge, unclipped** (or inside an
    *   `overflow-clip-margin`); where the page ends sooner, clip it sideways
    *   (`overflow-x: clip`) so the rest of the hit area can't scroll it.
-   * - Small icon Buttons sit in the header: beside the one document's label,
-   *   wrapping onto a second row when they can't share its line; with
-   *   several documents, in a `--fgd-size-hit` cell at the header's end with a
-   *   `--role-rule` start edge, where the tabs end.
+   *   With no document (`tabs` empty) there is no header row at all: the ⋮
+   *   hangs from the host's top-end corner.
+   * - Small icon Buttons (`variant="text"` icon-only `sm` Buttons) sit in
+   *   the header, quiet at rest: their edge is drawn only while pointed at
+   *   or focused. They sit beside the one document's label, which truncates
+   *   to leave them room (the header never wraps); with several documents,
+   *   in a `--fgd-size-hit` cell at the header's end with a `--role-rule`
+   *   start edge, where the tabs end. The row is end-aligned: a control
+   *   that joins after the first paint goes before the others (earlier in
+   *   `controls`), so the ones already painted don't move.
    * Hidden in print.
    */
   controls?: React.ReactNode
@@ -176,9 +190,9 @@ export type FileTabsProps = Omit<
    * toasts (§10.17). Hidden in print.
    */
   status?: React.ReactNode
-  /** Primary scale: labels, rules, focus ring. Never defaulted [D133]. */
+  /** Primary scale: labels, rules, the tabs' faces (the recessed --primary3, the front --primary1), focus ring. Never defaulted [D133]. */
   primary?: PrimaryScale
-  /** Secondary scale: the selected tab's fill, edge and label (`--role-select*`). Never defaulted. */
+  /** Secondary scale: the hover underline (`--role-accent`). Never defaulted. */
   secondary?: RadixScale
 }
 
@@ -292,14 +306,17 @@ export type FileTabsListProps = Omit<BaseTabs.List.Props, 'children'> & {
 const staticListState: BaseTabs.List.State = { orientation: 'horizontal', tabActivationDirection: 'none' }
 
 /**
- * The header: 56 px with its `--role-rule`, the folder tabs across its full
- * width under 12 px of room, running over the rule, and the Root's
- * `status` and `controls` at its end. The labels take the UI face (mono
- * with `mono`), the selected tab filled with its neighbours tucked under it. When they overflow, their
- * row scrolls sideways with its native scrollbar, which hangs just below
- * the header (or overlays the strip's foot, where scrollbars overlay), so
- * the tabs never lift off the rule. With one tab it shows that name as a
- * label (no tablist); with none, only the controls and status, or
+ * The header: one fixed 56 px row with its `--role-rule`, the folder tabs
+ * across its full width under 12 px of room, standing on the rule, and the
+ * Root's `status` and `controls` at its end. The labels take the UI face
+ * (mono with `mono`); the selected tab takes its panel's face and opens
+ * into it, the others recessed behind it with its neighbours tucked
+ * under it. When they overflow, their row scrolls sideways with its native
+ * scrollbar, which hangs just below the header (or overlays the strip's
+ * foot, where scrollbars overlay), so the tabs never lift off the rule.
+ * With one tab it shows that name as a label (no tablist), truncated with
+ * an ellipsis where the controls need its room; with none, the controls
+ * and status (a `FileTabsControl` alone hangs, with no header row), or
  * nothing. Its own props (`aria-label`, `className` …) go to the tablist,
  * or to the one document's label.
  */
@@ -344,6 +361,7 @@ export function FileTabsList(props: FileTabsListProps) {
     <div
       className={fileTabsHeader({ frame })}
       data-tablist={tablist ? '' : undefined}
+      data-labelless={tabs.length === 0 ? '' : undefined}
     >
       <div className={styles.bar}>
         <div className={styles.lead}>{lead}</div>
@@ -422,6 +440,9 @@ export type FileTabsControlProps = Omit<useRender.ComponentProps<'button'>, 'cla
  * a tooltip's `data-popup-open` changes nothing), on the `--primary1` face.
  * As a Menu's trigger:
  * `<Menu.Trigger render={<FileTabsControl />} aria-label="More actions">`.
+ * Or as a lone action, where it is the only one (Code Block's nameless
+ * snippet hangs its copy, `content_copy` at the tag tier): name it with
+ * `aria-label`, pair it with a Tooltip, and give it an `onClick`.
  */
 export function FileTabsControl(props: FileTabsControlProps) {
   const { render, ref, className, ...elementProps } = props

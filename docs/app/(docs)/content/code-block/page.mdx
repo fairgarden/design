@@ -49,7 +49,9 @@ import { DemoCodeBlockBasic } from './demos/basic'
 
 <DemoCodeBlockBasic.Title />
 
-One file shows its name in the header and its actions as a row of icon-only buttons, each named by a tooltip: copy the source, copy the file's deep link (the page URL with its `#slug`; every slug has a hidden scroll target, so the link lands on the block) and, for a file with a hosted URL, view the source. A fence without a file name shows no label.
+One file shows its name in the header and its actions as a row of quiet icon-only buttons, each named by a tooltip: copy the source, copy the file's deep link (the page URL with its `#slug`; every slug has a hidden scroll target, so the link lands on the block) and, for a file with a hosted URL, view the source. The buttons are a glyph with no edge until you point at one or focus it, like the ⋮. The header is one fixed row: a long name truncates with an ellipsis rather than wrap.
+
+A fence without a file name has no header at all, so a one-line snippet stays one line tall. Where copying is its only action, as for the import line at the top of this page, a copy button hangs just outside the frame's top-end corner: one click copies the code and a toast says "Code copied". It sits where the ⋮ would, the same size, and outlines at once when you point at it or focus it. With more actions (view source, variants, the TS | JS switch) the ⋮ menu hangs there instead, and if an action arrives after the page loads, the button turns into the ⋮ in place: only the glyph changes.
 
 Every copy (the source, the link, or all files as Markdown) confirms with a [Toast](../../feedback/toast/page.mdx) in the page's toast bar: "VolunteerShift.tsx copied", "Link copied" or "Markdown copied", or a danger toast if the browser refuses the clipboard. The header and the buttons never change to say so. The toasts need the design system's `ToastProvider` in the app shell, as this site mounts it; without one, copying still works, silently.
 
@@ -80,7 +82,7 @@ import { DemoCodeBlockVariants } from './demos/variants'
 
 <DemoCodeBlockVariants.Title />
 
-With one file, the variants show as a Select and the engine's JavaScript transform as a TS | JS segmented switch; with several files both move into the menu. The control changes at once; the code swaps 350 ms later while the changed lines grow or shrink, and the page holds still around the control. Under reduced motion the swap is instant. The engine stores the choice and applies it to every block on the page.
+With one file, the variants show as a Select and the engine's JavaScript transform as a TS | JS segmented switch; with several files both move into the menu. When the engine works the transform out in the browser, the switch arrives after the page hydrates: it joins at the start of the row, taking its room from the file name, so nothing below moves and the buttons already there stay put. The control changes at once; the code swaps 350 ms later while the changed lines grow or shrink, and the page holds still around the control. Under reduced motion the swap is instant. The engine stores the choice and applies it to every block on the page.
 
 <DemoCodeBlockVariants />
 

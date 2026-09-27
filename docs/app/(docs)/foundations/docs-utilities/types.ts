@@ -7,6 +7,8 @@ import {
   createMdxComponents,
   DemoTitle,
   Pre,
+  toSidebarItems,
+  sitemapHref,
 } from '@fairgarden/design/utils/docs';
 
 const { types, AdditionalTypes } = createMultipleTypes(import.meta.url, {
@@ -17,6 +19,8 @@ const { types, AdditionalTypes } = createMultipleTypes(import.meta.url, {
   createMdxComponents,
   DemoTitle,
   Pre,
+  toSidebarItems,
+  sitemapHref,
 });
 
 export const TypesDocsUtilities = types;

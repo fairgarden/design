@@ -126,19 +126,33 @@
     color: var(--primary12);
   }
 
+  /*
+   * The label reserves --size-px-9 (64 px), more than "Search" takes in
+   * the UI face or its fallbacks, so where the trigger sizes to its content
+   * (the Navigation Bar's search slot) the web font arriving never changes
+   * its width and nothing beside it moves [D201, D203].
+   */
   .triggerLabel {
     flex: 1 1 auto;
-    min-inline-size: 0;
+    min-inline-size: var(--size-px-9);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   /* The shortcut hint: a mono key cap on the field rule, from --lg-n-above; it rides the right edge. */
+  /*
+   * The hint: mono, so 6ch holds "Ctrl K" exactly; "⌘K" centers in the
+   * same box. The box is painted before the label is known, so the trigger
+   * keeps one width from the first paint [D201].
+   */
   .kbd {
     display: none;
     flex: none;
+    box-sizing: content-box;
+    min-inline-size: 6ch;
     padding-inline: var(--size-px-1);
+    text-align: center;
     border: var(--border-size-1) solid var(--role-rule);
     border-radius: var(--radius-1);
     white-space: nowrap;

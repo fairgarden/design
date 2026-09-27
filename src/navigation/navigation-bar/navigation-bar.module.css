@@ -323,6 +323,12 @@
     }
   }
 
+  /* Wide: the content boxes align with a wide page frame, the docs layout's columns [D202]. */
+  .wide .inner,
+  .wide .utilityInner {
+    inline-size: min(calc(100% - 2 * var(--fgd-space-margin)), var(--fgd-container-wide));
+  }
+
   /* Compact (the docked header): utility row and brand drawing dropped, one row, same height. */
   .compact .utility,
   .compact .brandDrawing {

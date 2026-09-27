@@ -17,7 +17,7 @@ const text = `Volunteer handbook
 
 Sign in at the shed whistle board, wear closed shoes, and ask a crew lead before using the chipper. Work days run 9 to noon; water and gloves are provided.`
 
-/** An icon-only Button named by its Tooltip; a link when it has an `href`. */
+/** A quiet (`text`) icon-only Button named by its Tooltip; a link when it has an `href`. */
 function IconAction(props: {
   icon: IconName
   label: string
@@ -28,6 +28,7 @@ function IconAction(props: {
   const { icon, label, onClick, href, download } = props
   const button = href ? (
     <Button
+      variant="text"
       iconOnly
       size="sm"
       icon={icon}
@@ -37,7 +38,7 @@ function IconAction(props: {
       {label}
     </Button>
   ) : (
-    <Button iconOnly size="sm" icon={icon} onClick={onClick}>
+    <Button variant="text" iconOnly size="sm" icon={icon} onClick={onClick}>
       {label}
     </Button>
   )
@@ -50,7 +51,8 @@ function IconAction(props: {
 }
 
 /**
- * One document: its title as a label, and a row of icon Buttons beside it.
+ * One document: its title as a label, and a row of quiet icon Buttons
+ * beside it, their edge drawn only on hover and focus.
  * Copying the link confirms with a toast in the page's toast bar, not in
  * the header.
  */

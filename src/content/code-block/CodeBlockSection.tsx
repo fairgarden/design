@@ -111,6 +111,9 @@ export function CodeBlockSection(props: CodeBlockSectionProps) {
     [code.files],
   )
   const hasTabs = tabs.length > 1
+  // One named file: its label and the inline row. Several files, or a
+  // nameless one (no header row), take the hanging ⋮ menu.
+  const inline = tabs.length === 1
 
   // "Copy link": the selected file's deep link, through the engine's copier.
   const slug = code.selectedFileSlug
@@ -166,7 +169,7 @@ export function CodeBlockSection(props: CodeBlockSectionProps) {
         secondary={secondary}
         actions={
           <CodeActionsMenu
-            inline={!hasTabs}
+            inline={inline}
             fileName={code.selectedFileName}
             onCopy={toasts.track('source', code.copy, code.selectedFileName)}
             onCopyLink={slug ? copyLink : undefined}

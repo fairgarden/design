@@ -18,8 +18,19 @@
  * are drawn again over the header (and over the ends of the strip's native
  * scrollbar), and a FileTabsControl (the ⋮) always hangs past the host's
  * inline-end edge, which is why the host must not clip and must leave
- * --fgd-size-file-tabs-control free there. Colors are role variables only;
- * local custom properties carry dimensions only:
+ * --fgd-size-file-tabs-control free there.
+ *
+ * The tabs are paper: the selected tab takes its panel's own face (the
+ * host's --primary1, the ground with `frameNone`) and opens into it, with
+ * no rule between them; the others sit recessed behind it on --primary3,
+ * each standing on the header's rule. The header is one fixed row that
+ * never wraps: a lone file's label truncates, the tabs scroll, and a
+ * control that joins late takes its room at the start of the controls,
+ * whose end never moves. With no document and a FileTabsControl there is
+ * no header row: the ⋮ hangs from the host's top-end corner. Small icon
+ * Buttons in the header (`text` icon-only Buttons) are quiet at rest, as
+ * the ⋮ is: their edge shows only on hover and focus. Colors are role
+ * variables only; local custom properties carry dimensions only:
  *   --file-tab-radius          the paper-tab radius: the selected tab's top radii and the first and
  *                              last tabs' outer one, as the source's (12 px)
  *   --file-tabs-host-radius    the host's top corner radius, which the side edges start below
@@ -77,27 +88,29 @@
   /*
    * The header: 56 px with its --role-rule (the room above the tabs plus
    * the tabs, which run over the rule), as the source's 48 px header held
-   * its 35 px tabs. The bar's items span it, rule included.
+   * its 35 px tabs. The bar's items span it, rule included. Its height is
+   * fixed: nothing in it wraps or grows it, so a control that joins after
+   * the first paint never moves what's below.
    */
   .header {
     position: relative;
     box-sizing: border-box;
-    min-block-size: var(--file-tabs-block);
+    block-size: var(--file-tabs-block);
     border-block-end: var(--border-size-1) solid var(--role-rule);
   }
 
   /*
    * The row inside the header: its items run a rule's width past the
-   * header's content, over the rule. With one file (or none) it's in flow
-   * and wraps, so controls that can't sit beside a lone label take a second
-   * row.
+   * header's content, over the rule. With one file (or none) it's in flow;
+   * it never wraps: the lone label truncates to leave the controls their
+   * room.
    */
   .bar {
     position: relative;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: stretch;
-    min-block-size: var(--file-tabs-block);
+    block-size: var(--file-tabs-block);
     margin-block-end: calc(-1 * var(--border-size-1));
   }
 
@@ -153,7 +166,13 @@
     padding-block-start: var(--file-tabs-top);
   }
 
-  /* Each tab is --fgd-size-hit tall, open at the bottom onto the header's rule. */
+  /*
+   * Each tab is --fgd-size-hit tall, its foot on the foot of the header's
+   * rule. A tab behind the selected one is recessed paper: the --primary3
+   * face (two steps off the host's --primary1, never transparency),
+   * its own foot drawing the header's rule it covers, so it stands on the
+   * rule; the selected tab opens there instead (states).
+   */
   .tab {
     --file-tab-pad-start: var(--file-tab-inset);
     --file-tab-pad-end: var(--file-tab-inset);
@@ -168,9 +187,8 @@
     padding-block: 0;
     padding-inline: var(--file-tab-pad-start) var(--file-tab-pad-end);
     border: var(--border-size-1) solid var(--role-rule);
-    border-block-end: 0;
     border-radius: 0;
-    background: none;
+    background-color: var(--primary3);
     color: var(--role-muted);
     text-decoration: none;
     white-space: nowrap;
@@ -247,15 +265,21 @@
     stroke: var(--role-disabled-edge);
   }
 
-  /* One file: its name, the header's full height, inset as the source's label (12 px from the host's outer edge). */
+  /*
+   * One file: its name on one line, centred in the header, inset as the
+   * source's label (12 px from the host's outer edge). A name longer than
+   * its room truncates with an ellipsis rather than wrap, so the header
+   * keeps its height whatever the controls take.
+   */
   .single {
-    display: flex;
-    align-items: center;
+    display: block;
+    flex: 0 1 auto;
     box-sizing: border-box;
     min-inline-size: 0;
-    min-block-size: var(--file-tabs-block);
     padding-inline: var(--size-px-2-5);
-    overflow-wrap: anywhere;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   /*
@@ -302,13 +326,15 @@
   /*
    * The controls' cell for small controls (icon Buttons): at least
    * --fgd-size-hit wide, its padding keeping them off the header's rules,
-   * wrapping when it can't fit beside a lone label. A FileTabsControl never
+   * one row that never wraps, end-aligned: a control that joins after the
+   * first paint enters at its start, taking room from the label or the
+   * tabs, and the controls already there stay put. A FileTabsControl never
    * sits in the header: its row hangs outside (below).
    */
   .controls {
     display: flex;
     flex: 0 1 auto;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: var(--size-px-1);
     align-items: center;
     justify-content: flex-end;
@@ -419,10 +445,10 @@
     }
   }
 
-  /* Edge and radius changes: the source's 200 ms; never the fill, which would fade through transparent. */
+  /* Face and radius changes: the source's 200 ms; both faces are opaque steps, so the fill never passes through transparent. */
   @media (--motionOK) {
     .tab {
-      transition-property: border-color, border-radius;
+      transition-property: background-color, border-color, border-radius;
       transition-duration: var(--fgd-duration-disclosure);
       transition-timing-function: var(--ease-out-3);
     }
@@ -445,8 +471,7 @@
     position: absolute;
     inset-inline: 0;
     inset-block-start: 0;
-    flex-wrap: nowrap;
-    min-block-size: 0;
+    block-size: auto;
     margin: 0;
   }
 
@@ -526,7 +551,7 @@
 
   /* In a host part below another (no rounded top): the header's rule joins the part above, and the side edges run from it. */
   .frameJoined {
-    min-block-size: calc(var(--file-tabs-block) + var(--border-size-1));
+    block-size: calc(var(--file-tabs-block) + var(--border-size-1));
     border-block-start: var(--border-size-1) solid var(--role-rule);
   }
 
@@ -573,26 +598,69 @@
   .frameNone > .bar > .side > .status {
     background-color: var(--role-ground);
   }
+
+  /*
+   * No document and a FileTabsControl (Code Block's nameless snippet): no
+   * header row, no rule. The header keeps only the joining rule with
+   * `joined`; the ⋮ hangs from the host's top-end corner as it does beside
+   * a header, its ear --fgd-size-hit tall from the host's top edge (or the
+   * joining rule), with its hit area in the same gutter, so it takes no
+   * layout width and no height. The status, while busy, lies over the
+   * panel's top-end corner beside it.
+   */
+  .header[data-labelless]:has(> .bar > .side > .controls > .control) {
+    block-size: auto;
+    border-block-end-width: 0;
+  }
+
+  .header[data-labelless] > .bar:has(> .side > .controls > .control) {
+    block-size: 0;
+    margin: 0;
+  }
+
+  .header[data-labelless] > .bar:has(> .side > .controls > .control)::before,
+  .header[data-labelless] > .bar:has(> .side > .controls > .control)::after {
+    content: none;
+  }
+
+  .header[data-labelless] > .bar > .side:has(> .controls > .control) {
+    block-size: calc(var(--fgd-size-hit) + var(--border-size-1));
+  }
+
+  .frameNone[data-labelless] > .bar > .side:has(> .controls > .control) {
+    block-size: var(--fgd-size-hit);
+  }
 }
 
 @layer states {
   /*
-   * The selected tab: the filled folder tab, above its neighbours, with both
-   * top corners rounded. It carries words, so it takes the text-bearing
-   * selection roles; its label is also marked by weight.
+   * The selected tab: the front sheet of paper, above its neighbours, with
+   * both top corners rounded. It takes its panel's own face (the host's
+   * --primary1) in the same --role-rule edge, and opens into the panel: no
+   * foot edge, so the header's rule stops at its sides and nothing divides
+   * tab from panel (the foot's width moves into its padding, so its label
+   * stays level with the others'). Its label is the --primary12 ink at
+   * --font-weight-7: the state reads by weight and by the joined edge, not
+   * by color alone.
    */
   .tab[data-active] {
     z-index: var(--layer-1);
-    border-color: var(--role-select-text-edge);
+    padding-block-end: var(--border-size-1);
+    border-block-end-width: 0;
     border-start-start-radius: var(--file-tab-radius);
     border-start-end-radius: var(--file-tab-radius);
-    background-color: var(--role-select-text);
-    color: var(--role-select-text-label);
+    background-color: var(--primary1);
+    color: var(--primary12);
   }
 
   .tab[data-active] .label {
-    color: var(--role-select-text-label);
+    color: var(--primary12);
     font-weight: var(--font-weight-7);
+  }
+
+  /* No host frame: the panel sits on the ground, so the front tab takes the ground's face. */
+  .frameNone .tab[data-active] {
+    background-color: var(--role-ground);
   }
 
   /*
@@ -646,16 +714,7 @@
     display: block;
   }
 
-  /*
-   * The disabled selected tab keeps its shape, place and weight on a
-   * --primary1 face with the --role-rule edge, so its muted label keeps text
-   * contrast (muted on the selection fill would not).
-   */
-  .tab[data-active][data-disabled] {
-    border-color: var(--role-rule);
-    background-color: var(--primary1);
-  }
-
+  /* The disabled selected tab keeps its face, shape, place and weight; its label is muted. */
   .tab[data-active][data-disabled] .label {
     color: var(--role-muted);
   }
@@ -697,6 +756,25 @@
     cursor: default;
   }
 
+  /*
+   * Small icon Buttons in the header are quiet at rest, as the ⋮ is: `text`
+   * icon-only Buttons, a glyph with no edge (and, disabled, no dotted edge:
+   * a loading stand-in is the same glyph in --role-muted, the same size).
+   * Pointed at or focused, their circle is drawn at once, a --border-size-1
+   * --primary12 edge on the --role-soft-hover fill, as the ⋮'s ear [D181];
+   * the Button keeps its fixed size (the edge is inside it), its
+   * --fgd-size-hit hit area, its glyph's weight swap and its focus ring.
+   * Nothing fades, so leaving is as instant as arriving.
+   */
+  .controls > :is(button, a):not(.control) {
+    transition: none;
+  }
+
+  .controls > :is(button, a):not(.control, :disabled, [data-disabled], [aria-busy='true']):is(:hover, :focus-visible) {
+    border: var(--border-size-1) solid var(--primary12);
+    background-color: var(--role-soft-hover);
+  }
+
   .panel:focus-visible {
     outline: var(--fgd-focus-width) solid var(--primary12);
     outline-offset: calc(-1 * var(--fgd-focus-width));
@@ -706,16 +784,22 @@
 @layer print {
   @media print {
     /* The header hugs the file labels, inset like a code block's code; the controls and status are screen-only. */
-    .header {
-      min-block-size: 0;
+    .header,
+    .frameJoined {
+      block-size: auto;
       padding: var(--size-px-2) var(--size-px-2-5);
     }
 
     .header > .bar,
     .header[data-tablist] > .bar {
       position: static;
-      min-block-size: 0;
+      block-size: auto;
       margin: 0;
+    }
+
+    /* No document (a nameless snippet): nothing to print, so no header. */
+    .header[data-labelless] {
+      display: none;
     }
 
     .bar::before,
@@ -754,9 +838,12 @@
       color: var(--primary12);
     }
 
+    /* Paper doesn't truncate: a long name wraps. */
     .single {
-      min-block-size: 0;
       padding-inline: 0;
+      overflow: visible;
+      white-space: normal;
+      overflow-wrap: anywhere;
     }
 
     .tab::after,

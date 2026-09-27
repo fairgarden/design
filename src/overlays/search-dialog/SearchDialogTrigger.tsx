@@ -74,9 +74,14 @@ export function SearchDialogTrigger(props: SearchDialogTriggerProps): React.JSX.
         <ExpandingBoxMain className={styles.triggerMain}>
           <Icon name="search" className={styles.magnifier} />
           <span className={styles.triggerLabel}>{label}</span>
-          {hint ? (
+          {/*
+           * The hint's box is in the server HTML, sized for the longer
+           * label, so the platform's label filling it in after hydration
+           * never widens the trigger (no layout shift) [D201].
+           */}
+          {keyboardShortcut ? (
             <kbd aria-hidden="true" className={cx(expandingBoxParts.end, styles.kbd)}>
-              {hint.label}
+              {hint?.label ?? '\u00a0'}
             </kbd>
           ) : null}
         </ExpandingBoxMain>

@@ -4,11 +4,12 @@
  * `kind="band"` Ground of the header's preset, so it takes the header's
  * ground and mode, never a `white` overlay scope [D97, D148].
  *
- * Parts: base, bar, logo, logoMark, close, closeLabel, scroll, nav, list,
- * item, group, groupRow, rowLabel, glyph (the Collapsible module's D109
- * glyph), panel, childList (the indent guide), childItem, childLink,
- * directLink, linkLabel, footer, footerAction, footerList, footerLink,
- * footerLocale, menuTrigger, menuIcon, menuLabel.
+ * Parts: base, bar, logo, logoMark, close, closeLabel, scroll, nav,
+ * navHost (a passed-in navigation: the docs sidebar [D202]), list, item,
+ * group, groupRow, rowLabel, glyph (the Collapsible module's D109 glyph),
+ * panel, childList (the indent guide), childItem, childLink, directLink,
+ * linkLabel, footer, footerAction, footerList, footerLink, footerLocale,
+ * menuTrigger, menuIcon, menuLabel.
  *
  * No backdrop or tint [D24 → D121]: the full sheet hides the page; the side
  * sheet leaves it unpainted and inert. Motion is a clip reveal, never a
@@ -73,8 +74,15 @@
     flex: none;
   }
 
+  /*
+   * Both labels reserve --size-px-8 (48 px), more than "Menu" or "Close"
+   * takes in the UI face or its fallbacks, so the web font arriving never
+   * moves the header's end, and the close control has the menu Button's
+   * width [D201, D203].
+   */
   .menuLabel,
   .closeLabel {
+    min-inline-size: var(--size-px-8);
     text-decoration-color: var(--role-accent);
     text-underline-offset: var(--size-px-1);
   }
@@ -83,6 +91,7 @@
   @media (--xs-n-below) {
     .menuLabel {
       position: absolute;
+      min-inline-size: 0;
       inline-size: 1px;
       block-size: 1px;
       overflow: hidden;
@@ -141,6 +150,13 @@
   .nav,
   .group {
     display: block;
+  }
+
+  /* A passed-in navigation (the docs sidebar): the page margins round it. */
+  .navHost {
+    display: block;
+    padding-block: var(--size-px-3) var(--size-px-5);
+    padding-inline: var(--fgd-space-margin);
   }
 
   .list,

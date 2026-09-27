@@ -131,6 +131,45 @@ chunk loads, and its emphasis window in the server HTML. A fence's flags
 | highlightAfter     | `'init' \| 'stream' \| 'hydration' \| 'idle'`  | -       | When the code highlights. Default: the engine's own (`'idle'`: the server&#xA;HTML carries the plain code, highlighted once the browser is idle). Pass&#xA;`'init'` only to show server-side highlighting: the HTML then arrives&#xA;highlighted, at the cost of server work and page weight.                                                                                                           |
 | sourceEnhancers    | `SourceEnhancer[]`                             | -       | The source enhancers the server runs on code it parses. Default&#xA;`serverSourceEnhancers` (the engine's emphasis enhancer, with the&#xA;options demos get), so the emphasis window is in the server HTML and&#xA;nothing changes size after hydration \[D201]. A fence the build&#xA;precomputed already carries its window; this covers any code the server&#xA;still parses. Pass `[]` to run none. |
 
+### sitemapHref
+
+A sitemap page's route: its `path` (`./button/page.mdx`) under its
+section's `prefix` (`/actions/`), without `page.mdx` or a trailing slash
+(`/actions/button`); the section itself with no path (`/actions`).
+
+**Parameters:**
+
+| Parameter | Type     | Default | Description |
+| :-------- | :------- | :------ | :---------- |
+| prefix    | `string` | -       | -           |
+| path?     | `string` | `""`    | -           |
+
+**Return Value:**
+
+```tsx
+type ReturnValue = string;
+```
+
+### toSidebarItems
+
+The sitemap's sections, in sitemap order, as SidebarNav groups: each
+section's title over its pages, in the section index's order, the
+heading linking to the section's index page. Pages without a title use
+their slug.
+
+**Parameters:**
+
+| Parameter | Type                    | Default | Description |
+| :-------- | :---------------------- | :------ | :---------- |
+| sitemap   | `Sitemap \| undefined`  | -       | -           |
+| options?  | `ToSidebarItemsOptions` | -       | -           |
+
+**Return Value:**
+
+```tsx
+type ReturnValue = SidebarNavItem[];
+```
+
 ## Additional Types
 
 ### createDemo
@@ -510,6 +549,19 @@ demos window alike.
 type serverSourceEnhancers = SourceEnhancer[];
 ```
 
+### ToSidebarItemsOptions
+
+Options for toSidebarItems.
+
+```typescript
+type ToSidebarItemsOptions = {
+  /** Builds each route from a section prefix and a page path. Default `sitemapHref`. */
+  toHref?: (prefix: string, path?: string) => string;
+  /** Link each group heading to its section's index page. Default `true`. */
+  groupLinks?: boolean;
+};
+```
+
 ### TypesFactoryOptions
 
 The engine's types factory options (`@fairgarden/docs/abstractCreateTypes`).
@@ -520,10 +572,12 @@ type TypesFactoryOptions = AbstractCreateTypesOptions;
 
 ## Export Groups
 
-- `createDemoFactory`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`
-- `createDemoWithVariantsFactory`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`
-- `createTypesFactory`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`
-- `createMultipleTypesFactory`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`
-- `createMdxComponents`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`
-- `DemoTitle`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`
-- `Pre`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`
+- `createDemoFactory`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`, `sitemapHref`, `toSidebarItems`, `ToSidebarItemsOptions`
+- `createDemoWithVariantsFactory`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`, `sitemapHref`, `toSidebarItems`, `ToSidebarItemsOptions`
+- `createTypesFactory`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`, `sitemapHref`, `toSidebarItems`, `ToSidebarItemsOptions`
+- `createMultipleTypesFactory`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`, `sitemapHref`, `toSidebarItems`, `ToSidebarItemsOptions`
+- `createMdxComponents`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`, `sitemapHref`, `toSidebarItems`, `ToSidebarItemsOptions`
+- `DemoTitle`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`, `sitemapHref`, `toSidebarItems`, `ToSidebarItemsOptions`
+- `Pre`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`, `sitemapHref`, `toSidebarItems`, `ToSidebarItemsOptions`
+- `toSidebarItems`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`, `sitemapHref`, `toSidebarItems`, `ToSidebarItemsOptions`
+- `sitemapHref`: `createDemoFactory`, `createDemoWithVariantsFactory`, `DemoFactoryOptions`, `CreateDemo`, `CreateDemoWithVariants`, `createDemo`, `createDemoWithVariants`, `createTypesFactory`, `createMultipleTypesFactory`, `TypesFactoryOptions`, `CreateTypes`, `CreateMultipleTypes`, `createTypes`, `createMultipleTypes`, `createMdxComponents`, `MdxLinkComponent`, `CreateMdxComponentsOptions`, `MdxComponents`, `DemoTitle`, `DemoTitleProps`, `Pre`, `PreProps`, `serverSourceEnhancers`, `sitemapHref`, `toSidebarItems`, `ToSidebarItemsOptions`

@@ -1,18 +1,20 @@
-import Link from 'next/link'
 import { CodeProviderLazy } from '@fairgarden/docs/CodeProvider'
-import { Ground } from '@fairgarden/design/foundations/ground'
 import { ToastProvider } from '@fairgarden/design/feedback/toast'
-import { Lockup } from '@/components/Logo'
-import { Navigation } from '@/components/Navigation'
-import { Search } from '@/components/Search'
-import styles from '@/components/chrome.module.css'
+import { toSidebarItems } from '@fairgarden/design/utils/docs/toSidebarItems'
+import { DocsFrame } from '@/components/DocsFrame'
 import { sitemap } from '../sitemap'
+
+/** The sidebar's page tree: the sitemap's sections and pages, built once on the server. */
+const sidebarItems = toSidebarItems(sitemap)
 
 /**
  * The docs chrome, around every docs page (the home page, the section
- * indexes, the component pages and their demo pages). The page is a paper
- * band, the page root; the chrome takes its colors from the scope's role
- * variables, so it follows the page mode like any component.
+ * indexes, the component pages and their demo pages): the design system's
+ * Docs Layout (DocsFrame), a paper page ground whose parts take their
+ * colors from the scope's role variables, so it follows the page mode like
+ * any component. The sidebar from 1024 px (the drawer below) and the
+ * table of contents from 1440 px are placed by viewport media alone, so
+ * the server HTML paints the final frame.
  *
  * `CodeProviderLazy` gives every code block and demo the docs engine's client
  * side: the parser that highlights code the client produces (a TS → JS swap,
@@ -35,18 +37,7 @@ export default function DocsLayout({ children }: Readonly<{ children: React.Reac
   return (
     <ToastProvider>
       <CodeProviderLazy>
-        <Ground preset="paper" kind="band" render={<div className={styles.page} />}>
-          <header className={styles.header}>
-            <Link href="/" className={styles.brand}>
-              <Lockup />
-            </Link>
-            <Search />
-          </header>
-          <div className={styles.frame}>
-            <Navigation sitemap={sitemap} />
-            <main className={styles.main}>{children}</main>
-          </div>
-        </Ground>
+        <DocsFrame items={sidebarItems}>{children}</DocsFrame>
       </CodeProviderLazy>
     </ToastProvider>
   )

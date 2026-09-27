@@ -1,0 +1,60 @@
+/* The handbook's wordmark: the kicker's serif, in the header's ink. */
+.wordmark {
+  font-family: var(--fgd-font-display);
+  font-variation-settings: var(--fgd-font-display-settings);
+  font-weight: var(--font-weight-7);
+  font-size: var(--fgd-font-size-kicker);
+  line-height: var(--font-lineheight-0);
+  white-space: nowrap;
+}
+
+/* The page, set as the docs' own pages are: display title, lead, H2 over a hairline, H3, body at the reading measure. */
+.article {
+  color: var(--primary12);
+}
+
+.title {
+  margin-block: 0 var(--size-px-7-5);
+  font-family: var(--fgd-font-display);
+  font-variation-settings: var(--fgd-font-display-settings);
+  font-weight: var(--font-weight-7);
+  font-size: var(--fgd-font-size-display);
+  line-height: var(--font-lineheight-0);
+  color: var(--role-heading);
+}
+
+.lead {
+  max-inline-size: var(--fgd-measure-reading);
+  margin-block: 0 var(--size-px-5);
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-lead);
+  line-height: var(--font-lineheight-3);
+}
+
+.h2 {
+  margin-block: var(--size-px-8-5) var(--size-px-5);
+  padding-block-end: var(--size-px-3);
+  border-block-end: var(--border-size-1) solid var(--role-hairline);
+  font-family: var(--fgd-font-display);
+  font-variation-settings: var(--fgd-font-display-settings);
+  font-weight: var(--font-weight-7);
+  font-size: var(--fgd-font-size-h2);
+  line-height: var(--font-lineheight-0);
+  color: var(--role-heading);
+}
+
+.h3 {
+  margin-block: var(--size-px-7-5) var(--size-px-3);
+  font-family: var(--fgd-font-ui);
+  font-weight: var(--font-weight-6);
+  font-size: var(--fgd-font-size-subhead);
+  line-height: var(--font-lineheight-1);
+}
+
+.p {
+  max-inline-size: var(--fgd-measure-reading);
+  margin-block: 0 var(--size-px-5);
+  font-family: var(--fgd-font-text);
+  font-size: var(--fgd-font-size-body);
+  line-height: var(--fgd-leading-reading);
+}

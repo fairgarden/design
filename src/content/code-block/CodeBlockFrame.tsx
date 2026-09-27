@@ -41,11 +41,12 @@ export function variantItems(variants: readonly string[]) {
 
 /**
  * The one-file actions' names, shared by the loaded row (CodeActionsMenu)
- * and the loading state's stand-ins, so both read the same.
+ * and the loading state's stand-ins, so both read the same. A nameless
+ * file's copy is "Copy code" (its toast says "Code copied").
  */
 export function actionLabels(fileName: string | undefined) {
   return {
-    copy: fileName ? `Copy ${fileName} source` : 'Copy source',
+    copy: fileName ? `Copy ${fileName} source` : 'Copy code',
     link: fileName ? `Copy ${fileName} link` : 'Copy link',
     source: fileName ? `View ${fileName} source` : 'View source',
   }

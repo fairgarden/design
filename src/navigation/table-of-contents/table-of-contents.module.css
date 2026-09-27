@@ -1,0 +1,134 @@
+/*
+ * Table of Contents (§9.16). CVA function `tableOfContents` in
+ * TableOfContents.tsx.
+ *
+ * Parts: base (the nav), heading, list, item, link, label, labelText.
+ *
+ * Line-based [D202]: the entries hang on a --border-size-1 --role-hairline
+ * guide at the list's start edge, H3 and H4 one step in on their own
+ * guide; the section in view draws the --border-size-2-25 --primary12 bar
+ * over it, the current-item grammar of the drawer, tab strip and Jump list.
+ * No fills, no shadows. Colors are role variables only; there are no local
+ * custom properties.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.heading {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.link {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  /* The caps heading on a 44 px row, level with the sidebar's first group heading. */
+  .heading {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--fgd-size-hit);
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-inline-start: var(--border-size-1) solid var(--role-hairline);
+  }
+
+  /* H3 and H4: one step in, on their own guide. */
+  .list .list {
+    margin-inline-start: var(--size-px-3);
+  }
+
+  .item {
+    display: block;
+  }
+
+  /* An entry: type-caption at weight 400 on a 44 px row, --size-px-3 off the guide. */
+  .link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    min-block-size: var(--fgd-size-hit);
+    padding-block: var(--size-px-2);
+    padding-inline: var(--size-px-3) 0;
+    color: var(--primary12);
+    text-decoration-line: none;
+  }
+
+  /* The current bar, over the guide: a border, so it survives forced colors. */
+  .link::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: calc(-1 * var(--border-size-1));
+    border-inline-start: 0 solid var(--primary12);
+    pointer-events: none;
+  }
+
+  /*
+   * The label reserves its weight-700 box: a hidden copy of its words at
+   * --font-weight-7 (`data-label`) shares the one grid cell, so scrollspy
+   * never widens or rewraps an entry (no layout shift while scrolling).
+   */
+  .label {
+    display: grid;
+    min-inline-size: 0;
+  }
+
+  .label::after {
+    content: attr(data-label);
+    grid-area: 1 / 1;
+    font-weight: var(--font-weight-7);
+    visibility: hidden;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .labelText {
+    grid-area: 1 / 1;
+  }
+}
+
+@layer compounds {
+  /* Entries fill their row: a block flex box, over Link's inline `nav` row. */
+  .link {
+    display: flex;
+  }
+}
+
+@layer states {
+  .list .link:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: calc(-1 * var(--border-size-2));
+  }
+
+  /* The section in view: the --border-size-2-25 start-edge bar and weight 700 [D15]. */
+  .list .link[aria-current='location']::before {
+    border-inline-start-width: var(--border-size-2-25);
+  }
+
+  .list .link[aria-current='location'] {
+    font-weight: var(--font-weight-7);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Screen wayfinding: the document's own headings carry its structure (§7.7). */
+    .base {
+      display: none;
+    }
+  }
+}

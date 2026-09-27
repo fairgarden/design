@@ -83,7 +83,9 @@ export function CodeBlockSectionLoading(props: CodeBlockSectionLoadingProps) {
   const tabs = fileNames
     .filter(Boolean)
     .map((name) => ({ id: name, name, slug: generateFileSlug(fallback.slug ?? '', name, mainVariant) }))
-  const hasTabs = tabs.length > 1
+  // The loaded block's layout: the inline row for one named file; the ⋮
+  // for several files or a nameless one (which has no header row).
+  const inline = tabs.length === 1
   const fileName = fallback.initialFilename ?? tabs[0]?.id
   const labels = actionLabels(fileName)
   // The variants the loaded block's Select lists (a Demo's are in its bar),
@@ -91,6 +93,10 @@ export function CodeBlockSectionLoading(props: CodeBlockSectionLoadingProps) {
   const variants = embedded
     ? []
     : [...new Set([mainVariant, ...Object.keys(fallback.extraVariants ?? {})])]
+  // A nameless file whose one known action is copy hangs a copy ear in the
+  // ⋮'s slot, as the loaded block does (a late TS | JS switch turns it into
+  // the ⋮ there: the same box, another glyph).
+  const copyOnly = tabs.length === 0 && variants.length < 2 && !openableUrl(fallback.url)
 
   return (
     <div
@@ -113,11 +119,18 @@ export function CodeBlockSectionLoading(props: CodeBlockSectionLoadingProps) {
         secondary={secondary}
         actions={
           // The loaded actions' stand-ins, the same size and in the same order:
-          // the menu's trigger, or the one file's row. A named file has a deep
-          // link, and a hosted URL a "View source". The fallback doesn't say
-          // whether the file has a TS | JS switch or a code controller's
-          // "Reset edits", so those join the row at the swap (an engine gap).
-          hasTabs ? (
+          // the copy ear, the menu's trigger, or the one named file's row of
+          // quiet `text` Buttons (disabled: the muted glyph, no edge). A named
+          // file has a deep link, and a hosted URL a "View source". The
+          // fallback doesn't say whether the file has a TS | JS switch or a
+          // code controller's "Reset edits", so those join the row at the
+          // swap (an engine gap), at its start: the header never wraps, the
+          // label gives them room, and these stand-ins' places hold.
+          copyOnly ? (
+            <FileTabsControl aria-label={labels.copy} disabled>
+              <Icon name="content_copy" size="tag" weight="interactive" />
+            </FileTabsControl>
+          ) : !inline ? (
             <FileTabsControl aria-label="More actions" disabled>
               <Icon name="more_vert" size="tag" weight="interactive" />
             </FileTabsControl>
@@ -133,16 +146,16 @@ export function CodeBlockSectionLoading(props: CodeBlockSectionLoadingProps) {
                   />
                 </span>
               ) : null}
-              <Button iconOnly size="sm" icon="content_copy" disabled>
+              <Button variant="text" iconOnly size="sm" icon="content_copy" disabled>
                 {labels.copy}
               </Button>
               {fileName ? (
-                <Button iconOnly size="sm" icon="link" disabled>
+                <Button variant="text" iconOnly size="sm" icon="link" disabled>
                   {labels.link}
                 </Button>
               ) : null}
               {openableUrl(fallback.url) ? (
-                <Button iconOnly size="sm" icon="open_in_new" disabled>
+                <Button variant="text" iconOnly size="sm" icon="open_in_new" disabled>
                   {labels.source}
                 </Button>
               ) : null}

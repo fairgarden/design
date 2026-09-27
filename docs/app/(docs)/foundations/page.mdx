@@ -178,6 +178,7 @@ Factories for a documentation site built on `@fairgarden/docs`: demos, API table
   - createTypes
   - createMdxComponents
   - serverSourceEnhancers
+  - toSidebarItems
   - The engine's client side
   - Print
   - API Reference
@@ -188,6 +189,7 @@ Factories for a documentation site built on `@fairgarden/docs`: demos, API table
     - createMdxComponents
     - DemoTitle
     - Pre
+    - toSidebarItems and sitemapHref
     - Additional types
 - Exports:
   - createDemoFactory
@@ -204,7 +206,11 @@ Factories for a documentation site built on `@fairgarden/docs`: demos, API table
     - Props: children, slug
   - Pre
     - Props: Content, ContentLoading, data-content-props, data-name, data-precompute, data-slug, highlightAfter, sourceEnhancers
-- Types: CreateDemo, CreateDemoWithVariants, CreateMdxComponentsOptions, CreateMultipleTypes, CreateTypes, DemoFactoryOptions, DemoTitleProps, MdxComponents, MdxLinkComponent, PreProps, TypesFactoryOptions, createDemo, createDemoWithVariants, createMultipleTypes, createTypes, serverSourceEnhancers
+  - sitemapHref
+    - Parameters: prefix, path
+  - toSidebarItems
+    - Parameters: sitemap, options
+- Types: CreateDemo, CreateDemoWithVariants, CreateMdxComponentsOptions, CreateMultipleTypes, CreateTypes, DemoFactoryOptions, DemoTitleProps, MdxComponents, MdxLinkComponent, PreProps, ToSidebarItemsOptions, TypesFactoryOptions, createDemo, createDemoWithVariants, createMultipleTypes, createTypes, serverSourceEnhancers
 
 </details>
 

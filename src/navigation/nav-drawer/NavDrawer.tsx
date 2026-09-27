@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { Collapsible as BaseCollapsible } from '@base-ui/react/collapsible'
 import { Dialog as BaseDialog } from '@base-ui/react/dialog'
+import { useRender } from '@base-ui/react/use-render'
 import { cva, type VariantProps } from 'class-variance-authority'
 
 import { DisclosureGlyph } from '../../disclosure/collapsible'
@@ -44,16 +45,18 @@ import styles from './nav-drawer.module.css'
  *   Button and close control take the `text` Button hover;
  *   `:focus-visible` → the ring, inset inside rows.
  * - Parts: base (the sheet), bar, logo, logoMark, close, closeLabel, scroll,
- *   nav, list, item, groupRow, rowLabel, glyph, panel, childList (the
- *   indent guide), childLink, directLink, linkLabel, footer, footerAction,
- *   footerList, footerLink, footerLocale, menuTrigger, menuLabel.
+ *   nav, navHost (a `nav` passed in: the docs sidebar [D202]), list, item,
+ *   groupRow, rowLabel, glyph, panel, childList (the indent guide),
+ *   childLink, directLink, linkLabel, footer, footerAction, footerList,
+ *   footerLink, footerLocale, menuTrigger, menuLabel.
  * - Scope: the portaled sheet re-declares the header's scope as a
  *   `kind="band"` Ground of its preset (Ground writes `data-theme` as on
  *   the header); never a `white` overlay scope [D97, D148].
  * - Container: none; page frame on the viewport custom media.
  * - Data: `sections` takes the shared navigation data (utils/navigation),
  *   the object that also builds the Navigation Menu panels and the footer
- *   sitemap [D187].
+ *   sitemap [D187]; or `nav` takes a complete navigation, the docs
+ *   layout's SidebarNav, which then fills the Scroll Area [D202].
  */
 export const navigationDrawer = cva(styles.base, {
   variants: {
@@ -105,6 +108,21 @@ export type NavDrawerProps = {
   sections?: readonly SitemapSection[]
   /** The top-level rows: `NavDrawerGroup`s and direct `NavDrawerLink`s. */
   children?: React.ReactNode
+  /**
+   * A complete navigation shown in the Scroll Area in place of the drawer's
+   * own list: the docs layout's `SidebarNav` [D202]. It carries its own
+   * `nav` landmark, so `sections`, `children` and `navLabel` go unused, and
+   * focus moves to its current page's link (`aria-current="page"`), else
+   * its first link.
+   */
+  nav?: React.ReactNode
+  /**
+   * Where focus goes when the drawer closes because the viewport reached
+   * the inline threshold. Default: the Navigation Bar item matching the
+   * last open group, else the bar's first item. The docs layout passes the
+   * in-flow sidebar's current link.
+   */
+  inlineTarget?: () => HTMLElement | null
   /** The fixed footer zone: a `NavDrawerFooter`. */
   footer?: React.ReactNode
   /** The menu Button's label, authored in title case [D160]. Default "Menu". */
@@ -119,6 +137,11 @@ export type NavDrawerProps = {
   logoHref?: string
   /** The logo link's accessible name. Default: the Navigation Bar's. */
   logoLabel?: string
+  /**
+   * Builds the logo link, e.g. `(href) => <NextLink href={href} />`.
+   * Default: the Navigation Bar's, else a plain `<a href>`.
+   */
+  renderLink?: (href: string) => React.ReactElement
   /** The current page's URL path. Default: the Navigation Bar's. */
   currentPath?: string
   /** Controlled open state. */
@@ -154,6 +177,8 @@ export function NavDrawer(props: NavDrawerProps) {
   const {
     sections,
     children,
+    nav,
+    inlineTarget,
     footer,
     label = 'Menu',
     closeLabel = 'Close',
@@ -161,6 +186,7 @@ export function NavDrawer(props: NavDrawerProps) {
     logo: logoProp,
     logoHref: logoHrefProp,
     logoLabel: logoLabelProp,
+    renderLink: renderLinkProp,
     currentPath: currentPathProp,
     open: openProp,
     defaultOpen = false,
@@ -177,6 +203,7 @@ export function NavDrawer(props: NavDrawerProps) {
   const logo = logoProp ?? bar?.logo
   const logoHref = logoHrefProp ?? bar?.logoHref ?? '/'
   const logoLabel = logoLabelProp ?? bar?.logoLabel
+  const renderLink = renderLinkProp ?? bar?.renderLink
   const currentPath = currentPathProp ?? bar?.currentPath
 
   const [innerOpen, setInnerOpen] = React.useState(defaultOpen)
@@ -192,6 +219,7 @@ export function NavDrawer(props: NavDrawerProps) {
   const triggerRef = React.useRef<HTMLButtonElement | null>(null)
   const sheetRef = React.useRef<HTMLDivElement | null>(null)
   const listRef = React.useRef<HTMLUListElement | null>(null)
+  const navHostRef = React.useRef<HTMLDivElement | null>(null)
   const returnTarget = React.useRef<HTMLElement | null>(null)
 
   // From the inline threshold the Navigation Bar hides the menu Button:
@@ -201,15 +229,26 @@ export function NavDrawer(props: NavDrawerProps) {
     const check = () => {
       const trigger = triggerRef.current
       if (trigger && trigger.getClientRects().length === 0) {
-        returnTarget.current = findInlineItem(trigger, sheetRef.current)
+        returnTarget.current = inlineTarget?.() ?? findInlineItem(trigger, sheetRef.current)
         setOpen(false)
       }
     }
     window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
-  }, [open, setOpen])
+  }, [open, setOpen, inlineTarget])
 
   const context = React.useMemo<DrawerContextValue>(() => ({ currentPath }), [currentPath])
+
+  const logoLink = useRender({
+    render: renderLink?.(logoHref),
+    defaultTagName: 'a',
+    props: {
+      className: styles.logo,
+      href: logoHref,
+      'aria-label': logoLabel,
+      children: <span className={styles.logoMark}>{logo}</span>,
+    },
+  })
 
   return (
     <DrawerContext.Provider value={context}>
@@ -222,7 +261,17 @@ export function NavDrawer(props: NavDrawerProps) {
           <BaseDialog.Popup
             ref={sheetRef}
             aria-label={label}
-            initialFocus={() => listRef.current?.querySelector<HTMLElement>(ROW) ?? true}
+            initialFocus={() => {
+              const host = navHostRef.current
+              if (host != null) {
+                return (
+                  host.querySelector<HTMLElement>('a[aria-current="page"]') ??
+                  host.querySelector<HTMLElement>(ROW) ??
+                  true
+                )
+              }
+              return listRef.current?.querySelector<HTMLElement>(ROW) ?? true
+            }}
             finalFocus={() => {
               const target = returnTarget.current
               returnTarget.current = null
@@ -240,22 +289,24 @@ export function NavDrawer(props: NavDrawerProps) {
             }
           >
             <div className={styles.bar}>
-              {logo != null ? (
-                <a className={styles.logo} href={logoHref} aria-label={logoLabel}>
-                  <span className={styles.logoMark}>{logo}</span>
-                </a>
-              ) : null}
+              {logo != null ? logoLink : null}
               <BaseDialog.Close className={styles.close}>
                 <Icon name="close" size="tag" weight="interactive" className={styles.menuIcon} />
                 <span className={styles.closeLabel}>{closeLabel}</span>
               </BaseDialog.Close>
             </div>
             <ScrollArea className={styles.scroll}>
-              <nav aria-label={navLabel} className={styles.nav}>
-                <ul ref={listRef} className={styles.list}>
-                  {listItems([sections?.map(sectionRow), children], styles.item)}
-                </ul>
-              </nav>
+              {nav != null ? (
+                <div ref={navHostRef} className={styles.navHost}>
+                  {nav}
+                </div>
+              ) : (
+                <nav aria-label={navLabel} className={styles.nav}>
+                  <ul ref={listRef} className={styles.list}>
+                    {listItems([sections?.map(sectionRow), children], styles.item)}
+                  </ul>
+                </nav>
+              )}
             </ScrollArea>
             {footer}
           </BaseDialog.Popup>

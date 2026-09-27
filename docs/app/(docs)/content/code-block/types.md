@@ -13,9 +13,10 @@ to each file's `#slug`; a modifier click opens the link instead of
 switching. Copy writes the selected file; "Copy link" its deep link. Each
 copy confirms with a toast (a danger toast if the clipboard refuses)
 through the design system's ToastProvider, where one is mounted above;
-without one, copying is silent. With several files the "More actions"
-⋮ hangs outside the frame's inline-end edge: leave
-`--fgd-size-file-tabs-control` (24 px) free past the block, unclipped.
+without one, copying is silent. A nameless snippet has no header row.
+With several files, or none named, the "More actions" ⋮ hangs outside
+the frame's inline-end edge: leave `--fgd-size-file-tabs-control`
+(24 px) free past the block, unclipped.
 
 **CodeBlock Props:**
 
