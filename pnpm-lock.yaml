@@ -34,8 +34,8 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0(postcss@8.5.28)
       '@fairgarden/distribution':
-        specifier: ^0.1.0-alpha.4
-        version: 0.1.0-alpha.4
+        specifier: ^0.1.0-alpha.6
+        version: 0.1.0-alpha.6
       '@fairgarden/docs':
         specifier: ^0.13.4-canary.18
         version: 0.13.4-canary.18(@types/react@19.3.0)(next@16.3.6(@babel/core@7.29.7)(@types/node@26.6.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(prettier@3.9.8)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3)
@@ -458,8 +458,8 @@ packages:
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@fairgarden/distribution@0.1.0-alpha.4':
-    resolution: {integrity: sha512-qG7XAxG3Z8r1PqER6dpcv9d/QFY1q/WDtQnEn3Oyr37ok0j4eNmSUiysJ/URUypvqshWtHny6SAVtiM1sw8jxQ==}
+  '@fairgarden/distribution@0.1.0-alpha.6':
+    resolution: {integrity: sha512-wIDck1iFk/x1w+88dEAK2zpUUKQ/K2z89yARMQ05bQ9c0/xmNFNv+nc6vg3bcK4zU/pkbrpnIrb2QtGiwUuh1w==}
     hasBin: true
 
   '@fairgarden/docs@0.13.4-canary.18':
@@ -3602,7 +3602,7 @@ snapshots:
       '@eslint/core': 0.17.0
       levn: 0.4.1
 
-  '@fairgarden/distribution@0.1.0-alpha.4':
+  '@fairgarden/distribution@0.1.0-alpha.6':
     dependencies:
       '@babel/parser': 7.29.9
       mdast-util-from-markdown: 2.0.3
