@@ -2,7 +2,7 @@
 
 <!-- fg:version -->
 
-Version **0.1.0-alpha.2**
+Version **0.1.0-alpha.3**
 
 <!-- /fg:version -->
 
@@ -88,7 +88,7 @@ Install dependencies from the monorepo root only. The full specification lives o
 
 ## Releasing
 
-This module releases on its own. `0.1.0-alpha.2` is what main is working towards,
+This module releases on its own. `0.1.0-alpha.3` is what main is working towards,
 not what is published — the version here is always the next one. Its release
 notes are the top section of `CHANGELOG.md`, where every pull request adds a
 line linking itself.
@@ -98,7 +98,7 @@ line linking itself.
    pull requests are held — their changelog check fails — so nothing is noted
    under a version that has already shipped.
 2. **Start the next version.** `pnpm next-version` opens a pull request moving
-   main to `0.1.0-alpha.3` and starting its section of the
+   main to `0.1.0-alpha.4` and starting its section of the
    changelog, or `pnpm next-version --id rc` to change identifier. Merging it
    lifts the hold. A prerelease gets no maintenance branch; there is no
    released line behind it yet.

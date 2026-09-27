@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.1.0-alpha.3
+
 ## 0.1.0-alpha.2
 
 - `utils/docs` builds a docs site on `@fairgarden/docs`, an optional peer: `createDemo`, `createTypes` and `createMdxComponents` render through `CodeBlock`, `Demo`, `TypesTable` and `FileTabs`. Code windows and loading states are in the first paint, so a page doesn't shift as it highlights ([#3](https://github.com/fairgarden/design/pull/3))
