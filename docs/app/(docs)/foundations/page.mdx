@@ -168,7 +168,7 @@ A frame that morphs from one box into another with View Transitions: a field-lik
 
 ## Outline Morph
 
-A trigger's focus ring grows into its popup's frame as the popup opens, and shrinks back onto the ring as it closes. It is on by default in every component where a focusable trigger opens an anchored, framed popup. The rule is simple: a popup morphs from the control that opened it, or it appears at once.
+A trigger's focus ring grows into its popup's frame as the popup opens, and shrinks back onto the ring as it closes. It is on by default in every component where a focusable trigger opens a framed surface: an anchored popup, a dialog or a drawer's sheet. The rule is simple: an overlay morphs from the control that opened it, or it appears at once.
 
 <details>
 
@@ -177,6 +177,7 @@ A trigger's focus ring grows into its popup's frame as the popup opens, and shri
 - Sections:
   - Where it runs
   - How the morph works
+  - Dialogs and sheets
   - Tails
   - Typing
   - Turning it off
@@ -184,7 +185,7 @@ A trigger's focus ring grows into its popup's frame as the popup opens, and shri
   - Build your own
   - API Reference
     - useOutlineMorph
-    - OutlineMorphFrame, OutlineMorphTail and canOutlineMorph
+    - OutlineMorphFrame, OutlineMorphTail, OutlineMorphLayer and canOutlineMorph
     - Additional types
 - Exports:
   - canOutlineMorph

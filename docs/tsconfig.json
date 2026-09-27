@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -23,48 +19,20 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@fairgarden/design/foundations/*": [
-        "../src/foundations/*"
-      ],
-      "@fairgarden/design/actions/*": [
-        "../src/actions/*"
-      ],
-      "@fairgarden/design/navigation/*": [
-        "../src/navigation/*"
-      ],
-      "@fairgarden/design/forms/*": [
-        "../src/forms/*"
-      ],
-      "@fairgarden/design/feedback/*": [
-        "../src/feedback/*"
-      ],
-      "@fairgarden/design/overlays/*": [
-        "../src/overlays/*"
-      ],
-      "@fairgarden/design/disclosure/*": [
-        "../src/disclosure/*"
-      ],
-      "@fairgarden/design/page/*": [
-        "../src/page/*"
-      ],
-      "@fairgarden/design/content/*": [
-        "../src/content/*"
-      ],
-      "@fairgarden/design/data/*": [
-        "../src/data/*"
-      ],
-      "@fairgarden/design/utils/*": [
-        "../src/utils/*"
-      ],
-      "@fairgarden/design/icons/*": [
-        "../src/icons/*"
-      ],
-      "@fairgarden/design/*": [
-        "../src/*"
-      ]
+      "@/*": ["./*"],
+      "@fairgarden/design/foundations/*": ["../src/foundations/*"],
+      "@fairgarden/design/actions/*": ["../src/actions/*"],
+      "@fairgarden/design/navigation/*": ["../src/navigation/*"],
+      "@fairgarden/design/forms/*": ["../src/forms/*"],
+      "@fairgarden/design/feedback/*": ["../src/feedback/*"],
+      "@fairgarden/design/overlays/*": ["../src/overlays/*"],
+      "@fairgarden/design/disclosure/*": ["../src/disclosure/*"],
+      "@fairgarden/design/page/*": ["../src/page/*"],
+      "@fairgarden/design/content/*": ["../src/content/*"],
+      "@fairgarden/design/data/*": ["../src/data/*"],
+      "@fairgarden/design/utils/*": ["../src/utils/*"],
+      "@fairgarden/design/icons/*": ["../src/icons/*"],
+      "@fairgarden/design/*": ["../src/*"]
     }
   },
   "include": [
@@ -72,11 +40,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    ".next-morphfix/types/**/*.ts",
-    ".next-morphfix/dev/types/**/*.ts"
+    ".next/dev/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
