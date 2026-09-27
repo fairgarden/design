@@ -39,7 +39,7 @@ import styles from './code-block.module.css'
  * ear, its --fgd-size-hit hit area in that gutter; the page leaves
  * --fgd-size-file-tabs-control free there). A nameless file whose only
  * action is copy hangs that instead: a FileTabsControl holding
- * `content_copy` at the tag tier, "Copy code", in the ⋮'s slot. Every handler is useCode's (or
+ * `content_copy` at the inline tier (16 px), "Copy code", in the ⋮'s slot. Every handler is useCode's (or
  * useCopier's, for the link); a copy confirms with a toast, never in the
  * header or the menu (CodeBlockToasts).
  * Not exported from the index.
@@ -207,7 +207,7 @@ export function CodeActionsMenu(props: CodeActionsMenuProps) {
         <TooltipTrigger
           render={
             <FileTabsControl aria-label={copyLabel} onClick={onCopy}>
-              <Icon name="content_copy" size="tag" weight="interactive" />
+              <Icon name="content_copy" size="inline" weight="interactive" />
             </FileTabsControl>
           }
         />

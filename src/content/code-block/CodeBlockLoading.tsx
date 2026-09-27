@@ -128,7 +128,7 @@ export function CodeBlockSectionLoading(props: CodeBlockSectionLoadingProps) {
           // label gives them room, and these stand-ins' places hold.
           copyOnly ? (
             <FileTabsControl aria-label={labels.copy} disabled>
-              <Icon name="content_copy" size="tag" weight="interactive" />
+              <Icon name="content_copy" size="inline" weight="interactive" />
             </FileTabsControl>
           ) : !inline ? (
             <FileTabsControl aria-label="More actions" disabled>

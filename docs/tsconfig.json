@@ -76,9 +76,7 @@
     ".next-docslayout-dev/types/**/*.ts",
     ".next-docslayout-dev/dev/types/**/*.ts",
     ".next-docslayout/types/**/*.ts",
-    ".next-docslayout/dev/types/**/*.ts",
-    ".next-codeheader/types/**/*.ts",
-    ".next-codeheader/dev/types/**/*.ts"
+    ".next-docslayout/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
