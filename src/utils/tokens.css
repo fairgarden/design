@@ -106,11 +106,11 @@
     --radius-conditional-2-25: clamp(0px, calc(100vw - 100%) * 1e5, var(--radius-2-25));
     --radius-conditional-3-25: clamp(0px, calc(100vw - 100%) * 1e5, var(--radius-3-25));
 
-    /* Type families (§1.5.5) [D159]; --fgd-font-fine is set per mode (theme.css). */
-    --fgd-font-display: 'Fraunces Variable', 'Source Serif 4 Variable', var(--font-old-style);
-    --fgd-font-text: 'Source Serif 4 Variable', var(--font-transitional);
-    --fgd-font-ui: 'Figtree Variable', var(--font-geometric-humanist);
-    --fgd-font-mono: 'IBM Plex Mono', var(--font-mono);
+    /* Type families (§1.5.5) [D159]; --fgd-font-fine is set per mode (theme.css). Each webfont's metric-matched fallback follows it (utils/font-fallbacks.css) [D201]. */
+    --fgd-font-display: 'Fraunces Variable', 'Fraunces Fallback', 'Source Serif 4 Variable', var(--font-old-style);
+    --fgd-font-text: 'Source Serif 4 Variable', 'Source Serif 4 Fallback', var(--font-transitional);
+    --fgd-font-ui: 'Figtree Variable', 'Figtree Fallback', var(--font-geometric-humanist);
+    --fgd-font-mono: 'IBM Plex Mono', 'IBM Plex Mono Fallback', var(--font-mono);
     --fgd-font-display-settings: 'SOFT' 0, 'WONK' 0;
     --fgd-font-accent-settings: 'SOFT' 100, 'WONK' 1;
 
