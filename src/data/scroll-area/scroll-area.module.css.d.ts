@@ -1,6 +1,7 @@
 declare const styles: {
   readonly "base": string;
   readonly "content": string;
+  readonly "contentFluid": string;
   readonly "corner": string;
   readonly "edge": string;
   readonly "edgeEnd": string;

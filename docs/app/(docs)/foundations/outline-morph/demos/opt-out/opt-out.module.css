@@ -1,0 +1,16 @@
+.stack {
+  display: grid;
+  gap: var(--size-px-5);
+  inline-size: 100%;
+  max-inline-size: var(--size-sm);
+}
+
+/* Every morph inside this region is off: the property inherits. */
+.quiet {
+  --fgd-outline-morph: none;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--size-px-3);
+  align-items: center;
+}

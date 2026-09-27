@@ -127,11 +127,15 @@
     }
   }
 
-  /* Travel and hover at --fgd-duration-quick with --ease-out-3; instant under reduced motion [D181]. */
+  /*
+   * Travel and hover at --fgd-duration-quick with --ease-out-3; instant under
+   * reduced motion [D181]. The thumb travels and edges fade; the track's and
+   * thumb's fills rest at none, so they step at once [D205].
+   */
   @media (--motionOK) {
     .track,
     .thumb {
-      transition-property: inset-inline-start, border-color, background-color;
+      transition-property: inset-inline-start, border-color;
       transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }

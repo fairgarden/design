@@ -297,14 +297,7 @@
     text-underline-offset: var(--size-px-1);
   }
 
-  /* Hover and press transitions [D181]: --fgd-duration-quick, --ease-out-3. */
-  @media (--motionOK) {
-    .sortButton {
-      transition-property: color, background-color;
-      transition-duration: var(--fgd-duration-quick);
-      transition-timing-function: var(--ease-out-3);
-    }
-  }
+  /* No transition on the sort button: its press is the inverse pair from none, which steps at once [D205]. */
 
   .sortGlyph {
     flex: none;
@@ -665,9 +658,13 @@
     display: table-cell;
   }
 
-  /* The scroll cue shows only while the table overflows. */
+  /*
+   * The scroll cue shows only while the table overflows. Its line is kept
+   * either way: overflow is known only after mount, and the table must not
+   * move when the cue appears [D201].
+   */
   .base:not(:has(.region[data-has-overflow-x])) .cue {
-    display: none;
+    visibility: hidden;
   }
 
   /* Pinned column: its --border-size-2 --role-rule edge appears once columns scroll under it. */

@@ -47,6 +47,7 @@ import {
   type SequentialStep,
   type SeriesSlot,
 } from '../../utils/seriesPatterns'
+import { DISCLOSURE_DURATION_MS } from '../../utils/tokens'
 import { useMediaQuery } from '../../utils/useMediaQuery'
 import styles from './chart.module.css'
 
@@ -75,7 +76,11 @@ export type { SeriesSlot, SequentialStep }
  * - States: the Recharts surface's `:focus-visible` → the ring; the active
  *   category (hover or arrow keys, the accessibility layer) → the tooltip,
  *   the cursor, and a --border-size-2 edge on the active bars, markers one
- *   size up; nothing fades. The table trigger per §10.13.
+ *   size up; nothing fades. The tooltip moves at once, never sliding
+ *   [D181]. The table trigger per §10.13.
+ * - Motion: none by default. `animate` opts into the entry animation
+ *   (growth by length over --fgd-duration-disclosure, DISCLOSURE_DURATION_MS)
+ *   and only under --motionOK [D167].
  * - Parts: base, body (the FigureMedia), legend, legendItem, swatch,
  *   stepLegend, chartArea, axisTitle, plot, plotBars, plotColumns, print,
  *   tooltip, dataTable (the Collapsible holding the §8.2 Table). The
@@ -83,7 +88,9 @@ export type { SeriesSlot, SequentialStep }
  * - Scope: none. Container: `base`, named `chart` because it holds the
  *   Figure's own container. Baseline: horizontal bars,
  *   legend above; from 1024 px a column chart draws columns and the legend
- *   moves to the side (§5.10.2). Print: a fixed 174 mm chart.
+ *   moves to the side (§5.10.2). Print: a fixed 174 mm chart; its copy
+ *   writes only --chart-print-ratio inline, which the module maps onto
+ *   the Recharts wrapper (§1.11.1).
  *
  * Every fill, stroke and label is a role-variable string passed to Recharts
  * (never a Radix variable or literal), fills are opaque (fillOpacity 1), and
@@ -137,8 +144,6 @@ const STROKE_2 = 2
 const MARKER_RADIUS = 4
 /** A column never grows wider than --size-px-8. */
 const MAX_COLUMN = 48
-/** --fgd-duration-disclosure: growth by length only, under --motionOK. */
-const DURATION = 200
 /** --fgd-print-live-width, 174 mm at 96 px per inch. */
 const PRINT_WIDTH = 658
 /** Plot height of column, line and area charts. */
@@ -277,6 +282,13 @@ export type ChartProps<Row extends object = Record<string, unknown>> = Omit<
   tableLabel?: React.ReactNode
   /** The trigger label while the table is open. Default "Hide Data Table". */
   tableOpenLabel?: React.ReactNode
+  /**
+   * Opts the chart into its entry animation: bars and columns grow and
+   * lines draw by length over `--fgd-duration-disclosure`, only under
+   * `--motionOK`, never by opacity. Default `false`: charts are static
+   * [D167]. The tooltip never slides, whatever this is.
+   */
+  animate?: boolean
 }
 
 interface ResolvedSeries {
@@ -651,8 +663,11 @@ function Plot(props: PlotProps) {
     width,
     height: width == null ? undefined : height,
     tabIndex: print ? -1 : undefined,
+    // The print copy's ratio, as a custom property only: `printChart` makes
+    // the wrapper fluid at that ratio (Recharts writes its px size inline).
+    className: print ? styles.printChart : undefined,
     style: print
-      ? { width: '100%', height: 'auto', aspectRatio: `${width} / ${height}` }
+      ? ({ '--chart-print-ratio': `${width} / ${height}` } as React.CSSProperties)
       : undefined,
   }
 
@@ -686,15 +701,15 @@ function Plot(props: PlotProps) {
             ? { className: styles.cursorBand, fill: 'none', stroke: INK_PRIMARY, strokeWidth: STROKE_1 }
             : { className: styles.cursorLine, stroke: INK_PRIMARY }
         }
-        isAnimationActive={animate}
-        animationDuration={DURATION}
-        animationEasing="ease-out"
+        // The tooltip follows the active category at once: a sliding box
+        // would be a transform on hover [D181].
+        isAnimationActive={false}
       />
     )
 
   const animation = {
     isAnimationActive: animate,
-    animationDuration: DURATION,
+    animationDuration: DISCLOSURE_DURATION_MS,
     animationEasing: 'ease-out' as const,
   }
 
@@ -1113,12 +1128,15 @@ export function Chart<Row extends object = Record<string, unknown>>(props: Chart
     secondary,
     tableLabel = 'Show Data Table',
     tableOpenLabel = 'Hide Data Table',
+    animate = false,
     className,
     ...rest
   } = props
 
   const scope = useScopeAttributes()
   const motionOK = useMediaQuery(MOTION_QUERY)
+  // Opt-in only, and only where motion is allowed [D167].
+  const entryMotion = animate && motionOK
   const id = safeId(React.useId(), 'chart')
   const resolvedKind: ChartKind = kind ?? 'bar'
   const ink = oneInk === true
@@ -1209,7 +1227,7 @@ export function Chart<Row extends object = Record<string, unknown>>(props: Chart
                     prefix={`${id}-screen`}
                     print={false}
                     height={isBar ? barsHeight : screenHeight}
-                    animate={motionOK}
+                    animate={entryMotion}
                   />
                 </ResponsiveContainer>
               </div>
@@ -1222,7 +1240,7 @@ export function Chart<Row extends object = Record<string, unknown>>(props: Chart
                       prefix={`${id}-columns`}
                       print={false}
                       height={columnsHeight}
-                      animate={motionOK}
+                      animate={entryMotion}
                     />
                   </ResponsiveContainer>
                 </div>

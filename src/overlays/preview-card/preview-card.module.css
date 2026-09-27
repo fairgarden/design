@@ -5,8 +5,8 @@
  *
  * The anchored overlay surface (§10.1): the `white` scope's --primary1 face,
  * a --border-size-2 --primary12 frame in both modes [D92, D156],
- * --radius-2-25, 240–360 px wide, --size-px-3 padding. Motion is instant or
- * a clip reveal from the trigger side, never a fade [D91]. Shown only with
+ * --radius-2-25, 240–360 px wide, --size-px-3 padding. No motion: a hover
+ * preview appears and goes at once [D205]. Shown only with
  * hover and a fine pointer. Colors are role variables only; local custom
  * properties carry dimensions only.
  */
@@ -39,7 +39,6 @@
     --preview-card-tail-inline: var(--size-px-2-5);
     --preview-card-tail-block: calc(var(--size-px-2-5) / 2 + var(--border-size-2));
     --preview-card-bleed: calc(-1 * var(--preview-card-tail-block));
-    --preview-card-clip-from: inset(var(--preview-card-bleed));
 
     position: relative;
     display: grid;
@@ -91,14 +90,6 @@
     stroke-width: var(--border-size-2);
   }
 
-  @media (--motionOK) {
-    .base {
-      transition-property: clip-path;
-      transition-duration: var(--fgd-duration-disclosure);
-      transition-timing-function: var(--ease-out-3);
-    }
-  }
-
   /* Hover and a fine pointer only: on touch, stylus and coarse pointers the link simply navigates. */
   @media (--touch), (--stylus), (--pointer) {
     .positioner,
@@ -109,41 +100,6 @@
 }
 
 @layer states {
-  .base[data-side='bottom'] {
-    --preview-card-clip-from: inset(
-      var(--preview-card-bleed) var(--preview-card-bleed) 100% var(--preview-card-bleed)
-    );
-  }
-
-  .base[data-side='top'] {
-    --preview-card-clip-from: inset(
-      100% var(--preview-card-bleed) var(--preview-card-bleed) var(--preview-card-bleed)
-    );
-  }
-
-  .base[data-side='left'],
-  .base[data-side='inline-start'] {
-    --preview-card-clip-from: inset(
-      var(--preview-card-bleed) var(--preview-card-bleed) var(--preview-card-bleed) 100%
-    );
-  }
-
-  .base[data-side='right'],
-  .base[data-side='inline-end'] {
-    --preview-card-clip-from: inset(
-      var(--preview-card-bleed) 100% var(--preview-card-bleed) var(--preview-card-bleed)
-    );
-  }
-
-  .base[data-starting-style],
-  .base[data-ending-style] {
-    clip-path: var(--preview-card-clip-from);
-  }
-
-  .base[data-instant] {
-    transition: none;
-  }
-
   .arrow[data-side='bottom'] {
     inset-block-start: calc(-1 * var(--preview-card-tail-block));
   }
@@ -153,13 +109,22 @@
     rotate: 180deg;
   }
 
-  .arrow[data-side='left'],
+  /* The physical sides place the tail physically, so it faces the trigger on a right-to-left page too. */
+  .arrow[data-side='left'] {
+    right: calc(-1 * (var(--preview-card-tail-inline) + var(--preview-card-tail-block)) / 2);
+    rotate: 90deg;
+  }
+
+  .arrow[data-side='right'] {
+    left: calc(-1 * (var(--preview-card-tail-inline) + var(--preview-card-tail-block)) / 2);
+    rotate: -90deg;
+  }
+
   .arrow[data-side='inline-start'] {
     inset-inline-end: calc(-1 * (var(--preview-card-tail-inline) + var(--preview-card-tail-block)) / 2);
     rotate: 90deg;
   }
 
-  .arrow[data-side='right'],
   .arrow[data-side='inline-end'] {
     inset-inline-start: calc(-1 * (var(--preview-card-tail-inline) + var(--preview-card-tail-block)) / 2);
     rotate: -90deg;

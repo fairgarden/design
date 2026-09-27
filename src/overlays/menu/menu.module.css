@@ -11,9 +11,11 @@
  * The list highlight is --primary4 plus a --border-size-2-25 start-edge bar in
  * --primary12 (a destructive item: the danger fill, its label and bar
  * --role-danger-label [D192]); a checked option is a leading ✓ or ● and --font-weight-6,
- * with no fill and no bar [D145]. Motion is instant or a clip reveal from
- * the trigger side, never a fade [D91]. Colors are role variables only;
- * local custom properties carry dimensions only.
+ * with no fill and no bar [D145]. Motion is the outline morph (a Menu's
+ * popup answers `data-outline-morph` while it draws its frame) [D204] or
+ * none: the popup opens and closes at once [D205].
+ * Colors are role variables only; local custom properties carry
+ * dimensions only.
  */
 
 /* Composition sits in top-level rules, outside the layers: Lightning CSS
@@ -38,7 +40,6 @@
 
   /* 200 px to --size-px-14, at least the trigger's width, at most the viewport less its margins. */
   .base {
-    --menu-clip-from: inset(0);
     --menu-item-radius: calc(var(--radius-2-25) - var(--size-px-1));
 
     box-sizing: border-box;
@@ -148,14 +149,6 @@
     border-block-start: var(--border-size-1) solid var(--role-rule);
   }
 
-  @media (--motionOK) {
-    .base {
-      transition-property: clip-path;
-      transition-duration: var(--fgd-duration-disclosure);
-      transition-timing-function: var(--ease-out-3);
-    }
-  }
-
   @media (--forcedColors) {
     .dangerGlyph {
       forced-color-adjust: none;
@@ -182,31 +175,14 @@
 }
 
 @layer states {
-  /* The reveal starts at the trigger edge (data-side names where the popup sits). */
-  .base[data-side='bottom'] {
-    --menu-clip-from: inset(0 0 100% 0);
-  }
-
-  .base[data-side='top'] {
-    --menu-clip-from: inset(100% 0 0 0);
-  }
-
-  .base[data-side='left'],
-  .base[data-side='inline-start'] {
-    --menu-clip-from: inset(0 0 0 100%);
-  }
-
-  .base[data-side='right'],
-  .base[data-side='inline-end'] {
-    --menu-clip-from: inset(0 100% 0 0);
-  }
-
-  .base[data-starting-style],
-  .base[data-ending-style] {
-    clip-path: var(--menu-clip-from);
-  }
-
-  .base[data-instant] {
+  /*
+   * Outline morph [D204] (Menu's `morph`, the default): while the overlay
+   * draws the frame, the popup's own edge takes its face. Without the morph
+   * (hover opens, submenus, context menus, `morph={false}`) the popup opens
+   * and closes at once [D205].
+   */
+  .base[data-outline-morph] {
+    border-color: var(--primary1);
     transition: none;
   }
 

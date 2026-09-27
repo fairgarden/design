@@ -239,55 +239,6 @@ export type NewsletterProps =
 const headingTags = { 2: 'h2', 3: 'h3', 4: 'h4' } as const
 
 /**
- * Lifts a straddle card across the seam of the band it opens: the seam
- * falls halfway through the gap between the heading and the first field
- * (§5.6.2), however the heading wraps. Writes --newsletter-overlap (px) on
- * the root; without script the card simply opens the lower band.
- */
-function useStraddle(
-  enabled: boolean,
-  root: React.RefObject<HTMLElement | null>,
-  heading: React.RefObject<HTMLElement | null>,
-  after: React.RefObject<HTMLElement | null>,
-) {
-  React.useLayoutEffect(() => {
-    const node = root.current
-    if (!enabled || !node) return undefined
-    const band = node.parentElement?.closest<HTMLElement>('[data-ground]') ?? null
-    if (!band) return undefined
-
-    let frame = 0
-    const measure = () => {
-      cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(() => {
-        const headingNode = heading.current
-        const afterNode = after.current
-        if (!headingNode || !afterNode) return
-        const current = parseFloat(node.style.getPropertyValue('--newsletter-overlap')) || 0
-        const top = node.getBoundingClientRect().top + current
-        const headingBottom = headingNode.getBoundingClientRect().bottom + current
-        const afterTop = afterNode.getBoundingClientRect().top + current
-        const seamInCard = headingBottom - top + (afterTop - headingBottom) / 2
-        const shift = top - band.getBoundingClientRect().top + seamInCard
-        node.style.setProperty('--newsletter-overlap', `${Math.max(0, Math.round(shift))}px`)
-      })
-    }
-
-    measure()
-    const observer = new ResizeObserver(measure)
-    observer.observe(node)
-    observer.observe(band)
-    window.addEventListener('resize', measure)
-    return () => {
-      cancelAnimationFrame(frame)
-      observer.disconnect()
-      window.removeEventListener('resize', measure)
-      node.style.removeProperty('--newsletter-overlap')
-    }
-  }, [enabled, root, heading, after])
-}
-
-/**
  * The newsletter signup. At most one per page besides the footer block;
  * when a page carries one, the footer shows only a link. In print it
  * becomes one 0.75 pt box: the heading and "Subscribe at <printUrl>".
@@ -330,25 +281,13 @@ export function Newsletter(props: NewsletterProps) {
   const HeadingTag = headingTags[headingLevel]
   const isStraddle = resolvedKind === 'straddle'
 
-  const rootRef = React.useRef<HTMLElement | null>(null)
-  const headingRef = React.useRef<HTMLHeadingElement | null>(null)
-  const formAreaRef = React.useRef<HTMLDivElement | null>(null)
   const statusRef = React.useRef<HTMLDivElement | null>(null)
-  useStraddle(isStraddle, rootRef, headingRef, formAreaRef)
 
   // Success replaces the form; focus moves to the message [D58].
   React.useEffect(() => {
     if (status === 'success') statusRef.current?.focus()
   }, [status])
 
-  const setRootRef = React.useCallback(
-    (node: HTMLElement | null) => {
-      rootRef.current = node
-      if (typeof ref === 'function') ref(node)
-      else if (ref) (ref as React.RefObject<HTMLElement | null>).current = node
-    },
-    [ref],
-  )
 
   const postcodeLabel = postcode === true ? 'Postcode' : postcode || null
   const plate = isStraddle && grained === true
@@ -409,7 +348,7 @@ export function Newsletter(props: NewsletterProps) {
     postcodeLabel != null ? (
       <Field name="postcode" className={styles.postcodeField}>
         <FieldLabel optional>{postcodeLabel}</FieldLabel>
-        <Input autoComplete="postal-code" plate={plate} style={{ maxInlineSize: '12ch' }} />
+        <Input autoComplete="postal-code" plate={plate} className={styles.postcode} />
       </Field>
     ) : null
 
@@ -478,7 +417,6 @@ export function Newsletter(props: NewsletterProps) {
             </span>
           ) : null}
           <HeadingTag
-            ref={headingRef}
             id={headingId}
             className={resolvedKind === 'band' ? styles.bandHeading : styles.heading}
           >
@@ -486,7 +424,7 @@ export function Newsletter(props: NewsletterProps) {
           </HeadingTag>
           {pitch != null ? <p className={styles.pitch}>{pitch}</p> : null}
         </div>
-        <div ref={formAreaRef} className={styles.formArea}>
+        <div className={styles.formArea}>
           {form}
         </div>
       </div>
@@ -514,7 +452,7 @@ export function Newsletter(props: NewsletterProps) {
   return useRender({
     defaultTagName: resolvedKind === 'inline' ? 'div' : 'section',
     render,
-    ref: setRootRef,
+    ref,
     props: mergeProps<'section'>(
       {
         ...scope,

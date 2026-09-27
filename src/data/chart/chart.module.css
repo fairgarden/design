@@ -4,14 +4,16 @@
  * and chart area), `legend` (+ `legendList`, `legendItem`, `legendLabel`,
  * `swatch`, `stepLegend`, `stepBar`, `stepLabel`, `defs`), `chartArea`,
  * `axisTitle`, `plot` (+ `plotBars`, `plotColumns`: the screen copies),
- * `print` (the fixed print copy), `tooltip` (+ parts), the Recharts SVG parts
+ * `print` (the fixed print copy; `printChart` its Recharts wrapper),
+ * `tooltip` (+ parts), the Recharts SVG parts
  * (`gridLine`, `zeroLine`, `cursorBand`, `cursorLine`, ticks,
  * labels, `stepFill`, `stepPattern`, pattern parts) and `dataTable`, the
  * Collapsible holding the §8.2 Table. The Figure owns the caption (§8.5).
  *
  * Colors are role variables only. Recharts receives them as role-variable
  * strings (fill, stroke); these rules add line geometry, type roles and
- * structure. Local custom properties: none.
+ * structure. Local custom property: --chart-print-ratio, the print copy's
+ * drawn width / height (a dimension), written inline by the component.
  */
 
 /* Composition sits in top-level rules, outside the layers: Lightning CSS
@@ -120,6 +122,18 @@
   .plotColumns,
   .print {
     display: none;
+  }
+
+  /*
+   * The print copy's Recharts wrapper: fluid at its drawn ratio, so the
+   * 174 mm chart scales to the live width. Recharts writes the wrapper's px
+   * size inline, and only important declarations outrank an inline value;
+   * the component itself writes only --chart-print-ratio (§1.11.1).
+   */
+  .printChart {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: var(--chart-print-ratio);
   }
 
   /* Recharts' surface takes the ring when the accessibility layer focuses it. */

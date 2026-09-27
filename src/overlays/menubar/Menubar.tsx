@@ -5,7 +5,8 @@ import { Menu as BaseMenu } from '@base-ui/react/menu'
 import { Menubar as BaseMenubar } from '@base-ui/react/menubar'
 import { cva, type VariantProps } from 'class-variance-authority'
 
-import { MenuGroup, MenuGroupLabel, MenuPopup, type MenuPopupProps } from '../menu'
+import { Menu, MenuGroup, MenuGroupLabel, MenuPopup, type MenuPopupProps } from '../menu'
+import { MenuMorphTrigger, MenubarMorphContext } from '../menu/morph'
 import { resolveClassName } from '../../utils/className'
 import { primaryScaleVariants, secondaryScaleVariants } from '../../utils/scales'
 import { useScopeAttributes } from '../../utils/scope'
@@ -36,6 +37,11 @@ import styles from './menubar.module.css'
  * - Container: none; below --lg-n-above (the viewport tier of the page
  *   frame) the bar collapses into one "Menu" trigger whose popup lists the
  *   former menus as labelled groups.
+ * - Outline morph [D204]: on by default (`morph={false}` on the bar or a
+ *   menu opts out). A press opens a menu with the trigger's ring (or box)
+ *   growing into its popup, and Escape, a choice or an outside press
+ *   closes it back; moving between menus (hover, arrow keys) stays
+ *   instant, as Base UI switches them.
  */
 export const menubar = cva(styles.base, {
   variants: {
@@ -53,6 +59,9 @@ const WIDE_QUERY = '(min-width: 1024px)'
 /** Inside the collapsed "Menu", each MenubarMenu renders as a labelled group. */
 const CollapsedContext = React.createContext(false)
 
+/** The bar's `morph`, the default for each of its menus. */
+const MorphContext = React.createContext(true)
+
 /** Props for Menubar: Base UI Menubar props plus the color axes and the collapsed label. */
 export type MenubarProps = BaseMenubar.Props & {
   /** Primary Radix scale for the bar: triggers, rule, open bar and ring. Never defaulted [D133]. */
@@ -66,6 +75,13 @@ export type MenubarProps = BaseMenubar.Props & {
   collapsedLabel?: string
   /** Props for the collapsed menu's popup. */
   collapsedPopupProps?: MenuPopupProps
+  /**
+   * The outline morph for every menu of the bar: a press grows the
+   * trigger's ring (or box) into the popup's frame, and Escape, a choice
+   * or an outside press shrinks it back; moving between menus stays
+   * instant. Default `true`; `false` opens and closes them at once.
+   */
+  morph?: boolean
 }
 
 /**
@@ -80,6 +96,7 @@ export function Menubar(props: MenubarProps) {
     secondary,
     collapsedLabel = 'Menu',
     collapsedPopupProps,
+    morph = true,
     className,
     children,
     ...rest
@@ -97,16 +114,20 @@ export function Menubar(props: MenubarProps) {
         menubar({ primary, secondary, className: extra })
       )}
     >
-      {wide ? (
-        children
-      ) : (
-        <BaseMenu.Root>
-          <BaseMenu.Trigger className={styles.trigger}>{collapsedLabel}</BaseMenu.Trigger>
-          <MenuPopup {...collapsedPopupProps}>
-            <CollapsedContext.Provider value={true}>{children}</CollapsedContext.Provider>
-          </MenuPopup>
-        </BaseMenu.Root>
-      )}
+      <MenubarMorphContext.Provider value={true}>
+        <MorphContext.Provider value={morph}>
+          {wide ? (
+            children
+          ) : (
+            <Menu morph={morph}>
+              <MenuMorphTrigger className={styles.trigger}>{collapsedLabel}</MenuMorphTrigger>
+              <MenuPopup {...collapsedPopupProps}>
+                <CollapsedContext.Provider value={true}>{children}</CollapsedContext.Provider>
+              </MenuPopup>
+            </Menu>
+          )}
+        </MorphContext.Provider>
+      </MenubarMorphContext.Provider>
     </BaseMenubar>
   )
 }
@@ -124,6 +145,8 @@ export type MenubarMenuProps = Omit<BaseMenu.Root.Props, 'children'> & {
   popupProps?: MenuPopupProps
   /** The menu's items: MenuItem, MenuCheckboxItem, MenuRadioGroup, MenuSubmenu … */
   children?: React.ReactNode
+  /** The outline morph for this menu. Default: the Menubar's `morph`. */
+  morph?: boolean
 }
 
 /**
@@ -132,8 +155,9 @@ export type MenubarMenuProps = Omit<BaseMenu.Root.Props, 'children'> & {
  * MenuGroupLabel of the same label.
  */
 export function MenubarMenu(props: MenubarMenuProps) {
-  const { label, disabled, popupProps, children, ...rest } = props
+  const { label, disabled, popupProps, children, morph, ...rest } = props
   const collapsed = React.useContext(CollapsedContext)
+  const barMorph = React.useContext(MorphContext)
 
   if (collapsed) {
     return (
@@ -145,11 +169,11 @@ export function MenubarMenu(props: MenubarMenuProps) {
   }
 
   return (
-    <BaseMenu.Root {...rest}>
-      <BaseMenu.Trigger className={styles.trigger} disabled={disabled}>
+    <Menu {...rest} morph={morph ?? barMorph}>
+      <MenuMorphTrigger className={styles.trigger} disabled={disabled}>
         {label}
-      </BaseMenu.Trigger>
+      </MenuMorphTrigger>
       <MenuPopup {...popupProps}>{children}</MenuPopup>
-    </BaseMenu.Root>
+    </Menu>
   )
 }

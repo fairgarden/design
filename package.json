@@ -60,6 +60,7 @@
     "@base-ui/react": "^1.8.0",
     "@csstools/postcss-global-data": "^4.0.0",
     "@fairgarden/distribution": "^0.1.0-alpha.4",
+    "@fairgarden/docs": "^0.13.4-canary.18",
     "@material-symbols/svg-400": "^0.47.5",
     "@material-symbols/svg-500": "^0.47.5",
     "@material-symbols/svg-600": "^0.47.5",
@@ -94,6 +95,7 @@
   },
   "peerDependencies": {
     "@base-ui/react": "^1.8.0",
+    "@fairgarden/docs": "^0.13.4-canary.18",
     "@protomaps/basemaps": "^5.7.2",
     "maplibre-gl": "^6.11.1",
     "pmtiles": "^4.5.0",
@@ -101,6 +103,9 @@
     "react-dom": "^19"
   },
   "peerDependenciesMeta": {
+    "@fairgarden/docs": {
+      "optional": true
+    },
     "@protomaps/basemaps": {
       "optional": true
     },

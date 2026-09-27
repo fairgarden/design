@@ -1,0 +1,38 @@
+.frame {
+  display: grid;
+  gap: var(--size-px-3);
+  inline-size: 100%;
+}
+
+.toggle {
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-caption);
+  color: var(--primary12);
+}
+
+.upper {
+  padding: var(--size-px-10) var(--fgd-space-margin);
+}
+
+.prose {
+  max-inline-size: var(--fgd-measure-reading);
+  margin: 0 auto;
+  font-family: var(--fgd-font-text);
+  font-size: var(--fgd-font-size-body);
+}
+
+/* A band's own padding (--fgd-space-section), which the straddle card's rise cancels. */
+.lower {
+  padding: var(--fgd-space-section) var(--fgd-space-margin) var(--size-px-7-5);
+}
+
+.container {
+  max-inline-size: var(--fgd-container-content);
+  margin-inline: auto;
+}
+
+.after {
+  margin: 0;
+  font-family: var(--fgd-font-ui);
+  font-size: var(--fgd-font-size-body-ui);
+}

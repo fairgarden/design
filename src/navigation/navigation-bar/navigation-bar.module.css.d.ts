@@ -25,6 +25,7 @@ declare const styles: {
   readonly "utilityLink": string;
   readonly "utilityList": string;
   readonly "utilityNav": string;
+  readonly "wide": string;
 };
 export = styles;
 

@@ -1,0 +1,29 @@
+/* Four triggers in a cross, each panel on its own side. */
+.cross {
+  display: grid;
+  grid-template-columns: repeat(3, max-content);
+  grid-template-areas:
+    '. top .'
+    'start . end'
+    '. bottom .';
+  gap: var(--size-px-3);
+  justify-content: center;
+  align-items: center;
+  padding-block: var(--size-px-11);
+}
+
+.top {
+  grid-area: top;
+}
+
+.end {
+  grid-area: end;
+}
+
+.bottom {
+  grid-area: bottom;
+}
+
+.start {
+  grid-area: start;
+}

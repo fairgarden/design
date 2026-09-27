@@ -1,0 +1,160 @@
+/*
+ * Types Table. Parts: `base`, `description`, `scroll`, `table`, `name`,
+ * `fallback`, `returns`, `label`, `additional`, `summary`, and `typePre`
+ * (TypePre: a signature in a cell).
+ *
+ * The table frame follows [D83]: a rule top and bottom and under the head,
+ * hairlines between body rows. Colors are role variables and scale steps
+ * only; nothing is transparent, shadowed or graded [D12].
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.description,
+.table {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+.fallback,
+.returns {
+  composes: typeCaption from '../../utils/type.module.css';
+}
+
+.label {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.summary {
+  composes: typeFieldLabel from '../../utils/type.module.css';
+}
+
+.typePre {
+  composes: syntax from '../../utils/syntax.module.css';
+}
+
+@layer base {
+  .base {
+    display: grid;
+    gap: var(--size-px-3);
+    min-inline-size: 0;
+    margin-block: var(--size-px-5);
+  }
+
+  .description {
+    max-inline-size: var(--fgd-measure-reading);
+  }
+
+  /* Wide tables scroll on their own, never the page. */
+  .scroll {
+    min-inline-size: 0;
+    overflow-x: auto;
+  }
+
+  .table {
+    inline-size: 100%;
+    border-collapse: collapse;
+    border-block: var(--border-size-1) solid var(--role-rule);
+  }
+
+  /* The head row: type-label (composes can't reach a descendant). */
+  .table thead th {
+    padding: var(--size-px-2) var(--size-px-2-5);
+    border-block-end: var(--border-size-1) solid var(--role-rule);
+    color: var(--role-muted);
+    font-family: var(--fgd-font-ui);
+    font-size: var(--fgd-font-size-label);
+    font-weight: var(--font-weight-6);
+    line-height: var(--font-lineheight-1);
+    letter-spacing: var(--font-letterspacing-3);
+    text-align: start;
+    text-transform: uppercase;
+  }
+
+  .table tbody th,
+  .table td {
+    padding: var(--size-px-2-5);
+    border-block-end: var(--border-size-1) solid var(--role-hairline);
+    font-weight: inherit;
+    text-align: start;
+    vertical-align: top;
+  }
+
+  .table tbody tr:last-child > * {
+    border-block-end: none;
+  }
+
+  /* The key column: the name in mono, never broken. */
+  .name {
+    white-space: nowrap;
+  }
+
+  .name code {
+    font-family: var(--fgd-font-mono);
+    font-size: var(--fgd-font-size-caption);
+    font-weight: var(--font-weight-5);
+  }
+
+  .fallback,
+  .returns {
+    margin-block-start: var(--size-px-1);
+    color: var(--role-muted);
+  }
+
+  .label {
+    margin-inline-end: var(--size-px-2);
+  }
+
+  .additional {
+    padding-block-start: var(--size-px-2);
+    border-block-start: var(--border-size-1) solid var(--role-hairline);
+  }
+
+  .summary {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--fgd-size-hit);
+    font-family: var(--fgd-font-mono);
+    cursor: pointer;
+  }
+
+  /* A signature: unframed, inline in its cell. Long type names
+   * (React.ImgHTMLAttributes<HTMLImageElement>) break rather than run past
+   * a 390 px viewport. */
+  .typePre {
+    margin: 0;
+    font-family: var(--fgd-font-mono);
+    font-size: var(--fgd-font-size-caption);
+    line-height: var(--fgd-leading-compact);
+    color: var(--primary12);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}
+
+@layer states {
+  /* Focus: the ring, keyboard only [D45]. */
+  .summary:focus-visible {
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: var(--fgd-focus-offset);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Paper can't scroll: the table prints in full, rows never split. */
+    .scroll {
+      overflow: visible;
+    }
+
+    .table tr {
+      break-inside: avoid;
+    }
+
+    /* Disclosures print open (§1.5.15). */
+    .additional::details-content {
+      content-visibility: visible;
+      display: block;
+    }
+  }
+}

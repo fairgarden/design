@@ -1,0 +1,84 @@
+# Expanding Box
+
+A frame that morphs from one box into another with View Transitions: a field-like trigger grows into its panel and shrinks back. The header search dialog is built on it.
+
+```tsx
+import {
+  ExpandingBox,
+  ExpandingBoxExtra,
+  ExpandingBoxMain,
+  expandingBoxParts,
+  startExpandingTransition,
+  useExpandingBoxName,
+} from '@fairgarden/design/foundations/expanding-box'
+```
+
+The box has no behavior of its own. An owner renders two boxes, the trigger's (`collapsed`) and the panel's, under one name from `useExpandingBoxName()`, and keeps exactly one of them `active`. The state change that swaps them runs inside `startExpandingTransition(update, { direction })`, and the browser animates each named piece from the old box to the new one.
+
+## How the morph works
+
+The frame is a 9-slice: a head row and a foot row of corner and edge cells, and a content row whose face and two side-edge pieces fill in the rest. While a box is active, each piece carries its own `view-transition-name`, set inline per instance, so two boxes on a page never collide. The corners translate without scaling, so their radii stay crisp. The four edges stretch only along their length, so they keep their weight, and the face stretches behind them. `ExpandingBoxMain` rides the left edge, the one element marked `expandingBoxParts.end` rides the right edge, and `ExpandingBoxExtra` grows out of the trigger's empty extra.
+
+Only geometry moves. No piece fades: each shows its new state from the first frame while its box travels, and the page behind it does not crossfade either. Opening takes 333 ms on a critically damped curve that never overshoots (`--fgd-duration-expand`, `--fgd-ease-expand`). Closing takes 200 ms (`--fgd-duration-disclosure`), so the way back is faster. The trigger's focus ring does not travel with the frame. It stays hidden for 200 ms and shows once the frame has landed.
+
+Both states share one radius, `--radius-2-25`, and one edge, `--border-size-2`, so the corners keep their shape and only travel; the focus ring follows the radius. Only the edge color changes: `--role-rule` collapsed, stepping to `--primary12` on hover, and `--primary12` expanded. Opening switches to the expanded color as the box starts to move. Closing keeps the expanded color while the box shrinks, and the landed trigger eases back to `--role-rule` once the morph has finished. The face is `--primary1`. `sheet` marks the dialog's box below 768 px, where its owner insets the panel by the page margin; the frame stays the same.
+
+## The morph
+
+import { DemoExpandingBoxMorph } from './demos/morph'
+
+<DemoExpandingBoxMorph.Title />
+
+Select the trigger to open the panel, then press Escape or Close to shrink it back. Focus moves to Close on open and returns to the trigger on close. The owner moves focus inside the update, so the ring shows in the new snapshot, not the old one.
+
+<DemoExpandingBoxMorph />
+
+[See Demo](./demos/morph/)
+
+## Two pairs and the primary scale
+
+import { DemoExpandingBoxPairs } from './demos/pairs'
+
+<DemoExpandingBoxPairs.Title />
+
+Each owner takes its own name, so each pair morphs on its own. `primary` recolors the edges, the face and the focus ring.
+
+<DemoExpandingBoxPairs />
+
+[See Demo](./demos/pairs/)
+
+## Reduced motion and fallbacks
+
+`startExpandingTransition` reads `prefers-reduced-motion` when it is called. Under reduced motion, or in a browser without View Transitions and `view-transition-class`, it runs the update directly and the panel appears at once. The owner can add its own fallback where motion is allowed, as the search dialog does with the Dialog's clip reveal. The promise it returns resolves when the morph finishes, or straight away when there is none, and it never rejects.
+
+While a morph runs, `<html>` carries `data-fgd-expanding="open"` or `"close"`, so an owner's CSS can step aside (for example, to turn off a clip reveal that would fight the morph). The global rules live in `utils/view-transitions.css`, which `utils/global.css` imports.
+
+In print the box drops its slices and prints its content inside one black `--border-size-1` frame.
+
+## API Reference
+
+import { TypesExpandingBox, TypesExpandingBoxAdditional } from './types'
+
+### ExpandingBox
+
+<TypesExpandingBox.ExpandingBox />
+
+### ExpandingBoxMain and ExpandingBoxExtra
+
+<TypesExpandingBox.ExpandingBoxMain />
+
+<TypesExpandingBox.ExpandingBoxExtra />
+
+### useExpandingBoxName and startExpandingTransition
+
+<TypesExpandingBox.useExpandingBoxName />
+
+<TypesExpandingBox.startExpandingTransition />
+
+### Additional types
+
+<TypesExpandingBoxAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §9.10 (search) [D194], §10.14 (the overlay frame) and §1.5.15 (motion).

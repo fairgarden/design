@@ -11,6 +11,9 @@
  *   --scroll-area-thumb       thumb thickness; widens on hover and drag
  *   --scroll-area-edge-start  `none` hides the start edge (a pinned table column draws it)
  *   --scroll-area-max-block   the root's cap, written by the `maxBlockSize` prop
+ *   --scroll-area-overscroll-x, --scroll-area-overscroll-y
+ *                             the viewport's scroll chaining per axis (default
+ *                             `contain`); a carousel sets `y` to `auto`
  */
 
 @layer base {
@@ -30,7 +33,18 @@
     flex: 1 1 auto;
     min-block-size: 0;
     min-inline-size: 0;
-    overscroll-behavior: contain;
+    overscroll-behavior: var(--scroll-area-overscroll-x, contain) var(--scroll-area-overscroll-y, contain);
+  }
+
+  /*
+   * `fitContent={false}`: the content keeps the viewport's width, so its
+   * children's percentages resolve against the viewport (a carousel track).
+   * Base UI writes `min-width: fit-content` inline on the content, and only
+   * an important declaration outranks an inline value; the package itself
+   * writes no real property inline (§1.11.1).
+   */
+  .contentFluid {
+    min-inline-size: 0 !important;
   }
 
   /* The gutter: a centered --border-size-1 --role-hairline track. */
@@ -135,6 +149,17 @@
     scroll-snap-type: x mandatory;
   }
 
+  /*
+   * The horizontal gutter is always reserved, as the panel's is: whether
+   * the content overflows is known only after layout (Base UI's
+   * data-has-overflow-x arrives after mount), and geometry must be final in
+   * the first paint [D201]. Owners that sit on a margin take it from there.
+   */
+  .wide .viewport,
+  .rail .viewport {
+    padding-block-end: var(--scroll-area-gutter);
+  }
+
   .wide .edgeStart,
   .rail .edgeStart {
     inset-inline-start: 0;
@@ -164,12 +189,6 @@
 }
 
 @layer states {
-  /* The horizontal gutter is reserved while there is something to scroll. */
-  .wide[data-has-overflow-x] .viewport,
-  .rail[data-has-overflow-x] .viewport {
-    padding-block-end: var(--scroll-area-gutter);
-  }
-
   /* Panel scrollbar: shown on hover, scroll and focus. */
   .panel .scrollbar {
     visibility: hidden;

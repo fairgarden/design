@@ -201,7 +201,8 @@
     .group,
     .decrement,
     .increment {
-      transition-property: border-color, background-color, color;
+      /* Edges fade; a stepper's press is the inverse pair from none, which steps at once [D205]. */
+      transition-property: border-color;
       transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }

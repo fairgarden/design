@@ -1,0 +1,868 @@
+/*
+ * File tabs. Parts: `base` (the Root, around the header and the panel),
+ * `header` (FileTabsList: the 56 px row on its rule), `bar` (the row inside
+ * it that holds the lead and the side, and draws the host's side edges),
+ * `lead` (the tabs or the one file's label), `list` (the tablist, the
+ * tabs' native scroll row), `tab`, `label`, `edge` / `edgeLine` (the disabled
+ * `line-dotted-fine` underline, true SVG dots), `single` (the lone file's
+ * label, no tablist), `side` (the header's end), `status` (laid over the
+ * tabs beside the controls), `controls` (the controls' cell), `control`
+ * (FileTabsControl) and `panel`. The header's frame classes: `frameTop`,
+ * `frameJoined` and `frameNone`.
+ *
+ * The header opens a host: a --border-size-1 box with no padding and a
+ * --primary1 face (Code Block's frame, or the Root given a frame class).
+ * The geometry is the source's code block header, to the pixel: the header
+ * with its rule is the tab row's height, the tabs run over the rule, the
+ * strip runs out over the host's side edges by their width, the side edges
+ * are drawn again over the header (and over the ends of the strip's native
+ * scrollbar), and a FileTabsControl (the ⋮) always hangs past the host's
+ * inline-end edge, which is why the host must not clip and must leave
+ * --fgd-size-file-tabs-control free there.
+ *
+ * The tabs are paper: the selected tab takes its panel's own face (the
+ * host's --primary1, the ground with `frameNone`) and opens into it, with
+ * no rule between them; the others sit recessed behind it on --primary3,
+ * each standing on the header's rule. The header is one fixed row that
+ * never wraps: a lone file's label truncates, the tabs scroll, and a
+ * control that joins late takes its room at the start of the controls,
+ * whose end never moves. With no document and a FileTabsControl there is
+ * no header row: the ⋮ hangs from the host's top-end corner. Small icon
+ * Buttons in the header (`text` icon-only Buttons) are quiet at rest, as
+ * the ⋮ is: their edge shows only on hover and focus. Colors are role
+ * variables only; local custom properties carry dimensions only:
+ *   --file-tab-radius          the paper-tab radius: the selected tab's top radii and the first and
+ *                              last tabs' outer one, as the source's (12 px)
+ *   --file-tabs-host-radius    the host's top corner radius, which the side edges start below
+ *   --file-tab-radius-pressed  the selected tab's radii while pressed (the source's 12 → 16 px)
+ *   --file-tab-tuck            how far a neighbour tucks under the selected tab: its radius, so the
+ *                              neighbour's top edge runs into the selected tab's shoulder
+ *   --file-tab-inset           a tab's side padding
+ *   --file-tab-pad-start/-end  each tab's side padding, grown by the tuck on a tucked side
+ *   --file-tabs-top            the room above the tabs
+ *   --file-tabs-block          the header's height with its rule: the room above plus the tabs
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * Labels take the UI face at the caption size by default, mono
+ * (`type-data`, §3.11) with `mono` for file names; inactive labels are
+ * muted text [D170, D175]. The control is an icon host: its glyph takes the next
+ * weight on hover and press [D181]. */
+/* Labels in the UI face at the caption size, not caps, by default; `mono` (file names) in `type-data`. */
+.labelUi,
+.singleUi {
+  composes: typeCaption typeMuted from '../../utils/type.module.css';
+}
+
+.labelMono,
+.singleMono {
+  composes: typeData typeMuted from '../../utils/type.module.css';
+}
+
+.status {
+  composes: typeData from '../../utils/type.module.css';
+}
+
+.edgeLine {
+  composes: lineDottedFine from '../../utils/line.module.css';
+}
+
+.control {
+  composes: iconHost from '../../foundations/icon/icon.module.css';
+}
+
+@layer base {
+  .base {
+    --file-tab-radius: var(--radius-2-75);
+    --file-tabs-host-radius: var(--radius-2-25);
+    --file-tab-radius-pressed: calc(var(--file-tab-radius) * 4 / 3);
+    --file-tab-tuck: var(--file-tab-radius);
+    --file-tab-inset: var(--size-px-2);
+    --file-tabs-top: var(--size-px-2-5);
+    --file-tabs-block: calc(var(--file-tabs-top) + var(--fgd-size-hit));
+
+    min-inline-size: 0;
+  }
+
+  /*
+   * The header: 56 px with its --role-rule (the room above the tabs plus
+   * the tabs, which run over the rule), as the source's 48 px header held
+   * its 35 px tabs. The bar's items span it, rule included. Its height is
+   * fixed: nothing in it wraps or grows it, so a control that joins after
+   * the first paint never moves what's below.
+   */
+  .header {
+    position: relative;
+    box-sizing: border-box;
+    block-size: var(--file-tabs-block);
+    border-block-end: var(--border-size-1) solid var(--role-rule);
+  }
+
+  /*
+   * The row inside the header: its items run a rule's width past the
+   * header's content, over the rule. With one file (or none) it's in flow;
+   * it never wraps: the lone label truncates to leave the controls their
+   * room.
+   */
+  .bar {
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    block-size: var(--file-tabs-block);
+    margin-block-end: calc(-1 * var(--border-size-1));
+  }
+
+  /*
+   * The host's side edges, drawn again over the bar, down a rule's width
+   * past it (where they start is the frame's). Tabs scrolled to either end
+   * pass under them, and so do the ends of the strip's native scrollbar,
+   * which runs out over the host's edges with the strip.
+   */
+  .bar::before,
+  .bar::after {
+    content: '';
+    position: absolute;
+    z-index: var(--layer-1);
+    inset-block: 0 calc(-1 * var(--border-size-1));
+    pointer-events: none;
+  }
+
+  .bar::before {
+    inset-inline-start: calc(-1 * var(--border-size-1));
+    border-inline-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  .bar::after {
+    inset-inline-end: calc(-1 * var(--border-size-1));
+    border-inline-end: var(--border-size-1) solid var(--role-rule);
+  }
+
+  /*
+   * The lead: the tabs or the one file's label, across the header's full
+   * width and out over the host's side edges by their width (the source's
+   * -1 px), so an end tab's edge sits on the host's line. A zero basis: it
+   * shrinks rather than push the controls to another row.
+   */
+  .lead {
+    display: flex;
+    flex: 1 1 0;
+    align-items: center;
+    min-inline-size: 0;
+    margin-inline: calc(-1 * var(--border-size-1));
+  }
+
+  /*
+   * The tabs: bottom-aligned under the room above them, over the header's
+   * rule. Mono keeps one advance width at every weight, so the selected
+   * label's 700 never moves the row.
+   */
+  .list {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: flex-end;
+    padding-block-start: var(--file-tabs-top);
+  }
+
+  /*
+   * Each tab is --fgd-size-hit tall, its foot on the foot of the header's
+   * rule. A tab behind the selected one is recessed paper: the --primary3
+   * face (two steps off the host's --primary1, never transparency),
+   * its own foot drawing the header's rule it covers, so it stands on the
+   * rule; the selected tab opens there instead (states).
+   */
+  .tab {
+    --file-tab-pad-start: var(--file-tab-inset);
+    --file-tab-pad-end: var(--file-tab-inset);
+
+    position: relative;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    box-sizing: border-box;
+    min-block-size: var(--fgd-size-hit);
+    margin: 0;
+    padding-block: 0;
+    padding-inline: var(--file-tab-pad-start) var(--file-tab-pad-end);
+    border: var(--border-size-1) solid var(--role-rule);
+    border-radius: 0;
+    background-color: var(--primary3);
+    color: var(--role-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  /* Neighbours share one edge. */
+  .tab + .tab {
+    margin-inline-start: calc(-1 * var(--border-size-1));
+  }
+
+  /* The first and last tabs round their outer top corner. */
+  .tab:first-child {
+    border-start-start-radius: var(--file-tab-radius);
+  }
+
+  .tab:last-child {
+    border-start-end-radius: var(--file-tab-radius);
+  }
+
+  /* The pressed line under the label (the other tabs). */
+  .tab::after {
+    content: '';
+    display: none;
+    position: absolute;
+    inset-inline: var(--file-tab-pad-start) var(--file-tab-pad-end);
+    inset-block-end: 0;
+    border-block-end: var(--border-size-2) solid var(--primary12);
+    pointer-events: none;
+  }
+
+  /*
+   * The bare-text hover underline's color, weight and offset, as Tabs draws
+   * it (§9.5) [D181]. The label reserves its selected width: a hidden,
+   * zero-tall copy of its words at --font-weight-7 (`data-label`) sets its
+   * width, so selecting a tab never moves the row in the UI face (mono
+   * keeps one advance width anyway).
+   */
+  .label {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  .label::after {
+    content: attr(data-label);
+    block-size: 0;
+    overflow: hidden;
+    font-weight: var(--font-weight-7);
+    visibility: hidden;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* Disabled underline host: true 1 px dots at 3 px under the label (§4.6) [D36, D68]. */
+  .edge {
+    display: none;
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-end: 0;
+    inline-size: 100%;
+    block-size: var(--fgd-dot-fine);
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .edgeLine {
+    fill: none;
+    stroke: var(--role-disabled-edge);
+  }
+
+  /*
+   * One file: its name on one line, centred in the header, inset as the
+   * source's label (12 px from the host's outer edge). A name longer than
+   * its room truncates with an ellipsis rather than wrap, so the header
+   * keeps its height whatever the controls take.
+   */
+  .single {
+    display: block;
+    flex: 0 1 auto;
+    box-sizing: border-box;
+    min-inline-size: 0;
+    padding-inline: var(--size-px-2-5);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /*
+   * The header's end: the controls' cell, and the status laid over the tabs
+   * beside it. Above the host's redrawn side edges, so a control's drawn
+   * edge can take the host's line.
+   */
+  .side {
+    position: relative;
+    z-index: var(--layer-2);
+    display: flex;
+    flex: 0 1 auto;
+    min-inline-size: 0;
+    margin-inline-start: auto;
+  }
+
+  /*
+   * The status (the busy "-ing…" label [D84]): laid over the header's end
+   * beside the controls on a --primary1 face with a --role-rule start edge,
+   * so it never moves or narrows the tabs, and the header's rule drawn
+   * again under it. Always mounted, as the live region; empty, it has no
+   * size.
+   */
+  .status {
+    position: absolute;
+    z-index: var(--layer-1);
+    inset-block: 0;
+    inset-inline-end: 100%;
+    display: flex;
+    align-items: center;
+    padding-inline: var(--size-px-2);
+    border-block-end: var(--border-size-1) solid var(--role-rule);
+    border-inline-start: var(--border-size-1) solid var(--role-rule);
+    background-color: var(--primary1);
+    color: var(--role-muted);
+    white-space: nowrap;
+  }
+
+  .status:empty {
+    padding-inline: 0;
+    border-width: 0;
+  }
+
+  /*
+   * The controls' cell for small controls (icon Buttons): at least
+   * --fgd-size-hit wide, its padding keeping them off the header's rules,
+   * one row that never wraps, end-aligned: a control that joins after the
+   * first paint enters at its start, taking room from the label or the
+   * tabs, and the controls already there stay put. A FileTabsControl never
+   * sits in the header: its row hangs outside (below).
+   */
+  .controls {
+    display: flex;
+    flex: 0 1 auto;
+    flex-wrap: nowrap;
+    gap: var(--size-px-1);
+    align-items: center;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    min-inline-size: var(--fgd-size-hit);
+    padding: var(--size-px-1) var(--size-px-2);
+  }
+
+  /*
+   * With a FileTabsControl (the ⋮), the header's end always hangs just
+   * outside the host's inline-end edge with zero layout width, whatever the
+   * tab count, as the source's did: from the host's top edge (or the joining
+   * rule) to the foot of the header's rule, the source's 49 px beside its
+   * 48 px header, so the tabs take the whole header. The host leaves
+   * --fgd-size-file-tabs-control free past its edge, unclipped. The status
+   * stays inside, over the tabs' end.
+   */
+  .side:has(> .controls > .control) {
+    position: absolute;
+    inset-block-start: calc(-1 * var(--border-size-1));
+    inset-inline-start: calc(100% + var(--border-size-1));
+    block-size: calc(var(--file-tabs-block) + var(--border-size-1));
+    margin: 0;
+  }
+
+  .side:has(> .controls > .control) > .status {
+    inset-block: var(--border-size-1) 0;
+    inset-inline-end: calc(100% + var(--border-size-1));
+  }
+
+  /* One row outside the edge, as wide as its controls, with no cell edge or padding. */
+  .controls:has(> .control) {
+    flex-wrap: nowrap;
+    align-items: stretch;
+    inline-size: max-content;
+    min-inline-size: 0;
+    padding: 0;
+  }
+
+  /*
+   * One header control (FileTabsControl): the ear, --size-px-4 wide from the
+   * host's edge line (the source's 20 px), with rounded outer corners. Its
+   * drawn shape (`::after`) sits under its glyph; its hit area (`::before`)
+   * is --fgd-size-hit wide from the host's outer edge, all of it in the
+   * gutter and none over the tabs.
+   */
+  .control {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    inline-size: calc(var(--size-px-4) - var(--border-size-1));
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-start-end-radius: var(--radius-2-25);
+    border-end-end-radius: var(--radius-2-25);
+    background: none;
+    color: var(--primary12);
+    cursor: pointer;
+    appearance: none;
+  }
+
+  /* Its glyph centres on the ear, whose start edge is the host's line: it starts on that line too, never squeezed. */
+  .control > * {
+    flex: none;
+    max-inline-size: none;
+    margin-inline-start: calc(-1 * var(--border-size-1));
+  }
+
+  .control::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    inline-size: var(--fgd-size-hit);
+  }
+
+  /* The ear, drawn from the host's edge line: its start edge is that line, its top the host's top edge, its foot the header's rule. */
+  .control::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    display: none;
+    inset: 0 0 0 calc(-1 * var(--border-size-1));
+    border: var(--border-size-1) solid var(--primary12);
+    border-start-end-radius: var(--radius-2-25);
+    border-end-end-radius: var(--radius-2-25);
+    background-color: var(--primary1);
+    pointer-events: none;
+  }
+
+  /* The controls row: the containing block of the corner it draws round the ear with a rounded host (below). */
+  .controls:has(> .control) {
+    position: relative;
+  }
+
+  .panel {
+    min-inline-size: 0;
+  }
+
+  @media (--forcedColors) {
+    .edgeLine {
+      stroke: currentColor;
+    }
+  }
+
+  /*
+   * Face and radius changes: the source's 200 ms (`transition: all 0.2s
+   * ease`, its curve mapped to --ease-out-3) [D195]. Both faces are opaque
+   * steps, so the fill never passes through transparent; the radii change
+   * on selection and on pressing the selected tab, never on hover alone: a
+   * control's own shape may change on a press or a selection [D181, D205].
+   */
+  @media (--motionOK) {
+    .tab {
+      transition-property: background-color, border-color, border-radius;
+      transition-duration: var(--fgd-duration-disclosure);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer variants {
+  /*
+   * Several files: the bar leaves the flow, as the source's header
+   * container did, so the header keeps its height whatever the strip's
+   * scrollbar takes. The tablist is the strip's native scroll row (the
+   * row Base UI scrolls a tab into as arrow keys move focus), across the
+   * lead. A classic scrollbar hangs flush under the header, over the
+   * code's top padding, clear of the first line; an overlay one shows over
+   * the strip's foot; the tabs never lift off the rule. (The source padded
+   * the row's foot 2 px, which left 2 px of face between the tabs and a
+   * classic scrollbar; its pale track hid the gap, a dark one shows it.)
+   */
+  .header[data-tablist] > .bar {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: 0;
+    block-size: auto;
+    margin: 0;
+  }
+
+  .header[data-tablist] > .bar > .lead {
+    align-items: stretch;
+  }
+
+  .header[data-tablist] > .bar > .lead > .list {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+
+  /*
+   * Small controls (not a FileTabsControl) with several files: their cell,
+   * the header's height with its rule, as the tabs; the tabs end on its
+   * --role-rule start edge.
+   */
+  .header[data-tablist] > .bar > .side:not(:has(> .controls > .control)) {
+    align-self: flex-start;
+    block-size: var(--file-tabs-block);
+  }
+
+  .header[data-tablist] > .bar > .side > .controls:not(:has(> .control)) {
+    border-inline-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  /* At the top of a host with rounded top corners: the side edges start below the host's radius, as the source's did (`top: 8px`). */
+  .frameTop > .bar::before,
+  .frameTop > .bar::after {
+    inset-block-start: var(--file-tabs-host-radius);
+  }
+
+  /*
+   * At the top of a rounded host the drawn ear wraps the host's top-end
+   * corner, so its outline runs unbroken: its start side is the host's
+   * corner arc and end edge, redrawn in the outline's colour, and the pocket
+   * between the arc and the ear's top line takes the ear's fill. The ear
+   * itself starts at the host's outer edge, with no start side; the
+   * controls row draws the corner: `::before` the arc, the end edge below
+   * it down to the rule's foot and, as its clipped spread shadow, the
+   * pocket's fill; `::after` the pocket's top line. Both take the host's
+   * radius, so they follow it, and logical sides, so they mirror in RTL.
+   */
+  .frameTop .control::after {
+    inset-inline-start: 0;
+    border-inline-start-width: 0;
+  }
+
+  .frameTop .controls:has(> .control)::before,
+  .frameTop .controls:has(> .control)::after {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    display: none;
+    inset-block-start: 0;
+    inset-inline-end: 100%;
+    box-sizing: border-box;
+    inline-size: var(--file-tabs-host-radius);
+    pointer-events: none;
+  }
+
+  .frameTop .controls:has(> .control)::before {
+    block-size: 100%;
+    border-block-start: var(--border-size-1) solid var(--primary12);
+    border-inline-end: var(--border-size-1) solid var(--primary12);
+    border-start-end-radius: var(--file-tabs-host-radius);
+    box-shadow: 0 0 0 var(--file-tabs-host-radius) var(--primary1);
+    clip-path: inset(0);
+  }
+
+  .frameTop .controls:has(> .control)::after {
+    block-size: var(--border-size-1);
+    background-color: var(--primary12);
+  }
+
+  /* In a host part below another (no rounded top): the header's rule joins the part above, and the side edges run from it. */
+  .frameJoined {
+    block-size: calc(var(--file-tabs-block) + var(--border-size-1));
+    border-block-start: var(--border-size-1) solid var(--role-rule);
+  }
+
+  .frameJoined > .bar::before,
+  .frameJoined > .bar::after {
+    inset-block-start: calc(-1 * var(--border-size-1));
+  }
+
+  /* No host frame: no side edges to draw or overlap, so the strip stays inside the header. */
+  .frameNone > .bar::before,
+  .frameNone > .bar::after {
+    content: none;
+  }
+
+  .frameNone > .bar > .lead {
+    margin-inline: 0;
+  }
+
+  /* The tabs still end on a controls' cell edge, as they would on a host's. */
+  .frameNone > .bar > .lead:has(+ .side > .controls) {
+    margin-inline-end: calc(-1 * var(--border-size-1));
+  }
+
+  /*
+   * A FileTabsControl hangs past the header's own end, from its top to the
+   * rule's foot, the ear's start edge on the tabs' last line.
+   */
+  .frameNone > .bar:has(> .side > .controls > .control) > .lead {
+    margin-inline-end: 0;
+  }
+
+  .frameNone > .bar > .side:has(> .controls > .control) {
+    inset-block-start: 0;
+    inset-inline-start: 100%;
+    block-size: var(--file-tabs-block);
+  }
+
+  .frameNone > .bar > .side:has(> .controls > .control) > .status {
+    inset-block: 0;
+    inset-inline-end: 100%;
+  }
+
+  /* The status covers the tabs on the ground they sit on. */
+  .frameNone > .bar > .side > .status {
+    background-color: var(--role-ground);
+  }
+
+  /*
+   * No document and a FileTabsControl (Code Block's nameless snippet): no
+   * header row, no rule. The header keeps only the joining rule with
+   * `joined`; the ⋮ hangs from the host's top-end corner as it does beside
+   * a header, its ear --fgd-size-hit tall from the host's top edge (or the
+   * joining rule), with its hit area in the same gutter, so it takes no
+   * layout width and no height. The status, while busy, lies over the
+   * panel's top-end corner beside it.
+   */
+  .header[data-labelless]:has(> .bar > .side > .controls > .control) {
+    block-size: auto;
+    border-block-end-width: 0;
+  }
+
+  .header[data-labelless] > .bar:has(> .side > .controls > .control) {
+    block-size: 0;
+    margin: 0;
+  }
+
+  .header[data-labelless] > .bar:has(> .side > .controls > .control)::before,
+  .header[data-labelless] > .bar:has(> .side > .controls > .control)::after {
+    content: none;
+  }
+
+  .header[data-labelless] > .bar > .side:has(> .controls > .control) {
+    block-size: calc(var(--fgd-size-hit) + var(--border-size-1));
+  }
+
+  .frameNone[data-labelless] > .bar > .side:has(> .controls > .control) {
+    block-size: var(--fgd-size-hit);
+  }
+}
+
+@layer states {
+  /*
+   * The selected tab: the front sheet of paper, above its neighbours, with
+   * both top corners rounded. It takes its panel's own face (the host's
+   * --primary1) in the same --role-rule edge, and opens into the panel: no
+   * foot edge, so the header's rule stops at its sides and nothing divides
+   * tab from panel (the foot's width moves into its padding, so its label
+   * stays level with the others'). Its label is the --primary12 ink at
+   * --font-weight-7: the state reads by weight and by the joined edge, not
+   * by color alone.
+   */
+  .tab[data-active] {
+    z-index: var(--layer-1);
+    padding-block-end: var(--border-size-1);
+    border-block-end-width: 0;
+    border-start-start-radius: var(--file-tab-radius);
+    border-start-end-radius: var(--file-tab-radius);
+    background-color: var(--primary1);
+    color: var(--primary12);
+  }
+
+  .tab[data-active] .label {
+    color: var(--primary12);
+    font-weight: var(--font-weight-7);
+  }
+
+  /* No host frame: the panel sits on the ground, so the front tab takes the ground's face. */
+  .frameNone .tab[data-active] {
+    background-color: var(--role-ground);
+  }
+
+  /*
+   * Its neighbours tuck under it by the tuck: the tucked side's padding
+   * grows by it and the negative margin gives it back, so no label moves
+   * when the selection does.
+   */
+  .tab:has(+ .tab[data-active]) {
+    --file-tab-pad-end: calc(var(--file-tab-inset) + var(--file-tab-tuck));
+
+    margin-inline-end: calc(-1 * var(--file-tab-tuck));
+  }
+
+  .tab[data-active] + .tab {
+    --file-tab-pad-start: calc(var(--file-tab-inset) + var(--file-tab-tuck));
+
+    margin-inline-start: calc(-1 * (var(--file-tab-tuck) + var(--border-size-1)));
+  }
+
+  /* Hover (the other tabs, not disabled): the bare-text underline [D181]. */
+  .tab:not([data-active]):not([data-disabled]):hover .label {
+    text-decoration-line: underline;
+  }
+
+  /* Pressed (the other tabs): a --border-size-2 line under the label. */
+  .tab:not([data-active]):not([data-disabled]):active::after {
+    display: block;
+  }
+
+  /* Pressed (the selected tab): its radii grow, where motion is OK. */
+  @media (--motionOK) {
+    .tab[data-active]:not([data-disabled]):active {
+      border-start-start-radius: var(--file-tab-radius-pressed);
+      border-start-end-radius: var(--file-tab-radius-pressed);
+    }
+  }
+
+  /* Focus: the 2 px --primary12 ring inside the hit area, so the scrolling row never clips it. */
+  .tab:focus-visible {
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: calc(-1 * var(--fgd-focus-width));
+  }
+
+  /* Disabled: --role-muted label and the dotted underline; never dimmed [D16, D85]. */
+  .tab[data-disabled] {
+    color: var(--role-muted);
+    cursor: default;
+  }
+
+  .tab[data-disabled] .edge {
+    display: block;
+  }
+
+  /* The disabled selected tab keeps its face, shape, place and weight; its label is muted. */
+  .tab[data-active][data-disabled] .label {
+    color: var(--role-muted);
+  }
+
+  /*
+   * The ear shows at once while the control is pointed at or focused, on the
+   * soft hover fill [D181], never waiting on its tooltip (whose own
+   * `data-popup-open` it ignores); and while its menu is open (the menu's
+   * `aria-expanded`), on the --primary1 face.
+   */
+  .control[aria-expanded='true']::after,
+  .control:not(:disabled, [data-disabled]):is(:hover, :focus-visible)::after,
+  .frameTop .controls:has(> .control[aria-expanded='true'])::before,
+  .frameTop .controls:has(> .control[aria-expanded='true'])::after,
+  .frameTop .controls:has(> .control:not(:disabled, [data-disabled]):is(:hover, :focus-visible))::before,
+  .frameTop .controls:has(> .control:not(:disabled, [data-disabled]):is(:hover, :focus-visible))::after {
+    display: block;
+  }
+
+  /* Pointed at or focused: the soft hover fill, in the ear and the corner's pocket alike. */
+  .control:not(:disabled, [data-disabled]):is(:hover, :focus-visible)::after {
+    background-color: var(--role-soft-hover);
+  }
+
+  .frameTop .controls:has(> .control:not(:disabled, [data-disabled]):is(:hover, :focus-visible))::before {
+    box-shadow: 0 0 0 var(--file-tabs-host-radius) var(--role-soft-hover);
+  }
+
+  /*
+   * Focus: the ring on the control, keyboard only, inset. Its offset is the
+   * local ring token, so the outline morph predicts the ring a closing
+   * menu lands on [D204].
+   */
+  .control {
+    --fgd-focus-offset: calc(-1 * var(--fgd-focus-width));
+  }
+
+  .control:focus-visible {
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: var(--fgd-focus-offset);
+  }
+
+  /* Disabled (a loading state): --role-muted, the rest weight, no opacity [D85]. */
+  .control:disabled,
+  .control[data-disabled] {
+    color: var(--role-muted);
+    cursor: default;
+  }
+
+  /*
+   * Small icon Buttons in the header are quiet at rest, as the ⋮ is: `text`
+   * icon-only Buttons, a glyph with no edge (and, disabled, no dotted edge:
+   * a loading stand-in is the same glyph in --role-muted, the same size).
+   * Pointed at or focused, their circle is drawn at once, a --border-size-1
+   * --primary12 edge on the --role-soft-hover fill, as the ⋮'s ear [D181];
+   * the Button keeps its fixed size (the edge is inside it), its
+   * --fgd-size-hit hit area, its glyph's weight swap and its focus ring.
+   * Nothing fades, so leaving is as instant as arriving.
+   */
+  .controls > :is(button, a):not(.control) {
+    transition: none;
+  }
+
+  .controls > :is(button, a):not(.control, :disabled, [data-disabled], [aria-busy='true']):is(:hover, :focus-visible) {
+    border: var(--border-size-1) solid var(--primary12);
+    background-color: var(--role-soft-hover);
+  }
+
+  .panel:focus-visible {
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: calc(-1 * var(--fgd-focus-width));
+  }
+}
+
+@layer print {
+  @media print {
+    /* The header hugs the file labels, inset like a code block's code; the controls and status are screen-only. */
+    .header,
+    .frameJoined {
+      block-size: auto;
+      padding: var(--size-px-2) var(--size-px-2-5);
+    }
+
+    .header > .bar,
+    .header[data-tablist] > .bar {
+      position: static;
+      block-size: auto;
+      margin: 0;
+    }
+
+    /* No document (a nameless snippet): nothing to print, so no header. */
+    .header[data-labelless] {
+      display: none;
+    }
+
+    .bar::before,
+    .bar::after,
+    .side {
+      display: none;
+    }
+
+    .lead,
+    .header[data-tablist] > .bar > .lead {
+      align-items: center;
+      margin-inline: 0;
+    }
+
+    /* Plain mono labels in a wrapping row, black on white, the selected one marked by weight alone (§1.11.6). */
+    .list,
+    .header[data-tablist] > .bar > .lead > .list {
+      flex-wrap: wrap;
+      gap: var(--size-px-1) var(--size-px-3);
+      padding-block: 0;
+      overflow: visible;
+    }
+
+    .tab {
+      min-block-size: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: none;
+      color: var(--primary12);
+    }
+
+    .tab .label,
+    .single {
+      color: var(--primary12);
+    }
+
+    /* Paper doesn't truncate: a long name wraps. */
+    .single {
+      padding-inline: 0;
+      overflow: visible;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .tab::after,
+    .edge {
+      display: none;
+    }
+  }
+}

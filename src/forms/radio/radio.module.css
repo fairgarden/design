@@ -8,8 +8,10 @@
  * a --primary12 dot), edge / edgeLine (the disabled `line-dotted-fine` edge
  * in SVG [D36, D68]), feedback, feedbackGlyph, feedbackWord.
  *
- * Colors are role variables only; the swatch disc's color is content,
- * passed inline by the component. Local custom properties carry dimensions:
+ * Colors are role variables only; the swatch disc's color is content: the
+ * component writes the `swatch` prop inline as --radio-swatch (the one
+ * local property that holds content, never a role color), and `.swatch`
+ * maps it to `background` (§1.11.1). Local custom properties carry dimensions:
  *   --radio-edge         circle edge width (2 → 3 px checked)
  *   --radio-pill-edge    option pill edge width (1 → 2 px checked)
  *   --radio-swatch-ring  swatch ring width (1 px)
@@ -117,6 +119,8 @@
     block-size: var(--size-px-7);
     border: var(--radio-swatch-ring) solid var(--primary12);
     border-radius: var(--radius-round);
+    /* The `swatch` prop, written inline as --radio-swatch; unset, no background. */
+    background: var(--radio-swatch);
   }
 
   /*
@@ -197,13 +201,17 @@
     }
   }
 
-  /* Hover transitions [D181]: --fgd-duration-quick, --ease-out-3. */
+  /*
+   * Hover transitions [D181]: --fgd-duration-quick, --ease-out-3, for edges
+   * and underlines. The circle's and the pill's fills rest at none, so their
+   * hover and checked fills step at once [D205].
+   */
   @media (--motionOK) {
     .circle,
     .base,
     .swatch,
     .label {
-      transition-property: border-color, background-color, text-decoration-color;
+      transition-property: border-color, text-decoration-color;
       transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }

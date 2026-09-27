@@ -108,10 +108,10 @@
       transition-timing-function: var(--ease-out-3);
     }
 
-    /* Hover transitions [D181]: --fgd-duration-quick, --ease-out-3. */
+    /* Hover transitions [D181]: --fgd-duration-quick, --ease-out-3; the circle's weight steps [D205]. */
     .title,
     .circle {
-      transition-property: text-decoration-color, border-width;
+      transition-property: text-decoration-color;
       transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }

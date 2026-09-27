@@ -1,0 +1,39 @@
+# Types Table
+
+The API reference for an export, as `@fairgarden/docs` extracts it from TypeScript at build time: a component's props, a hook's or function's parameters and return type, and each related type in a disclosure.
+
+```tsx
+import { TypesTable, TypePre } from '@fairgarden/design/content/types-table'
+```
+
+Types Table fills the engine's types factories' `TypesTable` slot: it calls `useTypes(props)` and renders the result. `TypePre` fills their `TypePre` slot, for type signatures. `createTypes` and `createMultipleTypes` from [`@fairgarden/design/utils/docs`](../../foundations/docs-utilities/page.mdx) plug in both. `@fairgarden/docs` is an optional peer dependency; install it to use Types Table. Every API reference on this site is one, including this page's.
+
+## Anatomy
+
+A component's table lists its props, then its data attributes and its CSS variables, each with its type, its default and its description. A hook or function lists its parameters, or the properties of its options object, and its return type. A raw type shows its formatted code. The table frame follows the design system's tables: a rule top and bottom and under the head row, hairlines between rows, labels in the muted ink. The key column is mono and never breaks; a wide table scrolls on its own, never the page.
+
+Each related type, such as a namespaced `Props` or a type the export uses, is a disclosure under the table, named by the type in mono. Its content carries the type's slug as its id, so a link to `#slug` lands on it.
+
+`TypePre` sets a signature unframed, inline in its cell, in the Code Block's syntax tiers. A long type name breaks rather than running past a narrow viewport.
+
+## Print
+
+Tables print in full, their rows never split, and every disclosure prints open, black on white.
+
+## API Reference
+
+import { TypesTypesTable, TypesTypesTableAdditional } from './types'
+
+### TypesTable
+
+<TypesTypesTable.TypesTable />
+
+### TypePre
+
+<TypesTypesTable.TypePre />
+
+### Additional types
+
+<TypesTypesTableAdditional />
+
+[See Types](./types.md)

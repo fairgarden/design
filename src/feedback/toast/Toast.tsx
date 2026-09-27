@@ -20,6 +20,7 @@ import {
   type PrimaryScale,
   type RadixScale,
 } from '../../utils/scales'
+import { useReleaseMark } from '../../utils/useReleaseMark'
 import styles from './toast.module.css'
 
 /*
@@ -249,7 +250,7 @@ function ToastViewport(
     <BaseToast.Portal container={container}>
       <BaseToast.Viewport
         {...overlayAttributes}
-        aria-label={label}
+        aria-label={label ?? 'Notifications'}
         className={cx(
           styles.viewport,
           primaryScaleVariants[scales.primary],
@@ -317,7 +318,7 @@ function ToastItem(props: { toast: BaseToastObject; position: number; total: num
 
 /** An action cell: holds its rest width while busy and ignores presses then [D84]. */
 function ToastActionCell(props: ToastAction) {
-  const { onClick, disabled, destructive, ...rest } = props
+  const { onClick, onPointerDown, onKeyUp, disabled, destructive, ...rest } = props
   const busy = rest['aria-busy'] === true || rest['aria-busy'] === 'true'
   const element = React.useRef<HTMLButtonElement | null>(null)
   const restWidth = React.useRef<number | null>(null)
@@ -337,6 +338,10 @@ function ToastActionCell(props: ToastAction) {
     }
   }, [busy])
 
+  // The press swaps fill and ink as the inverse pair; the release mark lets
+  // the module step the release too, never fading the ink over the fill [D205].
+  const releaseMark = useReleaseMark(element)
+
   return (
     <BaseButton
       {...rest}
@@ -344,6 +349,14 @@ function ToastActionCell(props: ToastAction) {
       disabled={disabled}
       className={cx(styles.action, destructive ? styles.actionDestructive : undefined)}
       onClick={busy ? undefined : onClick}
+      onPointerDown={(event) => {
+        releaseMark.onPointerDown()
+        onPointerDown?.(event)
+      }}
+      onKeyUp={(event) => {
+        releaseMark.onKeyUp(event)
+        onKeyUp?.(event)
+      }}
     />
   )
 }

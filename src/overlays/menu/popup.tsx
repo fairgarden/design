@@ -4,6 +4,8 @@ import * as React from 'react'
 import { Menu as BaseMenu } from '@base-ui/react/menu'
 import { cva, type VariantProps } from 'class-variance-authority'
 
+import { OutlineMorphFrame } from '../../foundations/outline-morph'
+import { useMergedRef } from '../../utils/assignRef'
 import { cx, resolveClassName } from '../../utils/className'
 import {
   OVERLAY_COLLISION_PADDING,
@@ -13,6 +15,7 @@ import {
   overlayScales,
 } from '../../utils/overlay'
 import { primaryScaleVariants, secondaryScaleVariants } from '../../utils/scales'
+import { MenuMorphContext } from './morph'
 import styles from './menu.module.css'
 
 /*
@@ -63,6 +66,8 @@ export type MenuPopupProps = BaseMenu.Popup.Props & {
  * The portal, positioner and popup. `placement` supplies defaults for the
  * positioner; any prop left undefined falls through to Base UI's own
  * defaults (the end side for submenus, the pointer for context menus).
+ * Inside a Menu with the outline morph, the popup is its target and the
+ * frame renders beside it [D204].
  */
 export function MenuPopupFrame(
   props: MenuPopupProps & { placement?: Pick<MenuPopupProps, 'align' | 'sideOffset'> }
@@ -80,10 +85,13 @@ export function MenuPopupFrame(
     placement,
     className,
     children,
+    ref,
     ...rest
   } = props
 
   const scales = overlayScales(primary, secondary)
+  const morph = React.useContext(MenuMorphContext)
+  const popupRef = useMergedRef<HTMLDivElement>(ref, morph?.targetRef)
 
   return (
     <BaseMenu.Portal container={container} keepMounted={keepMounted}>
@@ -97,6 +105,7 @@ export function MenuPopupFrame(
       >
         <BaseMenu.Popup
           {...rest}
+          ref={popupRef}
           {...overlayAttributes}
           className={resolveClassName(className, (extra) =>
             menu({
@@ -108,6 +117,7 @@ export function MenuPopupFrame(
         >
           <OverlayScope>{children}</OverlayScope>
         </BaseMenu.Popup>
+        {morph ? <OutlineMorphFrame ref={morph.frameRef} /> : null}
       </BaseMenu.Positioner>
     </BaseMenu.Portal>
   )

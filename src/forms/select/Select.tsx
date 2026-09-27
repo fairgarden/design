@@ -7,6 +7,8 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { dangerScale, useFieldInvalid } from '../field'
 import { Ground } from '../../foundations/ground'
 import { Icon, iconHost } from '../../foundations/icon'
+import { OutlineMorphFrame } from '../../foundations/outline-morph'
+import { useOutlineMorphRoot } from '../../foundations/outline-morph/useOutlineMorphRoot'
 import { cx } from '../../utils/className'
 import { primaryScaleVariants, secondaryScaleVariants } from '../../utils/scales'
 import { useScopeAttributes } from '../../utils/scope'
@@ -34,8 +36,8 @@ import styles from './select.module.css'
  *   error edge or danger underline. Item `data-highlighted` → --primary4
  *   plus the --border-size-2-25 start bar [D145]; `data-selected` → leading ✓
  *   plus --font-weight-6; `data-disabled` → --role-muted, never
- *   highlighted. Popup `data-starting-style` / `data-ending-style` → the
- *   clip reveal from `data-side` [D91].
+ *   highlighted. Popup: the outline morph or nothing; it opens and closes
+ *   at once [D205].
  * - Parts: base (the trigger), value, icon, swatch, popup, list, item,
  *   itemText, itemIndicator, group, groupLabel, separator.
  * - Scope: `popup` renders in its Base UI Portal and declares a nested
@@ -43,6 +45,11 @@ import styles from './select.module.css'
  *   [D92] overlay frame [D139, D156]. `plate` → the trigger is a nested
  *   `white` Ground.
  * - Container: none; inherits its context.
+ * - Outline morph [D204]: on by default (`morph={false}` opts out), the
+ *   trigger's focus ring (or, opened by pointer, its edge) grows into the
+ *   popup's frame and back (foundations/outline-morph). The frame renders
+ *   beside the popup in its Positioner; while it draws, the popup carries
+ *   `data-outline-morph` (its edge takes the face). No trigger style changes.
  */
 export const select = cva(styles.base, {
   variants: {
@@ -124,6 +131,14 @@ export type SelectProps<Value = string> = RootProps<Value> & {
    * scale while invalid.
    */
   secondary?: SelectVariants['secondary']
+  /**
+   * The outline morph: the focus ring grows into the popup's frame as it
+   * opens and shrinks back as it closes; opened by pointer (no ring), the
+   * field edge grows instead. Instant under reduced motion; off in forced
+   * colors and print, and wherever `--fgd-outline-morph: none` applies.
+   * Default `true`; `false` opens and closes the popup at once.
+   */
+  morph?: boolean
 } & (
     | {
         /**
@@ -163,6 +178,8 @@ export function Select<Value = string>(props: SelectProps<Value>) {
     secondary,
     className,
     'aria-label': ariaLabel,
+    morph = true,
+    onOpenChange,
     ...rootProps
   } = props
 
@@ -171,6 +188,14 @@ export function Select<Value = string>(props: SelectProps<Value>) {
   const resolvedSecondary = invalid ? dangerScale : secondary
   const options = flatten(items)
   const hasSwatch = options.some((option) => option.swatch)
+
+  // The outline morph follows the root's open state [D204].
+  const outline = useOutlineMorphRoot({
+    open: rootProps.open,
+    defaultOpen: rootProps.defaultOpen,
+    onOpenChange,
+    morph,
+  })
 
   const triggerClassName = select({
     variant,
@@ -195,8 +220,9 @@ export function Select<Value = string>(props: SelectProps<Value>) {
     : undefined
 
   return (
-    <BaseSelect.Root<Value, false> {...rootProps} items={items}>
+    <BaseSelect.Root<Value, false> {...rootProps} onOpenChange={outline.onOpenChange} items={items}>
       <BaseSelect.Trigger
+        ref={outline.refs?.sourceRef}
         {...(plate ? null : scope)}
         aria-label={ariaLabel}
         className={triggerClassName}
@@ -236,6 +262,7 @@ export function Select<Value = string>(props: SelectProps<Value>) {
           collisionPadding={16}
         >
           <BaseSelect.Popup
+            ref={outline.refs?.targetRef}
             {...overlayAttributes}
             className={[styles.popup, overlayScaleClassName].join(' ')}
           >
@@ -245,6 +272,7 @@ export function Select<Value = string>(props: SelectProps<Value>) {
               </BaseSelect.List>
             </OverlayScope>
           </BaseSelect.Popup>
+          {outline.refs ? <OutlineMorphFrame ref={outline.refs.frameRef} /> : null}
         </BaseSelect.Positioner>
       </BaseSelect.Portal>
     </BaseSelect.Root>

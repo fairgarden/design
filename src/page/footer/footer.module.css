@@ -313,11 +313,11 @@
     display: none;
   }
 
-  /* Link animates its own list and legal links. */
+  /* Link animates its own list and legal links. Colors fade; the underline's weight steps [D205]. */
   @media (--motionOK) {
     .socialLink,
     .contactLink {
-      transition-property: color, text-decoration-color, text-decoration-thickness;
+      transition-property: color, text-decoration-color;
       transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }

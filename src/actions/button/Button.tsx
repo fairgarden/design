@@ -12,6 +12,7 @@ import {
   secondaryScaleVariants,
 } from '../../utils/scales'
 import { useScopeAttributes } from '../../utils/scope'
+import { useReleaseMark } from '../../utils/useReleaseMark'
 
 import styles from './button.module.css'
 
@@ -73,6 +74,8 @@ type ButtonVariants = VariantProps<typeof button>
 export type PressCallback = (event: React.MouseEvent<HTMLButtonElement>) => void
 
 type ClickEvent = Parameters<NonNullable<BaseButton.Props['onClick']>>[0]
+type PointerDownEvent = Parameters<NonNullable<BaseButton.Props['onPointerDown']>>[0]
+type KeyUpEvent = Parameters<NonNullable<BaseButton.Props['onKeyUp']>>[0]
 
 type ButtonCommonProps = Omit<BaseButton.Props, 'children'> & {
     /**
@@ -218,6 +221,18 @@ export function Button(props: ButtonProps) {
     }
   }, [busy])
 
+  // A `solid` press swaps fill and ink as a pair; the release mark lets the
+  // module step the release too, never fading one over the other [D205].
+  const releaseMark = useReleaseMark(element)
+  const handlePointerDown = (event: PointerDownEvent) => {
+    releaseMark.onPointerDown()
+    rest.onPointerDown?.(event)
+  }
+  const handleKeyUp = (event: KeyUpEvent) => {
+    releaseMark.onKeyUp(event)
+    rest.onKeyUp?.(event)
+  }
+
   const handleClick = (event: ClickEvent) => {
     if (busy) {
       event.preventDefault()
@@ -274,6 +289,8 @@ export function Button(props: ButtonProps) {
       disabled={disabled}
       className={resolvedClassName}
       onClick={handleClick}
+      onPointerDown={handlePointerDown}
+      onKeyUp={handleKeyUp}
     >
       {iconPosition === 'end' ? label : glyph}
       {iconPosition === 'end' ? glyph : label}

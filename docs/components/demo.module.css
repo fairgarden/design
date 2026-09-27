@@ -1,0 +1,52 @@
+/*
+ * The site's page-frame preview around the design system's Demo: an iframe
+ * of the demo's preview route (FramedPreview). Tokens and role variables
+ * only: no shadow, opacity or gradient.
+ */
+
+/*
+ * A page-frame demo: its preview route in a frame that is its own viewport,
+ * so the demo's viewport media resolve against the frame's width. It
+ * cancels the preview's inset (`--demo-inset`) to run edge to edge inside
+ * the demo's frame, with the "Full page" link in a foot under it.
+ */
+.framed {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 100%;
+  min-inline-size: 0;
+  margin: calc(-1 * var(--demo-inset));
+}
+
+/* The frame stays hidden until its page reports its height (no opacity). */
+.frame {
+  display: block;
+  inline-size: 100%;
+  block-size: var(--frame-block-size, var(--size-px-12));
+  border: 0;
+  visibility: hidden;
+
+  &[data-ready] {
+    visibility: visible;
+  }
+}
+
+/* A fixed viewport the demo scrolls inside, so a sticky bar docks in it. */
+.frameScroll {
+  block-size: min(var(--size-px-15), 70dvh);
+}
+
+/* "Full page": the preview route at the browser's width. */
+.frameFoot {
+  display: flex;
+  justify-content: flex-end;
+  padding-inline: var(--size-px-3);
+  border-block-start: var(--border-size-1) solid var(--role-hairline);
+}
+
+/* Print: the frame prints as the page it holds would; the link is screen-only. */
+@media print {
+  .frameFoot {
+    display: none;
+  }
+}

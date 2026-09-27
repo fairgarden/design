@@ -690,16 +690,18 @@ export function Map(props: MapProps) {
     tileSize
   )
   const scale = 2 ** shown.zoom
-  const position = (u: number, v: number): React.CSSProperties =>
-    mode === 'drawing'
+  // A marker's or label's offset in the frame, as custom properties only;
+  // the module maps --map-x and --map-y to `left` and `top`.
+  const position = (u: number, v: number) =>
+    (mode === 'drawing'
       ? {
-          left: `${((u - shown.u) * scale + 0.5) * 100}%`,
-          top: `${((v - shown.v) * scale + 0.5) * 100}%`,
+          '--map-x': `${((u - shown.u) * scale + 0.5) * 100}%`,
+          '--map-y': `${((v - shown.v) * scale + 0.5) * 100}%`,
         }
       : {
-          left: `calc(50% + ${(u - shown.u) * tileSize * scale}px)`,
-          top: `calc(50% + ${(v - shown.v) * tileSize * scale}px)`,
-        }
+          '--map-x': `calc(50% + ${(u - shown.u) * tileSize * scale}px)`,
+          '--map-y': `calc(50% + ${(v - shown.v) * tileSize * scale}px)`,
+        }) as React.CSSProperties
 
   const kit = React.useMemo<MapDrawingKit>(
     () => ({

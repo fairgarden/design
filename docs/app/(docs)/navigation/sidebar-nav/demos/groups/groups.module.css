@@ -1,0 +1,4 @@
+/* The docs layout's sidebar column: 240 px. */
+.column {
+  inline-size: min(100%, var(--size-px-13));
+}

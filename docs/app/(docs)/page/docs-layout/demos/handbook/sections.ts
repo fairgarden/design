@@ -1,0 +1,105 @@
+/** The Composting page's sections: its headings (and so its contents) and their text, in order. */
+export const sections: { id: string; title: string; level: 2 | 3; body: string }[] = [
+  {
+    id: 'what-goes-in',
+    title: 'What goes in',
+    level: 2,
+    body: 'A good heap is about two parts brown to one part green by volume. Chop anything thicker than a thumb, and leave out what the lists below don’t name.',
+  },
+  {
+    id: 'greens',
+    title: 'Greens',
+    level: 3,
+    body: 'Spent crops, weeds that haven’t set seed, grass clippings, coffee grounds and raw fruit and vegetable scraps from home. Greens bring the nitrogen and the water.',
+  },
+  {
+    id: 'browns',
+    title: 'Browns',
+    level: 3,
+    body: 'Dry leaves, straw, shredded cardboard and the wood chips stacked behind the shed. Browns bring the carbon and the air; add a forkful with every bucket of greens.',
+  },
+  {
+    id: 'what-stays-out',
+    title: 'What stays out',
+    level: 3,
+    body: 'Meat, fish, dairy, cooked food, diseased plants and the roots of bindweed and couch grass. They draw rats or survive the heap and come back in the beds.',
+  },
+  {
+    id: 'the-three-bays',
+    title: 'The three bays',
+    level: 2,
+    body: 'The left bay takes new material. The middle bay holds last month’s heap while it cooks, and the right bay holds compost that is resting and nearly ready. A chalk board on the gate says which bay is which this month.',
+  },
+  {
+    id: 'turning-days',
+    title: 'Turning days',
+    level: 3,
+    body: 'On the first Saturday of the month the work-day crew moves each bay one step to the right. Bring gloves; forks are in the shed.',
+  },
+  {
+    id: 'moisture',
+    title: 'Moisture',
+    level: 3,
+    body: 'The heap should feel as damp as a wrung-out sponge. If it is dry, the crew waters it as they turn; if it is wet and flat, they fork in more browns.',
+  },
+  {
+    id: 'heat',
+    title: 'Heat',
+    level: 3,
+    body: 'A working heap is warm a hand’s depth down within a week of turning. The thermometer on the middle bay’s post reads the core; the crew notes it on the board.',
+  },
+  {
+    id: 'troubleshooting',
+    title: 'Troubleshooting',
+    level: 2,
+    body: 'Most heaps that misbehave are too wet, too dry or short of one kind of material. Tell a plot coordinator before changing a bay yourself.',
+  },
+  {
+    id: 'smells',
+    title: 'Smells',
+    level: 3,
+    body: 'A sour or rotten smell means too much green and too little air. Fork in dry browns and turn the bay early; the smell goes within days.',
+  },
+  {
+    id: 'pests',
+    title: 'Pests',
+    level: 3,
+    body: 'Rats come for cooked food and bread. Keep the lids on, bury fresh scraps in the middle of the bay, and report tunnels to a coordinator.',
+  },
+  {
+    id: 'a-slow-heap',
+    title: 'A slow heap',
+    level: 3,
+    body: 'A cold, dry heap needs water and greens; a cold, wet one needs browns and a turn. Small heaps stay cold, so the bays are filled before they are left to cook.',
+  },
+  {
+    id: 'worm-bins',
+    title: 'Worm bins',
+    level: 2,
+    body: 'Two worm bins sit in the shade of the tool shed for kitchen scraps in winter, when the big heap is too cold to work.',
+  },
+  {
+    id: 'feeding-the-worms',
+    title: 'Feeding the worms',
+    level: 3,
+    body: 'Feed them little and often, bury food under the bedding, and keep citrus, onions and anything cooked out of them.',
+  },
+  {
+    id: 'harvesting-castings',
+    title: 'Harvesting castings',
+    level: 3,
+    body: 'In spring, move the bedding to one side, add fresh food there, and lift the dark castings from the other side a week later, once the worms have moved.',
+  },
+  {
+    id: 'sharing-finished-compost',
+    title: 'Sharing finished compost',
+    level: 2,
+    body: 'Finished compost is dark, crumbly and smells of the woods. When the right bay is ready, the plot coordinators post a sign-up on the gate.',
+  },
+  {
+    id: 'the-sign-up',
+    title: 'The sign-up',
+    level: 3,
+    body: 'Each plot takes two barrow loads in the order of the sign-up; the rest goes to the shared herb beds and the seedling benches.',
+  },
+]

@@ -1,0 +1,92 @@
+/*
+ * Syntax tiers for highlighted code outside a Code Block: inline code in
+ * prose and the type signatures in API tables (starry-night `pl-*` and the
+ * docs pipeline's `fgd-*` classes). Compose `syntax` into the part that
+ * holds the code, in a top-level rule outside any @layer:
+ *   .code { composes: syntax from '../../utils/syntax.module.css'; }
+ * Scoped to `.syntax`, so it never reaches a Code Block, whose own rules
+ * color its source. The same three tiers as the Code Block: the ink, the
+ * secondary step 12 and the primary step 11, with weight and slant telling
+ * the rest apart. Print turns every step black; weight and slant remain.
+ */
+@layer base {
+  .syntax :global(.pl-c) {
+    color: var(--primary11);
+    font-style: italic;
+  }
+
+  .syntax :global(.pl-ba),
+  .syntax :global(.pl-sg),
+  .syntax :global(.fgd-pu),
+  .syntax :global(.fgd-ae),
+  .syntax :global(.fgd-td) {
+    color: var(--primary11);
+    font-style: normal;
+  }
+
+  /* Keywords and tags. */
+  .syntax :global(.pl-k),
+  .syntax :global(.pl-ent),
+  .syntax :global(.fgd-jt),
+  .syntax :global(.fgd-ht),
+  .syntax :global(.fgd-this) {
+    color: var(--secondary12);
+    font-weight: var(--font-weight-7);
+  }
+
+  /* Constants: numbers, booleans, null, built-in types, CSS values. */
+  .syntax :global(.pl-c1),
+  .syntax :global(.pl-s .pl-v),
+  .syntax :global(.fgd-num),
+  .syntax :global(.fgd-bool),
+  .syntax :global(.fgd-n),
+  .syntax :global(.fgd-cv),
+  .syntax :global(.fgd-bt) {
+    color: var(--secondary12);
+    font-weight: var(--font-weight-4);
+    font-style: normal;
+  }
+
+  /* Strings: the ink, oblique. */
+  .syntax :global(.pl-s),
+  .syntax :global(.pl-pds),
+  .syntax :global(.pl-sr),
+  .syntax :global(.fgd-av),
+  .syntax :global(.fgd-ps) {
+    color: var(--primary12);
+    font-style: italic;
+  }
+
+  /* Functions and entity names: the ink, heavy. */
+  .syntax :global(.pl-e),
+  .syntax :global(.pl-en),
+  .syntax :global(.pl-v),
+  .syntax :global(.pl-smw),
+  .syntax :global(.fgd-jv) {
+    color: var(--primary12);
+    font-weight: var(--font-weight-7);
+  }
+
+  /* Plain identifiers and code inside a string: the ink. */
+  .syntax :global(.pl-smi),
+  .syntax :global(.pl-s .pl-s1),
+  .syntax :global(.fgd-op),
+  .syntax :global(.fgd-ak),
+  .syntax :global(.fgd-da),
+  .syntax :global(.fgd-cp),
+  .syntax :global(.fgd-te),
+  .syntax :global(.fgd-jsx) {
+    color: var(--primary12);
+    font-style: normal;
+  }
+
+  .syntax :global(.pl-mh),
+  .syntax :global(.pl-mb),
+  .syntax :global(.pl-ms) {
+    font-weight: var(--font-weight-7);
+  }
+
+  .syntax :global(.pl-mi) {
+    font-style: italic;
+  }
+}

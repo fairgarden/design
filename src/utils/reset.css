@@ -14,7 +14,14 @@
     margin: 0;
   }
 
+  /*
+   * The page's scrollbar gutter is always reserved [D201], so the content
+   * never moves sideways when the scrollbar comes or goes: a popup's scroll
+   * lock hiding it, a popup or a filter changing the page's height. With
+   * overlay scrollbars nothing is reserved.
+   */
   :where(html) {
+    scrollbar-gutter: stable;
     -webkit-text-size-adjust: none;
     text-size-adjust: none;
     block-size: 100%;

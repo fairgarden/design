@@ -8,6 +8,11 @@ import { chip, chipParts } from '../../actions/chip'
 import { dangerScale, useFieldInvalid } from '../field'
 import { Ground } from '../../foundations/ground'
 import { Icon, iconHost, type IconName } from '../../foundations/icon'
+import { OutlineMorphFrame } from '../../foundations/outline-morph'
+import {
+  useOutlineMorphRoot,
+  useTypingMorphPolicy,
+} from '../../foundations/outline-morph/useOutlineMorphRoot'
 import { highlightMatch } from '../../utils/highlightMatch'
 import { StatusGlyph } from '../../utils/StatusGlyph'
 import { OverlayScope, overlayAttributes, overlayScaleClassName } from '../../utils/overlay'
@@ -35,8 +40,8 @@ import styles from './combobox.module.css'
  *   `data-popup-open` → edge --primary12, chevron rotated. Item
  *   `data-highlighted` → --primary4 plus the start bar [D145];
  *   `data-selected` → leading ✓ plus --font-weight-6; `data-disabled` →
- *   --role-muted. Popup `data-starting-style` / `data-ending-style` → the
- *   clip reveal from `data-side` [D91].
+ *   --role-muted. Popup: the outline morph or nothing; it opens and
+ *   closes at once [D205].
  * - Parts: base (the box), input, icon, clear, trigger, chips (each a
  *   removable chip, the Chip module's parts through `chipParts` on Base
  *   UI's Chip and ChipRemove, plus `chip` for its keyboard ring, stack
@@ -46,6 +51,14 @@ import styles from './combobox.module.css'
  *   `white` page scope, writes no `data-theme`, and takes the [D92] frame
  *   [D139, D156]. `plate` → the box is a nested `white` Ground.
  * - Container: none; inherits its context.
+ * - Outline morph [D204]: on by default (`morph={false}` opts out). The
+ *   box's ring (drawn on any focus) grows into the popup's frame and back
+ *   onto it (foundations/outline-morph, ring `focus-within`); the frame
+ *   renders beside the popup in its Positioner, and the popup answers
+ *   `data-outline-morph`. Typing policy: explicit opens and the first open
+ *   of a focus session morph; later opens and closes caused by typing are
+ *   instant, as every open without the morph is [D205]. Filtering
+ *   resizes the open popup its own way. No box style changes.
  */
 export const combobox = cva(styles.base, {
   variants: {
@@ -155,6 +168,16 @@ export type ComboboxProps<Multiple extends boolean | undefined = false> = RootPr
   primary?: ComboboxVariants['primary']
   /** Secondary Radix scale. Unused at rest; the danger scale while invalid. */
   secondary?: ComboboxVariants['secondary']
+  /**
+   * The outline morph: the box's focus ring grows into the popup's frame as
+   * it opens and shrinks back onto the ring as it closes. Opens you ask for
+   * (a click, the chevron, the arrow keys) and the first open after focus
+   * arrives morph; later opens and closes caused by typing are instant.
+   * Instant under reduced motion; off in forced colors and print, and
+   * wherever `--fgd-outline-morph: none` applies. Default `true`; `false`
+   * opens and closes the popup at once.
+   */
+  morph?: boolean
 }
 
 const CREATE = '\u0000create:'
@@ -201,12 +224,25 @@ export function Combobox<Multiple extends boolean | undefined = false>(
     plate,
     primary,
     secondary,
+    morph = true,
+    onOpenChange,
     ...rootProps
   } = props
 
   const scope = useScopeAttributes()
   const invalid = useFieldInvalid()
   const resolvedSecondary = invalid ? dangerScale : secondary
+
+  // The outline morph follows the root's open state, with the typing policy [D204].
+  const typing = useTypingMorphPolicy()
+  const outline = useOutlineMorphRoot({
+    open: rootProps.open,
+    defaultOpen: rootProps.defaultOpen,
+    onOpenChange,
+    morph,
+    ring: 'focus-within',
+    instant: typing.instant,
+  })
 
   // The query, for match marking and the add row.
   const [innerQuery, setInnerQuery] = React.useState(String(defaultInputValue ?? ''))
@@ -329,6 +365,7 @@ export function Combobox<Multiple extends boolean | undefined = false>(
   return (
     <BaseCombobox.Root<ComboboxOption, Multiple>
       {...(rootProps as RootProps<Multiple>)}
+      onOpenChange={outline.onOpenChange}
       multiple={multiple}
       items={viewItems}
       value={currentValue as BaseCombobox.Root.Props<ComboboxOption, Multiple>['value']}
@@ -346,6 +383,8 @@ export function Combobox<Multiple extends boolean | undefined = false>(
     >
       {plate ? (
         <BaseCombobox.InputGroup
+          ref={outline.refs?.sourceRef}
+          onFocus={typing.onFocus}
           className={boxClassName}
           render={
             <Ground
@@ -360,13 +399,19 @@ export function Combobox<Multiple extends boolean | undefined = false>(
           {boxChildren}
         </BaseCombobox.InputGroup>
       ) : (
-        <BaseCombobox.InputGroup {...scope} className={boxClassName}>
+        <BaseCombobox.InputGroup
+          {...scope}
+          ref={outline.refs?.sourceRef}
+          onFocus={typing.onFocus}
+          className={boxClassName}
+        >
           {boxChildren}
         </BaseCombobox.InputGroup>
       )}
       <BaseCombobox.Portal>
         <BaseCombobox.Positioner className={styles.positioner} sideOffset={8} collisionPadding={16}>
           <BaseCombobox.Popup
+            ref={outline.refs?.targetRef}
             {...overlayAttributes}
             className={[styles.popup, overlayScaleClassName].join(' ')}
           >
@@ -394,6 +439,7 @@ export function Combobox<Multiple extends boolean | undefined = false>(
               </BaseCombobox.List>
             </OverlayScope>
           </BaseCombobox.Popup>
+          {outline.refs ? <OutlineMorphFrame ref={outline.refs.frameRef} /> : null}
         </BaseCombobox.Positioner>
       </BaseCombobox.Portal>
     </BaseCombobox.Root>

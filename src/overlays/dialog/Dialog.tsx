@@ -8,6 +8,8 @@ import { cva, type VariantProps } from 'class-variance-authority'
 
 import { Button, type ButtonProps } from '../../actions/button'
 import { Ground } from '../../foundations/ground'
+import { useOutlineMorphRoot } from '../../foundations/outline-morph/useOutlineMorphRoot'
+import { useMergedRef } from '../../utils/assignRef'
 import { cx, resolveClassName } from '../../utils/className'
 import {
   OverlayScope,
@@ -17,6 +19,7 @@ import {
 } from '../../utils/overlay'
 import { primaryScaleVariants, secondaryScaleVariants } from '../../utils/scales'
 import { GroundContext, rootScope, type FieldPreset } from '../../utils/scope'
+import { DialogMorphContext, DialogMorphLayer } from './morph'
 import styles from './dialog.module.css'
 
 /*
@@ -33,8 +36,12 @@ import styles from './dialog.module.css'
  * - Color fallback: the panel takes the `white` preset's defaults; explicit
  *   props apply inside it. Actions are §9.2 Buttons; a destructive one
  *   takes `destructive` [D192].
- * - States: Popup data-starting-style / data-ending-style → the clip reveal,
- *   instant under --motionNotOK [D91]; data-nested-dialog-open → the lower
+ * - States: the outline morph (§9.17) from the trigger's ring or edge to the
+ *   panel and back (Popup `data-outline-morph` → the border takes the face
+ *   while the overlay frame draws the edge), else at once [D205, D206]:
+ *   `morph={false}`, no rendered trigger (a programmatic open with none),
+ *   the solid cover from --md-n-above, reduced motion, forced colors;
+ *   data-nested-dialog-open → the lower
  *   dialog stays visible, framed and inert, never dimmed; body
  *   data-overflow-y-start / -end (the §10.19 Scroll Area names, set here)
  *   → the scroll-edge rules; Close is an icon-only Button (§9.2 states).
@@ -76,15 +83,35 @@ export const dialogBackdrop = cva(styles.backdrop, {
 
 type DialogVariants = VariantProps<typeof dialog>
 
-/** Props for Dialog: Base UI Dialog.Root props (`open`, `onOpenChange`, `modal` …). */
-export type DialogProps<Payload = unknown> = BaseDialog.Root.Props<Payload>
+/** Props for Dialog: Base UI Dialog.Root props (`open`, `onOpenChange`, `modal` …) plus `morph`. */
+export type DialogProps<Payload = unknown> = BaseDialog.Root.Props<Payload> & {
+  /**
+   * The outline morph (§9.17) [D206]: the trigger's focus ring (or edge)
+   * grows into the panel as it opens and shrinks back onto the trigger as
+   * it closes. Default `true`. `false`, like `--fgd-outline-morph: none`
+   * on an ancestor, opens and closes at once; so does an open with no
+   * rendered trigger, or with the solid cover.
+   */
+  morph?: boolean
+}
 
 /**
  * Groups the parts of a dialog (Base UI Dialog.Root). Modal by default: the
  * page stays visible, inert and scroll-locked, never dimmed [D24 → D121].
  */
 export function Dialog<Payload = unknown>(props: DialogProps<Payload>) {
-  return <BaseDialog.Root<Payload> {...props} />
+  const { morph = true, open, defaultOpen, onOpenChange, ...rest } = props
+  const root = useOutlineMorphRoot({ open, defaultOpen, onOpenChange, morph, surface: true })
+  return (
+    <DialogMorphContext.Provider value={root.refs}>
+      <BaseDialog.Root<Payload>
+        {...rest}
+        open={open}
+        defaultOpen={defaultOpen}
+        onOpenChange={root.onOpenChange}
+      />
+    </DialogMorphContext.Provider>
+  )
 }
 
 /** Props for DialogTrigger: Button props plus Base UI's trigger `handle` and `payload`. */
@@ -95,11 +122,17 @@ export type DialogTriggerProps = ButtonProps & {
   payload?: unknown
 }
 
-/** Opens the dialog. Renders a Button (§9.2); author its label in title case [D160]. */
+/**
+ * Opens the dialog. Renders a Button (§9.2); author its label in title case
+ * [D160]. The panel morphs out of it; a detached trigger (`handle`) sits
+ * outside the root's morph, so its dialog opens at once.
+ */
 export function DialogTrigger(props: DialogTriggerProps) {
   const { handle, payload, ...buttonProps } = props
+  const morph = React.useContext(DialogMorphContext)
   return (
     <BaseDialog.Trigger
+      ref={handle ? undefined : morph?.sourceRef}
       handle={handle}
       payload={payload}
       render={<Button {...(buttonProps as ButtonProps)} />}
@@ -144,7 +177,9 @@ export type DialogPopupProps = BaseDialog.Popup.Props & {
    * tide and heather → `royal`; apricot and rose → `brick`; see
    * `companionField` from Ground). It renders as a `kind="field"` Ground of
    * that preset at full-viewport geometry with no edge, fully opaque,
-   * hiding the page [D88 → D121]. Omitted (default), no backdrop is painted.
+   * hiding the page [D88 → D121]; with it, the panel opens and closes at
+   * once from --md-n-above, since the cover hides the trigger the outline
+   * morph would grow from [D206]. Omitted (default), no backdrop is painted.
    */
   cover?: FieldPreset
   /** The element the portal renders into. Default: `document.body`. */
@@ -157,8 +192,8 @@ export type DialogPopupProps = BaseDialog.Popup.Props & {
  * The modal panel, rendered in its Base UI Portal as a nested `white` scope
  * with the --border-size-2-25 --primary12 frame. Below --md-n-above it is a
  * full-screen opaque sheet; from --md-n-above it is centered, at least
- * --size-px-7-5 from every edge. It opens instantly or with a clip reveal,
- * never a fade. Compose `DialogTopBar` (eyebrow, title, close), `DialogBody`
+ * --size-px-7-5 from every edge. It grows out of its trigger by the outline
+ * morph, or opens at once; never a fade. Compose `DialogTopBar` (eyebrow, title, close), `DialogBody`
  * and `DialogActions` inside it.
  *
  * Focus moves to the first field in the body, else to Base UI's default
@@ -175,9 +210,12 @@ export function DialogPopup(props: DialogPopupProps) {
     className,
     initialFocus,
     children,
+    ref,
     ...rest
   } = props
 
+  const morph = React.useContext(DialogMorphContext)
+  const popupRef = useMergedRef<HTMLDivElement>(ref, morph?.targetRef)
   const bodyRef = React.useRef<HTMLDivElement | null>(null)
   const context = React.useMemo<DialogContextValue>(() => ({ bodyRef }), [])
   const scales = overlayScales(primary, secondary)
@@ -193,6 +231,7 @@ export function DialogPopup(props: DialogPopupProps) {
       {cover ? <DialogCover preset={cover} /> : null}
       <BaseDialog.Popup
         {...rest}
+        ref={popupRef}
         {...overlayAttributes}
         initialFocus={initialFocus ?? focusFirstField}
         className={resolveClassName(className, (extra) =>
@@ -200,7 +239,8 @@ export function DialogPopup(props: DialogPopupProps) {
             wide,
             primary: scales.primary,
             secondary: scales.secondary,
-            className: cx(overlayActionClassName, extra),
+            // Over the solid cover the trigger is hidden at the first frame: no morph from md [D206].
+            className: cx(overlayActionClassName, cover ? styles.overCover : undefined, extra),
           })
         )}
       >
@@ -208,6 +248,7 @@ export function DialogPopup(props: DialogPopupProps) {
           <OverlayScope>{children}</OverlayScope>
         </DialogContext.Provider>
       </BaseDialog.Popup>
+      <DialogMorphLayer morph={morph} />
     </BaseDialog.Portal>
   )
 }

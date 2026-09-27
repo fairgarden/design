@@ -99,10 +99,10 @@
       transition-timing-function: var(--ease-out-3);
     }
 
-    /* Hover transitions [D181]: --fgd-duration-quick, --ease-out-3. */
+    /* Hover transitions [D181]: --fgd-duration-quick, --ease-out-3; the glyph's weight steps [D205]. */
     .label,
     .glyph {
-      transition-property: text-decoration-color, stroke-width;
+      transition-property: text-decoration-color;
       transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }

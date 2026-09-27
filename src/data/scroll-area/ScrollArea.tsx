@@ -25,9 +25,9 @@ import styles from './scroll-area.module.css'
  * - Color fallback: inherits the scope.
  * - States: Scrollbar `data-orientation` → its edge; `data-hovering`,
  *   `data-scrolling` → the panel scrollbar shows and the thumb widens;
- *   Thumb `:active` → --primary12; Root `data-has-overflow-x/-y` → the
- *   gutter is reserved; `data-overflow-{x,y}-{start,end}` → each `edge`
- *   rule; Viewport `:focus-visible` → ring.
+ *   Thumb `:active` → --primary12; `data-overflow-{x,y}-{start,end}` →
+ *   each `edge` rule; Viewport `:focus-visible` → ring. The gutter is
+ *   always reserved (overflow is known only after mount) [D201].
  * - Parts: base, viewport, content, scrollbar, thumb, corner, edge
  *   (edgeStart, edgeEnd).
  * - Scope: none.
@@ -169,9 +169,8 @@ export function ScrollArea(props: ScrollAreaProps) {
         {...(focusable ? null : { tabIndex: -1 })}
       >
         <BaseScrollArea.Content
-          className={cx(styles.content, contentClassName)}
-          // Base UI writes `min-width: fit-content` inline; `false` lifts it.
-          {...(fitContent ? null : { style: { minWidth: 0 } })}
+          // Base UI writes `min-width: fit-content` inline; `contentFluid` lifts it in the module.
+          className={cx(styles.content, !fitContent && styles.contentFluid, contentClassName)}
         >
           {children}
         </BaseScrollArea.Content>

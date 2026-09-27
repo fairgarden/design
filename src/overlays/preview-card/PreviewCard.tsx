@@ -30,9 +30,8 @@ import styles from './preview-card.module.css'
  *   the popup's scope.
  * - Compound variants: none. Defaults: none; color axes: none.
  * - Color fallback: the popup takes the `white` preset's defaults.
- * - States: Popup data-starting-style / data-ending-style → the clip reveal
- *   from the trigger side (data-side), instant under --motionNotOK and on
- *   data-instant [D91]; Arrow data-side → the tail's edge. Opens after
+ * - States: the card appears and goes at once, a hover preview with no
+ *   motion [D205]; Arrow data-side → the tail's edge. Opens after
  *   600 ms of hover and closes 300 ms after leave.
  * - Parts: positioner, base (the popup), arrow and tail, thumb, title,
  *   description, domain.

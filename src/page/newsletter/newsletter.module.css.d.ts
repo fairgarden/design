@@ -18,6 +18,7 @@ declare const styles: {
   readonly "layout": string;
   readonly "legal": string;
   readonly "pitch": string;
+  readonly "postcode": string;
   readonly "postcodeField": string;
   readonly "printLine": string;
   readonly "printUrl": string;

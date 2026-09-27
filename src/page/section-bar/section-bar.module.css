@@ -356,10 +356,6 @@
       transition: block-size var(--fgd-duration-disclosure) var(--ease-out-3);
     }
 
-    .jumpPanel {
-      transition: clip-path var(--fgd-duration-disclosure) var(--ease-out-3);
-    }
-
     .jumpItem,
     .jumpLabel {
       transition: color var(--fgd-duration-quick) var(--ease-out-3);
@@ -585,12 +581,13 @@
     block-size: 0;
   }
 
-  .jumpPanel[data-starting-style],
-  .jumpPanel[data-ending-style] {
-    clip-path: inset(0 0 100% 0);
-  }
-
-  .jumpPanel[data-instant] {
+  /*
+   * Outline morph [D204] (`morph`, the default): while the overlay draws
+   * the frame, the Jump panel's own edge takes its face. Without the morph
+   * the panel opens and closes at once [D205].
+   */
+  .jumpPanel[data-outline-morph] {
+    border-color: var(--primary1);
     transition: none;
   }
 

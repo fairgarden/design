@@ -6,7 +6,9 @@
  * `edgeLine` draw the disabled `line-dotted-fine` edge as true dots
  * [D36, D68]. Colors are role variables only; local custom properties carry
  * dimensions only. The popup is a portaled `white` page scope framed by
- * --border-size-2 --primary12 [D92, D139, D156].
+ * --border-size-2 --primary12 [D92, D139, D156]. It opens and closes by
+ * the outline morph (the popup answers `data-outline-morph`,
+ * foundations/outline-morph) or at once [D205].
  */
 
 /* Composition sits in top-level rules, outside the layers: Lightning CSS
@@ -118,9 +120,6 @@
    * width, and never wider than the viewport minus the page margins.
    */
   .popup {
-    /* The clip reveal starts from the trigger side. */
-    --select-reveal-from: inset(0 0 100% 0);
-
     box-sizing: border-box;
     min-inline-size: var(--anchor-width);
     max-inline-size: calc(100vw - 2 * var(--fgd-space-margin));
@@ -215,7 +214,7 @@
 
   @media (--motionOK) {
     .base {
-      transition-property: border-color, border-width, outline-color;
+      transition-property: border-color;
       transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
@@ -224,10 +223,6 @@
       transition: rotate var(--fgd-duration-quick) var(--ease-out-3);
     }
 
-    /* The clip reveal (the edge wipes open), never a fade [D91]. */
-    .popup {
-      transition: clip-path var(--fgd-duration-disclosure) var(--ease-out-3);
-    }
   }
 }
 
@@ -372,15 +367,14 @@
     display: none;
   }
 
-  /* Placement: a popup above its trigger reveals from its bottom edge. */
-  .popup[data-side='top'] {
-    --select-reveal-from: inset(100% 0 0 0);
-  }
-
-  /* The clip reveal from the trigger side [D91]; instant under --motionNotOK. */
-  .popup[data-starting-style],
-  .popup[data-ending-style] {
-    clip-path: var(--select-reveal-from);
+  /*
+   * Outline morph [D204]: while the overlay draws the frame, the popup's own
+   * edge takes its face and its own transitions stay off. Without the morph
+   * the popup opens and closes at once (no reveal of its own) [D205].
+   */
+  .popup[data-outline-morph] {
+    border-color: var(--primary1);
+    transition: none;
   }
 }
 

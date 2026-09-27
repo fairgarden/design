@@ -1,8 +1,8 @@
 import * as React from 'react'
 import Link from 'next/link'
 import type { SitemapSectionData } from '@fairgarden/docs/createSitemap/types'
-import { toHref } from './href'
-import styles from './chrome.module.css'
+import { sitemapHref } from '@fairgarden/design/utils/docs/toSidebarItems'
+import styles from './pages-index.module.css'
 
 /**
  * Wraps the auto-generated part of each section index (`extractToIndex`
@@ -16,7 +16,7 @@ export function PagesIndex({ data }: { data?: SitemapSectionData; children?: Rea
     <ul className={styles.index}>
       {data.pages.map((page) => (
         <li key={page.path}>
-          <Link href={toHref(data.prefix, page.path)} className={styles.indexCard}>
+          <Link href={sitemapHref(data.prefix, page.path)} className={styles.indexCard}>
             <span className={styles.indexTitle}>{page.title}</span>
             <span className={styles.indexDescription}>{page.description}</span>
           </Link>

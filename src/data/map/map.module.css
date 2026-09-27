@@ -13,8 +13,13 @@
  * `building`, `area`, `route`, `altRoute`).
  *
  * Colors are role variables only; the MapLibre canvas reads them at runtime
- * [D158]. Local custom property: --map-ratio, the frame's aspect ratio (a
- * dimension). MapLibre's stylesheet is not needed: `canvas` carries the two
+ * [D158]. Local custom properties (dimensions, written inline by the
+ * component, never a real property, §1.11.1): --map-ratio, the frame's
+ * aspect ratio; --map-x and --map-y, a marker's or label's physical offset
+ * in the frame (`left` / `top`: map coordinates don't mirror in RTL);
+ * --map-snapshot-width and --map-snapshot-height, the print snapshot's
+ * off-screen host.
+ * MapLibre's stylesheet is not needed: `canvas` carries the two
  * rules its canvas relies on, and no MapLibre control, marker or popup is
  * used.
  */
@@ -147,6 +152,22 @@
     display: block;
   }
 
+  /*
+   * The off-screen host the print snapshot renders into (a second MapLibre
+   * instance, appended to the body while it draws): fixed at the viewport
+   * origin, hidden and never hit-tested, at the snapshot's size, which the
+   * component writes as --map-snapshot-width and --map-snapshot-height.
+   */
+  .snapshotHost {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--map-snapshot-width);
+    height: var(--map-snapshot-height);
+    visibility: hidden;
+    pointer-events: none;
+  }
+
   /* The print snapshot waits hidden; print shows it (see the print layer). */
   .snapshot {
     display: none;
@@ -179,6 +200,8 @@
    */
   .marker {
     position: absolute;
+    top: var(--map-y);
+    left: var(--map-x);
     display: grid;
     place-items: center;
     box-sizing: border-box;
@@ -226,6 +249,8 @@
   /* Labels: live text on a nested opaque plate with a --border-size-1 edge (§8.10). */
   .label {
     position: absolute;
+    top: var(--map-y);
+    left: var(--map-x);
     padding-inline: var(--size-px-1);
     border: var(--border-size-1) solid var(--primary12);
     background-color: var(--role-halo);

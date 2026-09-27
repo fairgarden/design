@@ -1,10 +1,11 @@
 /*
  * The print remap (§1.11.6, §1.4.5). Print always renders light, whatever
  * the screen mode, including inside a data-theme="dark" band: steps 1–5 of
- * the role scales go white and 6–12 black; contrast inks and label aliases
- * black; halo, grounds, tints and grain white; the seam black. Browsers drop
- * backgrounds by default, so fills and decorative patterns vanish; borders
- * and inline SVG print. Modules add structural print rules only.
+ * the role scales (danger included) go white and 6–12 black, so the danger
+ * roles print black; contrast inks and label aliases black; halo, grounds,
+ * tints and grain white; the seam black. Browsers drop backgrounds by
+ * default, so fills and decorative patterns vanish; borders and inline SVG
+ * print. Modules add structural print rules only.
  */
 @layer print {
   @media print {
@@ -87,12 +88,25 @@
       --action10: #000;
       --action11: #000;
       --action12: #000;
+      --danger1: #fff;
+      --danger2: #fff;
+      --danger3: #fff;
+      --danger4: #fff;
+      --danger5: #fff;
+      --danger6: #000;
+      --danger7: #000;
+      --danger8: #000;
+      --danger9: #000;
+      --danger10: #000;
+      --danger11: #000;
+      --danger12: #000;
       --primary-contrast: #000;
       --secondary-contrast: #000;
       --action-contrast: #000;
       --role-inverse: #000;
       --role-action-label: #000;
       --role-action-pressed-label: #000;
+      --role-danger-label: #000;
       --role-select-mark: #000;
       --role-status-text: #000;
       --role-halo: #fff;

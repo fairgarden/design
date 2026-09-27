@@ -97,6 +97,8 @@
     /* Radii (§1.5.11): Open Props --radius-1 (2 px) and --radius-round plus these steps. */
     --radius-0: 0;
     --radius-2-25: 8px;
+    /* File Tabs' folder tabs, shaped as paper tabs (the source's 12 px tab radius); frames keep --radius-2-25. */
+    --radius-2-75: 12px;
     --radius-3-25: 20px;
     /* ≈ 1/7 of the frame's width, max 64 px; the frame's parent is its container. */
     --fgd-radius-feature: min(calc(100cqi / 7), var(--size-px-9));
@@ -104,11 +106,11 @@
     --radius-conditional-2-25: clamp(0px, calc(100vw - 100%) * 1e5, var(--radius-2-25));
     --radius-conditional-3-25: clamp(0px, calc(100vw - 100%) * 1e5, var(--radius-3-25));
 
-    /* Type families (§1.5.5) [D159]; --fgd-font-fine is set per mode (theme.css). */
-    --fgd-font-display: 'Fraunces Variable', 'Source Serif 4 Variable', var(--font-old-style);
-    --fgd-font-text: 'Source Serif 4 Variable', var(--font-transitional);
-    --fgd-font-ui: 'Figtree Variable', var(--font-geometric-humanist);
-    --fgd-font-mono: 'IBM Plex Mono', var(--font-mono);
+    /* Type families (§1.5.5) [D159]; --fgd-font-fine is set per mode (theme.css). Each webfont's metric-matched fallback follows it (utils/font-fallbacks.css) [D201]. */
+    --fgd-font-display: 'Fraunces Variable', 'Fraunces Fallback', 'Source Serif 4 Variable', var(--font-old-style);
+    --fgd-font-text: 'Source Serif 4 Variable', 'Source Serif 4 Fallback', var(--font-transitional);
+    --fgd-font-ui: 'Figtree Variable', 'Figtree Fallback', var(--font-geometric-humanist);
+    --fgd-font-mono: 'IBM Plex Mono', 'IBM Plex Mono Fallback', var(--font-mono);
     --fgd-font-display-settings: 'SOFT' 0, 'WONK' 0;
     --fgd-font-accent-settings: 'SOFT' 100, 'WONK' 1;
 
@@ -149,6 +151,8 @@
     --fgd-size-control-md: 40px;
     --fgd-size-control-xl: 56px;
     --fgd-size-hit: 44px;
+    /* The room a hanging File Tabs control (the code block's ⋮) needs past its host's edge: its 20 px ear and clearance; hosts leave it free and unclipped (§9.13). */
+    --fgd-size-file-tabs-control: var(--size-px-5);
     --fgd-size-icon-block: 36px;
     /* The logo mark in a lockup, a prominent mark sized to the header bar: 40 px, 48 px from --lg-n-above, 32 px below --xs-n-below (§1.5.12). */
     --fgd-size-logo: var(--fgd-size-control-md);
@@ -195,6 +199,65 @@
     --fgd-duration-disclosure: 200ms;
     --fgd-delay-tooltip: 500ms;
     --fgd-duration-toast: 6s;
+    /*
+     * The expanding box's View Transitions morph (a field-like trigger into
+     * its dialog). Open runs --fgd-duration-expand on --fgd-ease-expand;
+     * close runs --fgd-duration-disclosure, so it stays the faster. The ease
+     * is a critically damped spring (stiffness 0.3, damping 1) sampled as
+     * linear() stops, its one undershoot stop clipped to 0 so the curve
+     * never leaves [0, 1]: no overshoot. JS mirror: utils/tokens.ts.
+     */
+    --fgd-duration-expand: 333ms;
+    /*
+     * The anchored morph's close (the outline morph, §9.17) [D204]: an alias
+     * of --fgd-duration-disclosure (200 ms), so the Morph tier owns its own
+     * name and a close is never slower than its open. The outline morph reads
+     * it, --fgd-duration-expand and --fgd-ease-expand from the trigger at each
+     * open and close; 0ms turns the morph off. JS mirror: utils/tokens.ts.
+     */
+    --fgd-duration-collapse: var(--fgd-duration-disclosure);
+    /*
+     * The modal morph (the outline morph on Dialog, Alert Dialog and the
+     * drawer's sheets, §9.17) [D206]: the same curve, stretched for the
+     * longer travel from a trigger to a panel or a full sheet; the close is
+     * 0.6 × the open, the ratio of 333 to 200. 0ms turns that morph off.
+     * JS mirror: SURFACE_DURATION_MS in utils/tokens.ts.
+     */
+    --fgd-duration-expand-surface: 400ms;
+    --fgd-duration-collapse-surface: 240ms;
+    --fgd-ease-expand: linear(
+      0,
+      0,
+      0.294,
+      0.401,
+      0.58,
+      0.706,
+      0.75,
+      0.825,
+      0.878,
+      0.896,
+      0.927,
+      0.949,
+      0.957,
+      0.97,
+      0.979,
+      0.982,
+      0.987,
+      0.991,
+      0.992,
+      0.995,
+      0.996,
+      0.998,
+      0.999,
+      0.999,
+      1
+    );
+    /*
+     * The code block's variant and JS/TS swap: the rendered code swaps after
+     * this delay while its changed lines grow or shrink over it. JS mirror
+     * (useCode's transformDelay / variantSwapDelay): utils/tokens.ts.
+     */
+    --fgd-duration-swap: 350ms;
     /* Desktop Navigation Menu hover intent [D182]; JS mirror: utils/tokens.ts. */
     --fgd-delay-nav-open: 150ms;
     --fgd-delay-nav-close: 300ms;
@@ -247,6 +310,10 @@
     :root {
       --fgd-duration-quick: var(--fgd-duration-instant);
       --fgd-duration-disclosure: var(--fgd-duration-instant);
+      --fgd-duration-expand: var(--fgd-duration-instant);
+      --fgd-duration-expand-surface: var(--fgd-duration-instant);
+      --fgd-duration-collapse-surface: var(--fgd-duration-instant);
+      --fgd-duration-swap: var(--fgd-duration-instant);
     }
   }
 

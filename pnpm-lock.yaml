@@ -36,6 +36,9 @@ importers:
       '@fairgarden/distribution':
         specifier: ^0.1.0-alpha.4
         version: 0.1.0-alpha.4
+      '@fairgarden/docs':
+        specifier: ^0.13.4-canary.18
+        version: 0.13.4-canary.18(@types/react@19.3.0)(next@16.3.6(@babel/core@7.29.7)(@types/node@26.6.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(prettier@3.9.8)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3)
       '@material-symbols/svg-400':
         specifier: ^0.47.5
         version: 0.47.5
@@ -139,8 +142,8 @@ importers:
         specifier: workspace:*
         version: link:..
       '@fairgarden/docs':
-        specifier: ^0.13.3
-        version: 0.13.3(@types/react@19.3.0)(next@16.3.6(@babel/core@7.29.7)(@types/node@26.6.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(prettier@3.9.8)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3)
+        specifier: ^0.13.4-canary.18
+        version: 0.13.4-canary.18(@types/react@19.3.0)(next@16.3.6(@babel/core@7.29.7)(@types/node@26.6.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(prettier@3.9.8)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3)
       '@protomaps/basemaps':
         specifier: ^5.7.2
         version: 5.7.2
@@ -459,8 +462,8 @@ packages:
     resolution: {integrity: sha512-qG7XAxG3Z8r1PqER6dpcv9d/QFY1q/WDtQnEn3Oyr37ok0j4eNmSUiysJ/URUypvqshWtHny6SAVtiM1sw8jxQ==}
     hasBin: true
 
-  '@fairgarden/docs@0.13.3':
-    resolution: {integrity: sha512-63b5bRVF0aZrYOto7XcVyS8/0vU6gn+cVvSxNZwaALs/zqm2LpPUha+hYadOiIGMXzcpoXJiwzJ8CAVAs6Nk7A==}
+  '@fairgarden/docs@0.13.4-canary.18':
+    resolution: {integrity: sha512-3DHKz0F8Hp+p7hkcZ3ywo5UoStXLu6x/nd0ZV+76x+4FCtKEQmBmdLXg+YNPWikEokWViF/unl19rJirpFlEyg==}
     engines: {node: '>=22.18.0'}
     hasBin: true
     peerDependencies:
@@ -3607,7 +3610,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@fairgarden/docs@0.13.3(@types/react@19.3.0)(next@16.3.6(@babel/core@7.29.7)(@types/node@26.6.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(prettier@3.9.8)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3)':
+  '@fairgarden/docs@0.13.4-canary.18(@types/react@19.3.0)(next@16.3.6(@babel/core@7.29.7)(@types/node@26.6.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(prettier@3.9.8)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3)':
     dependencies:
       '@babel/runtime': 7.29.7
       '@csstools/postcss-light-dark-function': 3.0.4(postcss@8.5.28)

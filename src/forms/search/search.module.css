@@ -8,6 +8,8 @@
  * field is the Input's box (§10.1), the submit a `solid` Button butted to
  * it, and the clear and header trigger icon-only Buttons: their parts are
  * left to their own modules (§1.11.1). Colors are role variables only.
+ * The popup opens and closes by the outline morph (it answers
+ * `data-outline-morph`, foundations/outline-morph) or at once [D205].
  */
 
 /* Composition sits in top-level rules, outside the layers: Lightning CSS
@@ -93,9 +95,6 @@
 
   /* The §9.1 panel at field width: the white scope's face, the --border-size-2 --primary12 frame. */
   .popup {
-    /* The clip reveal starts from the trigger side. */
-    --search-reveal-from: inset(0 0 100% 0);
-
     box-sizing: border-box;
     inline-size: var(--anchor-width);
     max-inline-size: calc(100vw - 2 * var(--fgd-space-margin));
@@ -233,12 +232,6 @@
     }
   }
 
-  @media (--motionOK) {
-    /* The clip reveal (the edge wipes open), never a fade [D91]. */
-    .popup {
-      transition: clip-path var(--fgd-duration-disclosure) var(--ease-out-3);
-    }
-  }
 }
 
 @layer variants {
@@ -303,15 +296,14 @@
     display: none;
   }
 
-  /* Placement: a popup above the field reveals from its bottom edge. */
-  .popup[data-side='top'] {
-    --search-reveal-from: inset(100% 0 0 0);
-  }
-
-  /* The clip reveal from the trigger side [D91]; instant under --motionNotOK. */
-  .popup[data-starting-style],
-  .popup[data-ending-style] {
-    clip-path: var(--search-reveal-from);
+  /*
+   * Outline morph [D204]: while the overlay draws the frame, the popup's own
+   * edge takes its face and its own transitions stay off. Without the morph
+   * the popup opens and closes at once (no reveal of its own) [D205].
+   */
+  .popup[data-outline-morph] {
+    border-color: var(--primary1);
+    transition: none;
   }
 }
 

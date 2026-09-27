@@ -6,11 +6,21 @@ import { cva, type VariantProps } from 'class-variance-authority'
 
 import { Button, type ButtonProps } from '../../actions/button'
 import { Icon, type IconName } from '../../foundations/icon'
+import {
+  HOVER_REASONS,
+  useOutlineMorphRoot,
+} from '../../foundations/outline-morph/useOutlineMorphRoot'
 import { StatusGlyph, statusScales } from '../../utils/StatusGlyph'
 import { cx, resolveClassName } from '../../utils/className'
 import { OVERLAY_SIDE_OFFSET } from '../../utils/overlay'
 import { secondaryScaleVariants } from '../../utils/scales'
 import { MenuPopupFrame, type MenuPopupProps } from './popup'
+import {
+  MENUBAR_SWITCH_REASONS,
+  MenuMorphContext,
+  MenuMorphTrigger,
+  MenubarMorphContext,
+} from './morph'
 import styles from './menu.module.css'
 
 export { menu, type MenuPopupProps } from './popup'
@@ -35,9 +45,8 @@ export { menu, type MenuPopupProps } from './popup'
  *   data-checked on checkbox and
  *   radio items → leading ✓ or ● in --primary12, label --font-weight-6, no
  *   fill and no bar [D145]; data-disabled → --role-muted, no highlight;
- *   submenu trigger data-popup-open → stays highlighted; popup
- *   data-starting-style / data-ending-style with data-side → the clip
- *   reveal from the trigger side, instant under --motionNotOK [D91].
+ *   submenu trigger data-popup-open → stays highlighted; the popup opens
+ *   and closes by the outline morph or at once [D205].
  * - Parts: positioner, base (the popup), item, itemIcon (the leading slot),
  *   itemLabel, checkGlyph, dangerGlyph, shortcut, submenuChevron,
  *   groupLabel, separator.
@@ -45,6 +54,15 @@ export { menu, type MenuPopupProps } from './popup'
  *   `white` scope (`page` scheme, no data-theme) with the --border-size-2
  *   --primary12 edge [D148, D156]. The trigger is a Button (§9.2).
  * - Container: none; inherits its context.
+ * - Outline morph [D204]: on by default (`morph={false}` on Menu opts
+ *   out). The trigger's ring (keyboard) or edge (pointer: its outline, its
+ *   fill, or its box in its ink) grows into the popup's frame and back
+ *   (foundations/outline-morph); MenuTrigger takes the source ref, the popup
+ *   answers `data-outline-morph` and the frame renders beside it. Without
+ *   the morph a menu opens and closes at once [D205]: hover opens
+ *   (`openOnHover`), switching menus in a Menubar, and submenus (MenuSubmenu
+ *   turns the morph off inside it: they open on hover as the pointer passes,
+ *   and their row has no outline to grow from).
  */
 export const menuItem = cva(styles.item, {
   variants: {
@@ -61,12 +79,37 @@ export const menuItem = cva(styles.item, {
 
 type MenuItemVariants = VariantProps<typeof menuItem>
 
-/** Props for Menu: Base UI Menu.Root props (`open`, `onOpenChange`, `modal` …). */
-export type MenuProps<Payload = unknown> = BaseMenu.Root.Props<Payload>
+/** Props for Menu: Base UI Menu.Root props (`open`, `onOpenChange`, `modal` …) plus the outline morph. */
+export type MenuProps<Payload = unknown> = BaseMenu.Root.Props<Payload> & {
+  /**
+   * The outline morph: the trigger's focus ring (or, opened by pointer, its
+   * edge) grows into the popup's frame as it opens and shrinks back as it
+   * closes. Hover opens and submenus are instant [D205]. Instant
+   * under reduced motion; off in forced colors and print, and wherever
+   * `--fgd-outline-morph: none` applies. Default `true`; `false` opens and
+   * closes the popup at once.
+   */
+  morph?: boolean
+}
 
-/** Groups the parts of a menu (Base UI Menu.Root). */
+/** Groups the parts of a menu (Base UI Menu.Root) and wires its outline morph. */
 export function Menu<Payload = unknown>(props: MenuProps<Payload>) {
-  return <BaseMenu.Root<Payload> {...props} />
+  const { morph = true, onOpenChange, ...rootProps } = props
+  const inMenubar = React.useContext(MenubarMorphContext)
+  const outline = useOutlineMorphRoot({
+    open: rootProps.open,
+    defaultOpen: rootProps.defaultOpen,
+    onOpenChange,
+    morph,
+    instant: (_open, details) =>
+      details.reason != null &&
+      (inMenubar ? MENUBAR_SWITCH_REASONS : HOVER_REASONS).has(details.reason),
+  })
+  return (
+    <MenuMorphContext.Provider value={outline.refs}>
+      <BaseMenu.Root<Payload> {...rootProps} onOpenChange={outline.onOpenChange} />
+    </MenuMorphContext.Provider>
+  )
 }
 
 /** Props for MenuTrigger: Button props plus Base UI's trigger options. */
@@ -85,7 +128,7 @@ export type MenuTriggerProps = ButtonProps & {
 export function MenuTrigger(props: MenuTriggerProps) {
   const { handle, payload, ...buttonProps } = props
   return (
-    <BaseMenu.Trigger
+    <MenuMorphTrigger
       handle={handle}
       payload={payload}
       render={<Button {...(buttonProps as ButtonProps)} />}
@@ -98,7 +141,7 @@ export function MenuTrigger(props: MenuTriggerProps) {
  * scope: --primary1 face, --border-size-2 --primary12 edge, --radius-2-25,
  * --size-px-1 padding, 200 px to --size-px-14 wide and at least the
  * trigger's width, --size-px-2 from the trigger, aligned to its start
- * edge. It opens instantly or with a clip reveal from the trigger side.
+ * edge. It opens from its trigger by the outline morph, or at once [D205].
  * Inside a `MenuSubmenu` it flies out to the end side.
  */
 export function MenuPopup(props: MenuPopupProps) {
@@ -258,10 +301,15 @@ export type MenuSubmenuProps = BaseMenu.SubmenuRoot.Props
 /**
  * Groups a submenu's trigger and popup (Base UI Menu.SubmenuRoot). The
  * nested MenuPopup flies out to the end side at --size-px-2 and flips at
- * the viewport edge.
+ * the viewport edge and opens at once: the outline morph stays
+ * with the top-level menu [D204].
  */
 export function MenuSubmenu(props: MenuSubmenuProps) {
-  return <BaseMenu.SubmenuRoot {...props} />
+  return (
+    <MenuMorphContext.Provider value={null}>
+      <BaseMenu.SubmenuRoot {...props} />
+    </MenuMorphContext.Provider>
+  )
 }
 
 /** Props for MenuSubmenuTrigger: Base UI Menu.SubmenuTrigger props plus a leading glyph. */

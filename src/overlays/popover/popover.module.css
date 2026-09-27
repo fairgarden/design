@@ -1,15 +1,18 @@
 /*
  * Popover (§10.15). CVA function `popover` in Popover.tsx.
  * Parts: positioner (the layer), base (the popup), arrow (the tail's box)
- * and tail (its drawing), title, term (the title in the definition kind),
- * description, source, close.
+ * and tail (its drawing), tailCap (the outline morph's copy of the tail),
+ * title, term (the title in the definition kind), description, source,
+ * close.
  *
  * The anchored overlay surface (§10.1): the `white` scope's --primary1 face,
  * a --border-size-2 --primary12 frame in both modes, never --role-rule
  * [D92, D156], --radius-2-25, --size-px-2 from the trigger. No shadow, no
- * backdrop. Motion is instant or a clip reveal from the trigger side, never
- * a fade [D91]. Colors are role variables only; local custom properties
- * carry dimensions only.
+ * backdrop. Motion is the outline morph (the popup answers
+ * `data-outline-morph`; its tail grows out of the frame's edge through the
+ * tail cap) [D204] or none: the panel opens and closes at once, never a
+ * fade [D205]. Colors are role variables only; local custom
+ * properties carry dimensions only.
  */
 
 /* Composition sits in top-level rules, outside the layers: Lightning CSS
@@ -36,20 +39,20 @@
 }
 
 @layer base {
+  /* The tail's dimensions live on the layer, so the popup's tail and the morph's tail cap share them. */
   .positioner {
+    --popover-tail-inline: var(--size-px-2-5);
+    --popover-tail-block: calc(var(--size-px-2-5) / 2 + var(--border-size-2));
+
     z-index: var(--layer-3);
   }
 
   /*
    * Base: anchored, the viewport less its margins wide. The clip bleeds past
-   * the frame by the tail's depth, so the tail shows at rest and leads the
-   * reveal.
+   * the frame by the tail's depth, so the tail shows.
    */
   .base {
-    --popover-tail-inline: var(--size-px-2-5);
-    --popover-tail-block: calc(var(--size-px-2-5) / 2 + var(--border-size-2));
     --popover-bleed: calc(-1 * var(--popover-tail-block));
-    --popover-clip-from: inset(var(--popover-bleed));
 
     position: relative;
     box-sizing: border-box;
@@ -97,13 +100,21 @@
     stroke-width: var(--border-size-2);
   }
 
-  @media (--motionOK) {
-    .base {
-      transition-property: clip-path;
-      transition-duration: var(--fgd-duration-disclosure);
-      transition-timing-function: var(--ease-out-3);
-    }
+  /*
+   * The outline morph's tail cap (OutlineMorphTail) [D204]: the tail's box,
+   * placed on the popup's tail by the engine, drawn with the popup's face
+   * and the frame's color (currentColor), which the morph animates.
+   */
+  .tailCap {
+    inline-size: var(--popover-tail-inline);
+    block-size: var(--popover-tail-block);
   }
+
+  .tailCap .tail {
+    fill: var(--fgd-outline-morph-tail-fill);
+    stroke: currentColor;
+  }
+
 }
 
 @layer variants {
@@ -132,32 +143,21 @@
 }
 
 @layer states {
-  /* The reveal starts at the trigger edge (data-side names where the panel sits). */
-  .base[data-side='bottom'] {
-    --popover-clip-from: inset(var(--popover-bleed) var(--popover-bleed) 100% var(--popover-bleed));
-  }
-
-  .base[data-side='top'] {
-    --popover-clip-from: inset(100% var(--popover-bleed) var(--popover-bleed) var(--popover-bleed));
-  }
-
-  .base[data-side='left'],
-  .base[data-side='inline-start'] {
-    --popover-clip-from: inset(var(--popover-bleed) var(--popover-bleed) var(--popover-bleed) 100%);
-  }
-
-  .base[data-side='right'],
-  .base[data-side='inline-end'] {
-    --popover-clip-from: inset(var(--popover-bleed) 100% var(--popover-bleed) var(--popover-bleed));
-  }
-
-  .base[data-starting-style],
-  .base[data-ending-style] {
-    clip-path: var(--popover-clip-from);
-  }
-
-  .base[data-instant] {
+  /*
+   * Outline morph [D204] (Popover's `morph`, the default): while the
+   * overlay draws the frame, the popup's own edge takes its face and its
+   * own transitions stay off. The popup's tail is held hidden meanwhile (a
+   * discrete hold, D196): the tail cap stands in for it above the frame,
+   * growing out of the frame's edge, and the tail shows again on the same
+   * pixels as the cap goes.
+   */
+  .base[data-outline-morph] {
+    border-color: var(--primary1);
     transition: none;
+  }
+
+  .base[data-outline-morph] .arrow {
+    visibility: hidden;
   }
 
   /* The tail sits on the edge facing the trigger and points at it. */
@@ -170,17 +170,43 @@
     rotate: 180deg;
   }
 
-  .arrow[data-side='left'],
+  /* The physical sides place the tail physically, so it faces the trigger on a right-to-left page too. */
+  .arrow[data-side='left'] {
+    right: calc(-1 * (var(--popover-tail-inline) + var(--popover-tail-block)) / 2);
+    rotate: 90deg;
+  }
+
+  .arrow[data-side='right'] {
+    left: calc(-1 * (var(--popover-tail-inline) + var(--popover-tail-block)) / 2);
+    rotate: -90deg;
+  }
+
   .arrow[data-side='inline-start'] {
     inset-inline-end: calc(-1 * (var(--popover-tail-inline) + var(--popover-tail-block)) / 2);
     rotate: 90deg;
   }
 
-  .arrow[data-side='right'],
   .arrow[data-side='inline-end'] {
     inset-inline-start: calc(-1 * (var(--popover-tail-inline) + var(--popover-tail-block)) / 2);
     rotate: -90deg;
   }
+
+
+  /* The tail cap turns as the tail does; the engine places it. */
+  .tailCap[data-side='top'] {
+    rotate: 180deg;
+  }
+
+  .tailCap[data-side='left'],
+  .tailCap[data-side='inline-start'] {
+    rotate: 90deg;
+  }
+
+  .tailCap[data-side='right'],
+  .tailCap[data-side='inline-end'] {
+    rotate: -90deg;
+  }
+
 }
 
 @layer print {

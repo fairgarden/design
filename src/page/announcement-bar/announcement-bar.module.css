@@ -143,13 +143,7 @@
     appearance: none;
   }
 
-  @media (--motionOK) {
-    .dismiss {
-      transition-property: color, background-color;
-      transition-duration: var(--fgd-duration-quick);
-      transition-timing-function: var(--ease-out-3);
-    }
-  }
+  /* No transition on the dismiss control: its press is the inverse pair from none, which steps at once [D205]. */
 
   /* ≤ 2 lines at base; one line from --md-n-above (authored short). */
   @media (--md-n-above) {

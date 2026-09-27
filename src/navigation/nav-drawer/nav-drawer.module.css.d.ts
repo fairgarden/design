@@ -24,6 +24,7 @@ declare const styles: {
   readonly "menuLabel": string;
   readonly "menuTrigger": string;
   readonly "nav": string;
+  readonly "navHost": string;
   readonly "panel": string;
   readonly "rowLabel": string;
   readonly "scroll": string;

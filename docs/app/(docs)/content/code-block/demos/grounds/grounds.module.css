@@ -1,0 +1,20 @@
+.stack {
+  display: grid;
+  flex: 1 1 100%;
+  gap: var(--size-px-3);
+  min-inline-size: 0;
+}
+
+.face {
+  display: grid;
+  gap: var(--size-px-2-5);
+  min-inline-size: 0;
+  padding: var(--size-px-5);
+  border: var(--border-size-1) solid var(--role-edge);
+  border-radius: var(--radius-2-25);
+}
+
+.name {
+  font-family: var(--fgd-font-ui);
+  font-weight: var(--font-weight-6);
+}

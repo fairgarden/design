@@ -152,7 +152,8 @@ export function Radio<Value>(props: RadioProps<Value>) {
         {isSwatch ? (
           <span
             className={styles.swatch}
-            style={swatch ? { background: swatch } : undefined}
+            // Content, as a custom property only; the module maps it to `background`.
+            style={swatch ? ({ '--radio-swatch': swatch } as React.CSSProperties) : undefined}
             aria-hidden="true"
           />
         ) : null}

@@ -17,6 +17,8 @@ import {
   type DialogPopupProps,
   type DialogTitleProps,
 } from '../dialog'
+import { DialogMorphContext } from '../dialog/morph'
+import { useOutlineMorphRoot } from '../../foundations/outline-morph/useOutlineMorphRoot'
 import { cx, resolveClassName } from '../../utils/className'
 import { overlayAttributes } from '../../utils/overlay'
 import { secondaryScaleVariants } from '../../utils/scales'
@@ -40,7 +42,8 @@ import styles from './alert-dialog.module.css'
  *   A confirm that destroys (every danger alert's, and any Delete, Remove
  *   or Discard) is a `solid` Button with `destructive`: the danger fill
  *   [D192].
- * - States: as Dialog. Focus opens on the least destructive action
+ * - States: as Dialog, the outline morph from the trigger included [D206].
+ *   Focus opens on the least destructive action
  *   (AlertDialogCancel); Esc means Cancel; outside presses never dismiss.
  * - Parts: base (the panel, with the Dialog's base), glyph.
  * - Scope: as Dialog. The glyph writes the overlay scope attributes beside
@@ -51,8 +54,15 @@ export const alertDialog = cva(styles.base)
 
 export type AlertDialogStatus = 'warning' | 'danger'
 
-/** Props for AlertDialog: Base UI AlertDialog.Root props (`open`, `onOpenChange` …). */
-export type AlertDialogProps<Payload = unknown> = BaseAlertDialog.Root.Props<Payload>
+/** Props for AlertDialog: Base UI AlertDialog.Root props (`open`, `onOpenChange` …) plus `morph`. */
+export type AlertDialogProps<Payload = unknown> = BaseAlertDialog.Root.Props<Payload> & {
+  /**
+   * The outline morph (§9.17) from the trigger to the panel and back, as
+   * Dialog's [D206]. Default `true`; `false` opens and closes at once, as
+   * does an alert opened with no rendered trigger (from a Menu item).
+   */
+  morph?: boolean
+}
 
 /**
  * Groups the parts of an alert dialog (Base UI AlertDialog.Root): always
@@ -60,7 +70,18 @@ export type AlertDialogProps<Payload = unknown> = BaseAlertDialog.Root.Props<Pay
  * Dialog, never deeper; the Dialog stays visible, framed and inert.
  */
 export function AlertDialog<Payload = unknown>(props: AlertDialogProps<Payload>) {
-  return <BaseAlertDialog.Root<Payload> {...props} />
+  const { morph = true, open, defaultOpen, onOpenChange, ...rest } = props
+  const root = useOutlineMorphRoot({ open, defaultOpen, onOpenChange, morph, surface: true })
+  return (
+    <DialogMorphContext.Provider value={root.refs}>
+      <BaseAlertDialog.Root<Payload>
+        {...rest}
+        open={open}
+        defaultOpen={defaultOpen}
+        onOpenChange={root.onOpenChange}
+      />
+    </DialogMorphContext.Provider>
+  )
 }
 
 /** Props for AlertDialogTrigger: Button props plus Base UI's trigger `handle` and `payload`. */
@@ -71,11 +92,16 @@ export type AlertDialogTriggerProps = ButtonProps & {
   payload?: unknown
 }
 
-/** Opens the alert dialog. Renders a Button (§9.2) whose label names the act ("Delete Photos"). */
+/**
+ * Opens the alert dialog. Renders a Button (§9.2) whose label names the act
+ * ("Delete Photos"); the alert morphs out of it.
+ */
 export function AlertDialogTrigger(props: AlertDialogTriggerProps) {
   const { handle, payload, ...buttonProps } = props
+  const morph = React.useContext(DialogMorphContext)
   return (
     <BaseAlertDialog.Trigger
+      ref={handle ? undefined : morph?.sourceRef}
       handle={handle}
       payload={payload}
       render={<Button {...(buttonProps as ButtonProps)} />}

@@ -1,0 +1,201 @@
+/*
+ * The MDX map's prose (createMdxComponents) and the demo title (DemoTitle),
+ * set in the design system's own type roles (§3.3, §3.5). Parts: `h1`,
+ * `h2`, `h3`, `h4`, `anchor` (a heading's self-link), `p`, `list`, `code`
+ * (inline code), `tableWrap`, `table`, `blockquote`, `hr`, `demoTitle`.
+ *
+ * Headings: H1 type-display and H2 type-h2 in --role-heading, H3
+ * type-subhead in --primary12. Gaps are visual (half-leading trimmed) on the
+ * px series. Colors are role variables only; nothing is transparent,
+ * shadowed or graded [D12].
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.h1 {
+  composes: typeDisplay from '../type.module.css';
+}
+
+.h2 {
+  composes: typeH2 from '../type.module.css';
+}
+
+.h3,
+.demoTitle {
+  composes: typeSubhead from '../type.module.css';
+}
+
+.h4 {
+  composes: typeRunin from '../type.module.css';
+}
+
+.p,
+.list {
+  composes: typeBody from '../type.module.css';
+}
+
+.table,
+.blockquote {
+  composes: typeBodyUi from '../type.module.css';
+}
+
+.code {
+  composes: syntax from '../syntax.module.css';
+}
+
+@layer base {
+  .h1 {
+    margin-block: 0 var(--size-px-7-5);
+    color: var(--role-heading);
+  }
+
+  .h2 {
+    margin-block: var(--size-px-8-5) var(--size-px-5);
+    padding-block-end: var(--size-px-3);
+    border-block-end: var(--border-size-1) solid var(--role-hairline);
+    color: var(--role-heading);
+  }
+
+  .h3,
+  .demoTitle {
+    margin-block: var(--size-px-7-5) var(--size-px-3);
+    color: var(--primary12);
+  }
+
+  .h4 {
+    margin-block: var(--size-px-5) var(--size-px-2);
+  }
+
+  /* A heading's self-link: the heading's own ink, the bare-text underline on hover [D181]. */
+  .anchor {
+    color: inherit;
+    text-decoration-line: none;
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  .p {
+    max-inline-size: var(--fgd-measure-reading);
+    margin-block: 0 var(--size-px-3);
+  }
+
+  /* The first paragraph after the H1 is the page's description: type-lead. */
+  .h1 + .p {
+    margin-block-end: var(--size-px-7-5);
+    font-family: var(--fgd-font-ui);
+    font-size: var(--fgd-font-size-lead);
+    font-weight: var(--font-weight-4);
+    line-height: var(--font-lineheight-3);
+  }
+
+  .list {
+    max-inline-size: var(--fgd-measure-reading);
+    margin-block: 0 var(--size-px-3);
+    padding-inline-start: var(--size-px-5);
+  }
+
+  .list > li + li {
+    margin-block-start: var(--size-px-1);
+  }
+
+  /* Inline code: highlighted in the Code Block's syntax tiers. */
+  .code {
+    font-family: var(--fgd-font-mono);
+    font-size: 0.9em;
+    color: var(--primary12);
+  }
+
+  .tableWrap {
+    margin-block: var(--size-px-5);
+    overflow-x: auto;
+  }
+
+  /* Table frame [D83]: rule top and bottom, hairline body rows. */
+  .table {
+    inline-size: 100%;
+    border-collapse: collapse;
+    border-block: var(--border-size-1) solid var(--role-rule);
+  }
+
+  .table th {
+    padding: var(--size-px-2) var(--size-px-2-5);
+    border-block-end: var(--border-size-1) solid var(--role-rule);
+    color: var(--role-muted);
+    font-family: var(--fgd-font-ui);
+    font-size: var(--fgd-font-size-label);
+    font-weight: var(--font-weight-6);
+    line-height: var(--font-lineheight-1);
+    letter-spacing: var(--font-letterspacing-3);
+    text-align: start;
+    text-transform: uppercase;
+  }
+
+  .table td {
+    padding: var(--size-px-2-5);
+    border-block-end: var(--border-size-1) solid var(--role-hairline);
+    vertical-align: top;
+  }
+
+  .table tr:last-child td {
+    border-block-end: none;
+  }
+
+  /* Callouts: a block edge in --role-rule, never a tinted fill alone [D84]. */
+  .blockquote {
+    max-inline-size: var(--fgd-measure-reading);
+    margin: var(--size-px-5) 0;
+    padding: var(--size-px-3) var(--size-px-5);
+    border-inline-start: var(--border-size-2-25) solid var(--role-rule);
+    background-color: var(--primary2);
+  }
+
+  .blockquote p {
+    margin: 0;
+  }
+
+  .hr {
+    margin-block: var(--size-px-7-5);
+    border: none;
+    border-block-start: var(--border-size-1) solid var(--role-hairline);
+  }
+}
+
+@layer states {
+  .anchor:hover {
+    text-decoration-line: underline;
+  }
+
+  .anchor:focus-visible {
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: var(--fgd-focus-offset);
+  }
+}
+
+@layer print {
+  @media print {
+    /* Headings stay with what follows; tables and callouts never split. */
+    .h1,
+    .h2,
+    .h3,
+    .h4,
+    .demoTitle {
+      break-after: avoid;
+    }
+
+    .tableWrap {
+      overflow: visible;
+    }
+
+    .table tr,
+    .blockquote {
+      break-inside: avoid;
+    }
+
+    /* Fills drop on paper; the edge carries the callout. */
+    .blockquote {
+      background: none;
+    }
+  }
+}

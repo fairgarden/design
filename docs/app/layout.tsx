@@ -1,14 +1,8 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import '@fairgarden/design/utils/global.css'
 import '@fairgarden/design/utils/fonts'
 import { ClientProvider } from '@fairgarden/design/utils/ClientProvider'
-import { Ground } from '@fairgarden/design/foundations/ground'
-import { Lockup } from '@/components/Logo'
-import { Navigation } from '@/components/Navigation'
-import { Search } from '@/components/Search'
-import styles from '@/components/chrome.module.css'
-import { sitemap } from './sitemap'
+import { preloadCoreFonts } from './fontPreloads'
 
 export const metadata: Metadata = {
   title: '@fairgarden/design',
@@ -16,27 +10,26 @@ export const metadata: Metadata = {
 }
 
 /**
- * The page is a paper band, the page root; the chrome takes its colors from
- * the scope's role variables, so it follows the page mode like any component.
+ * What every page needs, the docs and the demo previews alike: the global
+ * stylesheet (tokens, the Radix scales, the follow-OS mode and the roles),
+ * the fonts, and `ClientProvider`, which gives the components the locale
+ * and its direction.
+ *
+ * The four core font faces are preloaded, so text usually paints in its
+ * webfont first; the fonts module's metric-matched fallbacks keep any late
+ * swap from moving a line [D201].
+ *
+ * The rest sits below this layout. The docs pages are the `(docs)` group,
+ * whose layout adds the chrome and the providers only the docs use (the
+ * code engine, the toast bar). The full-page demo previews are `preview/`,
+ * a chromeless layout of their own, outside the docs.
  */
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  preloadCoreFonts()
   return (
     <html lang="en">
       <body>
-        <ClientProvider locale="en-US">
-          <Ground preset="paper" kind="band" render={<div className={styles.page} />}>
-            <header className={styles.header}>
-              <Link href="/" className={styles.brand}>
-                <Lockup />
-              </Link>
-              <Search />
-            </header>
-            <div className={styles.frame}>
-              <Navigation sitemap={sitemap} />
-              <main className={styles.main}>{children}</main>
-            </div>
-          </Ground>
-        </ClientProvider>
+        <ClientProvider locale="en-US">{children}</ClientProvider>
       </body>
     </html>
   )

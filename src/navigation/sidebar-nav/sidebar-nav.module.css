@@ -1,0 +1,270 @@
+/*
+ * Sidebar Navigation (§9.15). CVA function `sidebarNav` in SidebarNav.tsx.
+ *
+ * Parts: base (the nav), groups, group, collapsible, headingRow,
+ * headingTrigger, heading, toggle, glyph (the Collapsible module's D109
+ * glyph), panel, list, item, link, plain, label, labelText.
+ *
+ * Line-based [D202]: groups split by --role-hairline rules; pages hang on a
+ * --border-size-1 --role-hairline guide at the list's start edge; the
+ * current page draws the --border-size-2-25 --primary12 bar over the guide.
+ * No fills, no shadows. Colors are role variables only; there are no local
+ * custom properties.
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.heading {
+  composes: typeLabel from '../../utils/type.module.css';
+}
+
+.link {
+  composes: typeBodyUi from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  .groups,
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .group,
+  .item,
+  .collapsible {
+    display: block;
+  }
+
+  /* Groups split by a hairline rule, --size-px-3 on either side [§4.4]. */
+  .group + .group {
+    margin-block-start: var(--size-px-3);
+    padding-block-start: var(--size-px-3);
+    border-block-start: var(--border-size-1) solid var(--role-hairline);
+  }
+
+  /* The caps heading (type-label, caps wayfinding [D165]): a 44 px row. */
+  .heading {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    min-block-size: var(--fgd-size-hit);
+    margin: 0;
+    color: var(--primary12);
+  }
+
+  /* A collapsible group's row: the heading, then its toggle at the end. */
+  .headingRow {
+    display: flex;
+    align-items: center;
+    gap: var(--size-px-2);
+  }
+
+  .headingRow > .heading {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+
+  /* A group without a page: the whole row is the toggle. */
+  .headingTrigger {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: var(--fgd-size-hit);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-1);
+    background: none;
+    color: var(--primary12);
+    text-align: start;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .headingTrigger > .heading {
+    flex: 1 1 auto;
+    text-decoration-color: var(--role-accent);
+    text-decoration-thickness: var(--border-size-2);
+    text-underline-offset: var(--size-px-1);
+  }
+
+  /* The glyph-only toggle: a 44 px square, the glyph at the chrome tier. */
+  .toggle {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    inline-size: var(--fgd-size-hit);
+    block-size: var(--fgd-size-hit);
+    margin: 0;
+    margin-inline-end: calc(-1 * var(--size-px-3));
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-1);
+    background: none;
+    color: var(--primary12);
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .glyph {
+    flex: none;
+  }
+
+  /* The clip reveal (§1.5.15) [D91]: the panel wipes open; never faded. */
+  .panel {
+    block-size: var(--collapsible-panel-height);
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  /* Pages hang on a --border-size-1 hairline guide at the list's start edge. */
+  .list {
+    border-inline-start: var(--border-size-1) solid var(--role-hairline);
+  }
+
+  /* Subpages: one level in, on their own guide. */
+  .list .list {
+    margin-inline-start: var(--size-px-3);
+  }
+
+  /* A page: type-body-ui at weight 400, a 44 px row, --size-px-3 off the guide. */
+  .link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    min-block-size: var(--fgd-size-hit);
+    padding-block: var(--size-px-2);
+    padding-inline: var(--size-px-3) 0;
+    color: var(--primary12);
+    text-decoration-line: none;
+  }
+
+  .plain {
+    color: var(--role-muted);
+  }
+
+  /* The current bar, over the guide: a border, so it survives forced colors. */
+  .link::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: calc(-1 * var(--border-size-1));
+    border-inline-start: 0 solid var(--primary12);
+    pointer-events: none;
+  }
+
+  /*
+   * The label reserves its weight-700 box: a hidden copy of its words at
+   * --font-weight-7 (`data-label`) shares the one grid cell, so the cell is
+   * always the bold setting's size and the current page never widens or
+   * rewraps a line (no layout shift on navigation or scrollspy).
+   */
+  .label {
+    display: grid;
+    min-inline-size: 0;
+  }
+
+  .label::after {
+    content: attr(data-label);
+    grid-area: 1 / 1;
+    font-weight: var(--font-weight-7);
+    visibility: hidden;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .labelText {
+    grid-area: 1 / 1;
+  }
+
+  @media (--motionOK) {
+    .panel {
+      transition-property: block-size;
+      transition-duration: var(--fgd-duration-disclosure);
+      transition-timing-function: var(--ease-out-3);
+    }
+  }
+}
+
+@layer compounds {
+  /* Page links fill their row: a block flex box, over Link's inline `nav` row. */
+  .link {
+    display: flex;
+  }
+
+  /* Headings: a flex row over Link's inline `nav` row, the text's own 44 px. */
+  .heading {
+    display: flex;
+  }
+}
+
+@layer states {
+  /* The whole-row toggle: the bare-text underline on its words [D181]. */
+  .headingTrigger:hover > .heading {
+    text-decoration-line: underline;
+  }
+
+  .toggle:active,
+  .headingTrigger:active {
+    background-color: var(--primary12);
+    color: var(--role-inverse);
+  }
+
+  .toggle:active .glyph {
+    color: var(--role-inverse);
+  }
+
+  .toggle:focus-visible,
+  .headingTrigger:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: calc(-1 * var(--border-size-2));
+  }
+
+  /* Rows: the ring inset inside the row (the list parent raises it over Link's ring). */
+  .list .link:focus-visible,
+  .group > .heading:focus-visible,
+  .headingRow > .heading:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: calc(-1 * var(--border-size-2));
+  }
+
+  /* Current page: the --border-size-2-25 start-edge bar and weight 700 [D15]. */
+  .list .link[aria-current='page']::before {
+    border-inline-start-width: var(--border-size-2-25);
+  }
+
+  /* The bar replaces Link's current underline on a page (the list parent raises this over Link's rule). */
+  .list .link[aria-current='page'] {
+    font-weight: var(--font-weight-7);
+    text-decoration-line: none;
+  }
+
+  .panel[data-starting-style],
+  .panel[data-ending-style] {
+    block-size: 0;
+  }
+
+  @media (--forcedColors) {
+    .headingTrigger:hover > .heading {
+      text-decoration-line: underline;
+    }
+  }
+}
+
+@layer print {
+  @media print {
+    /* Screen wayfinding: the page prints alone (§7.7). */
+    .base {
+      display: none;
+    }
+  }
+}

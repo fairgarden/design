@@ -1,0 +1,49 @@
+# Sidebar Nav
+
+The page tree of a documentation site: groups under caps headings, their pages on a hairline guide, and the current page marked. The same component fills the docs layout's sidebar column and its drawer.
+
+```tsx
+import { SidebarNav } from '@fairgarden/design/navigation/sidebar-nav'
+```
+
+Pass `items` as plain data, `{ title, href, items }`, so the column and the drawer render the same object; a docs site builds it from the docs engine's sitemap with `toSidebarItems` from `@fairgarden/design/utils/docs`. Pass `currentPath` and the page whose path matches takes `aria-current="page"`. Links are plain anchors unless you pass `renderLink`, such as `(href) => <NextLink href={href} />`. The `nav` is named "Documentation" unless you pass `label`.
+
+## Groups and pages
+
+import { DemoSidebarNavGroups } from './demos/groups'
+
+<DemoSidebarNavGroups.Title />
+
+Each top-level item with `items` is a group: its heading is caps wayfinding in `type-label`, a link to the group's index page when it has an `href`, and hairline rules split the groups. Pages are `type-body-ui` links on 44 px rows, hung on a hairline guide at the list's start edge; a page's own `items` nest one level in on their own guide. The current page takes the 3 px start-edge bar over the guide and weight 700, and every label reserves its bold width, so moving the current page never rewraps a line. Hover follows the list-link rule: the link-hover ink, never a fill. When the page loads, and whenever the current page changes, its link is scrolled into view inside the column or the drawer that holds it, never by scrolling the page, so nothing around it moves. In print the navigation is hidden.
+
+<DemoSidebarNavGroups />
+
+[See Demo](./demos/groups/)
+
+## Collapsible groups
+
+import { DemoSidebarNavCollapsible } from './demos/collapsible'
+
+<DemoSidebarNavCollapsible.Title />
+
+With `collapsible`, each group is an independent Collapsible, so several may be open. A group with an index page keeps its heading as a link and gets a 44 px glyph toggle beside it; a group without one makes its whole heading row the toggle. The expand/collapse glyph points out when the group is closed and in when it is open, swapping rather than rotating. The group holding the current page starts open in the server HTML; pass an item's `defaultOpen` to override it. The toggle is named after its group ("Garden care pages") unless you pass `toggleLabel`.
+
+<DemoSidebarNavCollapsible />
+
+[See Demo](./demos/collapsible/)
+
+## API Reference
+
+import { TypesSidebarNav, TypesSidebarNavAdditional } from './types'
+
+### SidebarNav
+
+<TypesSidebarNav.SidebarNav />
+
+### Additional types
+
+<TypesSidebarNavAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §9.15 (sidebar navigation) [D202], in the docs layout of §11.15, with the disclosure glyph of §10.13 [D109].

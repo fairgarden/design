@@ -182,9 +182,10 @@
     }
   }
 
+  /* The edge's hover step fades [D140]; the focus ring steps at once [D205]. */
   @media (--motionOK) {
     .base {
-      transition-property: border-color, outline-color;
+      transition-property: border-color;
       transition-duration: var(--fgd-duration-quick);
       transition-timing-function: var(--ease-out-3);
     }
@@ -214,6 +215,22 @@
     align-self: flex-end;
     block-size: auto;
     padding-block-end: calc(var(--size-px-2) - var(--input-edge));
+  }
+
+  /*
+   * `chars`: the box fits the expected answer. The control is --input-chars
+   * characters of its own type wide (the component writes the number
+   * inline); the box adds its padding, edge and any icon, affix or toggle,
+   * and never grows past its container.
+   */
+  .chars {
+    inline-size: fit-content;
+    max-inline-size: 100%;
+  }
+
+  .chars .control {
+    flex: 0 1 auto;
+    inline-size: calc(var(--input-chars) * 1ch);
   }
 
   /* Textarea: at least 3 lines at --fgd-leading-compact; vertical resize only. */

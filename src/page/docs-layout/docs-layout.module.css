@@ -1,0 +1,266 @@
+/*
+ * Docs Layout (§11.15). CVA function `docsLayout` in DocsLayout.tsx; the
+ * root (`base`) is the page's `kind="band"` Ground.
+ *
+ * Parts: base, skipLink, frame (the columns), withSidebar, withToc, sidebar
+ * (its sticky column), main, tocBar (the strip that pins the contents'
+ * compact bar), toc (its sticky column), drawerTrigger.
+ *
+ * Page frame [D163, D202]: placement answers to the viewport custom media
+ * alone, the same steps as the rest of the frame (no new breakpoint):
+ * - base: one column; the sidebar sits in the drawer (the header's menu
+ *   Button), the contents in their compact bar, sticky under the header.
+ * - --fgd-nav-inline-n-above (1024 px by default): the sidebar column, the
+ *   same threshold that swaps the header's drawer for inline navigation.
+ * - --xl-n-above (1440 px): the contents column; the bar goes.
+ * Nothing is measured, so the server HTML paints the final frame [D201].
+ * Colors are role variables only; one local custom property carries a
+ * dimension (--docs-layout-gutter, the page's end gutter).
+ */
+
+/* Composition sits in top-level rules, outside the layers: Lightning CSS
+ * (Next.js with Turbopack) rejects `composes` inside @layer or any nesting.
+ * The composed classes keep their own layers. */
+.skipLink {
+  composes: typeButtonSm from '../../utils/type.module.css';
+}
+
+@layer base {
+  .base {
+    position: relative;
+    min-block-size: 100dvh;
+  }
+
+  /* The skip link: the first stop in the page, shown on focus (§11.5). */
+  .skipLink {
+    position: absolute;
+    inset-block-start: var(--size-px-2);
+    inset-inline-start: var(--fgd-space-margin);
+    z-index: var(--layer-3);
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    min-block-size: var(--fgd-size-hit);
+    padding-inline: var(--size-px-5);
+    border: var(--border-size-2) solid var(--primary12);
+    border-radius: var(--radius-round);
+    background-color: var(--primary12);
+    color: var(--role-inverse);
+    text-decoration-line: none;
+    white-space: nowrap;
+  }
+
+  /*
+   * The columns, capped at --fgd-container-wide (reached at the 1440 px
+   * viewport, so below it they span the viewport less its margins), with
+   * the grid gutter between them. The frame clips sideways at its padding
+   * edge (`clip`, so the sticky columns still dock): a code block's hanging
+   * ⋮ runs its hit area on into the margin, and on a phone past the
+   * viewport, where it must not make the page scroll sideways.
+   */
+  .frame {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: var(--fgd-space-margin);
+    box-sizing: border-box;
+    max-inline-size: var(--fgd-container-wide);
+    margin-inline: auto;
+    padding-inline: var(--fgd-space-margin);
+    overflow-x: clip;
+  }
+
+  /* Below its threshold the sidebar lives in the drawer; the contents column below --xl-n-above. */
+  .sidebar,
+  .toc {
+    display: none;
+  }
+
+  /*
+   * The page. Its end gutter is the room a code block's or demo's hanging
+   * ⋮ always takes, outside the block's frame: --fgd-size-file-tabs-control
+   * (24 px), then --fgd-size-hit from --md-n-above, so the whole 44 px hit
+   * area fits in the column [D197].
+   */
+  .main {
+    --docs-layout-gutter: var(--fgd-size-file-tabs-control);
+
+    min-inline-size: 0;
+    padding-block: var(--size-px-7-5) var(--fgd-space-section);
+    padding-inline-end: var(--docs-layout-gutter);
+  }
+
+  /*
+   * The contents below --xl-n-above [D203]: a strip at the top of the page,
+   * straight under the header's rule, that sticks to the viewport top once
+   * the static header scrolls away, so the bar naming the section in view
+   * stays in reach; the page's one sticky bar [D89]. One fixed height (the
+   * bar's --fgd-size-control-md box in --size-px-2 of ground, the
+   * --fgd-size-control-xl header height) over a --border-size-1 hairline,
+   * opaque page ground across the column and its end gutter, so the page
+   * scrolls cleanly under it. Its panel is an overlay, so opening it moves
+   * nothing. With no items the bar renders nothing and the strip goes.
+   */
+  .tocBar {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: var(--layer-2);
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    block-size: calc(var(--fgd-size-control-xl) + var(--border-size-1));
+    margin-block: calc(-1 * var(--size-px-7-5)) var(--size-px-7-5);
+    margin-inline-end: calc(-1 * var(--docs-layout-gutter));
+    padding-inline-end: var(--docs-layout-gutter);
+    border-block-end: var(--border-size-1) solid var(--role-hairline);
+    background-color: var(--role-ground);
+  }
+
+  .tocBar:empty {
+    display: none;
+  }
+
+  /* A heading a link lands on clears the sticky bar by --size-px-3. */
+  .withToc .main [id] {
+    scroll-margin-block-start: calc(var(--fgd-size-control-xl) + var(--border-size-1) + var(--size-px-3));
+  }
+
+  @media (--md-n-above) {
+    .main {
+      --docs-layout-gutter: var(--fgd-size-hit);
+    }
+  }
+
+  /*
+   * From the inline threshold: the sidebar column, 240 px, sticky at the
+   * viewport top with its own scroll (never the page's), ruled from the
+   * page by a --role-hairline. The stable gutter keeps its width whether
+   * or not it scrolls.
+   */
+  @media (--fgd-nav-inline-n-above) {
+    .withSidebar {
+      grid-template-columns: var(--size-px-13) minmax(0, 1fr);
+    }
+
+    .sidebar {
+      position: sticky;
+      inset-block-start: 0;
+      align-self: start;
+      display: block;
+      box-sizing: border-box;
+      max-block-size: 100dvh;
+      padding-block: var(--size-px-7-5);
+      padding-inline-end: var(--size-px-3);
+      border-inline-end: var(--border-size-1) solid var(--role-hairline);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
+    }
+
+    /*
+     * The current page is the column's initial scroll target where
+     * supported, so the column opens scrolled to it before first paint (the
+     * Sidebar Navigation's layout effect does it elsewhere, after
+     * hydration). Scoped to the column, the scroller it names: outside a
+     * scroll container `nearest` would scroll the page. No snap type is set,
+     * so the alignment is inert otherwise.
+     */
+    .sidebar [aria-current='page'] {
+      scroll-initial-target: nearest;
+      scroll-snap-align: center;
+    }
+  }
+
+  /* From --xl-n-above: the contents column, 240 px, sticky, scrolling on its own when long. */
+  @media (--xl-n-above) {
+    .withToc {
+      grid-template-columns: minmax(0, 1fr) var(--size-px-13);
+    }
+
+    .withSidebar.withToc {
+      grid-template-columns: var(--size-px-13) minmax(0, 1fr) var(--size-px-13);
+    }
+
+    .toc {
+      position: sticky;
+      inset-block-start: 0;
+      align-self: start;
+      display: block;
+      box-sizing: border-box;
+      max-block-size: 100dvh;
+      padding-block: var(--size-px-7-5);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
+    }
+
+    .toc:empty {
+      display: none;
+    }
+
+    /* A `toc` with no items: no column. */
+    .withToc:has(> .toc:empty) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .withSidebar.withToc:has(> .toc:empty) {
+      grid-template-columns: var(--size-px-13) minmax(0, 1fr);
+    }
+
+    .tocBar {
+      display: none;
+    }
+
+    .withToc .main [id] {
+      scroll-margin-block-start: 0;
+    }
+  }
+}
+
+@layer states {
+  .skipLink:not(:focus) {
+    inline-size: 1px;
+    block-size: 1px;
+    min-block-size: 0;
+    padding: 0;
+    border-width: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .skipLink:focus-visible {
+    outline: var(--border-size-2) solid var(--primary12);
+    outline-offset: var(--border-size-2);
+  }
+
+  /* A DocsLayoutDrawer outside a Navigation Bar: its menu Button goes where the sidebar column comes in. */
+  @media (--fgd-nav-inline-n-above) {
+    .drawerTrigger {
+      display: none;
+    }
+  }
+}
+
+@layer print {
+  @media print {
+    /* The page prints alone (§7.7): no skip link, columns or contents. */
+    .skipLink,
+    .sidebar,
+    .toc,
+    .tocBar,
+    .drawerTrigger {
+      display: none;
+    }
+
+    .frame {
+      display: block;
+      max-inline-size: none;
+      padding-inline: 0;
+      overflow: visible;
+    }
+
+    .main {
+      padding-block: 0;
+      padding-inline-end: 0;
+    }
+  }
+}

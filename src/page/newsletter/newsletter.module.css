@@ -11,7 +11,9 @@
  * --primary12 on one-ink grounds), word --primary12; the straddle card: a
  * `royal` field, edge --role-edge (its --primary12, drawn by Ground), grain
  * --role-grain-dark only. Colors are role variables only; local custom
- * properties carry dimensions only.
+ * properties carry dimensions only: --newsletter-seam-depth (the straddle
+ * seam's depth in its card) and the hook --newsletter-band-inset (the top
+ * padding of the band a straddle opens, default --fgd-space-section).
  */
 
 /* Composition sits in top-level rules, outside the layers: Lightning CSS
@@ -139,6 +141,11 @@
     min-inline-size: 0;
   }
 
+  /* The postcode's box (the Input root): at most 12 characters wide. */
+  .postcode {
+    max-inline-size: 12ch;
+  }
+
   /* The consent Checkbox sits under the fields, before the legal line. */
   .consent {
     align-self: flex-start;
@@ -238,14 +245,29 @@
    * Straddle card (§5.6.2): a royal field at --radius-conditional-3-25
    * (square where a phone runs it edge to edge), padding --size-px-4 (the
    * nominal radius). The column width at base; --size-sm, centered, from
-   * --md-n-above. It rises across the seam of the band it opens by
-   * --newsletter-overlap (measured), sits above both grounds, and keeps
-   * --size-px-8-5 before the lower band's content.
+   * --md-n-above. It rises across the seam of the band it opens, sits above
+   * both grounds, and keeps --size-px-8-5 before the lower band's content.
+   *
+   * The rise is fixed, in CSS, so it is in the first paint [D201]: the
+   * band's top padding (--newsletter-band-inset, default the band's
+   * --fgd-space-section; a page whose band pads otherwise sets it) plus the
+   * seam's depth in the card: the field's --border-size-1 edge, the card's
+   * --size-px-4 padding, one line of the `type-itemhead` heading
+   * (--fgd-font-size-itemhead at --font-lineheight-0) and half the
+   * --size-px-7 heading-to-field gap. Exact for a one-line heading with no
+   * pitch; a wrapped heading's seam falls a line higher, so it overlaps a
+   * little less (user direction, 2026-09-27).
    */
   .straddle {
+    --newsletter-seam-depth: calc(
+      var(--border-size-1) + var(--size-px-4) +
+        var(--fgd-font-size-itemhead) * var(--font-lineheight-0) + var(--size-px-7) / 2
+    );
+
     position: relative;
     z-index: var(--layer-1);
-    margin-block: calc(-1 * var(--newsletter-overlap, 0px)) var(--size-px-8-5);
+    margin-block: calc(-1 * (var(--newsletter-band-inset, var(--fgd-space-section)) + var(--newsletter-seam-depth)))
+      var(--size-px-8-5);
   }
 
   .card {

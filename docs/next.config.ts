@@ -66,5 +66,14 @@ export default withDeploymentConfig(
     // `pnpm validate` writes a page.tsx beside each demo, so the
     // "[See Demo](./demos/x/)" links resolve.
     requireDemoPage: true,
+    // Demo loaders also emit a JavaScript version of each TypeScript file,
+    // so demos offer the TS | JS switch.
+    transformTypescriptToJavascript: true,
+    // No `demoEmphasisOptions`: demos, the code the server parses
+    // (`serverSourceEnhancers`, which createMdxComponents passes by default)
+    // and CodeProviderLazy's client pass all window with the emphasis
+    // enhancer's defaults, so every window is the same in the server HTML
+    // and after hydration. Options set here must go to those
+    // `sourceEnhancers` too, as `[createEnhanceCodeEmphasis(options)]`.
   })(withMDX(nextConfig)),
 )

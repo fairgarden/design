@@ -3,10 +3,12 @@
 import * as React from 'react'
 import { Collapsible as BaseCollapsible } from '@base-ui/react/collapsible'
 import { Dialog as BaseDialog } from '@base-ui/react/dialog'
+import { useRender } from '@base-ui/react/use-render'
 import { cva, type VariantProps } from 'class-variance-authority'
 
 import { DisclosureGlyph } from '../../disclosure/collapsible'
 import { Dialog } from '../../overlays/dialog'
+import { DialogMorphPopup, DialogMorphTrigger } from '../../overlays/dialog/morph'
 import { Ground } from '../../foundations/ground'
 import { Icon } from '../../foundations/icon'
 import { link } from '../../actions/link'
@@ -31,9 +33,12 @@ import styles from './nav-drawer.module.css'
  * - Color fallback: the header's scope through React context (the
  *   Navigation Bar's preset and overrides); the action is the §9.2 `solid`
  *   Button on that scope's action scale.
- * - States: Dialog Popup `data-starting-style` → the clip reveal from the
- *   top (full sheet) or the docked edge (side sheet), instant under
- *   --motionNotOK; Collapsible Panel the same from its top; menu Button
+ * - States: the sheet grows out of the menu Button by the outline morph
+ *   (§9.17) and shrinks back onto it (Popup `data-outline-morph` → its
+ *   edge takes the ground while the overlay frame draws it; the frame
+ *   lands one weight past the viewport's edges where the sheet has none),
+ *   else it opens and closes at once [D205, D206]; Collapsible Panel → the
+ *   clip reveal from its top, instant under --motionNotOK; menu Button
  *   `data-popup-open` → × plus "Close"; Collapsible Trigger
  *   `data-panel-open` → the D109 glyph turns inward in --primary12;
  *   `aria-current` → the --border-size-2-25 start-edge bar (weight 700 on
@@ -44,16 +49,18 @@ import styles from './nav-drawer.module.css'
  *   Button and close control take the `text` Button hover;
  *   `:focus-visible` → the ring, inset inside rows.
  * - Parts: base (the sheet), bar, logo, logoMark, close, closeLabel, scroll,
- *   nav, list, item, groupRow, rowLabel, glyph, panel, childList (the
- *   indent guide), childLink, directLink, linkLabel, footer, footerAction,
- *   footerList, footerLink, footerLocale, menuTrigger, menuLabel.
+ *   nav, navHost (a `nav` passed in: the docs sidebar [D202]), list, item,
+ *   groupRow, rowLabel, glyph, panel, childList (the indent guide),
+ *   childLink, directLink, linkLabel, footer, footerAction, footerList,
+ *   footerLink, footerLocale, menuTrigger, menuLabel.
  * - Scope: the portaled sheet re-declares the header's scope as a
  *   `kind="band"` Ground of its preset (Ground writes `data-theme` as on
  *   the header); never a `white` overlay scope [D97, D148].
  * - Container: none; page frame on the viewport custom media.
  * - Data: `sections` takes the shared navigation data (utils/navigation),
  *   the object that also builds the Navigation Menu panels and the footer
- *   sitemap [D187].
+ *   sitemap [D187]; or `nav` takes a complete navigation, the docs
+ *   layout's SidebarNav, which then fills the Scroll Area [D202].
  */
 export const navigationDrawer = cva(styles.base, {
   variants: {
@@ -105,6 +112,21 @@ export type NavDrawerProps = {
   sections?: readonly SitemapSection[]
   /** The top-level rows: `NavDrawerGroup`s and direct `NavDrawerLink`s. */
   children?: React.ReactNode
+  /**
+   * A complete navigation shown in the Scroll Area in place of the drawer's
+   * own list: the docs layout's `SidebarNav` [D202]. It carries its own
+   * `nav` landmark, so `sections`, `children` and `navLabel` go unused, and
+   * focus moves to its current page's link (`aria-current="page"`), else
+   * its first link.
+   */
+  nav?: React.ReactNode
+  /**
+   * Where focus goes when the drawer closes because the viewport reached
+   * the inline threshold. Default: the Navigation Bar item matching the
+   * last open group, else the bar's first item. The docs layout passes the
+   * in-flow sidebar's current link.
+   */
+  inlineTarget?: () => HTMLElement | null
   /** The fixed footer zone: a `NavDrawerFooter`. */
   footer?: React.ReactNode
   /** The menu Button's label, authored in title case [D160]. Default "Menu". */
@@ -119,6 +141,11 @@ export type NavDrawerProps = {
   logoHref?: string
   /** The logo link's accessible name. Default: the Navigation Bar's. */
   logoLabel?: string
+  /**
+   * Builds the logo link, e.g. `(href) => <NextLink href={href} />`.
+   * Default: the Navigation Bar's, else a plain `<a href>`.
+   */
+  renderLink?: (href: string) => React.ReactElement
   /** The current page's URL path. Default: the Navigation Bar's. */
   currentPath?: string
   /** Controlled open state. */
@@ -127,6 +154,12 @@ export type NavDrawerProps = {
   defaultOpen?: boolean
   /** Called when the drawer opens or closes. */
   onOpenChange?: (open: boolean) => void
+  /**
+   * The outline morph (§9.17) [D206]: the menu Button's ring (or its ink
+   * box) grows into the sheet as it opens and shrinks back onto it as it
+   * closes. Default `true`; `false` opens and closes at once.
+   */
+  morph?: boolean
   /** Override the header scope's primary. Never defaulted [D133]. */
   primary?: NavigationDrawerVariants['primary']
   /** Override the header scope's secondary. Never defaulted. */
@@ -154,6 +187,8 @@ export function NavDrawer(props: NavDrawerProps) {
   const {
     sections,
     children,
+    nav,
+    inlineTarget,
     footer,
     label = 'Menu',
     closeLabel = 'Close',
@@ -161,10 +196,12 @@ export function NavDrawer(props: NavDrawerProps) {
     logo: logoProp,
     logoHref: logoHrefProp,
     logoLabel: logoLabelProp,
+    renderLink: renderLinkProp,
     currentPath: currentPathProp,
     open: openProp,
     defaultOpen = false,
     onOpenChange,
+    morph = true,
     primary,
     secondary,
     className,
@@ -177,6 +214,7 @@ export function NavDrawer(props: NavDrawerProps) {
   const logo = logoProp ?? bar?.logo
   const logoHref = logoHrefProp ?? bar?.logoHref ?? '/'
   const logoLabel = logoLabelProp ?? bar?.logoLabel
+  const renderLink = renderLinkProp ?? bar?.renderLink
   const currentPath = currentPathProp ?? bar?.currentPath
 
   const [innerOpen, setInnerOpen] = React.useState(defaultOpen)
@@ -192,6 +230,8 @@ export function NavDrawer(props: NavDrawerProps) {
   const triggerRef = React.useRef<HTMLButtonElement | null>(null)
   const sheetRef = React.useRef<HTMLDivElement | null>(null)
   const listRef = React.useRef<HTMLUListElement | null>(null)
+  const navHostRef = React.useRef<HTMLDivElement | null>(null)
+  const closeRef = React.useRef<HTMLButtonElement | null>(null)
   const returnTarget = React.useRef<HTMLElement | null>(null)
 
   // From the inline threshold the Navigation Bar hides the menu Button:
@@ -201,28 +241,49 @@ export function NavDrawer(props: NavDrawerProps) {
     const check = () => {
       const trigger = triggerRef.current
       if (trigger && trigger.getClientRects().length === 0) {
-        returnTarget.current = findInlineItem(trigger, sheetRef.current)
+        returnTarget.current = inlineTarget?.() ?? findInlineItem(trigger, sheetRef.current)
         setOpen(false)
       }
     }
     window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
-  }, [open, setOpen])
+  }, [open, setOpen, inlineTarget])
 
   const context = React.useMemo<DrawerContextValue>(() => ({ currentPath }), [currentPath])
 
+  const logoLink = useRender({
+    render: renderLink?.(logoHref),
+    defaultTagName: 'a',
+    props: {
+      className: styles.logo,
+      href: logoHref,
+      'aria-label': logoLabel,
+      children: <span className={styles.logoMark}>{logo}</span>,
+    },
+  })
+
   return (
     <DrawerContext.Provider value={context}>
-      <Dialog open={open} onOpenChange={(next) => setOpen(next)}>
-        <BaseDialog.Trigger ref={triggerRef} className={cx(styles.menuTrigger, triggerClassName)}>
+      <Dialog open={open} onOpenChange={(next) => setOpen(next)} morph={morph}>
+        <DialogMorphTrigger ref={triggerRef} className={cx(styles.menuTrigger, triggerClassName)}>
           <Icon name={open ? 'close' : 'menu'} size="tag" weight="interactive" className={styles.menuIcon} />
           <span className={styles.menuLabel}>{open ? closeLabel : label}</span>
-        </BaseDialog.Trigger>
+        </DialogMorphTrigger>
         <BaseDialog.Portal>
-          <BaseDialog.Popup
+          <DialogMorphPopup
             ref={sheetRef}
             aria-label={label}
-            initialFocus={() => listRef.current?.querySelector<HTMLElement>(ROW) ?? true}
+            initialFocus={() => {
+              const host = navHostRef.current
+              if (host != null) {
+                return (
+                  host.querySelector<HTMLElement>('a[aria-current="page"]') ??
+                  host.querySelector<HTMLElement>(ROW) ??
+                  true
+                )
+              }
+              return listRef.current?.querySelector<HTMLElement>(ROW) ?? true
+            }}
             finalFocus={() => {
               const target = returnTarget.current
               returnTarget.current = null
@@ -239,29 +300,80 @@ export function NavDrawer(props: NavDrawerProps) {
               />
             }
           >
-            <div className={styles.bar}>
-              {logo != null ? (
-                <a className={styles.logo} href={logoHref} aria-label={logoLabel}>
-                  <span className={styles.logoMark}>{logo}</span>
-                </a>
-              ) : null}
-              <BaseDialog.Close className={styles.close}>
+            <DrawerBar align={bar != null} triggerRef={triggerRef} closeRef={closeRef}>
+              {logo != null ? logoLink : null}
+              <BaseDialog.Close ref={closeRef} className={styles.close}>
                 <Icon name="close" size="tag" weight="interactive" className={styles.menuIcon} />
                 <span className={styles.closeLabel}>{closeLabel}</span>
               </BaseDialog.Close>
-            </div>
+            </DrawerBar>
             <ScrollArea className={styles.scroll}>
-              <nav aria-label={navLabel} className={styles.nav}>
-                <ul ref={listRef} className={styles.list}>
-                  {listItems([sections?.map(sectionRow), children], styles.item)}
-                </ul>
-              </nav>
+              {nav != null ? (
+                <div ref={navHostRef} className={styles.navHost}>
+                  {nav}
+                </div>
+              ) : (
+                <nav aria-label={navLabel} className={styles.nav}>
+                  <ul ref={listRef} className={styles.list}>
+                    {listItems([sections?.map(sectionRow), children], styles.item)}
+                  </ul>
+                </nav>
+              )}
             </ScrollArea>
             {footer}
-          </BaseDialog.Popup>
+          </DialogMorphPopup>
         </BaseDialog.Portal>
       </Dialog>
     </DrawerContext.Provider>
+  )
+}
+
+/**
+ * The sheet's bar. In a Navigation Bar's drawer slot it sits where the
+ * header's bar is, so its close control covers the menu Button's box
+ * exactly (the header's seams, brand strip, a docked header or a banner
+ * above it included) and the morph starts and lands on that one box
+ * [§11.6, D206]. Measured as the sheet mounts, before it paints, and on
+ * resize; written as custom properties the module maps: the bar's block
+ * offset and the control's inline shift (physical px).
+ */
+function DrawerBar(props: {
+  align: boolean
+  triggerRef: React.RefObject<HTMLButtonElement | null>
+  closeRef: React.RefObject<HTMLButtonElement | null>
+  children: React.ReactNode
+}) {
+  const { align, triggerRef, closeRef, children } = props
+  const barRef = React.useRef<HTMLDivElement | null>(null)
+
+  React.useLayoutEffect(() => {
+    const barElement = barRef.current
+    const close = closeRef.current
+    if (!align || !barElement || !close) return undefined
+    const place = () => {
+      barElement.style.removeProperty('--nav-drawer-bar-offset')
+      close.style.removeProperty('--nav-drawer-close-shift')
+      const trigger = triggerRef.current
+      if (!trigger || trigger.getClientRects().length === 0) return
+      const from = trigger.getBoundingClientRect()
+      const to = close.getBoundingClientRect()
+      // Only a trigger in the viewport's top band moves the bar (a header scrolled away leaves it at the top).
+      const dy = from.top - to.top
+      if (dy > 0 && dy < window.innerHeight / 3) {
+        barElement.style.setProperty('--nav-drawer-bar-offset', `${dy}px`)
+      }
+      const dx = from.left - to.left
+      if (Math.abs(dx) >= 0.5) close.style.setProperty('--nav-drawer-close-shift', `${dx}px`)
+    }
+    place()
+    window.addEventListener('resize', place)
+    return () => window.removeEventListener('resize', place)
+  }, [align, triggerRef, closeRef])
+
+  return (
+    <div ref={barRef} className={styles.bar}>
+      {children}
+    </div>
   )
 }
 
@@ -377,7 +489,7 @@ export type NavDrawerFooterProps = Omit<React.ComponentProps<'div'>, 'children'>
 
 /**
  * The drawer's fixed footer zone, under a --border-size-2 --role-rule: the
- * primary pill first (where the header's action goes below 480 px), then
+ * primary pill first (where the header's action goes below 768 px), then
  * the utility links at a --fgd-size-hit pitch, then the locale Select. Put
  * it in the drawer's `footer`.
  */

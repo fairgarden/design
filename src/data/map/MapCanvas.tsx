@@ -103,15 +103,11 @@ interface SnapshotJob {
 function renderSnapshot(job: SnapshotJob, done: (url: string | null) => void): () => void {
   const container = document.createElement('div')
   container.setAttribute('aria-hidden', 'true')
-  Object.assign(container.style, {
-    position: 'fixed',
-    left: '0px',
-    top: '0px',
-    width: `${job.width}px`,
-    height: `${job.height}px`,
-    visibility: 'hidden',
-    pointerEvents: 'none',
-  })
+  // Off screen, hidden and never hit-tested (`snapshotHost`), at the
+  // snapshot's size: two custom properties, never a real property (§1.11.1).
+  container.className = styles.snapshotHost
+  container.style.setProperty('--map-snapshot-width', `${job.width}px`)
+  container.style.setProperty('--map-snapshot-height', `${job.height}px`)
   document.body.appendChild(container)
   let map: MapLibreMap | null = null
   let cancelled = false

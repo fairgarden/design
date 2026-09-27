@@ -7,12 +7,20 @@
  * so a smaller logo slot (the Navigation Bar's, the drawer's) centers it
  * rather than shrinking it. The wordmark takes the scope's ink from its
  * parent; the logo keeps its own art.
+ *
+ * Narrowed by its slot (the Navigation Bar's logo gives way before its
+ * controls), the lockup drops the wordmark whole rather than cutting it:
+ * the wordmark wraps onto a second line, which the lockup's height clips,
+ * and the logo stands alone.
  */
 .lockup {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--size-px-2-5);
-  block-size: auto;
+  gap: 0 var(--size-px-2-5);
+  max-inline-size: 100%;
+  block-size: var(--fgd-size-logo);
+  overflow: clip;
   white-space: nowrap;
 }
 

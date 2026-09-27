@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { useRender } from '@base-ui/react/use-render'
 import { cva, type VariantProps } from 'class-variance-authority'
 
 import { Ground } from '../../foundations/ground'
@@ -10,6 +11,7 @@ import {
   type NavigationMenuFrame,
 } from '../navigation-menu'
 import { cx } from '../../utils/className'
+import { SkipLinkContext } from '../../utils/frame'
 import {
   primaryScaleVariants,
   secondaryScaleVariants,
@@ -29,10 +31,13 @@ import styles from './navigation-bar.module.css'
  *   --border-size-2 top rule); `ruled` → `ruled` (vertical --border-size-1
  *   rules between items); `compact` → `compact` (the docked header: brand
  *   drawing and utility row dropped; triggers, search and action kept, at
- *   the same height) [D183]; `primary`, `secondary` → scales module
- *   classes, applied through the header's Ground.
+ *   the same height) [D183]; `wide` → `wide` (the content box runs to
+ *   --fgd-container-wide, for a wide page frame such as the docs layout
+ *   [D202]); `primary`, `secondary` → scales module classes, applied
+ *   through the header's Ground.
  * - Compound variants: none.
- * - Defaults: masthead false, ruled false, compact false; color axes none.
+ * - Defaults: masthead false, ruled false, compact false, wide false; color
+ *   axes none.
  * - Color fallback: inherits the scope; the action is the §9.2 `solid`
  *   Button on the scope's action scale; the strip passes secondary green.
  * - States: item states are the Navigation Menu's (§9.6); `data-docked`
@@ -49,7 +54,9 @@ import styles from './navigation-bar.module.css'
  *   only over the night media hero) [D178]. Panels are portaled `white`
  *   scopes (§9.6).
  * - Container: none; page frame on the viewport custom media
- *   --fgd-nav-inline-n-above [D183].
+ *   --fgd-nav-inline-n-above [D183], with the action from --md-n-above.
+ *   Below the threshold the logo is the bar's one flexible item (the base
+ *   fit), so the bar never overflows.
  */
 export const navigationBar = cva(styles.base, {
   variants: {
@@ -62,6 +69,9 @@ export const navigationBar = cva(styles.base, {
     compact: {
       true: styles.compact,
     },
+    wide: {
+      true: styles.wide,
+    },
     // Color axes: never defaulted [D133]; the header's Ground applies them.
     primary: primaryScaleVariants,
     secondary: secondaryScaleVariants,
@@ -70,6 +80,7 @@ export const navigationBar = cva(styles.base, {
     masthead: false,
     ruled: false,
     compact: false,
+    wide: false,
   },
 })
 
@@ -87,6 +98,8 @@ export interface NavigationBarContextValue {
   logoLabel?: string
   /** The current page's URL path. */
   currentPath?: string
+  /** Builds the home link; the drawer's bar repeats it. */
+  renderLink?: (href: string) => React.ReactElement
 }
 
 /** Provided by NavigationBar; read by NavDrawer and the utility links. */
@@ -118,12 +131,20 @@ export type NavigationBarProps = Omit<React.ComponentProps<'header'>, 'children'
   primary?: NavigationBarVariants['primary']
   /** Override the preset's secondary. Never defaulted. */
   secondary?: NavigationBarVariants['secondary']
-  /** The logo: an ink logo in `currentColor` (an `svg` or `img`), 28 px tall, 36 px from --lg-n-above. */
+  /**
+   * The logo: an ink logo in `currentColor` (an `svg` or `img`), 28 px tall, 36 px from --lg-n-above.
+   * On a narrow bar it gives way (clipped in its 44 px target); a lockup drops its wordmark.
+   */
   logo: React.ReactNode
   /** The home link's accessible name, e.g. "FairGarden home". */
   logoLabel: string
   /** The home link. Default "/". */
   logoHref?: string
+  /**
+   * Builds the home link, e.g. `(href) => <NextLink href={href} />`; the
+   * drawer's bar repeats it. Default: a plain `<a href>`.
+   */
+  renderLink?: (href: string) => React.ReactElement
   /** An optional fine-line brand drawing (--border-size-0-75) beside the logo; dropped when compact. */
   brandDrawing?: React.ReactNode
   /** A `NavigationBarUtility` row above the bar, from --fgd-nav-inline-n-above; never docks. */
@@ -132,13 +153,16 @@ export type NavigationBarProps = Omit<React.ComponentProps<'header'>, 'children'
   children?: React.ReactNode
   /** Icon Buttons, e.g. `<Search kind="trigger" … />`, `--size-px-1` apart. */
   search?: React.ReactNode
-  /** The one primary action: a `solid` Button at `size="sm"`. Below 480 px it moves to the drawer footer, so repeat it there. */
+  /** The one primary action: a `solid` Button at `size="sm"`. Below --md-n-above (768 px) it moves to the drawer footer, so repeat it there. */
   action?: React.ReactNode
   /** The `NavDrawer` (menu Button and sheet), shown below --fgd-nav-inline-n-above. */
   drawer?: React.ReactNode
   /** The current page's URL path, shared with the menu, drawer and utility links. */
   currentPath?: string
-  /** The skip link's target. Default "#main". */
+  /**
+   * The skip link's target. Default "#main". Inside the docs layout, which
+   * renders the page's skip link itself, the bar renders none.
+   */
   skipHref?: string
   /** The skip link's words. Default "Skip to main content". */
   skipLabel?: string
@@ -148,6 +172,12 @@ export type NavigationBarProps = Omit<React.ComponentProps<'header'>, 'children'
   ruled?: NavigationBarVariants['ruled']
   /** `true`: the compact header, even undocked. The sticky observer sets it while docked. Default `false`. */
   compact?: NavigationBarVariants['compact']
+  /**
+   * `true`: the bar's content box, and the utility row's, run to
+   * `--fgd-container-wide` rather than `--fgd-container-content`, aligned
+   * with a wide page frame: the docs layout's columns [D202]. Default `false`.
+   */
+  wide?: NavigationBarVariants['wide']
   /** How the header docks. Default `none`. */
   dock?: NavigationBarDock
   /** With `dock="swap"`: a zero-height element at the section bar's in-flow position. */
@@ -173,6 +203,7 @@ export function NavigationBar(props: NavigationBarProps) {
     logo,
     logoLabel,
     logoHref = '/',
+    renderLink,
     brandDrawing,
     utility,
     children,
@@ -185,6 +216,7 @@ export function NavigationBar(props: NavigationBarProps) {
     masthead,
     ruled,
     compact,
+    wide,
     dock = 'none',
     sentinelRef,
     onDockChange,
@@ -196,6 +228,7 @@ export function NavigationBar(props: NavigationBarProps) {
 
   const scope = useScope()
   const preset: BandPreset = presetProp ?? (isBandPreset(scope.ground) ? scope.ground : 'paper')
+  const frameSkipLink = React.useContext(SkipLinkContext)
 
   const rootRef = React.useRef<HTMLElement | null>(null)
   const frameRef = React.useRef<HTMLDivElement | null>(null)
@@ -287,9 +320,30 @@ export function NavigationBar(props: NavigationBarProps) {
       logoHref,
       logoLabel,
       currentPath,
+      renderLink,
     }),
-    [preset, primary, secondary, logo, logoHref, logoLabel, currentPath]
+    [preset, primary, secondary, logo, logoHref, logoLabel, currentPath, renderLink]
   )
+
+  const logoLink = useRender({
+    render: renderLink?.(logoHref),
+    defaultTagName: 'a',
+    props: {
+      className: styles.logo,
+      href: logoHref,
+      'aria-label': logoLabel,
+      children: (
+        <>
+          <span className={styles.logoMark}>{logo}</span>
+          {brandDrawing != null ? (
+            <span className={styles.brandDrawing} aria-hidden="true">
+              {brandDrawing}
+            </span>
+          ) : null}
+        </>
+      ),
+    },
+  })
 
   const setRootRef = React.useCallback(
     (node: HTMLElement | null) => {
@@ -318,24 +372,19 @@ export function NavigationBar(props: NavigationBarProps) {
           ref={setRootRef}
           style={rootStyle}
           data-docked={docked ? '' : undefined}
-          className={navigationBar({ masthead, ruled, compact: compact || docked, className })}
+          className={navigationBar({ masthead, ruled, compact: compact || docked, wide, className })}
         >
           <div ref={frameRef} className={styles.frame}>
-            <a className={styles.skipLink} href={skipHref}>
-              {skipLabel}
-            </a>
+            {frameSkipLink ? null : (
+              <a className={styles.skipLink} href={skipHref}>
+                {skipLabel}
+              </a>
+            )}
             <div className={cx(styles.strip, secondaryScaleVariants.green)} aria-hidden="true" />
             {utility}
             <div ref={barRef} className={styles.bar}>
               <div ref={innerRef} className={styles.inner}>
-                <a className={styles.logo} href={logoHref} aria-label={logoLabel}>
-                  <span className={styles.logoMark}>{logo}</span>
-                  {brandDrawing != null ? (
-                    <span className={styles.brandDrawing} aria-hidden="true">
-                      {brandDrawing}
-                    </span>
-                  ) : null}
-                </a>
+                {logoLink}
                 {children != null ? <div className={styles.nav}>{children}</div> : null}
                 <div className={styles.tools}>
                   {search != null ? <div className={styles.iconButtons}>{search}</div> : null}

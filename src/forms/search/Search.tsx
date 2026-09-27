@@ -7,6 +7,11 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { Button } from '../../actions/button'
 import { Field, FieldLabel } from '../field'
 import { Icon, type IconName } from '../../foundations/icon'
+import { OutlineMorphFrame } from '../../foundations/outline-morph'
+import {
+  useOutlineMorphRoot,
+  useTypingMorphPolicy,
+} from '../../foundations/outline-morph/useOutlineMorphRoot'
 import { input, inputParts } from '../input'
 import { Link } from '../../actions/link'
 import { highlightMatch } from '../../utils/highlightMatch'
@@ -35,13 +40,19 @@ import styles from './search.module.css'
  *   (around field and submit together when butted); `data-popup-open` →
  *   `aria-expanded`, popup shown; `data-highlighted` on `item` → --primary4
  *   plus the start bar [D145]; `data-disabled` → per §10.1; popup
- *   `data-starting-style` / `data-ending-style` → the clip reveal.
+ *   the outline morph or nothing: it opens and closes at once [D205].
  * - Parts: base (the landmark), magnifier, rules, popup, group,
  *   groupLabel, item, itemIcon, match, secondaryName, seeAll, status, bar.
  * - Scope: the popup renders in its Base UI Portal and declares a `white`
  *   page scope; edge --border-size-2 --primary12 [D148, D156].
  * - Container: none; the docked bar is page frame, and the butted submit
  *   follows the Input's row (§5.10.2).
+ * - Outline morph [D204]: on by default for the field kinds (`morph={false}`
+ *   opts out). The field's ring (drawn on any focus, around the butted
+ *   submit too) grows into the popup's frame and back onto it
+ *   (foundations/outline-morph, ring `focus-within`), with Autocomplete's
+ *   typing policy; the popup answers `data-outline-morph`, and without
+ *   the morph it opens and closes at once [D205]. No field style changes.
  */
 export const search = cva(styles.base, {
   variants: {
@@ -139,6 +150,16 @@ interface SearchFieldProps {
   primary?: SearchVariants['primary']
   /** Secondary Radix scale: accepted; the submit takes the scope's action scale. */
   secondary?: SearchVariants['secondary']
+  /**
+   * The outline morph: the field's focus ring grows into the suggestions'
+   * frame as they open and shrinks back onto the ring as they close. Opens
+   * you ask for (the arrow keys) and the first open after focus arrives
+   * morph; later opens and closes caused by typing are instant.
+   * Instant under reduced motion; off in forced colors and print, and
+   * wherever `--fgd-outline-morph: none` applies. Default `true`; `false`
+   * opens and closes the popup at once.
+   */
+  morph?: boolean
 }
 
 interface SearchTriggerProps {
@@ -225,10 +246,22 @@ function SearchField(props: { kind?: 'boxed' | 'ruled' | 'docked' } & SearchFiel
     className,
     primary,
     secondary,
+    morph = true,
   } = props
 
   const scope = useScopeAttributes()
   const ruled = kind === 'ruled'
+
+  // The outline morph follows the suggestions' open state, with the typing policy [D204].
+  const typing = useTypingMorphPolicy()
+  const outline = useOutlineMorphRoot({
+    open: undefined,
+    defaultOpen: undefined,
+    onOpenChange: undefined,
+    morph,
+    ring: 'focus-within',
+    instant: typing.instant,
+  })
   const showSubmit = !ruled && !hideSubmit
 
   const [innerQuery, setInnerQuery] = React.useState(defaultValue ?? '')
@@ -277,8 +310,14 @@ function SearchField(props: { kind?: 'boxed' | 'ruled' | 'docked' } & SearchFiel
         submitOnItemClick={submitOnItemClick}
         disabled={disabled}
         name={name}
+        onOpenChange={outline.onOpenChange}
       >
-        <BaseAutocomplete.InputGroup {...scope} className={boxClassName}>
+        <BaseAutocomplete.InputGroup
+          {...scope}
+          ref={outline.refs?.sourceRef}
+          onFocus={typing.onFocus}
+          className={boxClassName}
+        >
           {ruled ? (
             <svg className={styles.rulesEdge} aria-hidden="true" focusable="false">
               <line className={styles.rulesEdgeLine} x1="0" y1="0.5" x2="100%" y2="0.5" />
@@ -346,6 +385,7 @@ function SearchField(props: { kind?: 'boxed' | 'ruled' | 'docked' } & SearchFiel
             collisionPadding={16}
           >
             <BaseAutocomplete.Popup
+              ref={outline.refs?.targetRef}
               {...overlayAttributes}
               className={[styles.popup, overlayScaleClassName].join(' ')}
             >
@@ -383,6 +423,7 @@ function SearchField(props: { kind?: 'boxed' | 'ruled' | 'docked' } & SearchFiel
                 ) : null}
               </OverlayScope>
             </BaseAutocomplete.Popup>
+            {outline.refs ? <OutlineMorphFrame ref={outline.refs.frameRef} /> : null}
           </BaseAutocomplete.Positioner>
         </BaseAutocomplete.Portal>
       </BaseAutocomplete.Root>

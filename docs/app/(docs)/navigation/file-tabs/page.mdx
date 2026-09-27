@@ -1,0 +1,166 @@
+# File Tabs
+
+Paper-style folder tabs over a package of static documents kept together, like tabbed dividers in a binder: a grant application, a plot lease, a year of meeting minutes. Each tab is a standalone document; they share one panel, with optional controls and a busy status at the header's end.
+
+For code files, use [Code Block](../../content/code-block/page.mdx) or [Demo](../../content/demo/page.mdx): they render their headers with File Tabs.
+
+```tsx
+import {
+  FileTabs,
+  FileTabsControl,
+  FileTabsList,
+  FileTabsPanel,
+} from '@fairgarden/design/navigation/file-tabs'
+```
+
+`FileTabs` holds the selection and the header's settings (`frame`, `controls`, `status`, `mono`). `FileTabsList` renders the header from them: 56 px with its rule, the tabs across its whole width under 12 px of room and standing on the rule, and the status and controls at its end. `FileTabsPanel` is the one tabpanel, labelled by the selected tab. The tabs are paper: the selected tab takes the panel's own face and opens into it, with no rule between them, and its label turns bold; the others sit recessed behind it on a slightly darker step of the same scale, each standing on the header's rule. The state reads by weight and by the joined edge, not by color alone. The selected tab's radii grow while it's pressed; each label reserves its bold width, so selecting a tab never moves the row. Hover underlines the other labels. Labels take the UI face at the caption size and are never caps; `mono` sets them in mono for file names, as Code Block and Demo do. It needs no docs engine, so it works anywhere.
+
+The header is one fixed row that never wraps, so nothing that joins it later can move the page. The header opens a host: a bordered box with no padding, a `--primary1` face and no clip, such as a code block's frame, or the `FileTabs` root given a frame class, as in these demos. The host keeps the page's panel radius, `--radius-2-25`; the tabs alone take the paper-tab radius, `--radius-2-75`, and their curves leave the host's side line below its corner. The tab strip runs out over the host's side edges by their width, so there's no gap between an end tab and the edge, and the edges are drawn again over the header, so scrolled tabs and the ends of the strip's scrollbar pass under them. `frame` says which host it is: `"top"` (the default) for the top of a box with rounded corners, `"joined"` for a part below another, and `"none"` for no box at all.
+
+In print the header hugs its labels: plain labels in a wrapping row, the selected one in bold, without the controls or status.
+
+## Tabs or File Tabs?
+
+[Tabs](../tabs/page.mdx) switch between views or sections of one thing on a page: settings panes, the sections of an article, filtered views of one list. File Tabs hold a package of separate documents kept together, where each tab is a standalone document, drawn as paper tabs. For code files, use [Code Block](../../content/code-block/page.mdx) or [Demo](../../content/demo/page.mdx), which use File Tabs for their headers.
+
+## Documents
+
+import { DemoFileTabsBasic } from './demos/basic'
+
+<DemoFileTabsBasic.Title />
+
+With two or more documents the header shows tabs; with one it shows the document's title as a label, and the panel is a plain region. Arrow keys move between tabs and Enter or Space selects, so moving focus never swaps the document.
+
+<DemoFileTabsBasic />
+
+[See Demo](./demos/basic/)
+
+## Deep links
+
+import { DemoFileTabsLinks } from './demos/links'
+
+<DemoFileTabsLinks.Title />
+
+A tab with a `slug` is a link to `#slug`. A plain click selects the document without writing the hash or jumping the page; a modifier click (Ctrl, Cmd, Alt or Shift, from the keyboard too) opens the link elsewhere and leaves the selection alone. The scroll targets and the hash latch belong to the consumer, as this demo renders them.
+
+<DemoFileTabsLinks />
+
+[See Demo](./demos/links/)
+
+## Agenda with attachments
+
+import { DemoFileTabsAgenda } from './demos/agenda'
+
+<DemoFileTabsAgenda.Title />
+
+A cover document and its attachments in one frame: the meeting's agenda, or its minutes, above, and the documents it refers to below in `frame="joined"` tabs. A link in the cover selects that document's tab through the controlled `value` and moves focus to the tab, as the tabs pattern does, scrolling it into view; a modifier click still opens the link, and the hash selects the document on load.
+
+<DemoFileTabsAgenda />
+
+[See Demo](./demos/agenda/)
+
+## Controls
+
+import { DemoFileTabsControls } from './demos/controls'
+
+<DemoFileTabsControls.Title />
+
+`controls` go at the header's end. A `FileTabsControl` is the one to use for a menu: render it as the Menu's trigger (`<Menu.Trigger render={<FileTabsControl />}>` from Base UI) with an `Icon` inside (the ⋮ is `more_vert` at the tag tier, `size="tag"`) and an `aria-label`. It always hangs just outside the host's end edge, whatever the number of documents, and takes no room from the tabs: an ear 20 px wide from the frame's line, from its top edge to the foot of the header's rule. Its 44 px hit area reaches out into the gutter, never over the tabs. Pointing at it or focusing it outlines the ear at once, on a soft fill; its tooltip keeps its own delay. At the top of a rounded frame the outline wraps the frame's corner: it runs along the frame's arc and end edge, so ear and corner read as one shape. A document menu holds actions such as print, download and copy link; a copy confirms with a [Toast](../../feedback/toast/page.mdx), never in the header. A `FileTabsControl` can also be a lone action, named by its `aria-label` and a Tooltip, as a nameless snippet's copy button is in [Code Block](../../content/code-block/page.mdx). With no documents at all there's no header row: the control hangs from the frame's top-end corner. Small icon Buttons, the other kind of control, sit in the header instead, beside a single document's label.
+
+**Leave room for it.** Nothing measures the space: the host must leave `--fgd-size-file-tabs-control` (24 px) free past the frame's end, with nothing clipping it sideways, or an `overflow-clip-margin` that covers it. Where the page ends sooner than the 44 px hit area, clip the page sideways (`overflow-x: clip`) so the rest of it can't scroll the page. This site's column keeps that gutter at every width, 44 px from the medium breakpoint. Both columns below keep it: the first on the page, the second inside a column that clips, with the gutter inside its clip.
+
+<DemoFileTabsControls />
+
+[See Demo](./demos/controls/)
+
+## Many documents
+
+import { DemoFileTabsOverflow } from './demos/overflow'
+
+<DemoFileTabsOverflow.Title />
+
+Any number of documents fits. When the tabs overflow, the row scrolls sideways with the browser's own scrollbar. The header keeps its height whatever the scrollbar takes: a scrollbar that takes room hangs flush under the header's rule, over the panel's top, and one that overlays the page shows over the foot of the tabs. Either way the tabs never lift off the rule. At either end of the scroll the end tab sits flush with the frame's edge.
+
+<DemoFileTabsOverflow />
+
+[See Demo](./demos/overflow/)
+
+## One document
+
+import { DemoFileTabsSingle } from './demos/single'
+
+<DemoFileTabsSingle.Title />
+
+With one document, the label and the controls share the header: a row of small icon Buttons, each named by a Tooltip. Use `text` icon-only Buttons: they're quiet at rest, a glyph with no edge, like the ⋮, and pointing at one or focusing it draws its circle at once. They never hang, and the header never wraps: the label truncates with an ellipsis to leave them room. The row is aligned to the end, so a control that joins later goes first in `controls` and the ones already there stay put. A confirmation, such as a copied link, is a [Toast](../../feedback/toast/page.mdx) in the page's toast bar, never text in the header or a changed icon.
+
+<DemoFileTabsSingle />
+
+[See Demo](./demos/single/)
+
+## Status
+
+import { DemoFileTabsStatus } from './demos/status'
+
+<DemoFileTabsStatus.Title />
+
+`status` is the busy "-ing…" label while something the header started is under way, such as "Saving…". It's laid over the header's end beside the controls, covering the end of the tabs on the frame's face rather than pushing them, so they never move. It's a live region, mounted whenever `status` is set: pass `''` while idle rather than leaving it out, so the change is announced. Confirmations don't go here: a copied link, say, shows a toast.
+
+<DemoFileTabsStatus />
+
+[See Demo](./demos/status/)
+
+## Frames
+
+import { DemoFileTabsFrames } from './demos/frames'
+
+<DemoFileTabsFrames.Title />
+
+`frame="joined"` puts the header in a part of the host below another, as the Agenda demo's attachments sit under its agenda, and a demo's code under its preview: the header draws the rule that joins them, and the side edges run from it. `frame="none"` is for tabs with no box around them: the strip stays inside the header, the end tabs show their own edges, and a `FileTabsControl` hangs past the header's own end.
+
+<DemoFileTabsFrames />
+
+[See Demo](./demos/frames/)
+
+## Disabled
+
+import { DemoFileTabsDisabled } from './demos/disabled'
+
+<DemoFileTabsDisabled.Title />
+
+`disabled` holds every tab while the documents load: muted labels with a dotted underline, never dimmed. The selected tab keeps its face, shape and weight, so its muted label still reads. A disabled `FileTabsControl` stands in for the menu until it loads, in the same place and size.
+
+<DemoFileTabsDisabled />
+
+[See Demo](./demos/disabled/)
+
+## Mono labels
+
+`mono` sets the labels, and a single document's label, in mono (`type-data`) for file names, e.g. code. [Code Block](../../content/code-block/page.mdx) and [Demo](../../content/demo/page.mdx) set it; the geometry is the same in either face.
+
+## API Reference
+
+import { TypesFileTabs, TypesFileTabsAdditional } from './types'
+
+### FileTabs
+
+<TypesFileTabs.FileTabs />
+
+### FileTabsList
+
+<TypesFileTabs.FileTabsList />
+
+### FileTabsControl
+
+<TypesFileTabs.FileTabsControl />
+
+### FileTabsPanel
+
+<TypesFileTabs.FileTabsPanel />
+
+### Additional types
+
+<TypesFileTabsAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §9.13 (file tabs), §9.5 (tabs) and §3.11 (mono for file names).

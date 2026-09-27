@@ -17,12 +17,55 @@ export const POPUP_CLEARANCE_PX = 16
 export const TOOLTIP_DELAY_MS = 500
 
 /**
+ * `--fgd-duration-disclosure` (200 ms, §1.5.15), for motion JavaScript runs:
+ * a chart's opt-in entry animation [D167]. Recharts takes a number, and the
+ * chart passes it only when `animate` is set and motion is allowed.
+ */
+export const DISCLOSURE_DURATION_MS = 200
+
+/**
  * Desktop Navigation Menu hover intent [D182], for Base UI's Root `delay`
  * and `closeDelay`: `--fgd-delay-nav-open` (150 ms) and `--fgd-delay-nav-close`
  * (300 ms). Every input still opens a panel by click, Enter, Space or
  * ArrowDown; the delays apply to a fine pointer only.
  */
 export const NAV_DELAY_MS = { open: 150, close: 300 } as const
+
+/**
+ * The expanding box's View Transitions morph, and the outline morph's Web
+ * Animations (foundations/outline-morph): open `--fgd-duration-expand`
+ * (333 ms), close `--fgd-duration-collapse` (200 ms, an alias of
+ * `--fgd-duration-disclosure`). Both are instant under reduced motion, where
+ * neither morph runs at all. The outline morph reads the CSS tokens at each
+ * open and close; these are its fallback when a value can't be parsed.
+ */
+export const EXPAND_DURATION_MS = { open: 333, close: 200 } as const
+
+/**
+ * The outline morph on modal surfaces (Dialog, Alert Dialog, the drawer's
+ * side and full sheets) [D206]: open `--fgd-duration-expand-surface`
+ * (400 ms), close `--fgd-duration-collapse-surface` (240 ms), on the same
+ * `--fgd-ease-expand`. Instant under reduced motion. The engine reads the
+ * CSS tokens at each open and close; these are its fallback.
+ */
+export const SURFACE_DURATION_MS = { open: 400, close: 240 } as const
+
+/**
+ * The open easing, `--fgd-ease-expand`: a critically damped spring sampled
+ * as `linear()` stops, its undershoot clipped to 0, so it never leaves
+ * [0, 1] (for Web Animations: the outline morph runs both ways on it).
+ */
+export const EXPAND_EASE =
+  'linear(0, 0, 0.294, 0.401, 0.58, 0.706, 0.75, 0.825, 0.878, 0.896, 0.927, 0.949, 0.957, 0.97, 0.979, 0.982, 0.987, 0.991, 0.992, 0.995, 0.996, 0.998, 0.999, 0.999, 1)'
+
+/**
+ * The code block's variant and JS/TS swap, `--fgd-duration-swap` (350 ms):
+ * useCode's `transformDelay` and `variantSwapDelay`, which must equal the CSS
+ * duration of the line grow and shrink. Pass 0 for both under reduced motion,
+ * where the CSS duration is instant too. The swap's scroll-anchor window is
+ * twice this.
+ */
+export const SWAP_DURATION_MS = 350
 
 /**
  * The marker and trail geometry (§1.5.16, §4.7), for SVG viewBoxes, which

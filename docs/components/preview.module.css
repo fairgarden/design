@@ -1,0 +1,9 @@
+/*
+ * A preview route's page (PreviewStage): the paper band as the page root,
+ * at least a viewport tall, so the ground runs to the window's foot on a
+ * full page. In a page frame the viewport is the frame, which sizes to the
+ * content, so the band never adds height of its own.
+ */
+.page {
+  min-block-size: 100dvh;
+}

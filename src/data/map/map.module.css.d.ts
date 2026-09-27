@@ -37,6 +37,7 @@ declare const styles: {
   readonly "road": string;
   readonly "route": string;
   readonly "snapshot": string;
+  readonly "snapshotHost": string;
   readonly "street": string;
   readonly "subdivision": string;
   readonly "technical": string;
