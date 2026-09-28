@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { FooterNavigation } from '@/app/(docs)/page/footer/demos/navigation/FooterNavigation'
+import { FooterNavigation } from '@/app/(lib)/page/footer/demos/navigation/FooterNavigation'
 
 export const metadata: Metadata = { title: 'Footer: One navigation object for header, drawer and footer' }
 

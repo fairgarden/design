@@ -19,7 +19,7 @@ export const metadata: Metadata = {
  * webfont first; the fonts module's metric-matched fallbacks keep any late
  * swap from moving a line [D201].
  *
- * The rest sits below this layout. The docs pages are the `(docs)` group,
+ * The rest sits below this layout. The docs pages are the `(lib)` group,
  * whose layout adds the chrome and the providers only the docs use (the
  * code engine, the toast bar). The full-page demo previews are `preview/`,
  * a chromeless layout of their own, outside the docs.

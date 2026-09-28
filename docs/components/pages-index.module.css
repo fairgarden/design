@@ -2,7 +2,7 @@
  * The section index (PagesIndex): one card per page, built from the design
  * system's tokens and role variables only, with no literal colors,
  * shadows, opacity or gradients (§1.3). The docs chrome itself is the
- * design system's Docs Layout (app/(docs)/layout.tsx, DocsFrame).
+ * design system's Docs Layout (app/(lib)/layout.tsx, DocsFrame).
  */
 /* Section index cards: every face has an edge [D12]. */
 .index {

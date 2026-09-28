@@ -42,8 +42,10 @@ import styles from './scroll-area.module.css'
  * root hides the start edge, for a table whose pinned column draws that
  * edge itself (§8.2); `--scroll-area-overscroll-x` / `-y` set the
  * viewport's scroll chaining per axis; `--scroll-area-scroll-padding-inline`
- * sets its inline scroll padding, the snapport's insets (a carousel's
- * bleed). The viewport names its scroll
+ * sets its inline scroll padding, the snapport's insets: by default
+ * --size-px-3 on `wide` and `rail`, a 16 px row gap, so a snapped item rests
+ * one gap inside the edge rule; a row with another gap sets its own, and
+ * the carousel sets 0 (its content line) and its bleed. The viewport names its scroll
  * timeline `--scroll-area-block` (panel) or `--scroll-area-inline` (wide,
  * rail) and the root scopes it; a composer that reads it outside the root
  * (the table's cue) scopes it on its own element and sets the root's

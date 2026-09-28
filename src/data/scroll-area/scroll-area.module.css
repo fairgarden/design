@@ -13,8 +13,13 @@
  *                             the viewport's scroll chaining per axis (default
  *                             `contain`); a carousel sets `y` to `auto`
  *   --scroll-area-scroll-padding-inline
- *                             the viewport's inline scroll padding, which insets
- *                             the snapport; a carousel sets its end to its bleed
+ *                             the viewport's inline scroll padding (wide, rail),
+ *                             which insets the snapport; default --size-px-3,
+ *                             a 16 px item gap, so a snapped item rests one gap
+ *                             inside the edge rule with its neighbour just clear
+ *                             of it; a row with another gap or inset sets its
+ *                             own, and a carousel sets 0 (its content line) and
+ *                             its bleed at the end
  *
  * Scroll timelines: the viewport names `--scroll-area-block` (panel) or
  * `--scroll-area-inline` (wide, rail), and the root scopes both names, so
@@ -37,7 +42,6 @@
     min-block-size: 0;
     min-inline-size: 0;
     overscroll-behavior: var(--scroll-area-overscroll-x, contain) var(--scroll-area-overscroll-y, contain);
-    scroll-padding-inline: var(--scroll-area-scroll-padding-inline, auto);
   }
 
   /*
@@ -99,11 +103,15 @@
    * script and nothing is reserved (`scrollbar-gutter` reserves only the
    * block-axis bar) [D201]. Scroll-snap follows the content's own snap
    * points; the content is at least as wide as its children unless it is
-   * fluid.
+   * fluid. The inline scroll padding is the row's gap (--size-px-3 unless
+   * the composer sets another), so a snapped or focused item never sits
+   * flush against the edge rule and the item before it clears the edge
+   * exactly: no sliver of it shows [D207].
    */
   .wide .viewport,
   .rail .viewport {
     overflow: auto hidden;
+    scroll-padding-inline: var(--scroll-area-scroll-padding-inline, var(--size-px-3));
   }
 
   .wide .viewport {

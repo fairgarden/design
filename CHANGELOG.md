@@ -5,6 +5,7 @@
 - `ScrollArea` scrolls natively, with the browser's own scrollbar, and no longer wraps Base UI's: its `Scrollbar`, `Thumb` and `Corner` parts, their data attributes and their CSS variables are gone, as the Scroll Area page lists. A horizontal scrollbar takes its room in the first paint, so `Table`, `Tabs`, `Carousel` and `NavigationMenu` no longer shift when they overflow ([#7](https://github.com/fairgarden/design/pull/7))
 - Every scrollbar follows its surface: the thumb takes the rule color on the surface's own opaque track and steps to the heading ink on hover, at the platform's width ([#7](https://github.com/fairgarden/design/pull/7))
 - `Carousel` slides snap on the line they rest on, and Previous, Next and the arrow keys land where a swipe would, with no second movement ([#7](https://github.com/fairgarden/design/pull/7))
+- `wide` and `rail` Scroll Areas snap an item 16px inside their edge, one gap in, so it no longer sits under the edge rule; `--scroll-area-scroll-padding-inline` sets another inset ([#7](https://github.com/fairgarden/design/pull/7))
 - A tap no longer flashes the browser's highlight; each control shows its own press state ([#7](https://github.com/fairgarden/design/pull/7))
 
 ## 0.1.0-alpha.2
