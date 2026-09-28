@@ -46,7 +46,7 @@ function maskImage(locator: Locator, pseudoElement: PseudoElement = '::before') 
 
 test('sunburst draws its rays behind the one call to action on a white band', async ({ page }) => {
   const { preview, pageErrors } = await openDemo(page)
-  const grounds = preview.locator('[data-ground]')
+  const grounds = preview.locator('[data-ground]:not(button)')
   await expect(grounds).toHaveCount(1)
 
   const band = grounds.first()
@@ -76,11 +76,13 @@ test('sunburst draws its rays behind the one call to action on a white band', as
 
 test('sunburst drops out in print', async ({ page }) => {
   const { preview, pageErrors } = await openDemo(page)
-  const band = preview.locator('[data-ground]').first()
+  const band = preview.locator('[data-ground]:not(button)').first()
   await expect(band).toHaveClass(/patternSunburst/)
   await page.emulateMedia({ media: 'print' })
   await expect.poll(() => pseudo(band, '::before', 'display')).toBe('none')
-  await expect(band.getByRole('button', { name: 'Find a Garden' })).toBeVisible()
+  // The display type prints; action buttons drop out of print by design (§9.2).
+  await expect(band.getByText('Find a garden near you', { exact: true })).toBeVisible()
+  await expect(band.locator('button')).toBeHidden()
 
   expect(pageErrors, 'the demo should run without uncaught errors').toEqual([])
 })

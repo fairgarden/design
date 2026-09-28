@@ -43,7 +43,8 @@ test('statuses undoes a removal from the action toast', async ({ page }) => {
   await expect(toast).toBeVisible()
   await expect(toast).toHaveAccessibleDescription('They left your trip list.')
   await expect(toast.getByRole('img', { name: 'Success' })).toBeVisible()
-  await expect(toast.getByRole('button', { name: 'Close' })).toBeVisible()
+  // Base UI keeps the close button aria-hidden until the stack expands (hover or focus).
+  await expect(toast.getByRole('button', { name: 'Close', includeHidden: true })).toBeVisible()
 
   // Undo runs busy: the cell reads "Undoing…" with aria-busy, then the toast closes.
   await toast.getByRole('button', { name: 'Undo' }).click()
@@ -81,11 +82,11 @@ test('statuses shows each status glyph and queues toasts one at a time', async (
   await expect(draft).toBeHidden()
 
   // Closing it brings the waiting toast back, with no count.
-  await info.getByRole('button', { name: 'Close' }).click()
+  await info.getByRole('button', { name: 'Close', includeHidden: true }).click()
   await expect(info).toBeHidden()
   await expect(draft).toBeVisible()
   await expect(bar.getByText(/^\d+ of \d+$/)).toHaveCount(0)
-  await draft.getByRole('button', { name: 'Close' }).click()
+  await draft.getByRole('button', { name: 'Close', includeHidden: true }).click()
   await expect(draft).toBeHidden()
 
   // Warning: its glyph, and it persists until dismissed.
@@ -94,7 +95,7 @@ test('statuses shows each status glyph and queues toasts one at a time', async (
   await expect(warning).toBeVisible()
   await expect(warning).toHaveAccessibleDescription('Ridge trails close at 3 pm today.')
   await expect(warning.getByRole('img', { name: 'Warning' })).toBeVisible()
-  await warning.getByRole('button', { name: 'Close' }).click()
+  await warning.getByRole('button', { name: 'Close', includeHidden: true }).click()
   await expect(warning).toBeHidden()
 
   expect(pageErrors, 'the demo should run without uncaught errors').toEqual([])

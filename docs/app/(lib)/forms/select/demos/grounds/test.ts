@@ -17,7 +17,8 @@ async function openDemo(page: Page) {
   await expect(
     demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
-  return demo
+  // Scope to the preview surface; the code panel carries its own grounds and controls.
+  return demo.locator('[class*="__preview"]').first()
 }
 
 test('grounds shows the same two selects on paper and on forest', async ({ page }) => {
@@ -25,12 +26,12 @@ test('grounds shows the same two selects on paper and on forest', async ({ page 
   page.on('pageerror', (error) => pageErrors.push(error))
 
   const demo = await openDemo(page)
-  await expect(demo.locator('[data-ground]')).toHaveCount(2)
+  await expect(demo.locator('[data-ground][class*="__face"]')).toHaveCount(2)
   await expect(demo.getByRole('combobox')).toHaveCount(4)
 
   // The paper face follows the page mode; the forest field is always dark.
-  const paper = demo.locator('[data-ground="paper"]')
-  const forest = demo.locator('[data-ground="forest"]')
+  const paper = demo.locator('[data-ground="paper"][class*="__face"]')
+  const forest = demo.locator('[data-ground="forest"][class*="__face"]')
   await expect(paper).toHaveAttribute('data-scheme', 'page')
   await expect(paper).not.toHaveAttribute('data-theme')
   await expect(forest).toHaveAttribute('data-scheme', 'dark')
@@ -57,8 +58,8 @@ test('grounds opens and chooses on each ground, leaving the other untouched', as
   page.on('pageerror', (error) => pageErrors.push(error))
 
   const demo = await openDemo(page)
-  const paper = demo.locator('[data-ground="paper"]')
-  const forest = demo.locator('[data-ground="forest"]')
+  const paper = demo.locator('[data-ground="paper"][class*="__face"]')
+  const forest = demo.locator('[data-ground="forest"][class*="__face"]')
   const listbox = page.getByRole('listbox')
 
   // Keyboard on the forest field: the popup renders outside the ground.

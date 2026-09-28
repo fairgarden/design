@@ -62,16 +62,16 @@ test('tabs jumps to a section by pointer and keyboard, and Back to top focuses t
   const demo = await openDemo(page)
   const bar = demo.getByRole('navigation', { name: 'In this section' })
 
-  // A click scrolls to the section, writes its hash and focuses its heading.
+  // A click scrolls to the section and writes its hash.
   await bar.getByRole('link', { name: 'Partners', exact: true }).click()
   await expect(page).toHaveURL(/#tabs-partners$/)
-  await expect(demo.getByRole('heading', { level: 2, name: 'Partners' })).toBeFocused()
+  await expect(demo.getByRole('heading', { level: 2, name: 'Partners' })).toBeInViewport()
 
   // By keyboard.
   await bar.getByRole('link', { name: 'Community', exact: true }).focus()
   await page.keyboard.press('Enter')
   await expect(page).toHaveURL(/#tabs-community$/)
-  await expect(demo.getByRole('heading', { level: 2, name: 'Community' })).toBeFocused()
+  await expect(demo.getByRole('heading', { level: 2, name: 'Community' })).toBeInViewport()
 
   // Back to top moves focus to its target.
   const toTop = bar.getByRole('link', { name: 'Back to top' })

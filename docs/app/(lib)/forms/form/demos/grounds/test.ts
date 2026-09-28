@@ -14,23 +14,25 @@ async function openDemo(page: Page) {
   page.on('pageerror', (error) => pageErrors.push(error))
 
   await page.goto(route)
-  const demo = page.locator('.demo').first()
+  const demoRoot = page.locator('.demo').first()
   // The preview remounts, losing its state, when the demo's code content replaces the loading
   // fallback. The tabs are disabled until then, so wait for them before interacting.
   await expect(
-    demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
+    demoRoot.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
+  // Scope to the preview surface; the code panel also carries grounds, buttons and text.
+  const demo = demoRoot.locator('[class*="__preview"]').first()
   return { demo, pageErrors }
 }
 
 test('grounds shows the form on paper and forest scopes', async ({ page }) => {
   const { demo, pageErrors } = await openDemo(page)
 
-  const grounds = demo.locator('[data-ground]')
+  const grounds = demo.locator('section[data-ground]')
   await expect(grounds).toHaveCount(2)
 
-  const paper = demo.locator('[data-ground="paper"]')
-  const forest = demo.locator('[data-ground="forest"]')
+  const paper = demo.locator('section[data-ground="paper"]')
+  const forest = demo.locator('section[data-ground="forest"]')
   await expect(paper).toHaveCount(1)
   await expect(forest).toHaveCount(1)
 

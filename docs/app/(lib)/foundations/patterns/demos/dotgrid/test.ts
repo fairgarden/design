@@ -68,7 +68,7 @@ test('dotgrid puts display type and one action on the dots, other text on a plat
     expect(await maskImage(ground)).toContain('url(')
 
     // The name sits on a paper face: a light island inside a fixed field.
-    const plate = ground.locator('[data-ground]')
+    const plate = ground.locator('[data-ground]:not(button)')
     await expect(plate).toHaveCount(1)
     await expect(plate).toHaveAttribute('data-ground', 'paper')
     await expect(plate).toHaveText(field.preset)

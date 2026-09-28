@@ -97,7 +97,7 @@ test('destructive keeps focus and presses unchanged', async ({ page }) => {
   ).toHaveCount(0, { timeout: 15000 })
 
   // Tab walks one ground's three buttons in order, then on to the next ground.
-  const all = demo.getByRole('button')
+  const all = demo.locator('[class*="__preview"]').first().getByRole('button')
   await all.nth(0).focus()
   await expect(all.nth(0)).toBeFocused()
   await expect(all.nth(0)).toHaveText('Delete Trail')

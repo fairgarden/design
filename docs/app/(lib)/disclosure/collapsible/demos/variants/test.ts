@@ -30,7 +30,9 @@ test('variants shows more and less by pointer and keyboard', async ({ page }) =>
   await expect(demo.getByRole('button')).toHaveCount(3)
 
   // "Show more": four preserves listed, four more held in the closed panel.
-  const more = demo.getByRole('button', { name: 'Show 4 more' })
+  // The trigger's name flips between "Show 4 more" and "Show less", so match either.
+  const more = demo.getByRole('button', { name: /^Show (4 more|less)$/ })
+  await expect(more).toHaveAccessibleName('Show 4 more')
   await expect(more).toHaveAttribute('aria-expanded', 'false')
   await expect(demo.getByRole('listitem')).toHaveCount(4)
   await expect(demo.getByText('Bluestem Prairie')).toBeVisible()

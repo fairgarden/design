@@ -17,7 +17,8 @@ async function openDemo(page: Page) {
   await expect(
     demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
-  return demo
+  // Scope to the preview surface; the code panel repeats the demo's text.
+  return demo.locator('[class*="__preview"]').first()
 }
 
 test('states shows rest, checked, disabled and read-only boxes', async ({ page }) => {
@@ -53,9 +54,9 @@ test('states shows rest, checked, disabled and read-only boxes', async ({ page }
   await expect(reports).toBeChecked()
 
   // Disabled and read-only boxes keep their state.
-  await demo.getByText('Printed Catalog', { exact: true }).click()
+  await demo.getByText('Printed Catalog', { exact: true }).click({ force: true })
   await expect(catalog).not.toBeChecked()
-  await demo.getByText('Member Newsletter', { exact: true }).click()
+  await demo.getByText('Member Newsletter', { exact: true }).click({ force: true })
   await expect(newsletter).toBeChecked()
   await terms.click()
   await expect(terms).toBeChecked()

@@ -17,7 +17,8 @@ async function openDemo(page: Page) {
   await expect(
     demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
-  return demo
+  // The Demo's preview surface, without its code panel (a stable CSS Module local name).
+  return demo.locator('[class*="__preview"]').first()
 }
 
 test('statuses shows each status with its glyph name, role and scale', async ({ page }) => {

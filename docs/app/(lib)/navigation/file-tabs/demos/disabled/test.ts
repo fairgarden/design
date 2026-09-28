@@ -23,17 +23,18 @@ test('disabled keeps every tab and its trigger disabled, the selection unchanged
   await expect(files.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]')).toHaveCount(0, {
     timeout: 15000,
   })
+  const preview = demo.locator('[class*="__preview"]').first()
 
-  const tablist = demo.getByRole('tablist', { name: 'Spring packet' })
+  const tablist = preview.getByRole('tablist', { name: 'Spring packet' })
   const tabs = tablist.getByRole('tab')
   await expect(tabs).toHaveText(['Planting calendar', 'Seed order', 'Tool inventory'])
   for (const index of [0, 1, 2]) await expect(tabs.nth(index)).toBeDisabled()
   // The selected tab stays selected while disabled.
   await expect(tablist.getByRole('tab', { name: 'Seed order' })).toHaveAttribute('aria-selected', 'true')
 
-  const trigger = demo.getByRole('button', { name: 'More actions' })
+  const trigger = preview.getByRole('button', { name: 'More actions' })
   await expect(trigger).toBeDisabled()
-  await expect(demo.getByText('Loading…')).toBeVisible()
+  await expect(preview.getByText('Loading…')).toBeVisible()
 
   // A click chooses no other document, and the trigger opens no menu.
   await tablist.getByRole('tab', { name: 'Tool inventory' }).click({ force: true })

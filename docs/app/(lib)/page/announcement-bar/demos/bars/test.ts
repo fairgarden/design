@@ -56,7 +56,7 @@ test('bars renders a ruled bar, a countdown and two fields', async ({ page }) =>
 
   // A forest field bar with its link, set in a field Ground inside the aside.
   const field = bars.nth(2)
-  await expect(field.locator('[data-ground="forest"]')).toHaveCount(1)
+  await expect(field.locator('[data-ground="forest"]:not(a, button)')).toHaveCount(1)
   await expect(field).toContainText('Guided spring walks are open for booking.')
   await expect(field.getByRole('link', { name: 'Book a Walk' })).toHaveAttribute(
     'href',
@@ -66,7 +66,7 @@ test('bars renders a ruled bar, a countdown and two fields', async ({ page }) =>
 
   // An amber dual-voice record with its one serif accent phrase.
   const record = bars.nth(3)
-  await expect(record.locator('[data-ground="amber"]')).toHaveCount(1)
+  await expect(record.locator('[data-ground="amber"]:not(a, button)')).toHaveCount(1)
   await expect(record).toContainText('Product recall: Trail Mix No. 4, lots 12–19')
   await expect(record.getByText('Trail Mix No. 4', { exact: true })).toBeVisible()
   await expect(record.getByRole('link')).toHaveCount(0)

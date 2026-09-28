@@ -16,12 +16,14 @@ test('color computes the secondary from the status and lets explicit scales win'
   page.on('pageerror', (error) => pageErrors.push(error))
 
   await page.goto(route)
-  const demo = page.locator('.demo').first()
+  const code = page.locator('.demo').first()
   // The preview remounts when the demo's code content replaces the loading fallback. The tabs
   // are disabled until then, so wait for them before asserting.
   await expect(
-    demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
+    code.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
+  // The Demo's preview surface, without its code panel (a stable CSS Module local name).
+  const demo = code.locator('[class*="__preview"]').first()
 
   // Three alerts, none of them danger, so all are polite status regions.
   const alerts = demo.getByRole('status')

@@ -66,7 +66,10 @@ test('ornaments shows the trails, the four marker sets and the blob mount', asyn
   const numeral = preview.getByText('40', { exact: true })
   await expect(numeral).toBeVisible()
   await expect(preview.getByText('Blob mount with a stat numeral', { exact: true })).toBeVisible()
-  const blob = numeral.locator('xpath=..')
+  // The numeral sits in the blob's mark, a sibling of the decorative discs.
+  const blob = preview.locator('[class*="ornamentBlob"]')
+  await expect(blob).toHaveCount(1)
+  await expect(blob.getByText('40', { exact: true })).toBeVisible()
   await expect(blob.locator('svg[aria-hidden="true"]')).toHaveCount(1)
 
   // Trails (2), trail markers (3), timeline markers (4) and the blob's discs (1).

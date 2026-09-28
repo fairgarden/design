@@ -17,7 +17,7 @@ async function openDemo(page: Page) {
   await expect(
     demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
-  return demo
+  return demo.locator('[class*="__preview"]').first()
 }
 
 test('inline shows the footer form on the night band', async ({ page }) => {
@@ -26,7 +26,7 @@ test('inline shows the footer form on the night band', async ({ page }) => {
 
   const demo = await openDemo(page)
 
-  const band = demo.locator('[data-ground="night"]')
+  const band = demo.locator('[data-ground="night"][class*="ground-module__"]')
   await expect(band).toHaveCount(1)
   await expect(band).toHaveAttribute('data-theme', 'dark')
 

@@ -22,12 +22,14 @@ test('color applies primary and secondary scales, with the static fill on red', 
   page.on('pageerror', (error) => pageErrors.push(error))
 
   await page.goto(route)
-  const demo = page.locator('.demo').first()
+  const code = page.locator('.demo').first()
   // The preview remounts, losing its state, when the demo's code content replaces the loading
   // fallback. The tabs are disabled until then, so wait for them before interacting.
   await expect(
-    demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
+    code.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
+  // The Demo's preview surface, without its code panel (a stable CSS Module local name).
+  const demo = code.locator('[class*="__preview"]').first()
 
   // The pills: the scope accent, then taxonomy scales passed as `secondary`.
   const scopeAccent = badge(demo, 'Scope accent')

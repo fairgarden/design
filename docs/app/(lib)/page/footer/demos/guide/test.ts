@@ -107,7 +107,7 @@ test('guide moves through the block actions from the keyboard', async ({ page })
   await page.keyboard.press('Tab')
   await expect(footer.getByRole('link', { name: 'Download the Guide' })).toBeFocused()
   await page.keyboard.press('Tab')
-  await expect(footer.getByRole('link', { name: 'Donate' })).toBeFocused()
+  await expect(footer.getByRole('link', { name: 'Donate' }).first()).toBeFocused()
   await page.keyboard.press('Shift+Tab')
   await expect(footer.getByRole('link', { name: 'Download the Guide' })).toBeFocused()
 

@@ -17,7 +17,7 @@ async function openDemo(page: Page) {
   await expect(
     demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
-  return demo
+  return demo.locator('[class*="__preview"]').first()
 }
 
 test('states shows continuous, stepped, range and disabled sliders', async ({ page }) => {
@@ -31,7 +31,7 @@ test('states shows continuous, stepped, range and disabled sliders', async ({ pa
   const distance = demo.getByRole('group', { name: 'Walking Distance' })
   const distanceThumb = distance.getByRole('slider', { name: 'Walking Distance' })
   await expect(distanceThumb).toHaveAttribute('aria-valuenow', '6')
-  await expect(distanceThumb).toHaveAttribute('aria-valuemax', '20')
+  await expect(distanceThumb).toHaveAttribute('max', '20')
   await expect(distance.locator('output')).toHaveText('6 km')
 
   const group = demo.getByRole('group', { name: 'Group Size' })

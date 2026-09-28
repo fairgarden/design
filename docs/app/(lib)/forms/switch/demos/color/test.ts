@@ -17,7 +17,7 @@ async function openDemo(page: Page) {
   await expect(
     demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
-  return demo
+  return demo.locator('[class*="__preview"]').first()
 }
 
 test('color sets each switch scale and keeps the on and off states', async ({ page }) => {

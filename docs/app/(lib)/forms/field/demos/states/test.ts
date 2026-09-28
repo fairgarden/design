@@ -11,12 +11,14 @@ const route = path
 
 async function openDemo(page: Page) {
   await page.goto(route)
-  const demo = page.locator('.demo').first()
+  const demoRoot = page.locator('.demo').first()
   // The preview remounts, losing its state, when the demo's code content replaces the loading
   // fallback. The tabs are disabled until then, so wait for them before interacting.
   await expect(
-    demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
+    demoRoot.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
+  // Scope to the preview surface; the code panel also carries grounds, buttons and text.
+  const demo = demoRoot.locator('[class*="__preview"]').first()
 
   return {
     demo,
@@ -59,13 +61,13 @@ test('states shows rest, optional, invalid and disabled fields', async ({ page }
   const errorPart = demo.locator('[class*="secondaryRed"]', { hasText: 'Postcode is too short' })
   await expect(errorPart).toHaveCount(1)
   await expect(errorPart.locator('svg[aria-hidden="true"]')).toHaveCount(1)
-  await expect(demo.locator('[data-invalid]', { has: postcode }).first()).toBeVisible()
+  await expect(demo.locator('[data-invalid]', { has: page.getByRole('textbox', { name: 'Postcode', exact: true }) }).first()).toBeVisible()
 
   // Disabled: the value stays readable but can't be edited; the field is marked disabled.
   await expect(member).toHaveValue('FG-2041')
   await expect(member).toBeDisabled()
   await expect(member).toHaveAccessibleDescription('Assigned when your membership starts.')
-  await expect(demo.locator('[data-disabled]', { has: member }).first()).toBeVisible()
+  await expect(demo.locator('[data-disabled]', { has: page.getByRole('textbox', { name: 'Member Number', exact: true }) }).first()).toBeVisible()
 
   // Only the invalid field shows an error message.
   await expect(demo.getByText(/Enter all 5 digits/)).toHaveCount(1)
@@ -100,7 +102,7 @@ test('states focuses by label and tabs past the disabled field', async ({ page }
   // The disabled field is skipped, and clicking its label doesn't focus it.
   await page.keyboard.press('Tab')
   await expect(member).not.toBeFocused()
-  await demo.getByText('Member Number', { exact: true }).click()
+  await demo.getByText('Member Number', { exact: true }).click({ force: true })
   await expect(member).not.toBeFocused()
   await expect(member).toHaveValue('FG-2041')
 

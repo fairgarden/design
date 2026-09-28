@@ -31,7 +31,7 @@ test('pairs renders two independent collapsed owners', async ({ page }) => {
   const demo = await openDemo(page)
   const hours = demo.locator('button[aria-controls]').filter({ hasText: 'Opening hours' })
   const parking = demo.locator('button[aria-controls]').filter({ hasText: 'Parking' })
-  await expect(demo.locator('button[aria-expanded]')).toHaveCount(2)
+  await expect(demo.locator('[class*="__preview"]').first().locator('button[aria-expanded]')).toHaveCount(2)
   await expect(hours).toHaveAccessibleName('Opening hours')
   await expect(parking).toHaveAccessibleName('Parking')
   await expect(hours).toHaveAttribute('aria-expanded', 'false')

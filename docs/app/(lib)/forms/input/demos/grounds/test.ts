@@ -11,12 +11,14 @@ const route = path
 
 async function openDemo(page: Page) {
   await page.goto(route)
-  const demo = page.locator('.demo').first()
+  const demoRoot = page.locator('.demo').first()
   // The preview remounts, losing its state, when the demo's code content replaces the loading
   // fallback. The tabs are disabled until then, so wait for them before interacting.
   await expect(
-    demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
+    demoRoot.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
+  // Scope to the preview surface; the code panel also carries grounds, buttons and text.
+  const demo = demoRoot.locator('[class*="__preview"]').first()
   return demo
 }
 
@@ -64,7 +66,7 @@ test('grounds sets each preset scope and its plate', async ({ page }) => {
   await expect(forest.locator('[data-ground="white"]')).toHaveAttribute('data-theme', 'light')
   // The open boxes carry their scope's attributes.
   await expect(
-    forest.locator('[data-ground="forest"]').filter({ has: forest.getByLabel('Email Address') }),
+    forest.locator('[data-ground="forest"][class*="input-module"]').filter({ has: page.getByLabel('Email Address') }),
   ).toHaveAttribute('data-scheme', 'dark')
 
   expect(pageErrors, 'the demo should run without uncaught errors').toEqual([])

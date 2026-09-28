@@ -30,14 +30,19 @@ test('color sets the primary scale per field and gives the error the danger scal
   await expect(trail).not.toHaveAttribute('aria-invalid', 'true')
   await expect(trail).toHaveAccessibleDescription('Primary plum: label, edge, value and ring.')
   // The Field root carries the plum primary scale (a CSS Module class, stable by local name).
-  const plumField = demo.locator('[class*="primaryPlum"]', { has: trail })
+  // `has` locators resolve relative to each candidate, so they start from the page.
+  const plumField = demo.locator('[class*="primaryPlum"]', {
+    has: page.getByRole('textbox', { name: 'Trail Name', exact: true }),
+  })
   await expect(plumField).toHaveCount(1)
   await expect(plumField).not.toHaveAttribute('data-invalid')
 
   // Slate field with an indigo secondary, forced invalid.
   await expect(group).toHaveValue('40')
   await expect(group).toHaveAttribute('aria-invalid', 'true')
-  const slateField = demo.locator('[class*="primarySlate"]', { has: group })
+  const slateField = demo.locator('[class*="primarySlate"]', {
+    has: page.getByRole('textbox', { name: 'Group Size', exact: true }),
+  })
   await expect(slateField).toHaveCount(1)
   await expect(slateField).toHaveClass(/secondaryIndigo/)
   await expect(slateField).toHaveAttribute('data-invalid', '')

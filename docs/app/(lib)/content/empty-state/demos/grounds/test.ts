@@ -88,7 +88,9 @@ test('grounds moves focus between the actions by keyboard and pointer', async ({
 
   await actions.nth(1).click()
   await expect(actions.nth(1)).toBeFocused()
-  await expect(demo.getByRole('button')).toHaveCount(grounds.length)
+  await expect(demo.locator('[class*="__preview"]').first().getByRole('button')).toHaveCount(
+    grounds.length,
+  )
 
   expect(pageErrors, 'the demo should run without uncaught errors').toEqual([])
 })

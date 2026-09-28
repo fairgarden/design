@@ -26,8 +26,8 @@ async function openDemo(page: Page) {
 test('grounds renders the same groups on paper and forest scopes', async ({ page }) => {
   const { demo, pageErrors } = await openDemo(page)
 
-  const paper = demo.locator('[data-ground="paper"]')
-  const forest = demo.locator('[data-ground="forest"]')
+  const paper = demo.locator('[class*="__preview"]').first().locator('section[data-ground="paper"]')
+  const forest = demo.locator('[class*="__preview"]').first().locator('section[data-ground="forest"]')
   await expect(paper).toHaveCount(1)
   await expect(forest).toHaveCount(1)
   await expect(paper).toHaveAttribute('data-tone', 'light-base')
@@ -67,8 +67,8 @@ test('grounds renders the same groups on paper and forest scopes', async ({ page
 test('grounds switches the segment and filters independently per ground', async ({ page }) => {
   const { demo, pageErrors } = await openDemo(page)
 
-  const forest = demo.locator('[data-ground="forest"]')
-  const paper = demo.locator('[data-ground="paper"]')
+  const forest = demo.locator('[class*="__preview"]').first().locator('section[data-ground="forest"]')
+  const paper = demo.locator('[class*="__preview"]').first().locator('section[data-ground="paper"]')
 
   const forestView = forest.getByRole('group', { name: 'View on forest' })
   await forestView.getByRole('button', { name: 'Week' }).click()

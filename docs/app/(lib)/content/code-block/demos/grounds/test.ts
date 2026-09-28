@@ -44,7 +44,7 @@ test('grounds sets the same block on pollen and heather', async ({ page }) => {
     await expect(face.getByRole('button', { name: 'Copy seasonReport.ts link' })).toBeVisible()
 
     // The block takes its ground's scope, so its tokens resolve against that ground's scales.
-    const block = face.locator(`div[data-ground="${preset}"]`).filter({ has: page.locator('pre') })
+    const block = face.locator(`:scope > div[data-ground="${preset}"]`).filter({ has: page.locator('pre') })
     await expect(block).toHaveCount(1)
     await expect(block.locator('pre')).toContainText('export function seasonReport(')
     // Code reads left to right on any page.

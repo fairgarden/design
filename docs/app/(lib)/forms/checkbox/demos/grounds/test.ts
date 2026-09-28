@@ -25,8 +25,11 @@ test('grounds repeats the same checkboxes on paper and forest', async ({ page })
   page.on('pageerror', (error) => pageErrors.push(error))
 
   const demo = await openDemo(page)
-  const paper = demo.locator('[data-ground="paper"]')
-  const forest = demo.locator('[data-ground="forest"]')
+  // The Demo's preview surface, without its code; each ground is a section scope in it (the
+  // checkbox roots carry data-ground too).
+  const preview = demo.locator('[class*="__preview"]').first()
+  const paper = preview.locator('section[data-ground="paper"]')
+  const forest = preview.locator('section[data-ground="forest"]')
   await expect(paper).toHaveCount(1)
   await expect(forest).toHaveCount(1)
 
@@ -66,7 +69,8 @@ test('grounds repeats the same checkboxes on paper and forest', async ({ page })
   await expect(forestUnchecked).toBeChecked()
 
   // The disabled box ignores the pointer.
-  await forest.getByText('Unavailable', { exact: true }).click()
+  // Forced, since Playwright refuses to click a disabled control.
+  await forest.getByText('Unavailable', { exact: true }).click({ force: true })
   await expect(forest.getByRole('checkbox', { name: 'Unavailable', exact: true })).toBeChecked()
 
   expect(pageErrors, 'the demo should run without uncaught errors').toEqual([])

@@ -36,8 +36,8 @@ test('color sets each slider on its primary scale', async ({ page }) => {
     const root = demo.getByRole('group', { name })
     const thumb = root.getByRole('slider', { name })
     await expect(thumb).toHaveAttribute('aria-valuenow', value)
-    await expect(thumb).toHaveAttribute('aria-valuemin', '0')
-    await expect(thumb).toHaveAttribute('aria-valuemax', '100')
+    await expect(thumb).toHaveAttribute('min', '0')
+    await expect(thumb).toHaveAttribute('max', '100')
     await expect(thumb).toBeEnabled()
     await expect(root.locator('output')).toHaveText(value)
     // `primary` lands on the root as a scale class; omitted, the slider inherits the scope.

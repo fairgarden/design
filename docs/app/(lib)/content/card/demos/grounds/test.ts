@@ -35,7 +35,7 @@ test('grounds nests a white face on paper and a paper light island in each field
   ] as const
 
   for (const sample of samples) {
-    const ground = demo.locator(`[data-ground="${sample.preset}"]`).first()
+    const ground = demo.locator('[class*="__preview"]').first().locator(`section[data-ground="${sample.preset}"]`)
     await expect(ground).toBeVisible()
     if (sample.theme) await expect(ground).toHaveAttribute('data-theme', sample.theme)
     else await expect(ground).not.toHaveAttribute('data-theme', /.+/)

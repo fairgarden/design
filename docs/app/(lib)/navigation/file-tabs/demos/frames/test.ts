@@ -20,7 +20,7 @@ async function open(page: Page) {
   await expect(files.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]')).toHaveCount(0, {
     timeout: 15000,
   })
-  return demo
+  return demo.locator('[class*="__preview"]').first()
 }
 
 test('frames renders a joined and an unframed header, each on its own', async ({ page }) => {

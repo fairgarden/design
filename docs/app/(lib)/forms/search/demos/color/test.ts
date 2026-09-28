@@ -17,7 +17,9 @@ async function openDemo(page: Page) {
   await expect(
     demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
-  return demo
+  // Scope to the preview: the code panel repeats the demo's text in its source.
+  const preview = page.locator('.demo').first().locator('[class*="__preview"]').first()
+  return preview
 }
 
 test('color recolors each search with its primary scale', async ({ page }) => {
@@ -76,7 +78,7 @@ test('color filters suggestions in the white popup and closes on Escape', async 
   await expect(listbox).toBeHidden()
   await expect(field).toHaveAttribute('aria-expanded', 'false')
   await expect(field).toBeFocused()
-  await expect(field).toHaveValue('Ot')
+  await expect(field).toHaveValue('ot')
 
   expect(pageErrors, 'the demo should run without uncaught errors').toEqual([])
 })

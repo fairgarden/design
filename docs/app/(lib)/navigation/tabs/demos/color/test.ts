@@ -18,7 +18,7 @@ async function openDemo(page: Page) {
   await expect(
     demo.getByRole('tablist', { name: 'Files' }).locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
-  return demo
+  return demo.locator('[class*="__preview"]').first()
 }
 
 test('color renders a plum underline set and an indigo filled segmented set', async ({ page }) => {
@@ -29,7 +29,9 @@ test('color renders a plum underline set and an indigo filled segmented set', as
   // The primary-coloured underline tabs.
   const topics = demo.getByRole('tablist').filter({ has: page.getByRole('tab', { name: 'Birds' }) })
   await expect(topics).toHaveCount(1)
-  await expect(topics.getByRole('tab')).toHaveText(['Birds', 'Plants', 'Insects'], { ignoreCase: true })
+  // Each tab also holds a hidden copy of its label, so compare accessible names, not text.
+  for (const [i, name] of ['Birds', 'Plants', 'Insects'].entries())
+    await expect(topics.getByRole('tab').nth(i)).toHaveAccessibleName(name, { ignoreCase: true })
   await expect(topics.getByRole('tab', { name: 'Birds' })).toHaveAttribute('aria-selected', 'true')
   await expect(topics.getByRole('tab', { name: 'Plants' })).toHaveAttribute('aria-selected', 'false')
   await expect(topics.getByRole('tab', { name: 'Insects' })).toHaveAttribute('aria-selected', 'false')
@@ -37,14 +39,16 @@ test('color renders a plum underline set and an indigo filled segmented set', as
   // The secondary-coloured filled segmented tabs.
   const actions = demo.getByRole('tablist').filter({ has: page.getByRole('tab', { name: 'Visit' }) })
   await expect(actions).toHaveCount(1)
-  await expect(actions.getByRole('tab')).toHaveText(['Visit', 'Volunteer', 'Give'], { ignoreCase: true })
+  // Each tab also holds a hidden copy of its label, so compare accessible names, not text.
+  for (const [i, name] of ['Visit', 'Volunteer', 'Give'].entries())
+    await expect(actions.getByRole('tab').nth(i)).toHaveAccessibleName(name, { ignoreCase: true })
   await expect(actions.getByRole('tab', { name: 'Visit' })).toHaveAttribute('aria-selected', 'true')
 
   // Each root carries its colour axis (CSS Module classes keep their local names).
-  const plumRoot = demo.locator('[class*="primaryPlum"]').filter({ has: topics })
+  const plumRoot = demo.locator('[class*="primaryPlum"]').filter({ has: page.getByRole('tab', { name: 'Birds' }) })
   await expect(plumRoot).toHaveCount(1)
   await expect(plumRoot).not.toHaveClass(/segmented/)
-  const indigoRoot = demo.locator('[class*="secondaryIndigo"]').filter({ has: actions })
+  const indigoRoot = demo.locator('[class*="secondaryIndigo"]').filter({ has: page.getByRole('tab', { name: 'Visit' }) })
   await expect(indigoRoot).toHaveCount(1)
   await expect(indigoRoot).toHaveClass(/segmented/)
   await expect(indigoRoot).toHaveClass(/filled/)

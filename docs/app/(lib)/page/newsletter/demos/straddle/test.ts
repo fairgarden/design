@@ -17,7 +17,7 @@ async function openDemo(page: Page) {
   await expect(
     demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
-  return demo
+  return demo.locator('[class*="__preview"]').first()
 }
 
 test('straddle shows the royal card across the night band', async ({ page }) => {
@@ -27,15 +27,15 @@ test('straddle shows the royal card across the night band', async ({ page }) => 
   const demo = await openDemo(page)
 
   // The paper band above follows the page mode; the night band below is always dark.
-  await expect(demo.locator('[data-ground="paper"]')).toHaveCount(1)
-  await expect(demo.locator('[data-ground="paper"]')).not.toHaveAttribute('data-theme', /.+/)
-  const night = demo.locator('[data-ground="night"]')
+  await expect(demo.locator('[data-ground="paper"][class*="ground-module__"]')).toHaveCount(1)
+  await expect(demo.locator('[data-ground="paper"][class*="ground-module__"]')).not.toHaveAttribute('data-theme', /.+/)
+  const night = demo.locator('[data-ground="night"][class*="ground-module__"]')
   await expect(night).toHaveAttribute('data-theme', 'dark')
 
   const card = night.getByRole('region', { name: 'Get the Latest Garden Stewardship News' })
   await expect(card).toBeVisible()
   // The card is the page's one royal field, always dark.
-  const royal = card.locator('[data-ground="royal"]')
+  const royal = card.locator('[data-ground="royal"][class*="ground-module__"]')
   await expect(royal).toHaveCount(1)
   await expect(royal).toHaveAttribute('data-theme', 'dark')
 

@@ -33,7 +33,9 @@ test('grounds keeps the sticker its own white scope on every ground', async ({ p
   await expect(stickers).toHaveCount(4)
 
   // One host ground per preset, each holding one sticker and its name.
-  const grounds = demo.locator('[data-ground]:not([data-ground="white"])').filter({ has: stickers })
+  const grounds = demo
+    .locator('[data-ground]:not([data-ground="white"])')
+    .filter({ has: page.locator('span[aria-hidden="true"]:has(> svg)') })
   await expect(grounds).toHaveCount(4)
 
   // The sticker's own scope is a light island inside a fixed field; on a page ground it

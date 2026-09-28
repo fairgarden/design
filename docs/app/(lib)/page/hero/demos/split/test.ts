@@ -20,7 +20,7 @@ async function openDemo(page: Page) {
   await expect(
     demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
-  return { demo, pageErrors }
+  return { demo: demo.locator('[class*="__preview"]').first(), pageErrors }
 }
 
 test('split sets the text beside the captioned photo on the night band', async ({ page }) => {
@@ -59,7 +59,7 @@ test('split sets the text beside the captioned photo on the night band', async (
   const enlarge = figure.getByRole('button', { name: 'Enlarge the Photo' })
   await expect(enlarge).toBeEnabled()
   // The media Button sits in a night face.
-  await expect(figure.locator('[data-ground="night"]')).toContainText('Enlarge the Photo')
+  await expect(figure.locator('[data-ground="night"][class*="ground-module__"]')).toContainText('Enlarge the Photo')
 
   // The rail, and its trail in the paper seam below.
   const rail = hero.getByRole('link', { name: /Explore the garden/ })

@@ -20,7 +20,7 @@ async function openDemo(page: Page) {
   await expect(
     demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
-  return { demo, pageErrors }
+  return { demo: demo.locator('[class*="__preview"]').first(), pageErrors }
 }
 
 test('stacked puts the photo under the text, crossing into the paper seam', async ({ page }) => {

@@ -30,7 +30,7 @@ function collectErrors(page: Page) {
 
 async function openSearch(page: Page) {
   const demo = await openDemo(page)
-  const trigger = demo.getByRole('button', { name: label })
+  const trigger = demo.getByRole('button', { name: label, includeHidden: true })
   await expect(trigger).toHaveAttribute('aria-haspopup', 'dialog')
   await expect(trigger).toHaveAttribute('aria-expanded', 'false')
   // No keyboardShortcut in this demo: the header's search owns ⌘K / Ctrl K.

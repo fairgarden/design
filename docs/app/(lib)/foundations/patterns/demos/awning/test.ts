@@ -46,7 +46,7 @@ function maskImage(locator: Locator, pseudoElement: PseudoElement = '::before') 
 
 test('awning draws its stripes on a paper band and on the clay field', async ({ page }) => {
   const { preview, pageErrors } = await openDemo(page)
-  const grounds = preview.locator('[data-ground]')
+  const grounds = preview.locator('[data-ground]:not(button)')
   await expect(grounds).toHaveCount(2)
 
   // The paper band follows the page mode; the clay field is always light.
@@ -84,7 +84,7 @@ test('awning draws its stripes on a paper band and on the clay field', async ({ 
 
 test('awning drops out in print', async ({ page }) => {
   const { preview, pageErrors } = await openDemo(page)
-  const grounds = preview.locator('[data-ground]')
+  const grounds = preview.locator('[data-ground]:not(button)')
   await expect(grounds).toHaveCount(2)
   await page.emulateMedia({ media: 'print' })
   for (const ground of await grounds.all()) {

@@ -20,7 +20,7 @@ async function open(page: Page, hash = '') {
   await expect(files.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]')).toHaveCount(0, {
     timeout: 15000,
   })
-  return demo
+  return demo.locator('[class*="__preview"]').first()
 }
 
 test('links renders each tab as a deep link and selects on a plain click', async ({ page }) => {

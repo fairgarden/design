@@ -28,7 +28,7 @@ test('framed renders its banner in the preview above its two files', async ({ pa
 
   // The banner: the day's tag, the line and the call to action, in the live preview.
   await expect(demo.getByText('Saturday', { exact: true })).toBeVisible()
-  await expect(demo.getByText('Twelve volunteers are planting the orchard.')).toBeVisible()
+  await expect(demo.locator('[class*="__preview"]').first().getByText('Twelve volunteers are planting the orchard.')).toBeVisible()
   const join = demo.getByRole('button', { name: 'Join the Crew' })
   await expect(join).toBeVisible()
   await join.focus()

@@ -21,8 +21,10 @@ test('grounds sets each box on its ground and the popup on white', async ({ page
     demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
 
-  const paper = demo.locator('[data-ground="paper"]').first()
-  const forest = demo.locator('[data-ground="forest"]').first()
+  // The Demo's preview surface, without its code; each ground is a section scope in it.
+  const preview = demo.locator('[class*="__preview"]').first()
+  const paper = preview.locator('section[data-ground="paper"]')
+  const forest = preview.locator('section[data-ground="forest"]')
 
   // Paper follows the mode; forest is an always-dark field.
   await expect(paper).toHaveAttribute('data-scheme', 'page')
@@ -32,7 +34,7 @@ test('grounds sets each box on its ground and the popup on white', async ({ page
   await expect(forest).toHaveAttribute('data-theme', 'dark')
   await expect(forest).toContainText('forest')
 
-  await expect(demo.getByRole('combobox', { name: 'River' })).toHaveCount(2)
+  await expect(preview.getByRole('combobox', { name: 'River' })).toHaveCount(2)
   for (const ground of [paper, forest]) {
     const river = ground.getByRole('combobox', { name: 'River' })
     await expect(river).toHaveAttribute('placeholder', 'River name…')
@@ -52,6 +54,8 @@ test('grounds sets each box on its ground and the popup on white', async ({ page
   await expect(popupScope).not.toHaveAttribute('data-theme', /.+/)
   await expect(demo.getByRole('listbox')).toHaveCount(0)
 
+  // Opening highlights nothing, so the first ArrowDown lands on Avon and the second on Derwent.
+  await page.keyboard.press('ArrowDown')
   await page.keyboard.press('ArrowDown')
   await page.keyboard.press('Enter')
   await expect(listbox).toBeHidden()

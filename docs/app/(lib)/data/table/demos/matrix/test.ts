@@ -51,9 +51,9 @@ test('matrix shows the allergen grid with its marks and notes', async ({ page })
   }
 
   // The notes define the marks, below the table.
-  await expect(demo.getByText('● Contains. ○ May contain traces.')).toBeVisible()
+  await expect(demo.locator('[class*="__preview"]').first().getByText('● Contains. ○ May contain traces.')).toBeVisible()
   // The scroll cue is rendered with the table (it shows only while the table overflows).
-  await expect(demo.getByText('Scroll for more allergens →')).toHaveCount(1)
+  await expect(demo.locator('[class*="__preview"]').first().getByText('Scroll for more allergens →')).toHaveCount(1)
 
   expect(pageErrors, 'the demo should run without uncaught errors').toEqual([])
 })

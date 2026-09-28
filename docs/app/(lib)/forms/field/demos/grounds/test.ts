@@ -14,12 +14,14 @@ test('grounds renders the same fields on the paper face and the forest field', a
   page.on('pageerror', (error) => pageErrors.push(error))
 
   await page.goto(route)
-  const demo = page.locator('.demo').first()
+  const demoRoot = page.locator('.demo').first()
   // The preview remounts, losing its state, when the demo's code content replaces the loading
   // fallback. The tabs are disabled until then, so wait for them before interacting.
   await expect(
-    demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
+    demoRoot.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
+  // Scope to the preview surface; the code panel also carries grounds, buttons and text.
+  const demo = demoRoot.locator('[class*="__preview"]').first()
 
   // Two ground scopes: paper follows the page mode, forest is always dark.
   const paper = demo.locator('section[data-ground="paper"]', { has: page.getByRole('textbox') }).first()
@@ -54,7 +56,7 @@ test('grounds renders the same fields on the paper face and the forest field', a
     await expect(email).toHaveAccessibleDescription(message)
 
     // Each Field carries its ground's scope, so its roles resolve there.
-    await expect(ground.locator('[data-invalid]', { has: email }).first()).toHaveAttribute(
+    await expect(ground.locator('[data-invalid]', { has: page.getByRole('textbox', { name: 'Email Address', exact: true }) }).first()).toHaveAttribute(
       'data-ground',
       preset,
     )

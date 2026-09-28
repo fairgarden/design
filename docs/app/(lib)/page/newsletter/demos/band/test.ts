@@ -17,7 +17,7 @@ async function openDemo(page: Page) {
   await expect(
     demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
-  return demo
+  return demo.locator('[class*="__preview"]').first()
 }
 
 test('band shows two bands and a ruled row, each a named section', async ({ page }) => {
@@ -43,11 +43,11 @@ test('band shows two bands and a ruled row, each a named section', async ({ page
     'email',
   )
   await expect(notes.getByRole('button', { name: 'Subscribe' })).toBeVisible()
-  await expect(notes.locator('[data-ground]')).toHaveCount(0)
+  await expect(notes.locator('[data-ground][class*="ground-module__"]')).toHaveCount(0)
 
   // The leaf campaign field: an always-light field card with its own submit label.
   const planting = demo.getByRole('region', { name: 'Join the Spring Planting' })
-  const leaf = planting.locator('[data-ground="leaf"]')
+  const leaf = planting.locator('[data-ground="leaf"][class*="ground-module__"]')
   await expect(leaf).toHaveCount(1)
   await expect(leaf).toHaveAttribute('data-theme', 'light')
   await expect(planting.getByText("We'll send dates and places near you.")).toBeVisible()

@@ -16,12 +16,14 @@ test('grounds sets a forest field, the page ground and the ticker', async ({ pag
   page.on('pageerror', (error) => pageErrors.push(error))
 
   await page.goto(route)
-  const demo = page.locator('.demo').first()
+  const outer = page.locator('.demo').first()
   // The preview remounts when the demo's code content replaces the loading fallback. The tabs
   // are disabled until then, so wait for them before asserting.
   await expect(
-    demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
+    outer.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
+  // Scope to the preview surface: the code panel carries its own text and grounds.
+  const demo = outer.locator('[class*="__preview"]').first()
 
   // Three labelled marquee sections, named by their `label`.
   const fielded = demo.getByRole('region', { name: 'What we stand for', exact: true })

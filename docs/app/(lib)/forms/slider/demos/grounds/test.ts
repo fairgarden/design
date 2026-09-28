@@ -17,7 +17,7 @@ async function openDemo(page: Page) {
   await expect(
     demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
-  return demo
+  return demo.locator('[class*="__preview"]').first()
 }
 
 test('grounds shows the same sliders on paper and on the forest field', async ({ page }) => {
@@ -28,8 +28,8 @@ test('grounds shows the same sliders on paper and on the forest field', async ({
   await expect(demo.getByRole('slider')).toHaveCount(4)
 
   // The paper face follows the page mode; the forest field is always dark.
-  const paper = demo.locator('[data-ground="paper"]').filter({ has: page.getByRole('slider') })
-  const forest = demo.locator('[data-ground="forest"]').filter({ has: page.getByRole('slider') })
+  const paper = demo.locator('[data-ground="paper"]:not([role="group"])').filter({ has: page.getByRole('slider') })
+  const forest = demo.locator('[data-ground="forest"]:not([role="group"])').filter({ has: page.getByRole('slider') })
   await expect(paper).toHaveCount(1)
   await expect(forest).toHaveCount(1)
   await expect(paper).toHaveAttribute('data-scheme', 'page')
@@ -60,7 +60,7 @@ test('grounds shows the same sliders on paper and on the forest field', async ({
     await expect(grade).toHaveAttribute('data-ground', name)
     const gradeThumb = grade.getByRole('slider', { name: 'Trail Grade' })
     await expect(gradeThumb).toHaveAttribute('aria-valuenow', '3')
-    await expect(gradeThumb).toHaveAttribute('aria-valuemax', '10')
+    await expect(gradeThumb).toHaveAttribute('max', '10')
     await expect(grade.locator('output')).toHaveText('3')
     for (const label of ['0', '5', '10']) {
       await expect(grade.locator('[aria-hidden="true"]').getByText(label, { exact: true })).toHaveCount(1)

@@ -27,12 +27,18 @@ test('kinds renders framed, illustrated and inline empty states', async ({ page 
   const demo = await open(page)
   // Each empty state root writes its scope attributes; the innermost div holding its text.
   const root = (text: string) =>
-    demo.locator('div[data-ground]').filter({ hasText: text }).last()
+    demo
+      .locator('[class*="__preview"]')
+      .first()
+      .locator('div[data-ground]')
+      .filter({ hasText: text })
+      .last()
 
   // Two headings (h3) and two actions; the inline kind has neither.
   const headings = demo.getByRole('heading', { level: 3 })
   await expect(headings).toHaveText(['No saved trails yet', 'No sightings this week'])
-  await expect(demo.getByRole('button')).toHaveText(['Browse Trails', 'Log a Sighting'])
+  const preview = demo.locator('[class*="__preview"]').first()
+  await expect(preview.getByRole('button')).toHaveText(['Browse Trails', 'Log a Sighting'])
 
   // Framed (default): the dashed frame outline and the decorative trail, an outline action.
   const framed = root('No saved trails yet')
@@ -94,7 +100,7 @@ test('kinds reaches both actions by keyboard and pointer', async ({ page }) => {
 
   await log.click()
   await expect(log).toBeFocused()
-  await expect(demo.getByRole('button')).toHaveCount(2)
+  await expect(demo.locator('[class*="__preview"]').first().getByRole('button')).toHaveCount(2)
 
   expect(pageErrors, 'the demo should run without uncaught errors').toEqual([])
 })

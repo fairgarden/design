@@ -58,8 +58,8 @@ test('areas shows formatted values in the tooltip by pointer and keyboard', asyn
   const tooltip = tooltipLabel.locator('xpath=..')
   await expect(tooltipLabel).toHaveCount(0)
 
-  const box = (await chart.boundingBox())!
-  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
+  // The chart redraws its svg as it measures: hover() retries until it is stable and on screen.
+  await chart.hover()
   await expect(tooltipLabel).toHaveText(category)
   for (const name of ['Kitchen scraps', 'Yard waste', 'Other']) {
     await expect(tooltip).toContainText(name)

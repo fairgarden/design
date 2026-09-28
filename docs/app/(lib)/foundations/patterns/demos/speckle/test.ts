@@ -46,7 +46,7 @@ function maskImage(locator: Locator, pseudoElement: PseudoElement = '::before') 
 
 test('speckle draws its mark layer on a paper band and on the leaf field', async ({ page }) => {
   const { preview, pageErrors } = await openDemo(page)
-  const grounds = preview.locator('[data-ground]')
+  const grounds = preview.locator('[data-ground]:not(button)')
   await expect(grounds).toHaveCount(2)
 
   // The paper band follows the page mode; the leaf field is always light.
@@ -81,7 +81,7 @@ test('speckle draws its mark layer on a paper band and on the leaf field', async
 
 test('speckle drops out in print', async ({ page }) => {
   const { preview, pageErrors } = await openDemo(page)
-  const grounds = preview.locator('[data-ground]')
+  const grounds = preview.locator('[data-ground]:not(button)')
   await expect(grounds).toHaveCount(2)
   await page.emulateMedia({ media: 'print' })
   for (const ground of await grounds.all()) {

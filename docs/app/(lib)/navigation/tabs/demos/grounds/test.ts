@@ -53,8 +53,11 @@ test('grounds renders an underline and a segmented set in each ground scope', as
 
     const lists = face.getByRole('tablist')
     await expect(lists).toHaveCount(2)
-    await expect(lists.nth(0).getByRole('tab')).toHaveText(['Map', 'List'], { ignoreCase: true })
-    await expect(lists.nth(1).getByRole('tab')).toHaveText(['Now', 'Later'], { ignoreCase: true })
+    // Each tab also holds a hidden copy of its label, so compare accessible names, not text.
+    for (const [i, name] of ['Map', 'List'].entries())
+      await expect(lists.nth(0).getByRole('tab').nth(i)).toHaveAccessibleName(name, { ignoreCase: true })
+    for (const [i, name] of ['Now', 'Later'].entries())
+      await expect(lists.nth(1).getByRole('tab').nth(i)).toHaveAccessibleName(name, { ignoreCase: true })
     await expect(face.getByRole('tab', { name: 'Map', exact: true })).toHaveAttribute('aria-selected', 'true')
     await expect(face.getByRole('tab', { name: 'Now', exact: true })).toHaveAttribute('aria-selected', 'true')
     await expect(face.getByRole('tab', { name: 'List', exact: true })).toHaveAttribute('aria-selected', 'false')
@@ -62,7 +65,7 @@ test('grounds renders an underline and a segmented set in each ground scope', as
     await expect(face.getByText('Trailheads and parking.')).toBeVisible()
 
     // The segmented root re-resolves against its ground; only paper's is filled.
-    const segmented = face.locator('[class*="segmented"]').filter({ has: lists.nth(1) })
+    const segmented = face.locator('[class*="segmented"]').filter({ has: page.getByRole('tab', { name: 'Now', exact: true }) })
     await expect(segmented).toHaveCount(1)
     await expect(segmented).toHaveAttribute('data-ground', preset)
     if (filled) {

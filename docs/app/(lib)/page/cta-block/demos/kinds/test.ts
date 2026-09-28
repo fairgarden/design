@@ -105,14 +105,14 @@ test('kinds sets the deep and saturated kinds on fixed-mode CTA fields', async (
 
   // Deep defaults to the forest field, always dark.
   const deep = demo.getByRole('region', { name: 'Become a member and keep the gardens growing' })
-  const forest = deep.locator('[data-ground="forest"]')
+  const forest = deep.locator('[data-ground="forest"]:not(a, button)')
   await expect(forest).toHaveCount(1)
   await expect(forest).toHaveAttribute('data-theme', 'dark')
   await expect(forest.getByRole('link')).toHaveCount(2)
 
   // Saturated defaults to the amber campaign field, always light.
   const saturated = demo.getByRole('region', { name: 'Plant 10,000 trees this spring' })
-  const amber = saturated.locator('[data-ground="amber"]')
+  const amber = saturated.locator('[data-ground="amber"]:not(a, button)')
   await expect(amber).toHaveCount(1)
   await expect(amber).toHaveAttribute('data-theme', 'light')
   await expect(amber.getByRole('link')).toHaveCount(1)
@@ -124,7 +124,7 @@ test('kinds sets the deep and saturated kinds on fixed-mode CTA fields', async (
     'Request a survey of your land',
   ]) {
     await expect(
-      demo.getByRole('region', { name: headline }).locator('[data-ground]'),
+      demo.getByRole('region', { name: headline }).locator('[data-ground]:not(a, button)'),
     ).toHaveCount(0)
   }
 

@@ -14,16 +14,18 @@ test('grounds shows the same fields on paper and on the forest field', async ({ 
   page.on('pageerror', (error) => pageErrors.push(error))
 
   await page.goto(route)
-  const demo = page.locator('.demo').first()
+  const demoRoot = page.locator('.demo').first()
   // The preview remounts, losing its state, when the demo's code content replaces the loading
   // fallback. The tabs are disabled until then, so wait for them before interacting.
   await expect(
-    demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
+    demoRoot.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
+  // Scope to the preview surface; the code panel also carries grounds, buttons and text.
+  const demo = demoRoot.locator('[class*="__preview"]').first()
 
   // The paper face follows the page mode; the forest field is always dark.
-  const paper = demo.locator('[data-ground="paper"]').filter({ has: page.getByRole('textbox') })
-  const forest = demo.locator('[data-ground="forest"]').filter({ has: page.getByRole('textbox') })
+  const paper = demo.locator('section[data-ground="paper"]').filter({ has: page.getByRole('textbox') })
+  const forest = demo.locator('section[data-ground="forest"]').filter({ has: page.getByRole('textbox') })
   await expect(paper).toHaveCount(1)
   await expect(forest).toHaveCount(1)
   await expect(paper).toHaveAttribute('data-scheme', 'page')

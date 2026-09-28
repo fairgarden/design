@@ -63,7 +63,9 @@ test('tiers shows three plans with the recommended one first and chosen', async 
   await expect(tiers.nth(2).getByText('Unavailable', { exact: true })).toBeVisible()
   await expect(tiers.nth(2).getByText('Sold out for this season.')).toBeVisible()
 
-  await expect(demo.getByText('Prices as of 1 Sep 2026 (hemlockravine.org/join)')).toBeVisible()
+  await expect(
+    demo.getByText('Prices as of 1 Sep 2026 (hemlockravine.org/join)', { exact: true }),
+  ).toBeVisible()
   await expect(demo.getByRole('button', { name: 'Join Now' })).toBeEnabled()
 
   expect(pageErrors, 'the demo should run without uncaught errors').toEqual([])

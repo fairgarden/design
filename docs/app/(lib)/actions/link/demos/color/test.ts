@@ -33,7 +33,7 @@ test('color gives each link its own primary and secondary', async ({ page }) => 
     await expect(link).toBeVisible()
     await expect(link).toHaveAttribute('href', '#color')
   }
-  await expect(demo.getByText('Scope defaults:')).toBeVisible()
+  await expect(demo.locator('[class*="__preview"]').first().getByText('Scope defaults:')).toBeVisible()
 
   const style = (link: typeof defaults) =>
     link.evaluate((el) => {

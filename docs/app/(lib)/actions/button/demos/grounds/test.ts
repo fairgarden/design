@@ -89,7 +89,7 @@ test('grounds moves focus across the grounds by keyboard', async ({ page }) => {
   // A pointer press focuses the button and leaves the demo intact.
   await joins.nth(2).click()
   await expect(joins.nth(2)).toBeFocused()
-  await expect(demo.getByRole('button')).toHaveCount(grounds.length * 2)
+  await expect(demo.locator('[class*="__preview"]').first().getByRole('button')).toHaveCount(grounds.length * 2)
 
   expect(pageErrors, 'the demo should run without uncaught errors').toEqual([])
 })

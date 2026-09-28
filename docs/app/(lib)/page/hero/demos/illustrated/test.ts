@@ -20,7 +20,7 @@ async function openDemo(page: Page) {
   await expect(
     demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
-  return { demo, pageErrors }
+  return { demo: demo.locator('[class*="__preview"]').first(), pageErrors }
 }
 
 test('illustrated sets the lockup and sticker in the leaf field', async ({ page }) => {
@@ -38,7 +38,7 @@ test('illustrated sets the lockup and sticker in the leaf field', async ({ page 
   await expect(title.getByText('here', { exact: true })).toBeVisible()
 
   // The campaign field is a leaf Ground inside the band, fixed to light mode.
-  const field = hero.locator('[data-ground="leaf"]')
+  const field = hero.locator('[data-ground="leaf"][class*="ground-module__"]')
   await expect(field).toHaveCount(1)
   await expect(field).toHaveAttribute('data-theme', 'light')
   await expect(field).toContainText('Grown right here')

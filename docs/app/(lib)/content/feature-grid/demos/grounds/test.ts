@@ -29,12 +29,12 @@ test('grounds sets one glossary grid on paper, forest and leaf', async ({ page }
   // The Demo's preview surface, without its code (a stable CSS Module local name).
   const preview = demo.locator('[class*="__preview"]').first()
 
-  // Three grounds, each holding one grid.
-  await expect(preview.locator('[data-ground]')).toHaveCount(3)
+  // Three grounds, each holding one grid (the grid section writes its own scope too).
+  await expect(preview.locator('[data-ground]:has([data-ground])')).toHaveCount(3)
   await expect(preview.getByRole('list')).toHaveCount(3)
 
   for (const { ground, name, theme } of faces) {
-    const scope = preview.locator(`[data-ground="${ground}"]`)
+    const scope = preview.locator(`[data-ground="${ground}"]:has([data-ground])`)
     await expect(scope).toHaveCount(1)
     await expect(scope).toBeVisible()
     await expect(scope.getByText(name, { exact: true })).toBeVisible()

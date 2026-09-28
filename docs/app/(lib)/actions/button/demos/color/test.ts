@@ -30,7 +30,7 @@ test('color renders each variant with its primary or secondary scale', async ({ 
     demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
 
-  const all = demo.getByRole('button')
+  const all = demo.locator('[class*="__preview"]').first().getByRole('button')
   await expect(all).toHaveCount(buttons.length)
   await expect(all).toHaveText(buttons.map((b) => b.name))
 
@@ -87,7 +87,7 @@ test('color moves focus through the buttons by keyboard and takes presses', asyn
   const indigo = demo.getByRole('button', { name: buttons[1].name, exact: true })
   await indigo.click()
   await expect(indigo).toBeFocused()
-  await expect(demo.getByRole('button')).toHaveCount(buttons.length)
+  await expect(demo.locator('[class*="__preview"]').first().getByRole('button')).toHaveCount(buttons.length)
 
   expect(pageErrors, 'the demo should run without uncaught errors').toEqual([])
 })

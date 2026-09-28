@@ -11,11 +11,12 @@ const route = path
 
 async function openDemo(page: Page) {
   await page.goto(route)
-  const demo = page.locator('.demo').first()
+  const demoRoot = page.locator('.demo').first()
+  const demo = demoRoot.locator('[class*="__preview"]').first()
   // The preview remounts, losing its state, when the demo's code content replaces the loading
   // fallback. The tabs are disabled until then, so wait for them before interacting.
   await expect(
-    demo.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
+    demoRoot.locator('[role="tab"][aria-disabled="true"], [role="tab"][disabled]'),
   ).toHaveCount(0, { timeout: 15000 })
   return demo
 }
@@ -41,7 +42,7 @@ test('basic renders the link in its sentence with the card closed', async ({ pag
 
   // Nothing of the card is on the page until it is asked for.
   await expect(card(page)).toHaveCount(0)
-  await expect(page.getByText('A 2.1 km link from the saddle to the reservoir dam.')).toHaveCount(0)
+  await expect(page.getByText('A 2.1 km link from the saddle to the reservoir dam.', { exact: true })).toHaveCount(0)
 
   expect(pageErrors, 'the demo should run without uncaught errors').toEqual([])
 })

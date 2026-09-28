@@ -53,8 +53,8 @@ test('variants names status in words beside the avatar', async ({ page }) => {
 
   await expect(demo.getByRole('img', { name: 'Online' })).toBeVisible()
   await expect(demo.getByRole('img', { name: 'Away' })).toBeVisible()
-  await expect(demo.getByText('Ana Díaz · Online')).toBeVisible()
-  await expect(demo.getByText('Ben Okafor · Away')).toBeVisible()
+  await expect(demo.getByText('Ana Díaz · Online', { exact: true })).toBeVisible()
+  await expect(demo.getByText('Ben Okafor · Away', { exact: true })).toBeVisible()
   // The photo beside a visible name has empty alt, so it is not announced.
   await expect(demo.locator('img[alt=""]')).toHaveCount(1)
 

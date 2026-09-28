@@ -75,7 +75,10 @@ test('kinds renders the icon, numbered, rule-topped and framed grids', async ({ 
   const framed = grids.nth(3)
   await expect(framed.getByRole('listitem')).toHaveCount(4)
   await expect(framed.getByRole('heading', { level: 3 })).toHaveText(qualities)
-  await expect(framed.locator('[data-ground]').filter({ has: page.locator('ul') })).toHaveCount(1)
+  // The card frame and its face both write a scope; the face is the innermost one holding the list.
+  await expect(
+    framed.locator('[data-ground]:not(:has([data-ground] ul))').filter({ has: page.locator('ul') }),
+  ).toHaveCount(1)
   await expect(
     framed.getByText('One sentence on what it means for your visit.'),
   ).toHaveCount(4)

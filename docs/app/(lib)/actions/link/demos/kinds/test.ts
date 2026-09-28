@@ -30,7 +30,7 @@ test('kinds shows inline, standalone, nav, list, muted and external links', asyn
   // Inline, in running text.
   const inline = demo.getByRole('link', { name: 'trail conditions' })
   await expect(inline).toHaveAttribute('href', '#kinds')
-  await expect(demo.getByText('before you set out.')).toBeVisible()
+  await expect(demo.locator('[class*="__preview"]').first().getByText('before you set out.')).toBeVisible()
 
   // Standalone, with a decorative chevron that stays out of its name.
   const standalone = demo.getByRole('link', { name: 'See all trails', exact: true })
@@ -58,7 +58,7 @@ test('kinds shows inline, standalone, nav, list, muted and external links', asyn
   await expect(muted.getByRole('link', { name: 'Trail care' })).toBeVisible()
 
   // External: the arrow mark is hidden, "(external site)" is announced.
-  const external = demo.getByRole('link', { name: /^USGS\s*\(external site\)/ })
+  const external = demo.getByRole('link', { name: /^USGS[\s\u2060]*\(external site\)/ })
   await expect(external).toHaveAttribute('href', 'https://www.usgs.gov')
   await expect(external.locator('svg[aria-hidden="true"]')).toHaveCount(1)
 

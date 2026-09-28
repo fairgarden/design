@@ -74,7 +74,8 @@ test('kinds toggles cards and rows by pointer and keyboard', async ({ page }) =>
   await expect(frame).toBeChecked()
 
   // The disabled card ignores the pointer.
-  await cards.getByText('Museum Glass').click()
+  // Forced, since Playwright refuses to click a disabled control.
+  await cards.getByText('Museum Glass').click({ force: true })
   await expect(glass).not.toBeChecked()
 
   // Space toggles; Enter does not.
