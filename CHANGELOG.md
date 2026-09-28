@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.1.0-alpha.4
+
 ## 0.1.0-alpha.3
 
 - `ScrollArea` scrolls natively, with the browser's own scrollbar, and no longer wraps Base UI's: its `Scrollbar`, `Thumb` and `Corner` parts, their data attributes and their CSS variables are gone, as the Scroll Area page lists. A horizontal scrollbar takes its room in the first paint, so `Table`, `Tabs`, `Carousel` and `NavigationMenu` no longer shift when they overflow ([#7](https://github.com/fairgarden/design/pull/7))
