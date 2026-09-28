@@ -16,9 +16,16 @@ export type DemoContentProps = ContentProps<SiteDemoOptions>
 /**
  * The site's demo content: the design system's Demo, code-split
  * (`DemoLazy`). A `frame` demo renders its preview route in a frame,
- * passed in as `renderPreview`.
+ * passed in as `renderPreview`. The loaded demo carries `demo`, the class
+ * the browser tests find it by, as in @fairgarden/docs.
  */
 export function DemoContent(props: DemoContentProps) {
   const { frame, ...contentProps } = props
-  return <DemoLazy {...contentProps} renderPreview={framedPreview(frame, props.url, props.name)} />
+  return (
+    <DemoLazy
+      {...contentProps}
+      className="demo"
+      renderPreview={framedPreview(frame, props.url, props.name)}
+    />
+  )
 }

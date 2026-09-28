@@ -2,6 +2,7 @@
   "name": "@fairgarden/design-docs",
   "version": "0.1.0-alpha.0",
   "private": true,
+  "type": "module",
   "description": "Documentation site for @fairgarden/design",
   "license": "MIT",
   "scripts": {
@@ -9,7 +10,13 @@
     "build": "next build",
     "start": "next start -p 3032",
     "lint": "eslint",
-    "validate": "docs validate --command 'pnpm validate'"
+    "validate": "docs validate --command 'pnpm validate'",
+    "docs:run": "node ./scripts/runFairGardenDocs.mjs",
+    "test:e2e": "pnpm docs:run browser --script test:e2e:unconfined --playwright-version 1.63.0 --",
+    "test:e2e:unconfined": "playwright test",
+    "test:e2e:codegen": "playwright codegen",
+    "test:screenshots": "pnpm test:e2e --grep @screenshot",
+    "test:screenshots:update": "pnpm test:e2e --grep @screenshot --update-snapshots"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -30,6 +37,7 @@
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^16.3.5",
+    "@playwright/test": "1.63.0",
     "@types/mdx": "^2.0.13",
     "@types/node": "^26.6.2",
     "@types/react": "^19.3.0",
