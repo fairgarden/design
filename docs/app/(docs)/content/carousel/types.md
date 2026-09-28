@@ -6,11 +6,13 @@
 
 ### Carousel
 
-The carousel. Swipe, trackpad, the Previous and Next buttons, and the
-arrow, Home and End keys on the focused track all move it one slide at a
-time with snap. In print, card slides become a 2-up grid and photo sets
-of up to 6 a 3-up grid; a larger photo set prints its first slide and
-"n more images (short URL)".
+The carousel. The browser's own scroll snap places every slide: a swipe
+or trackpad scroll comes to rest on a slide's start, and the Previous and
+Next buttons and the arrow, Home and End keys on the focused track move
+it one slide at a time to exactly the position snap would choose. In
+print, card slides become a 2-up grid and photo sets of up to 6 a 3-up
+grid; a larger photo set prints its first slide and "n more images
+(short URL)".
 
 **Carousel Props:**
 

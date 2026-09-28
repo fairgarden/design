@@ -196,6 +196,25 @@
     overflow: clip;
   }
 
+  /*
+   * The panel's Scroll Area: its native scrollbar runs on the face, so the
+   * track is --primary1 [D207]. Attached, the area sits
+   * --fgd-overlay-corner-inset inside the end side and the bottom, which
+   * keeps the scrollbar clear of the rounded bottom corner; the component's
+   * cap subtracts --navigation-menu-corner-inset, so the panel still fits
+   * the space below the bar.
+   */
+  .scroll {
+    --role-scrollbar-track: var(--primary1);
+  }
+
+  .popupAttached .scroll {
+    --navigation-menu-corner-inset: var(--fgd-overlay-corner-inset);
+
+    margin-inline-end: var(--navigation-menu-corner-inset);
+    margin-block-end: var(--navigation-menu-corner-inset);
+  }
+
   .viewport {
     position: relative;
   }

@@ -8,6 +8,7 @@ declare const styles: {
   readonly "itemIcon": string;
   readonly "itemLabel": string;
   readonly "positioner": string;
+  readonly "scroll": string;
   readonly "separator": string;
   readonly "shortcut": string;
   readonly "submenuChevron": string;

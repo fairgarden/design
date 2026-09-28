@@ -15,6 +15,8 @@
  *
  * --role-edge (the container edge) is not keyed here: Ground's kind class
  * publishes it on each scope [D178], and component roots inherit it.
+ * --role-scrollbar-track is the scope's ground here; a scroller on another
+ * surface restates it in its own module [D207].
  *
  * Hover [D181]: --role-link-hover, --role-action-hover (the label stays
  * --role-action-label, the edge is unchanged), --role-select-hover, and
@@ -177,6 +179,17 @@
     --fgd-soft-hover-line: none;
     --fgd-series-fill: none;
     --fgd-series-pattern: inline;
+    /*
+     * Native scrollbars [D207]. The thumb is the lightest role step at 3:1
+     * on the track: the rule, on every preset in both modes (3.15:1 on light
+     * paper at the least). A hovered scroller steps it to --primary12, the
+     * rule's own hover step [D140]; on the one-ink fields the rule already
+     * is --primary12 [D14]. The track is the surface's own opaque ground,
+     * never transparent, so a grain or pattern never shows under the bar.
+     */
+    --role-scrollbar-thumb: var(--role-rule);
+    --role-scrollbar-thumb-hover: var(--primary12);
+    --role-scrollbar-track: var(--role-ground);
   }
 
   /* Tone-resolved aliases [D155, D141]. */

@@ -107,11 +107,14 @@
   }
 
   /*
-   * Body: scrolls between the bars. Its block edges are the §10.19 overflow
-   * rules, drawn in the face color (invisible, as an edge equal to its fill
-   * is [D12]) until content is hidden in that direction.
+   * Body: scrolls between the bars, its native scrollbar on the face (track
+   * --primary1) [D207]. Its block edges are the §10.19 overflow rules, drawn
+   * in the face color (invisible, as an edge equal to its fill is [D12])
+   * until content is hidden in that direction.
    */
   .body {
+    --role-scrollbar-track: var(--primary1);
+
     flex: 1 1 auto;
     display: grid;
     align-content: start;
@@ -124,10 +127,18 @@
     border-block-start-width: 0;
   }
 
+  /*
+   * Framed, the body's side edges are face-colored too, taken out of its
+   * padding: with the block-end edge they keep the scrollbar clear of the
+   * frame's rounded bottom corners when no action bar follows (5 px inner
+   * radius, so at least 1.46 px in from both edges) [D207].
+   */
   @media (--md-n-above) {
     .body {
       padding-block-start: 0;
+      padding-inline: calc(var(--dialog-inset) - var(--border-size-2));
       border-block-start-width: var(--border-size-2);
+      border-inline: var(--border-size-2) solid var(--primary1);
     }
   }
 

@@ -105,6 +105,13 @@
     /* Conditional radii [D171], Open Props' --radius-conditional-* pattern: full radius while narrower than the viewport, 0 when full-bleed. */
     --radius-conditional-2-25: clamp(0px, calc(100vw - 100%) * 1e5, var(--radius-2-25));
     --radius-conditional-3-25: clamp(0px, calc(100vw - 100%) * 1e5, var(--radius-3-25));
+    /*
+     * Corner clearance [D207]: a rectangle (a native scrollbar) clears a
+     * frame's rounded corner when it sits r(1 − 1/√2) inside the inner edges,
+     * r the inner radius, or r above the inner bottom edge. The overlay
+     * frame (--radius-2-25 at --border-size-2, so r = 6 px) needs 1.76 px: 2.
+     */
+    --fgd-overlay-corner-inset: 2px;
 
     /* Type families (§1.5.5) [D159]; --fgd-font-fine is set per mode (theme.css). Each webfont's metric-matched fallback follows it (utils/font-fallbacks.css) [D201]. */
     --fgd-font-display: 'Fraunces Variable', 'Fraunces Fallback', 'Source Serif 4 Variable', var(--font-old-style);

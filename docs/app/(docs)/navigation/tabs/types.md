@@ -26,7 +26,7 @@ give it a width in shrink-to-fit contexts.
 
 The tab list and its current-tab indicator. When 4–6 tabs overflow their
 row, the row scrolls sideways in a `wide` Scroll Area (the last tab
-clipped, a visible scrollbar, hard overflow edges) and a `--size-px-7` ›
+clipped, the native scrollbar, hard overflow edges) and a `--size-px-7` ›
 button at its end scrolls it on. More than 6 tabs belong in navigation
 or a Select.
 

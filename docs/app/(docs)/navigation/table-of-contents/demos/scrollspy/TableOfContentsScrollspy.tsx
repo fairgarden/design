@@ -40,24 +40,26 @@ export function TableOfContentsScrollspy() {
   const activeId = useActiveHeading(ids, { root: panelRef })
   return (
     <div className={styles.split}>
-      <div ref={panelRef} className={styles.panel} tabIndex={0} aria-label="Seed sowing guide">
-        {headings.map((heading) =>
-          heading.level === 2 ? (
-            <React.Fragment key={heading.id}>
-              <h2 id={heading.id} className={styles.h2}>
-                {heading.title}
-              </h2>
-              <p className={styles.p}>{body[heading.id]}</p>
-            </React.Fragment>
-          ) : (
-            <React.Fragment key={heading.id}>
-              <h3 id={heading.id} className={styles.h3}>
-                {heading.title}
-              </h3>
-              <p className={styles.p}>{body[heading.id]}</p>
-            </React.Fragment>
-          )
-        )}
+      <div className={styles.frame}>
+        <div ref={panelRef} className={styles.panel} tabIndex={0} aria-label="Seed sowing guide">
+          {headings.map((heading) =>
+            heading.level === 2 ? (
+              <React.Fragment key={heading.id}>
+                <h2 id={heading.id} className={styles.h2}>
+                  {heading.title}
+                </h2>
+                <p className={styles.p}>{body[heading.id]}</p>
+              </React.Fragment>
+            ) : (
+              <React.Fragment key={heading.id}>
+                <h3 id={heading.id} className={styles.h3}>
+                  {heading.title}
+                </h3>
+                <p className={styles.p}>{body[heading.id]}</p>
+              </React.Fragment>
+            )
+          )}
+        </div>
       </div>
       <div className={styles.column}>
         <TableOfContents items={headings} activeId={activeId} />

@@ -15,12 +15,35 @@
   }
 
   /*
+   * Native scrollbars [D207], standard properties only: every element takes
+   * its scope's thumb on its surface's opaque track, so a scroller follows
+   * its ground and the page mode (color-scheme comes from data-theme, which
+   * every fixed-mode scope carries). A hovered scroller steps the thumb, at
+   * once; html is left out, as it is hovered whenever the pointer is on the
+   * page. Width stays auto. Forced colors reset scrollbar-color to auto.
+   */
+  :where(*) {
+    scrollbar-color: var(--role-scrollbar-thumb) var(--role-scrollbar-track);
+  }
+
+  :where(:not(:root):hover) {
+    scrollbar-color: var(--role-scrollbar-thumb-hover) var(--role-scrollbar-track);
+  }
+
+  /*
    * The page's scrollbar gutter is always reserved [D201], so the content
    * never moves sideways when the scrollbar comes or goes: a popup's scroll
    * lock hiding it, a popup or a filter changing the page's height. With
    * overlay scrollbars nothing is reserved.
+   *
+   * No tap highlight (§1.11.9, the State rule's touch note): the browser's
+   * own overlay on a tapped element (Android Chrome's blue, iOS Safari's
+   * grey) is switched off, inherited everywhere, because every control
+   * shows its own press state. This removes a user-agent overlay; it paints
+   * nothing translucent, so the no-transparency rule is untouched.
    */
   :where(html) {
+    -webkit-tap-highlight-color: transparent;
     scrollbar-gutter: stable;
     -webkit-text-size-adjust: none;
     text-size-adjust: none;

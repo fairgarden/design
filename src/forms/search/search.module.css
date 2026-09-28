@@ -106,21 +106,34 @@
     outline: 0;
   }
 
-  /* 8 rows visible, then it scrolls. */
+  /*
+   * 8 rows visible, then it scrolls. The native scrollbar runs on the face
+   * (track --primary1), and the list sits --fgd-overlay-corner-inset inside
+   * the frame, clear of its rounded corners; its padding gives the inset
+   * back, so the items keep their --size-px-1 from the frame [D207]. Results
+   * filter while it is open, so `scrollbar-gutter: stable` keeps the rows'
+   * width whether or not it scrolls [D201].
+   */
   .list {
+    --search-list-pad: calc(var(--size-px-1) - var(--fgd-overlay-corner-inset));
+    --role-scrollbar-track: var(--primary1);
+
     box-sizing: border-box;
     max-block-size: min(
-      var(--available-height, 100vh),
-      calc(8 * var(--fgd-size-hit) + 2 * var(--size-px-1))
+      calc(var(--available-height, 100vh) - 2 * var(--fgd-overlay-corner-inset)),
+      calc(8 * var(--fgd-size-hit) + 2 * var(--search-list-pad))
     );
-    padding: var(--size-px-1);
+    margin: var(--fgd-overlay-corner-inset);
+    padding: var(--search-list-pad);
     overflow-y: auto;
+    scrollbar-gutter: stable;
     overscroll-behavior: contain;
-    scroll-padding-block: var(--size-px-1);
+    scroll-padding-block: var(--search-list-pad);
     outline: 0;
   }
 
   .list:empty {
+    margin: 0;
     padding: 0;
   }
 
@@ -278,12 +291,14 @@
     display: block;
   }
 
-  /* Highlighted: --primary4 plus a --border-size-2-25 start bar, as Menu [D145]. */
-  .item[data-highlighted] {
+  /* Highlighted, or pressed (§1.11.9): --primary4 plus a --border-size-2-25 start bar, as Menu [D145]. */
+  .item[data-highlighted],
+  .item:not([data-disabled]):active {
     background-color: var(--primary4);
   }
 
-  .item[data-highlighted]::before {
+  .item[data-highlighted]::before,
+  .item:not([data-disabled]):active::before {
     display: block;
   }
 

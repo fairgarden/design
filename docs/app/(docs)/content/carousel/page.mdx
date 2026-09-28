@@ -1,12 +1,12 @@
 # Carousel
 
-Secondary items in short horizontal space: similar species, related products, photo sets, at least four. Base UI has no carousel, so it is composed from a Scroll Area in its `rail` kind (the track and a 2 px progress rail), a list of slides each labelled "n of N", Previous and Next buttons and a polite count. It never autoplays or loops, and it has no dots.
+Secondary items in short horizontal space: similar species, related products, photo sets, at least four. Base UI has no carousel, so it is composed from a Scroll Area in its `rail` kind (the track, whose native scrollbar is the position rail), a list of slides each labelled "n of N", Previous and Next buttons and a polite count. It never autoplays or loops, and it has no dots.
 
 ```tsx
 import { Carousel, CarouselPhoto, CarouselSlide } from '@fairgarden/design/content/carousel'
 ```
 
-The first slide aligns to the container's start edge and the end bleeds to the viewport edge (to the field's edge inside a `forest` or `royal` field), with the next slide peeking. Swipe, trackpad, the buttons and the arrow, Home and End keys on the focused track move it a slide at a time with snap; a vertical wheel never moves the track and scrolls the page. At either end that button is hidden with its space kept, and the count states the position. When every slide fits, the controls go and the slides sit as a static row.
+The first slide aligns to the container's start edge and the end bleeds to the viewport edge (to the field's edge inside a `forest` or `royal` field), with the next slide peeking. Snapping is the browser's own: swipe and trackpad come to rest on a slide's start, and the buttons and the arrow, Home and End keys on the focused track scroll straight to where snap would put the slide, in one movement (at once under reduced motion). A vertical wheel never moves the track and scrolls the page. At either end that button is hidden with its space kept, and the count states the position. When every slide fits, the controls go and the slides sit as a static row.
 
 ## Card carousels
 

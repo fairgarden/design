@@ -6,25 +6,25 @@
 
 ### ScrollArea
 
-A Base UI Scroll Area. Overflow is shown by a hard `--border-size-2`
-`--role-rule` edge on each side with hidden content, never a fade
-\[D21, D68], and by a hairline track with a `--role-rule` thumb. Content
-prints at full height with the scrollbars and edges hidden. Don't nest
-two scroll areas on the same axis.
+A native scroll area: the browser's own scrollbar, in the scope's thumb
+and track colors, and a hard `--border-size-2` `--role-rule` edge on each
+side with hidden content, never a fade \[D21, D68, D207]. Content prints
+at full height with the edges hidden. Don't nest two scroll areas on the
+same axis.
 
 **ScrollArea Props:**
 
-| Prop             | Type                                                                                                                                                                                                                                                                                                                                               | Default | Description                                                                                                                                                                                                                                                                                                                                                          |
-| :--------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| label            | `string`                                                                                                                                                                                                                                                                                                                                           | -       | Accessible name for the scrollable region. Given, the viewport becomes a&#xA;named `region`; the viewport is focusable whenever it scrolls.                                                                                                                                                                                                                          |
-| contentClassName | `string`                                                                                                                                                                                                                                                                                                                                           | -       | Class for the content wrapper, the layout box of the children.                                                                                                                                                                                                                                                                                                       |
-| fitContent       | `boolean`                                                                                                                                                                                                                                                                                                                                          | -       | `true` (default): the content is at least as wide as its children, so&#xA;wide content scrolls. `false`: the content keeps the viewport's width&#xA;and its children overflow it, so their percentages resolve against the&#xA;viewport (a carousel track).                                                                                                          |
-| focusable        | `boolean`                                                                                                                                                                                                                                                                                                                                          | -       | `true` (default): the viewport joins the tab order whenever it scrolls,&#xA;so a keyboard can scroll it (§10.19). `false` keeps it out, for content&#xA;whose own items are the focus stops and scroll themselves into view&#xA;(a tab list).                                                                                                                        |
-| kind             | `'panel' \| 'wide' \| 'rail' \| null`                                                                                                                                                                                                                                                                                                              | -       | `panel` (default): vertical; the scrollbar shows on hover, focus and&#xA;scroll; the area caps at 50% of the viewport height (`maxBlockSize`&#xA;changes the cap).&#xA;`wide`: horizontal, the scrollbar always visible (wide tables).&#xA;`rail`: horizontal, a 2 px progress rail whose thumb equals the visible&#xA;fraction (carousels and removable-chip rows). |
-| maxBlockSize     | `string \| number`                                                                                                                                                                                                                                                                                                                                 | -       | The area's maximum block size, a CSS length such as&#xA;`calc(var(--available-height) - 2px)` (a number is px). Default: 50dvh&#xA;for `panel`, none for `wide` and `rail`.                                                                                                                                                                                          |
-| primary          | `'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'ruby' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| null`                                                                                                                               | -       | Primary Radix scale: every part (track, thumb, edges, focus ring). Never&#xA;defaulted; omitted, it inherits the scope \[D133].                                                                                                                                                                                                                                      |
-| secondary        | `'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'ruby' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| 'amber' \| 'blue' \| 'cyan' \| 'grass' \| 'green' \| 'jade' \| 'lime' \| 'mint' \| 'orange' \| 'sky' \| 'teal' \| 'yellow' \| null` | -       | Secondary Radix scale: unused by the scroll area. Never defaulted.                                                                                                                                                                                                                                                                                                   |
-| viewportRef      | `React.Ref<HTMLDivElement>`                                                                                                                                                                                                                                                                                                                        | -       | Ref to the scrolling viewport, e.g. to scroll it from Prev/Next buttons.                                                                                                                                                                                                                                                                                             |
+| Prop             | Type                                                                                                                                                                                                                                                                                                                                               | Default | Description                                                                                                                                                                                                                                                                                                 |
+| :--------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| label            | `string`                                                                                                                                                                                                                                                                                                                                           | -       | Accessible name for the scrollable region. Given, the viewport becomes a&#xA;named `region`; the viewport is focusable whenever it scrolls.                                                                                                                                                                 |
+| contentClassName | `string`                                                                                                                                                                                                                                                                                                                                           | -       | Class for the content wrapper, the layout box of the children.                                                                                                                                                                                                                                              |
+| fitContent       | `boolean`                                                                                                                                                                                                                                                                                                                                          | -       | `true` (default): the content is at least as wide as its children, so&#xA;wide content scrolls. `false`: the content keeps the viewport's width&#xA;and its children overflow it, so their percentages resolve against the&#xA;viewport (a carousel track).                                                 |
+| focusable        | `boolean`                                                                                                                                                                                                                                                                                                                                          | -       | `true` (default): the viewport joins the tab order whenever it scrolls,&#xA;so a keyboard can scroll it (§10.19). `false` keeps it out, for content&#xA;whose own items are the focus stops and scroll themselves into view&#xA;(a tab list).                                                               |
+| kind             | `'panel' \| 'wide' \| 'rail' \| null`                                                                                                                                                                                                                                                                                                              | -       | `panel` (default): vertical; its scrollbar gutter is always reserved;&#xA;the area caps at 50% of the viewport height (`maxBlockSize` changes the&#xA;cap).&#xA;`wide`: horizontal, with proximity snap (wide tables).&#xA;`rail`: horizontal, with mandatory snap (carousels and removable-chip&#xA;rows). |
+| maxBlockSize     | `string \| number`                                                                                                                                                                                                                                                                                                                                 | -       | The area's maximum block size, a CSS length such as&#xA;`calc(var(--available-height) - 2px)` (a number is px). Default: 50dvh&#xA;for `panel`, none for `wide` and `rail`.                                                                                                                                 |
+| primary          | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| null`                                                                                                                               | -       | Primary Radix scale: every part (thumb, edges, focus ring). Never&#xA;defaulted; omitted, it inherits the scope \[D133].                                                                                                                                                                                    |
+| secondary        | `'ruby' \| 'olive' \| 'sage' \| 'slate' \| 'sand' \| 'gray' \| 'mauve' \| 'brown' \| 'bronze' \| 'gold' \| 'red' \| 'crimson' \| 'tomato' \| 'pink' \| 'plum' \| 'indigo' \| 'iris' \| 'violet' \| 'purple' \| 'amber' \| 'blue' \| 'cyan' \| 'grass' \| 'green' \| 'jade' \| 'lime' \| 'mint' \| 'orange' \| 'sky' \| 'teal' \| 'yellow' \| null` | -       | Secondary Radix scale: unused by the scroll area. Never defaulted.                                                                                                                                                                                                                                          |
+| viewportRef      | `React.Ref<HTMLDivElement>`                                                                                                                                                                                                                                                                                                                        | -       | Ref to the scrolling viewport, e.g. to scroll it from Prev/Next buttons.                                                                                                                                                                                                                                    |
 
 ## Additional Types
 
@@ -36,70 +36,71 @@ type scrollArea = scrollArea;
 
 ### ScrollAreaProps
 
-Props for ScrollArea: Base UI Scroll Area Root props plus the kind and color axes.
+Props for ScrollArea: `div` props for the root plus the kind and color axes.
 
 ```typescript
-type ScrollAreaProps = ScrollAreaRootProps & {
-  kind?: 'panel' | 'wide' | 'rail' | null;
-  primary?:
-    | 'olive'
-    | 'sage'
-    | 'slate'
-    | 'sand'
-    | 'gray'
-    | 'mauve'
-    | 'brown'
-    | 'bronze'
-    | 'gold'
-    | 'red'
-    | 'ruby'
-    | 'crimson'
-    | 'tomato'
-    | 'pink'
-    | 'plum'
-    | 'indigo'
-    | 'iris'
-    | 'violet'
-    | 'purple'
-    | null;
-  secondary?:
-    | 'olive'
-    | 'sage'
-    | 'slate'
-    | 'sand'
-    | 'gray'
-    | 'mauve'
-    | 'brown'
-    | 'bronze'
-    | 'gold'
-    | 'red'
-    | 'ruby'
-    | 'crimson'
-    | 'tomato'
-    | 'pink'
-    | 'plum'
-    | 'indigo'
-    | 'iris'
-    | 'violet'
-    | 'purple'
-    | 'amber'
-    | 'blue'
-    | 'cyan'
-    | 'grass'
-    | 'green'
-    | 'jade'
-    | 'lime'
-    | 'mint'
-    | 'orange'
-    | 'sky'
-    | 'teal'
-    | 'yellow'
-    | null;
-  label?: string;
-  viewportRef?: React.Ref<HTMLDivElement>;
-  contentClassName?: string;
-  maxBlockSize?: string | number;
-  focusable?: boolean;
-  fitContent?: boolean;
-};
+type ScrollAreaProps = React.ClassAttributes<HTMLDivElement> &
+  React.HTMLAttributes<HTMLDivElement> & {
+    kind?: 'panel' | 'wide' | 'rail' | null;
+    primary?:
+      | 'ruby'
+      | 'olive'
+      | 'sage'
+      | 'slate'
+      | 'sand'
+      | 'gray'
+      | 'mauve'
+      | 'brown'
+      | 'bronze'
+      | 'gold'
+      | 'red'
+      | 'crimson'
+      | 'tomato'
+      | 'pink'
+      | 'plum'
+      | 'indigo'
+      | 'iris'
+      | 'violet'
+      | 'purple'
+      | null;
+    secondary?:
+      | 'ruby'
+      | 'olive'
+      | 'sage'
+      | 'slate'
+      | 'sand'
+      | 'gray'
+      | 'mauve'
+      | 'brown'
+      | 'bronze'
+      | 'gold'
+      | 'red'
+      | 'crimson'
+      | 'tomato'
+      | 'pink'
+      | 'plum'
+      | 'indigo'
+      | 'iris'
+      | 'violet'
+      | 'purple'
+      | 'amber'
+      | 'blue'
+      | 'cyan'
+      | 'grass'
+      | 'green'
+      | 'jade'
+      | 'lime'
+      | 'mint'
+      | 'orange'
+      | 'sky'
+      | 'teal'
+      | 'yellow'
+      | null;
+    label?: string;
+    viewportRef?: React.Ref<HTMLDivElement>;
+    contentClassName?: string;
+    maxBlockSize?: string | number;
+    focusable?: boolean;
+    fitContent?: boolean;
+  };
 ```

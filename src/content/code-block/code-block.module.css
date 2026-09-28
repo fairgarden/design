@@ -116,6 +116,8 @@
   /* The code: mono at the caption size, reading leading; the line height is
    * also the height a swap's bridge line grows to. */
   .pre {
+    /* The code's native scrollbar runs on the frame's face [D207]. */
+    --role-scrollbar-track: var(--primary1);
     --code-block-line: calc(var(--fgd-font-size-caption) * var(--fgd-leading-reading));
     /* A classic scrollbar's height: the window swaps the real scrollbar for
      * this much margin while it collapses (a platform metric, not a token). */
@@ -265,11 +267,21 @@
   }
 
   /*
+   * The code's native scroller takes the keyboard where it scrolls (the
+   * browsers make an overflowing `pre` a tab stop), so it shows the ring,
+   * inset, as the frame's full inner width leaves no room outside [D207].
+   */
+  .pre:focus-visible {
+    outline: var(--fgd-focus-width) solid var(--primary12);
+    outline-offset: calc(-1 * var(--fgd-focus-width));
+  }
+
+  /*
    * Editable code (only with the docs engine's editor): the wrapper is the
    * keyboard stop and shows the ring; the "Press Enter to start editing"
    * prompt is an inverse chip, shown with visibility, never faded.
    */
-  .source :global(pre):focus-visible {
+  .source :global(.editable-code-wrapper) > :global(pre):focus-visible {
     outline: none;
   }
 

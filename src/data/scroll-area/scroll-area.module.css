@@ -1,26 +1,29 @@
 /*
  * Scroll Area (§10.19). CVA function `scrollArea`.
- * Parts: `base` (Root, the positioned frame), `viewport`, `content`,
- * `scrollbar` (the gutter and its centered hairline track), `thumb`,
- * `corner`, and `edge` (`edgeStart`, `edgeEnd`): the hard overflow rules,
- * never a fade [D21, D68]. Colors are role variables only; local custom
- * properties carry dimensions only.
+ * Parts: `base` (the root, the positioned frame), `viewport` (the native
+ * scroller), `content`, and `edge` (`edgeStart`, `edgeEnd`): the hard
+ * overflow rules, never a fade [D21, D68]. The scrollbar is the browser's
+ * own, in the scope's thumb and track colors (reset.css) [D207]. Colors
+ * are role variables only; local custom properties carry dimensions only.
  *
  * Local properties:
- *   --scroll-area-gutter      the scrollbar gutter, reserved so content never shifts
- *   --scroll-area-thumb       thumb thickness; widens on hover and drag
  *   --scroll-area-edge-start  `none` hides the start edge (a pinned table column draws it)
  *   --scroll-area-max-block   the root's cap, written by the `maxBlockSize` prop
  *   --scroll-area-overscroll-x, --scroll-area-overscroll-y
  *                             the viewport's scroll chaining per axis (default
  *                             `contain`); a carousel sets `y` to `auto`
+ *   --scroll-area-scroll-padding-inline
+ *                             the viewport's inline scroll padding, which insets
+ *                             the snapport; a carousel sets its end to its bleed
+ *
+ * Scroll timelines: the viewport names `--scroll-area-block` (panel) or
+ * `--scroll-area-inline` (wide, rail), and the root scopes both names, so
+ * its edges can follow them; a composer that reads them outside the root
+ * sets the root's `timeline-scope` to `none` and scopes them itself.
  */
 
 @layer base {
   .base {
-    --scroll-area-gutter: var(--size-px-2-5);
-    --scroll-area-thumb: var(--size-px-1);
-
     position: relative;
     display: flex;
     flex-direction: column;
@@ -34,113 +37,75 @@
     min-block-size: 0;
     min-inline-size: 0;
     overscroll-behavior: var(--scroll-area-overscroll-x, contain) var(--scroll-area-overscroll-y, contain);
+    scroll-padding-inline: var(--scroll-area-scroll-padding-inline, auto);
   }
 
   /*
-   * `fitContent={false}`: the content keeps the viewport's width, so its
-   * children's percentages resolve against the viewport (a carousel track).
-   * Base UI writes `min-width: fit-content` inline on the content, and only
-   * an important declaration outranks an inline value; the package itself
-   * writes no real property inline (§1.11.1).
+   * Overflow edges: a --border-size-2 --role-rule rule over the viewport's
+   * side, shown by the states layer while content is hidden there. Out of
+   * flow, so they never move anything.
    */
-  .contentFluid {
-    min-inline-size: 0 !important;
-  }
-
-  /* The gutter: a centered --border-size-1 --role-hairline track. */
-  .scrollbar {
-    display: flex;
-    box-sizing: border-box;
-  }
-
-  .scrollbar::before {
-    content: '';
-    position: absolute;
-    border: 0 solid var(--role-hairline);
-    pointer-events: none;
-  }
-
-  .scrollbar[data-orientation='vertical'] {
-    justify-content: center;
-    inline-size: var(--scroll-area-gutter);
-  }
-
-  .scrollbar[data-orientation='vertical']::before {
-    inset-block: 0;
-    inset-inline-start: calc(50% - var(--border-size-1) / 2);
-    border-inline-start-width: var(--border-size-1);
-  }
-
-  .scrollbar[data-orientation='horizontal'] {
-    align-items: center;
-    block-size: var(--scroll-area-gutter);
-  }
-
-  .scrollbar[data-orientation='horizontal']::before {
-    inset-inline: 0;
-    inset-block-start: calc(50% - var(--border-size-1) / 2);
-    border-block-start-width: var(--border-size-1);
-  }
-
-  /* The thumb: --role-rule, --radius-round; its fill is its own edge (≥ 3:1) [D12]. */
-  .thumb {
-    position: relative;
-    flex: none;
-    border-radius: var(--radius-round);
-    background-color: var(--role-rule);
-  }
-
-  .scrollbar[data-orientation='vertical'] .thumb {
-    inline-size: var(--scroll-area-thumb);
-  }
-
-  .scrollbar[data-orientation='horizontal'] .thumb {
-    block-size: var(--scroll-area-thumb);
-  }
-
-  .corner {
-    display: none;
-  }
-
-  /* Overflow edges: shown per side by the states layer. */
   .edge {
-    display: none;
     position: absolute;
+    display: block;
+    visibility: hidden;
     border: 0 solid var(--role-rule);
     pointer-events: none;
   }
 
-  @media (--forcedColors) {
-    .thumb {
-      forced-color-adjust: none;
-      background-color: CanvasText;
+  .edgeStart {
+    display: var(--scroll-area-edge-start, block);
+  }
+
+  /* The root scopes the viewport's scroll timeline, so its edges can follow it. */
+  @supports (animation-timeline: scroll()) {
+    .base {
+      timeline-scope: --scroll-area-block, --scroll-area-inline;
     }
   }
 }
 
 @layer variants {
-  /* Panel: vertical, capped at half the viewport unless `maxBlockSize` sets the cap; the gutter always reserved. */
+  /*
+   * Panel: vertical, capped at half the viewport unless `maxBlockSize` sets
+   * the cap. `scrollbar-gutter: stable` keeps the scrollbar's gutter
+   * whether or not the content overflows, so content that grows or filters
+   * never moves sideways; an overlay scrollbar takes none [D201].
+   */
   .panel {
     max-block-size: var(--scroll-area-max-block, 50dvh);
   }
 
   .panel .viewport {
-    padding-inline-end: var(--scroll-area-gutter);
+    overflow: hidden auto;
+    scrollbar-gutter: stable;
   }
 
   .panel .edgeStart {
     inset-block-start: 0;
-    inset-inline: 0 var(--scroll-area-gutter);
+    inset-inline: 0;
     border-block-start-width: var(--border-size-2);
   }
 
   .panel .edgeEnd {
     inset-block-end: 0;
-    inset-inline: 0 var(--scroll-area-gutter);
+    inset-inline: 0;
     border-block-end-width: var(--border-size-2);
   }
 
-  /* Wide and rail: horizontal; scroll-snap follows the content's own snap points. */
+  /*
+   * Wide and rail: horizontal. A native horizontal scrollbar is laid out in
+   * the first paint whenever the content overflows, so nothing waits on
+   * script and nothing is reserved (`scrollbar-gutter` reserves only the
+   * block-axis bar) [D201]. Scroll-snap follows the content's own snap
+   * points; the content is at least as wide as its children unless it is
+   * fluid.
+   */
+  .wide .viewport,
+  .rail .viewport {
+    overflow: auto hidden;
+  }
+
   .wide .viewport {
     scroll-snap-type: x proximity;
   }
@@ -149,86 +114,83 @@
     scroll-snap-type: x mandatory;
   }
 
+  .wide .content,
+  .rail .content {
+    min-inline-size: fit-content;
+  }
+
   /*
-   * The horizontal gutter is always reserved, as the panel's is: whether
-   * the content overflows is known only after layout (Base UI's
-   * data-has-overflow-x arrives after mount), and geometry must be final in
-   * the first paint [D201]. Owners that sit on a margin take it from there.
+   * `fitContent={false}`: the content keeps the viewport's width, so its
+   * children's percentages resolve against the viewport (a carousel track).
    */
-  .wide .viewport,
-  .rail .viewport {
-    padding-block-end: var(--scroll-area-gutter);
+  .wide .contentFluid,
+  .rail .contentFluid {
+    min-inline-size: 0;
   }
 
   .wide .edgeStart,
   .rail .edgeStart {
     inset-inline-start: 0;
-    inset-block: 0 var(--scroll-area-gutter);
+    inset-block: 0;
     border-inline-start-width: var(--border-size-2);
   }
 
   .wide .edgeEnd,
   .rail .edgeEnd {
     inset-inline-end: 0;
-    inset-block: 0 var(--scroll-area-gutter);
+    inset-block: 0;
     border-inline-end-width: var(--border-size-2);
   }
 
-  /* Rail: a --border-size-2 --role-hairline track with a --primary12 thumb, square ends. */
-  .rail .scrollbar::before {
-    inset-block-start: calc(50% - var(--border-size-2) / 2);
-    border-block-start-width: var(--border-size-2);
-  }
+  /* The viewport's scroll timeline, on its kind's axis. */
+  @supports (animation-timeline: scroll()) {
+    .panel .viewport {
+      scroll-timeline: --scroll-area-block block;
+    }
 
-  .rail .thumb {
-    --scroll-area-thumb: var(--border-size-2);
-
-    border-radius: var(--radius-0);
-    background-color: var(--primary12);
+    .wide .viewport,
+    .rail .viewport {
+      scroll-timeline: --scroll-area-inline inline;
+    }
   }
 }
 
 @layer states {
-  /* Panel scrollbar: shown on hover, scroll and focus. */
-  .panel .scrollbar {
-    visibility: hidden;
-  }
-
-  .panel .scrollbar[data-hovering],
-  .panel .scrollbar[data-scrolling],
-  .panel:focus-within .scrollbar {
-    visibility: visible;
-  }
-
-  /* The thumb widens on hover and scroll (6 px), and darkens to --primary12 while dragged. */
-  .scrollbar[data-hovering] .thumb,
-  .scrollbar[data-scrolling] .thumb {
-    --scroll-area-thumb: calc(var(--size-px-1) * 1.5);
-  }
-
-  .thumb:active {
-    --scroll-area-thumb: calc(var(--size-px-1) * 1.5);
-
-    background-color: var(--primary12);
-  }
-
-  .rail .scrollbar[data-hovering] .thumb,
-  .rail .scrollbar[data-scrolling] .thumb,
-  .rail .thumb:active {
-    --scroll-area-thumb: var(--border-size-2);
-  }
-
-  /* Each edge rule appears only while content is hidden on that side. */
+  /*
+   * Each edge rule appears only while content is hidden on that side. Where
+   * scroll-driven animations exist, a discrete animation on the viewport's
+   * scroll timeline shows it: hidden at that side's end of the range,
+   * visible anywhere short of it, and not applied at all while the timeline
+   * is inactive (nothing to scroll). It is a state, not motion: visibility
+   * steps, nothing moves. Elsewhere the root's overflow attributes, which
+   * the component writes only there, show it.
+   */
   .panel[data-overflow-y-start] .edgeStart,
   .wide[data-overflow-x-start] .edgeStart,
-  .rail[data-overflow-x-start] .edgeStart {
-    display: var(--scroll-area-edge-start, block);
-  }
-
+  .rail[data-overflow-x-start] .edgeStart,
   .panel[data-overflow-y-end] .edgeEnd,
   .wide[data-overflow-x-end] .edgeEnd,
   .rail[data-overflow-x-end] .edgeEnd {
-    display: block;
+    visibility: visible;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .edgeStart {
+      animation: startEdgeState linear both;
+    }
+
+    .edgeEnd {
+      animation: endEdgeState linear both;
+    }
+
+    .panel .edge {
+      animation-timeline: --scroll-area-block;
+    }
+
+    .wide .edge,
+    .rail .edge {
+      animation-timeline: --scroll-area-inline;
+    }
   }
 
   /* Focus: the 2 px --primary12 ring at a 2 px offset, keyboard only [D45]. */
@@ -238,27 +200,44 @@
   }
 }
 
+/* The start edge shows once the viewport leaves its start; the end edge until it reaches its end. */
+@keyframes startEdgeState {
+  from {
+    visibility: hidden;
+  }
+
+  to {
+    visibility: visible;
+  }
+}
+
+@keyframes endEdgeState {
+  from {
+    visibility: visible;
+  }
+
+  to {
+    visibility: hidden;
+  }
+}
+
 @layer print {
   @media print {
-    /* Unfold: content prints at full height; scrollbars, rails and edges are hidden (§10.19). */
+    /* Unfold: content prints at full height and width; the edges are hidden (§10.19). */
     .base {
       display: block;
       max-block-size: none;
     }
 
-    /* The viewport's `overflow: scroll` and the content's `min-width` are inline styles. */
     .viewport {
-      overflow: visible !important;
+      overflow: visible;
       max-block-size: none;
-      padding: 0;
     }
 
     .content {
-      min-inline-size: 0 !important;
+      min-inline-size: 0;
     }
 
-    .scrollbar,
-    .corner,
     .edge {
       display: none;
     }

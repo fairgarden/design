@@ -14,3 +14,7 @@ node_modules
 
 # turborepo
 .turbo
+
+# next.js (Turbopack can write dev assets outside docs/)
+.next
+.next-*

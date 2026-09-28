@@ -317,7 +317,14 @@
     border-block-start: var(--border-size-1) solid var(--role-rule);
   }
 
+  /*
+   * The results' Scroll Area: its native scrollbar runs on the face, so the
+   * track is --primary1; between the input row and the stats row it stays
+   * clear of the frame's rounded corners [D207].
+   */
   .scroll {
+    --role-scrollbar-track: var(--primary1);
+
     flex: 1 1 auto;
     min-block-size: 0;
   }

@@ -72,7 +72,8 @@ import styles from './section-bar.module.css'
  *   jumpTrigger (Popover Trigger),
  *   jumpIndicator, tools, share, search, listen, listenCount, tabList, tab,
  *   toTop, bottomRule (the band's end border), breadcrumbPanel (Collapsible
- *   Panel), jumpPanel (Popover Popup), jumpList, jumpItem.
+ *   Panel), jumpPanel (Popover Popup), jumpNav (the list's native
+ *   scroller, inset from the rounded frame [D207]), jumpList, jumpItem.
  * - Scope: the root is a `kind="band"` Ground on the covered band's page
  *   ground. `jumpPanel` is a portaled `white` scope (`page` scheme) framed
  *   by --border-size-2 --primary12 [D92, D156].
@@ -460,7 +461,7 @@ export function SectionBar(props: SectionBarProps) {
               }}
             >
               <OverlayScope>
-                <nav aria-label="On this page">
+                <nav aria-label="On this page" className={styles.jumpNav}>
                   <ol className={styles.jumpList}>
                     {sections.map((section) => (
                       <li key={section.id}>

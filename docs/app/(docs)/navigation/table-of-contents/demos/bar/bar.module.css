@@ -1,12 +1,25 @@
-/* The page: a fixed-height box it scrolls in, as a phone's viewport would. */
-.page {
+/*
+ * The box, as a phone's viewport would be: a rounded frame whose page
+ * scrolls --size-px-1 inside it, so the page's native scrollbar clears the
+ * rounded corners (at least 0.293 × the 7 px inner radius).
+ */
+.frame {
   box-sizing: border-box;
   inline-size: min(100%, var(--size-sm));
   block-size: var(--size-px-15);
-  padding-inline: var(--size-px-3);
-  padding-block-end: var(--size-px-14);
+  padding: var(--size-px-1);
   border: var(--border-size-1) solid var(--role-rule);
   border-radius: var(--radius-2-25);
+}
+
+/* The page: the fixed-height box it scrolls in. */
+.page {
+  --page-pad: calc(var(--size-px-3) - var(--size-px-1));
+
+  box-sizing: border-box;
+  block-size: 100%;
+  padding-inline: var(--page-pad);
+  padding-block-end: var(--size-px-14);
   overflow-y: auto;
   color: var(--primary12);
 }
@@ -24,8 +37,8 @@
   display: flex;
   align-items: center;
   block-size: var(--fgd-size-control-xl);
-  margin-inline: calc(-1 * var(--size-px-3));
-  padding-inline: var(--size-px-3);
+  margin-inline: calc(-1 * var(--page-pad));
+  padding-inline: var(--page-pad);
   border-block-end: var(--border-size-1) solid var(--role-hairline);
   background-color: var(--role-ground);
 }

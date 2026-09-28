@@ -115,7 +115,10 @@ export function MenuPopupFrame(
             })
           )}
         >
-          <OverlayScope>{children}</OverlayScope>
+          {/* The items scroll inside the frame, clear of its rounded corners [D207]. */}
+          <div className={styles.scroll}>
+            <OverlayScope>{children}</OverlayScope>
+          </div>
         </BaseMenu.Popup>
         {morph ? <OutlineMorphFrame ref={morph.frameRef} /> : null}
       </BaseMenu.Positioner>

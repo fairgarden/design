@@ -239,8 +239,10 @@
     outline: 0;
   }
 
-  /* The native scrollbar, inset --size-px-1 from the frame's inner edge on every side. */
+  /* The native scrollbar, inset --size-px-1 from the frame's inner edge on every side; its track is the face [D207]. */
   .panelScroll {
+    --role-scrollbar-track: var(--primary1);
+
     flex: 1 1 auto;
     min-block-size: 0;
     padding-block: var(--size-px-1);
