@@ -103,6 +103,9 @@ const config = [
       'utils/**',
       'icons/**',
       'docs/**',
+      // Next builds, wherever Turbopack writes them
+      '**/.next/**',
+      '**/.next-*/**',
     ],
   },
   {

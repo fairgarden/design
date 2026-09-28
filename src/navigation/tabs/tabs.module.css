@@ -46,8 +46,8 @@
 
   /*
    * When 4–6 tabs overflow, the tablist scrolls sideways in a `wide` Scroll
-   * Area (§9.5, §10.19): the last tab clipped, a visible scrollbar under the
-   * row and the hard overflow edges, never a fade.
+   * Area (§9.5, §10.19): the last tab clipped, the native scrollbar under
+   * the row and the hard overflow edges, never a fade [D207].
    */
   .scroller {
     flex: 1 1 auto;
@@ -122,11 +122,18 @@
   }
 
   /* The current bar: --border-size-2-25 in --primary12, placed from Base UI's active-tab variables. */
+  /*
+   * The bar never reaches past the list: before hydration, Base UI's
+   * indicator script can measure the current tab wider than it is, and a
+   * bar past the list would widen the row's scroll area, showing a native
+   * scrollbar for a moment and moving the panel when it went [D201, D207].
+   */
   .indicator {
     position: absolute;
     inset-block-end: 0;
     left: calc(var(--active-tab-left) + var(--tab-inset));
     inline-size: calc(var(--active-tab-width) - 2 * var(--tab-inset));
+    max-inline-size: calc(100% - var(--active-tab-left) - 2 * var(--tab-inset));
     border-block-end: var(--border-size-2-25) solid var(--primary12);
     pointer-events: none;
   }
@@ -155,12 +162,12 @@
   }
 
   /*
-   * The panel sits --size-px-5 below the tab row: the bar's Scroll Area
-   * always reserves its --size-px-2-5 scrollbar gutter [D201], so the panel
-   * adds the remaining --size-px-2 and the step stays 20 px.
+   * The panel sits 20 px (--size-px-4) below the tab row, or below its
+   * native scrollbar when the row overflows; that scrollbar is laid out in
+   * the first paint, so the panel never moves [D201, D207].
    */
   .panel {
-    margin-block-start: var(--size-px-2);
+    margin-block-start: var(--size-px-4);
   }
 
   .printLabel {

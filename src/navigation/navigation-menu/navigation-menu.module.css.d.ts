@@ -45,6 +45,7 @@ declare const styles: {
   readonly "promo": string;
   readonly "promoCell": string;
   readonly "promoMedia": string;
+  readonly "scroll": string;
   readonly "search": string;
   readonly "tierRule": string;
   readonly "trigger": string;

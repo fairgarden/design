@@ -1,0 +1,94 @@
+# Docs Layout
+
+The documentation page frame: a skip link, the site header, then up to three columns, the page tree, the page and its contents. It is the one page frame with a sidebar and a contents column; marketing and reading pages keep the centered measure.
+
+```tsx
+import { DocsLayout, DocsLayoutDrawer } from '@fairgarden/design/page/docs-layout'
+```
+
+Compose it from the system's own parts: a `NavigationBar` with `wide` as the `header`, whose `drawer` is a `DocsLayoutDrawer`; a `SidebarNav` as the `sidebar`; a `TableOfContents` as the optional `toc`; and the page as `children`. The root is a `kind="band"` Ground on the page ground (`paper` by default), so every part takes the page's role variables and follows light and dark mode, the pastel grounds and right-to-left text by itself.
+
+```tsx
+function Contents() {
+  const activeId = useActiveHeading(headings.map((heading) => heading.id))
+  return <TableOfContents items={headings} activeId={activeId} />
+}
+
+<DocsLayout
+  header={
+    <NavigationBar
+      wide
+      logo={<Wordmark />}
+      logoLabel="Garden Handbook home"
+      search={<Search kind="trigger" label="Search the handbook" />}
+      drawer={<DocsLayoutDrawer />}
+    />
+  }
+  sidebar={<SidebarNav items={handbook} currentPath={pathname} />}
+  toc={<Contents />}
+>
+  {page}
+</DocsLayout>
+```
+
+## The frame
+
+import { DemoDocsLayoutHandbook } from './demos/handbook'
+
+<DemoDocsLayoutHandbook.Title />
+
+The columns sit inside `--fgd-container-wide`, which the frame reaches at a 1440 px window, with the grid gutter between them. The sidebar is a 240 px column, sticky at the top of the window with its own scroll and a hairline rule on its end edge; it opens scrolled to the current page. The page column keeps an end gutter at every width (24 px, then 44 px from 768 px) for the code blocks' hanging ⋮, and the frame clips sideways so that hit area never makes the page scroll. Prose inside keeps the reading measure. The contents column is 240 px, sticky and scrolling on its own when long. The layout renders the page's one skip link, aimed at its `main`, so the Navigation Bar in its header renders none. In print only the page remains: the skip link, the columns, the drawer and the contents bar are hidden, and the header prints as its masthead logo.
+
+The demo runs in a frame that is its own viewport, so at this column's width it shows the drawer and the contents bar: scroll the page and the bar names the section in view; press it and the whole list opens, centered on that section. Open the full page to see the columns.
+
+<DemoDocsLayoutHandbook frame="scroll" />
+
+[See Demo](./demos/handbook/)
+
+## Thresholds
+
+The layout adds no breakpoint. The sidebar column starts at `--fgd-nav-inline-n-above` (1024 px by default), the step where the header already swaps its drawer for inline navigation: below it, every navigation is in the drawer; from it, every navigation is inline. At 1024 px the page column still measures about 620 px after the sidebar, above the reading measure, while at 768 px it would fall to about 430 px, narrower than a phone held sideways. A site that sets the inline threshold to 1440 px moves the sidebar with it.
+
+The contents column starts at `--xl-n-above` (1440 px), where three columns fit: 240 px, the page at about 800 px, and 240 px. At 1024 px the page would drop below 400 px. Below 1440 px the contents become their compact bar: one line at the top of the page, straight under the header, that sticks to the top of the window once the header scrolls away. It names the section in view, so a reader always knows where they are and can jump anywhere from there. It is the page's one sticky bar, since the header is static, and it sits in the page column, so it never covers the sidebar.
+
+### Zero layout shift
+
+Every placement is viewport media in the layout's CSS: the columns, the menu Button, the contents bar. Nothing is measured and nothing waits for hydration, so the server HTML paints the final frame: no drawer flashes open, and a phone never paints the sidebar in the page flow for a frame. The contents bar has one fixed height and names the first section in the server HTML; naming another section later never changes its size, and its panel is an overlay that moves nothing. Headings in the page keep a `scroll-margin` so a link lands them clear of the bar. The sidebar scrolls to the current page inside its own column (before first paint where `scroll-initial-target` is supported), which moves nothing around it. The sidebar and the contents reserve the bold width of every entry, so marking the current page or the section in view never rewraps a line.
+
+## The drawer
+
+`DocsLayoutDrawer` is the Nav Drawer showing the layout's `sidebar`: the same `SidebarNav`, from the same data. Put it in the Navigation Bar's `drawer` slot, which shows its menu Button below the inline threshold, exactly where the sidebar column is absent. It keeps the drawer's behavior: a full-screen sheet below 768 px and a 480 px side sheet from there, the header repeated in the sheet's bar, focus moved into the sheet (to the current page's link), trapped there, Escape to close, focus returned to the menu Button, and the page behind inert and still. If the window widens past the threshold while it is open, it closes and focus moves to the current page's link in the sidebar column. Outside a Navigation Bar, the layout hides its menu Button from the threshold itself.
+
+## The table of contents
+
+The `toc` slot takes a `TableOfContents`. From 1440 px it fills the sticky end column; below, the layout draws the same element as the contents' compact bar (`kind="bar"`, which it sets through `TableOfContentsContext`), pinned under the header. The bar names the section in view and opens the whole list in a panel about a third of the window tall, scrolled so that section sits centered and marked. Pass `useActiveHeading(ids)` as its `activeId` for scrollspy; with no items, neither the column nor the bar appears. On this site the slot is a placeholder: only this page feeds it, with its headings written out by hand, until the docs engine's page headings are wired (below).
+
+## Wiring plan (planned)
+
+This part is planned, not built. The sidebar is already fed from the docs engine; the contents are not yet.
+
+- **Sidebar (built).** `toSidebarItems(sitemap)` from `@fairgarden/design/utils/docs` maps the engine's sitemap, the object that also feeds search, to `SidebarNav` items on the server: each section's title and index page over its pages, in index order. The layout marks the current page from the URL.
+- **Contents data (planned).** The engine already extracts every page's headings: the section index's outline lists them, and the sitemap carries them as each page's `sections`, which search indexes as "Sections". Some things are missing. The keys are slugs the engine makes itself, which can differ from the ids `rehype-slug` writes on the page: on this site 29 of 607 keys name no heading, because a repeated heading gets a `-1` suffix on the page and punctuation slugs differently. The level is implied by nesting, with H4s not recorded, and demo titles, which render as H3s, aren't listed. The engine should record each heading's rendered id and level.
+- **Helper (planned).** `toTableOfContents(page)` in `@fairgarden/design/utils/docs` will flatten those records into `TableOfContents` items (`id`, `title`, `level`), so the navigation components stay free of the engine, which remains an optional peer.
+- **Route (planned).** A layout can't see its route on the server, so a parallel route slot (`app/(lib)/@toc/[...slug]/page.tsx` with a `default.tsx`) will look the page up in the sitemap and render the contents with scrollspy, server-side, so the column is in the first paint. The static map in the site's `DocsToc` then goes.
+- **Checks (planned).** Every contents link resolves to a heading on its page; no layout shift at 1440, 1024 and 390 px; the bar naming the first section in the server HTML.
+
+## API Reference
+
+import { TypesDocsLayout, TypesDocsLayoutAdditional } from './types'
+
+### DocsLayout
+
+<TypesDocsLayout.DocsLayout />
+
+### DocsLayoutDrawer
+
+<TypesDocsLayout.DocsLayoutDrawer />
+
+### Additional types
+
+<TypesDocsLayoutAdditional />
+
+[See Types](./types.md)
+
+Specification: `DESIGN-SYSTEM.md` §11.15 (docs layout) [D202, D203], with the Navigation Bar of §11.5, the drawer of §11.6, the Sidebar Navigation of §9.15 and the Table of Contents of §9.16.

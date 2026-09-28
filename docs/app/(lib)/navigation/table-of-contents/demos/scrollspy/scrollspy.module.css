@@ -1,0 +1,65 @@
+/* The panel and its contents side by side, stacked when narrow. */
+.split {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--size-px-5);
+  inline-size: 100%;
+}
+
+/*
+ * A rounded frame whose panel scrolls --size-px-1 inside it, so the panel's
+ * native scrollbar clears the rounded corners (at least 0.293 × the 7 px
+ * inner radius). The panel inside stays --size-px-14 tall.
+ */
+.frame {
+  flex: 1 1 var(--size-px-14);
+  box-sizing: border-box;
+  block-size: calc(var(--size-px-14) + 2 * (var(--size-px-1) + var(--border-size-1)));
+  padding: var(--size-px-1);
+  border: var(--border-size-1) solid var(--role-rule);
+  border-radius: var(--radius-2-25);
+}
+
+/* The fixed-height box the guide scrolls in: the hook's `root`. */
+.panel {
+  box-sizing: border-box;
+  block-size: 100%;
+  padding-inline: calc(var(--size-px-5) - var(--size-px-1));
+  padding-block-end: var(--size-px-14);
+  overflow-y: auto;
+  color: var(--primary12);
+}
+
+.panel:focus-visible {
+  outline: var(--border-size-2) solid var(--primary12);
+  outline-offset: var(--border-size-2);
+}
+
+.column {
+  flex: 0 1 var(--size-px-13);
+}
+
+.h2 {
+  margin-block: var(--size-px-5) var(--size-px-2);
+  font-family: var(--fgd-font-display);
+  font-variation-settings: var(--fgd-font-display-settings);
+  font-weight: var(--font-weight-7);
+  font-size: var(--fgd-font-size-kicker);
+  line-height: var(--font-lineheight-0);
+  color: var(--role-heading);
+}
+
+.h3 {
+  margin-block: var(--size-px-3) var(--size-px-2);
+  font-family: var(--fgd-font-ui);
+  font-weight: var(--font-weight-6);
+  font-size: var(--fgd-font-size-body-ui);
+}
+
+.p {
+  max-inline-size: var(--fgd-measure-reading);
+  margin: 0;
+  font-family: var(--fgd-font-text);
+  font-size: var(--fgd-font-size-body);
+  line-height: var(--fgd-leading-reading);
+}

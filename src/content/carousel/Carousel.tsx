@@ -15,8 +15,8 @@ import styles from './carousel.module.css'
  * species, related products, photo sets), at least four. No Base UI
  * primitive exists, so it is composed: a `section` with
  * aria-roledescription="carousel", a Scroll Area in its `rail` kind
- * (§10.19: the viewport, and the horizontal scrollbar as the 2 px progress
- * rail), a `ul` of slides each labelled "n of N", Previous and Next Buttons
+ * (§10.19: the native scroller, whose horizontal scrollbar is the position
+ * rail [D207]), a `ul` of slides each labelled "n of N", Previous and Next Buttons
  * and a polite count. It never autoplays or loops, has no dots, and a
  * vertical wheel never moves the track [D186].
  *
@@ -38,14 +38,14 @@ import styles from './carousel.module.css'
  *   icon-only Button): `:hover` → the --primary3 fill with the edge
  *   unchanged, the glyph at the next tier's weight [D181]; `:focus-visible`
  *   → the ring; `:active` → the inverse pair [D84]. The Scroll Area's
- *   overflow attributes and its thumb states live in its module. `atStart`
+ *   overflow edges live in its module. `atStart`
  *   / `atEnd` → that button is omitted with its space kept; `static` →
  *   controls hidden (the rail hides itself without overflow).
  * - Parts: base, header, viewport (the Scroll Area root, with its
  *   Viewport), track (its Content, at the viewport's width through
  *   `fitContent={false}`), list, slide, controls, count, pager,
- *   prev, next (prevGlyph / nextGlyph are the Buttons' icons), rail and
- *   railThumb (the Scroll Area's scrollbar and thumb), printSummary.
+ *   prev, next (prevGlyph / nextGlyph are the Buttons' icons), and
+ *   printSummary; the rail is the viewport's native scrollbar.
  * - Scope: none.
  * - Container: `base` is the inline-size container `carousel`; the slide
  *   widths and, from 1024 px, the photo strip's fixed track height query
@@ -162,11 +162,35 @@ function slidesOf(list: HTMLElement | null): HTMLElement[] {
 }
 
 /**
- * The carousel. Swipe, trackpad, the Previous and Next buttons, and the
- * arrow, Home and End keys on the focused track all move it one slide at a
- * time with snap. In print, card slides become a 2-up grid and photo sets
- * of up to 6 a 3-up grid; a larger photo set prints its first slide and
- * "n more images (short URL)".
+ * The snapport's start edge in client coordinates: the viewport's start
+ * edge plus its inline-start scroll padding, where snap aligns each
+ * slide's start [D207].
+ */
+function snapportStart(viewport: HTMLElement): { rtl: boolean; edge: number } {
+  const style = getComputedStyle(viewport)
+  const rtl = style.direction === 'rtl'
+  const padding = parseFloat(style.scrollPaddingInlineStart) || 0
+  const box = viewport.getBoundingClientRect()
+  return { rtl, edge: rtl ? box.right - viewport.clientLeft - padding : box.left + viewport.clientLeft + padding }
+}
+
+/** How far a slide's start sits past the snapport's start (negative: before it). */
+function leadOf(slide: HTMLElement, port: { rtl: boolean; edge: number }): number {
+  const rect = slide.getBoundingClientRect()
+  return port.rtl ? port.edge - rect.right : rect.left - port.edge
+}
+
+/** A snap event's inline target, where the browser reports one (`scrollsnapchange`). */
+type SnapChangeEvent = Event & { snapTargetInline?: Element | null }
+
+/**
+ * The carousel. The browser's own scroll snap places every slide: a swipe
+ * or trackpad scroll comes to rest on a slide's start, and the Previous and
+ * Next buttons and the arrow, Home and End keys on the focused track move
+ * it one slide at a time to exactly the position snap would choose. In
+ * print, card slides become a 2-up grid and photo sets of up to 6 a 3-up
+ * grid; a larger photo set prints its first slide and "n more images
+ * (short URL)".
  */
 export function Carousel(props: CarouselProps) {
   const {
@@ -200,27 +224,19 @@ export function Carousel(props: CarouselProps) {
     current: 1,
   })
   const [bleed, setBleed] = React.useState(0)
+  // The slide snap last settled on, from `scrollsnapchange` where the browser
+  // reports it; null means measure the snapport instead.
+  const snappedRef = React.useRef<number | null>(null)
 
   const read = React.useCallback(() => {
     const viewport = viewportRef.current
     if (!viewport) return
-    const rtl = getComputedStyle(viewport).direction === 'rtl'
     const offset = Math.abs(viewport.scrollLeft)
     const max = viewport.scrollWidth - viewport.clientWidth
     const isStatic = max <= 1
     const atStart = offset <= 1
     const atEnd = isStatic || offset >= max - 1
-    const edge = viewport.getBoundingClientRect()
-    const items = slidesOf(listRef.current)
-    let first = 0
-    for (let index = 0; index < items.length; index += 1) {
-      const rect = items[index].getBoundingClientRect()
-      const lead = rtl ? edge.right - rect.right : rect.left - edge.left
-      if (lead >= -2) {
-        first = index
-        break
-      }
-    }
+    const first = snappedRef.current ?? firstInView(viewport, listRef.current)
     const current = atEnd && !isStatic ? total : first + 1
     setState((previous) =>
       previous.atStart === atStart &&
@@ -250,8 +266,13 @@ export function Carousel(props: CarouselProps) {
         edge = rtl ? start : start + field.clientWidth
       }
     }
+    // Kept to the hundredth, not the whole pixel: the bleed is the snapport's
+    // end padding and the trailing space, so a rounded value would leave the
+    // last slide a fraction off the container's edge at the end (RTL: 0.7–1 px).
     const next =
-      edge == null ? 0 : Math.max(0, Math.round(rtl ? rect.left - edge : edge - rect.right))
+      edge == null
+        ? 0
+        : Math.max(0, Math.round((rtl ? rect.left - edge : edge - rect.right) * 100) / 100)
     setBleed((previous) => (previous === next ? previous : next))
   }, [scope.kind])
 
@@ -268,6 +289,15 @@ export function Carousel(props: CarouselProps) {
         read()
       })
     }
+    // Snap reports the slide it settled on where the browser supports it;
+    // elsewhere `read` measures the snapport with the same maths.
+    const onSnapChange = (event: SnapChangeEvent) => {
+      const index = slidesOf(listRef.current).indexOf(event.snapTargetInline as HTMLElement)
+      snappedRef.current = index >= 0 ? index : null
+      schedule()
+    }
+    const snapEvents = 'onscrollsnapchange' in viewport
+    if (snapEvents) viewport.addEventListener('scrollsnapchange', onSnapChange)
     schedule()
     viewport.addEventListener('scroll', schedule, { passive: true })
     window.addEventListener('resize', schedule)
@@ -277,22 +307,28 @@ export function Carousel(props: CarouselProps) {
     if (listRef.current) observer.observe(listRef.current)
     return () => {
       cancelAnimationFrame(frame)
+      if (snapEvents) viewport.removeEventListener('scrollsnapchange', onSnapChange)
       viewport.removeEventListener('scroll', schedule)
       window.removeEventListener('resize', schedule)
       observer.disconnect()
     }
   }, [read, measureBleed])
 
+  // Scrolls straight to the target's snap position (its start on the
+  // snapport's start, clamped at the end by the browser), so mandatory snap
+  // has nothing left to correct: one movement, smooth or, under reduced
+  // motion, instant [D207].
   const scrollToIndex = React.useCallback((index: number) => {
     const viewport = viewportRef.current
     const items = slidesOf(listRef.current)
     const target = items[Math.max(0, Math.min(items.length - 1, index))]
     if (!viewport || !target) return
-    const rtl = getComputedStyle(viewport).direction === 'rtl'
-    const edge = viewport.getBoundingClientRect()
-    const rect = target.getBoundingClientRect()
-    const delta = rtl ? rect.right - edge.right : rect.left - edge.left
-    viewport.scrollBy({ left: delta, behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
+    const port = snapportStart(viewport)
+    const lead = leadOf(target, port)
+    viewport.scrollBy({
+      left: port.rtl ? -lead : lead,
+      behavior: prefersReducedMotion() ? 'instant' : 'smooth',
+    })
   }, [])
 
   const step = React.useCallback(
@@ -407,15 +443,13 @@ export function Carousel(props: CarouselProps) {
   )
 }
 
-/** The index of the first slide whose leading edge is in view. */
+/** The index of the first slide whose start is at or past the snapport's start. */
 function firstInView(viewport: HTMLElement | null, list: HTMLElement | null): number {
   if (!viewport) return 0
-  const rtl = getComputedStyle(viewport).direction === 'rtl'
-  const edge = viewport.getBoundingClientRect()
+  const port = snapportStart(viewport)
   const items = slidesOf(list)
   for (let index = 0; index < items.length; index += 1) {
-    const rect = items[index].getBoundingClientRect()
-    if ((rtl ? edge.right - rect.right : rect.left - edge.left) >= -2) return index
+    if (leadOf(items[index], port) >= -2) return index
   }
   return 0
 }

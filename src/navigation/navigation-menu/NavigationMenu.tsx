@@ -63,8 +63,8 @@ export { NAV_DELAY_MS }
  *   once (hover intent; no reveal of its own) [D205], with no
  *   --popup-width or --popup-height transition.
  * - Parts: base, list, item, trigger, hit, label, chevron, barLink, link
- *   (with Link's `nav` + `list` classes), positioner, popup, viewport (in a
- *   Scroll Area capped by `maxBlockSize`), content; overview adds
+ *   (with Link's `nav` + `list` classes), positioner, popup, scroll (the
+ *   Scroll Area, capped by `maxBlockSize`), viewport, content; overview adds
  *   featured, description, tierRule, search, groups, group, heading,
  *   promo; index adds categoryList, categoryTrigger, linkPane, featuredBar.
  * - Scope: the popup renders through its Base UI Portal and declares the
@@ -406,7 +406,10 @@ export function NavigationMenu(props: NavigationMenuProps) {
             >
               <OverlayScope>
                 {/* A panel taller than the space below the bar scrolls; the cap is that space. */}
-                <ScrollArea maxBlockSize="calc(var(--available-height, 100dvh) - var(--border-size-2))">
+                <ScrollArea
+                  className={styles.scroll}
+                  maxBlockSize="calc(var(--available-height, 100dvh) - var(--border-size-2) - var(--navigation-menu-corner-inset, 0px))"
+                >
                   <BaseNavigationMenu.Viewport className={styles.viewport} />
                 </ScrollArea>
               </OverlayScope>

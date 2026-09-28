@@ -131,17 +131,26 @@
     outline: 0;
   }
 
-  /* At most 8 items tall, then the list scrolls. */
+  /*
+   * At most 8 items tall, then the list scrolls. The native scrollbar runs on
+   * the face (track --primary1), and the list sits --fgd-overlay-corner-inset
+   * inside the frame, clear of its rounded corners; its padding gives the
+   * inset back, so the items keep their --size-px-1 from the frame [D207].
+   */
   .list {
+    --select-list-pad: calc(var(--size-px-1) - var(--fgd-overlay-corner-inset));
+    --role-scrollbar-track: var(--primary1);
+
     box-sizing: border-box;
     max-block-size: min(
-      var(--available-height, 100vh),
-      calc(8 * var(--fgd-size-hit) + 2 * var(--size-px-1))
+      calc(var(--available-height, 100vh) - 2 * var(--fgd-overlay-corner-inset)),
+      calc(8 * var(--fgd-size-hit) + 2 * var(--select-list-pad))
     );
-    padding: var(--size-px-1);
+    margin: var(--fgd-overlay-corner-inset);
+    padding: var(--select-list-pad);
     overflow-y: auto;
     overscroll-behavior: contain;
-    scroll-padding-block: var(--size-px-1);
+    scroll-padding-block: var(--select-list-pad);
     outline: 0;
   }
 
@@ -192,10 +201,10 @@
     color: var(--role-muted);
   }
 
-  /* The one popup group separator: --border-size-1 --role-rule across the panel. */
+  /* The one popup group separator: --border-size-1 --role-rule across the list to its edges, which sit inside the frame [D207]. */
   .separator {
     margin-block: var(--size-px-1);
-    margin-inline: calc(-1 * var(--size-px-1));
+    margin-inline: calc(-1 * var(--select-list-pad, var(--size-px-1)));
     border-block-start: var(--border-size-1) solid var(--role-rule);
   }
 
@@ -343,12 +352,14 @@
     background: none;
   }
 
-  /* Highlighted: --primary4 plus the start-edge bar [D145]. */
-  .item[data-highlighted] {
+  /* Highlighted, or pressed (a tap highlights nothing else, §1.11.9): --primary4 plus the start-edge bar [D145]. */
+  .item[data-highlighted],
+  .item:not([data-disabled]):active {
     background-color: var(--primary4);
   }
 
-  .item[data-highlighted]::before {
+  .item[data-highlighted]::before,
+  .item:not([data-disabled]):active::before {
     display: block;
   }
 

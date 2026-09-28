@@ -1,17 +1,17 @@
 /*
  * Carousel (§12.4). CVA function `carousel`. The Scroll Area (`rail`)
- * draws the viewport, the overflow edges, the --border-size-2 progress rail
- * (--role-hairline track, --primary12 thumb) and their states; the Buttons
- * draw the step pager. This module lays out the track, the slides and the
- * control row.
+ * draws the viewport, the native scroller whose scrollbar is the position
+ * rail, and the overflow edges [D207]; the Buttons draw the step pager.
+ * This module lays out the track, the slides and the control row.
  * Color roles (§12.4): prev / next edge and glyph --primary12 at
  * --border-size-2 (the outline icon-only Button; hover --primary3, pressed
- * the inverse pair); count --primary12; rail --role-hairline; railThumb
- * --primary12. Colors are role variables only; local custom properties
- * carry dimensions only (--carousel-slide, --carousel-bleed,
- * --carousel-ratio, a unitless ratio). The component writes only custom
- * properties inline (--carousel-bleed on the root, --carousel-ratio on a
- * slide); these rules map them to real properties [D205].
+ * the inverse pair); count --primary12; the rail is the native scrollbar in
+ * the scope's thumb and track (reset.css). Colors are role variables only;
+ * local custom properties carry dimensions only (--carousel-slide,
+ * --carousel-bleed, --carousel-ratio, a unitless ratio). The component
+ * writes only custom properties inline (--carousel-bleed on the root,
+ * --carousel-ratio on a slide); these rules map them to real properties
+ * [D205].
  */
 
 /* Composition sits in top-level rules, outside the layers: Lightning CSS
@@ -61,6 +61,12 @@
     margin-inline-start: calc(-1 * var(--size-px-2-5));
   }
 
+  /*
+   * Each slide is a snap point at its start. No `scroll-snap-stop`: with
+   * `always`, the browser also stops Home and End's programmatic scroll at
+   * the next slide, and a fling that passes several slides still comes to
+   * rest on one's start [D207].
+   */
   .slide {
     flex: none;
     inline-size: var(--carousel-slide);
@@ -111,6 +117,13 @@
   .viewport {
     /* A vertical wheel passes to the page: the track never holds vertical scroll chaining [D186]. */
     --scroll-area-overscroll-y: auto;
+    /*
+     * The snapport is the container's content box, not the bled viewport:
+     * the end's scroll padding is the bleed, so snap measures every slide
+     * against the line it rests on (user report, 2026-09-27: scroll snapping
+     * seemed "a little bit off") [D207].
+     */
+    --scroll-area-scroll-padding-inline: 0 var(--carousel-bleed, 0px);
 
     max-inline-size: none;
     margin-inline-end: calc(-1 * var(--carousel-bleed, 0px));
@@ -210,7 +223,7 @@
     visibility: hidden;
   }
 
-  /* Every slide fits: a static row, no controls (the rail hides itself without overflow). */
+  /* Every slide fits: a static row, no controls (no overflow, no scrollbar). */
   .static .controls {
     display: none;
   }

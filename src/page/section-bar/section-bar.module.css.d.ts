@@ -14,6 +14,7 @@ declare const styles: {
   readonly "jumpLabel": string;
   readonly "jumpList": string;
   readonly "jumpLive": string;
+  readonly "jumpNav": string;
   readonly "jumpPanel": string;
   readonly "jumpPositioner": string;
   readonly "jumpStatic": string;

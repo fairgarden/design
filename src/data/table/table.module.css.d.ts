@@ -12,6 +12,7 @@ declare const styles: {
   readonly "cellValue": string;
   readonly "compact": string;
   readonly "cue": string;
+  readonly "cueState": string;
   readonly "densityDefault": string;
   readonly "expanded": string;
   readonly "fit": string;
@@ -22,6 +23,7 @@ declare const styles: {
   readonly "inactive": string;
   readonly "interactive": string;
   readonly "lead": string;
+  readonly "leadEdgeState": string;
   readonly "notes": string;
   readonly "numeric": string;
   readonly "onSolid": string;

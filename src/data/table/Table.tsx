@@ -34,8 +34,10 @@ import styles from './table.module.css'
  *   sets the row header in weight 700; TableRow `inactive` → --role-muted;
  *   the sort Button `:hover` (not disabled) → the bare-text underline on the
  *   label (--role-accent, --border-size-2, offset --size-px-1) [D181], `:active` →
- *   inverse pair, `:focus-visible` → ring; the Scroll Area root's
- *   `data-overflow-x-start` → the pinned column's edge.
+ *   inverse pair, `:focus-visible` → ring; content hidden at the start
+ *   of the Scroll Area (its scroll timeline, or its root's
+ *   `data-overflow-x-start` where scroll-driven animations are missing)
+ *   → the pinned column's edge; content to scroll → the cue.
  * - Parts: base, region (the Scroll Area root; `pinned` in the scroll
  *   strategy, where the first column stays in view), cue, toggle, frame (the
  *   `table`: top and bottom rules), caption, captionInner, captionLabel,
@@ -144,7 +146,7 @@ export type TableProps = Omit<React.ComponentPropsWithRef<'table'>, 'className'>
   /**
    * A text cue above a table that scrolls, e.g. "Scroll for 3 more columns
    * →". Shown only while the table overflows; its line is reserved either
-   * way, so the table never moves when overflow is detected after mount.
+   * way, so the table never moves when the cue shows or hides.
    */
   scrollCue?: React.ReactNode
   /** `prioritize` only: the toggle label while optional columns are hidden. Default "Show All n Columns". */

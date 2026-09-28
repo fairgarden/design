@@ -8,7 +8,7 @@
  * tools, share, tabList (tabItem, tab, tabLabel, toTopItem, toTop: the
  * arrow_upward icon link), breadcrumbPanel (stairList, stairChevron, stairLink,
  * stairPlain, stairCurrent, panelTools), jumpPositioner, jumpPanel,
- * jumpList, jumpItem, visuallyHidden. Colors follow the §11.7 Color roles
+ * jumpNav (the list's native scroller), jumpList, jumpItem, visuallyHidden. Colors follow the §11.7 Color roles
  * table through role variables only.
  */
 
@@ -311,15 +311,31 @@
 
   .jumpPanel {
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
     inline-size: min(var(--size-px-14), 100vw - 2 * var(--fgd-space-margin));
     max-block-size: min(60vh, var(--available-height));
-    padding-block: var(--size-px-2);
-    overflow-y: auto;
+    padding-block: var(--fgd-overlay-corner-inset);
+    padding-inline: 0 var(--fgd-overlay-corner-inset);
     border: var(--border-size-2) solid var(--primary12);
     border-radius: var(--radius-2-25);
     background-color: var(--primary1);
     color: var(--primary12);
     clip-path: inset(0);
+  }
+
+  /*
+   * The list scrolls natively in `jumpNav`, which sits
+   * --fgd-overlay-corner-inset inside the frame's end side and ends, so its
+   * scrollbar clears the rounded corners; its padding makes up the panel's
+   * --size-px-2. The scrollbar runs on the face: track --primary1 [D207].
+   */
+  .jumpNav {
+    --role-scrollbar-track: var(--primary1);
+
+    min-block-size: 0;
+    padding-block: calc(var(--size-px-2) - var(--fgd-overlay-corner-inset));
+    overflow: hidden auto;
   }
 
   .jumpList {

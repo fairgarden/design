@@ -50,6 +50,11 @@
       --fgd-measure-reading: var(--fgd-measure-print);
     }
 
+    /* A dark band or field prints on white too, so its native widgets take the light scheme [D207]. */
+    [data-theme='dark'] {
+      color-scheme: light;
+    }
+
     :root,
     [data-ground] {
       --primary1: #fff;

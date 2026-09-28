@@ -47,9 +47,10 @@ export { menu, type MenuPopupProps } from './popup'
  *   fill and no bar [D145]; data-disabled → --role-muted, no highlight;
  *   submenu trigger data-popup-open → stays highlighted; the popup opens
  *   and closes by the outline morph or at once [D205].
- * - Parts: positioner, base (the popup), item, itemIcon (the leading slot),
- *   itemLabel, checkGlyph, dangerGlyph, shortcut, submenuChevron,
- *   groupLabel, separator.
+ * - Parts: positioner, base (the popup), scroll (the items' native
+ *   scroller, inset from the rounded frame [D207]), item, itemIcon (the
+ *   leading slot), itemLabel, checkGlyph, dangerGlyph, shortcut,
+ *   submenuChevron, groupLabel, separator.
  * - Scope: the popup renders through its Base UI Portal and declares a
  *   `white` scope (`page` scheme, no data-theme) with the --border-size-2
  *   --primary12 edge [D148, D156]. The trigger is a Button (§9.2).

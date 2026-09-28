@@ -1,7 +1,8 @@
 /*
  * Menu (§9.7), shared by Context Menu and the Menubar's menus. CVA
  * functions `menu` (the popup) and `menuItem` (an item) in Menu.tsx.
- * Parts: positioner (the layer), base (the popup), item, itemIcon (the
+ * Parts: positioner (the layer), base (the popup), scroll (the items'
+ * native scroller, inside the frame), item, itemIcon (the
  * --size-px-5 leading slot), itemLabel, checkGlyph (✓ or ●), dangerGlyph
  * (◆ with ×), shortcut, submenuChevron, groupLabel, separator.
  *
@@ -48,15 +49,31 @@
       calc(100vw - 2 * var(--fgd-space-margin))
     );
     max-inline-size: min(var(--size-px-14), calc(100vw - 2 * var(--fgd-space-margin)));
+    display: flex;
+    flex-direction: column;
     max-block-size: var(--available-height);
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    padding: var(--size-px-1);
+    padding: var(--fgd-overlay-corner-inset);
     border: var(--border-size-2) solid var(--primary12);
     border-radius: var(--radius-2-25);
     background-color: var(--primary1);
     color: var(--primary12);
     clip-path: inset(0);
+  }
+
+  /*
+   * The items scroll natively in `scroll`, which sits
+   * --fgd-overlay-corner-inset inside the frame, so its scrollbar clears the
+   * rounded corners; its padding makes up the popup's --size-px-1. The
+   * scrollbar runs on the face: track --primary1 [D207].
+   */
+  .scroll {
+    --menu-scroll-pad: calc(var(--size-px-1) - var(--fgd-overlay-corner-inset));
+    --role-scrollbar-track: var(--primary1);
+
+    min-block-size: 0;
+    padding: var(--menu-scroll-pad);
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
   /* A row: --fgd-size-hit tall at every breakpoint, --size-px-2-5 padding. */
@@ -141,10 +158,10 @@
     color: var(--role-muted);
   }
 
-  /* Full width across the popup's padding, --size-px-1 above and below. */
+  /* Across the scroller's padding to its edges, which sit inside the frame [D207]; --size-px-1 above and below. */
   .separator {
     margin-block: var(--size-px-1);
-    margin-inline: calc(-1 * var(--size-px-1));
+    margin-inline: calc(-1 * var(--menu-scroll-pad, var(--size-px-1)));
     border: 0;
     border-block-start: var(--border-size-1) solid var(--role-rule);
   }
@@ -186,14 +203,21 @@
     transition: none;
   }
 
-  /* Highlight (pointer or keyboard) and an open submenu's trigger: the soft fill plus the bar [D145]. */
+  /*
+   * Highlight (pointer or keyboard), an open submenu's trigger, and a press:
+   * the soft fill plus the bar [D145]. The press is the highlight, so a tap
+   * shows it where a touch highlights nothing (the tap highlight is off,
+   * §1.11.9); a step, never faded.
+   */
   .item[data-highlighted],
-  .item[data-popup-open] {
+  .item[data-popup-open],
+  .item:not([data-disabled]):active {
     background-color: var(--primary4);
   }
 
   .item[data-highlighted]::before,
-  .item[data-popup-open]::before {
+  .item[data-popup-open]::before,
+  .item:not([data-disabled]):active::before {
     display: block;
   }
 
@@ -202,21 +226,26 @@
    * (5.11:1 light, 4.75:1 dark) for the label, the glyph and the bar; the
    * glyph's knockout takes the fill [D192].
    */
-  .destructive[data-highlighted] {
+  .destructive[data-highlighted],
+  .destructive:not([data-disabled]):active {
     background-color: var(--role-danger);
     color: var(--role-danger-label);
   }
 
-  .destructive[data-highlighted]::before {
+  .destructive[data-highlighted]::before,
+  .destructive:not([data-disabled]):active::before {
     border-inline-start-color: var(--role-danger-label);
   }
 
   .destructive[data-highlighted] .itemIcon,
-  .destructive[data-highlighted] .itemLabel {
+  .destructive[data-highlighted] .itemLabel,
+  .destructive:not([data-disabled]):active .itemIcon,
+  .destructive:not([data-disabled]):active .itemLabel {
     color: var(--role-danger-label);
   }
 
-  .destructive[data-highlighted] .dangerGlyph {
+  .destructive[data-highlighted] .dangerGlyph,
+  .destructive:not([data-disabled]):active .dangerGlyph {
     fill: var(--role-danger);
     stroke: var(--role-danger);
   }
@@ -250,6 +279,7 @@
   /* Forced colors: the knockout stays the system Canvas, as at rest. */
   @media (--forcedColors) {
     .destructive[data-highlighted] .dangerGlyph,
+    .destructive:not([data-disabled]):active .dangerGlyph,
     .item[data-disabled] .dangerGlyph {
       fill: Canvas;
       stroke: Canvas;

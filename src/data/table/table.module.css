@@ -13,6 +13,8 @@
  *   --table-pad-block, --table-pad-inline  cell padding by density
  *   --table-row-min                         minimum row pitch (compact 32, interactive 44)
  *   --table-row-rule                        width of the --role-rule row rule (compact)
+ *   --table-lead-edge                       the pinned column's end edge: 0, or --border-size-2
+ *                                           once columns scroll under it
  * Each starts from its --fgd-table-* density token (tokens.css), so a
  * Ground's data-density reaches the table; the `density` prop overrides it.
  */
@@ -413,7 +415,12 @@
     white-space: nowrap;
   }
 
-  /* Scroll: the first column stays pinned; its end edge replaces the Scroll Area's start edge. */
+  /*
+   * Scroll: the first column stays pinned; its end edge replaces the Scroll
+   * Area's start edge. --table-lead-edge is that edge's width, 0 until
+   * columns scroll under it; the padding gives the width back, so the
+   * column never changes size.
+   */
   .pinned {
     --scroll-area-edge-start: none;
   }
@@ -422,9 +429,24 @@
     position: sticky;
     inset-inline-start: 0;
     z-index: var(--layer-1);
-    border-inline-end: 0 solid var(--role-rule);
-    padding-inline-end: calc(var(--table-pad-inline) + var(--border-size-2));
+    border-inline-end: var(--table-lead-edge, 0px) solid var(--role-rule);
+    padding-inline-end: calc(var(--table-pad-inline) + var(--border-size-2) - var(--table-lead-edge, 0px));
     background-color: var(--role-ground);
+  }
+
+  /*
+   * The cue and the pinned edge read the Scroll Area's scroll timeline from
+   * outside it: the table scopes the name, so the Scroll Area root doesn't
+   * [D207].
+   */
+  @supports (animation-timeline: scroll()) {
+    .base {
+      timeline-scope: --scroll-area-inline;
+    }
+
+    .region {
+      timeline-scope: none;
+    }
   }
 
   /* Prioritize: optional columns wait behind the toggle; they always print. */
@@ -659,9 +681,12 @@
   }
 
   /*
-   * The scroll cue shows only while the table overflows. Its line is kept
-   * either way: overflow is known only after mount, and the table must not
-   * move when the cue appears [D201].
+   * The scroll cue shows only while the table overflows, and its line is
+   * kept either way, so the table never moves when it appears [D201].
+   * Where scroll-driven animations exist, the Scroll Area's scroll timeline
+   * shows it: the animation applies only while that timeline is active,
+   * that is, while there is something to scroll. Elsewhere the Scroll
+   * Area's data-has-overflow-x, written only there, shows it.
    */
   .base:not(:has(.region[data-has-overflow-x])) .cue {
     visibility: hidden;
@@ -669,8 +694,19 @@
 
   /* Pinned column: its --border-size-2 --role-rule edge appears once columns scroll under it. */
   .pinned[data-overflow-x-start] .lead {
-    border-inline-end-width: var(--border-size-2);
-    padding-inline-end: var(--table-pad-inline);
+    --table-lead-edge: var(--border-size-2);
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .cue {
+      animation: cueState linear both;
+      animation-timeline: --scroll-area-inline;
+    }
+
+    .pinned .lead {
+      animation: leadEdgeState linear both;
+      animation-timeline: --scroll-area-inline;
+    }
   }
 
   /* Selected (a checked row Checkbox or `selected`) and current (`:target`): the row bar. */
@@ -710,6 +746,26 @@
   .sortButton:focus-visible {
     outline: var(--border-size-2) solid var(--primary12);
     outline-offset: var(--border-size-2);
+  }
+}
+
+/* States on the scroll timeline: discrete steps, nothing moves. */
+@keyframes cueState {
+  from,
+  to {
+    visibility: visible;
+  }
+}
+
+/* The edge steps to its width as soon as the columns leave the start (a custom property flips, never interpolates). */
+@keyframes leadEdgeState {
+  0% {
+    --table-lead-edge: 0px;
+  }
+
+  0.001%,
+  100% {
+    --table-lead-edge: var(--border-size-2);
   }
 }
 

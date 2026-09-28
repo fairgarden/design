@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { CrewBanner } from '@/app/(docs)/content/demo/demos/framed/CrewBanner'
+import { CrewBanner } from '@/app/(lib)/content/demo/demos/framed/CrewBanner'
 
 export const metadata: Metadata = { title: 'Demo: Custom preview' }
 
